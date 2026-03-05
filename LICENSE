@@ -1,0 +1,74 @@
+Azuki VRC Avatar System License
+
+Copyright (c) 2026 Azuki
+
+For the purposes of this license:
+
+A "commercial purpose" is any use primarily intended for commercial advantage
+or monetary compensation, including but not limited to one-time payments,
+subscriptions, commissions, donations, or sales of digital products.
+
+A "personal purpose" is any use not defined as a commercial purpose.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+You may choose to use the software under one of the following license options.
+
+--------------------------------------------------
+Personal License
+--------------------------------------------------
+
+The software may be used, copied, modified, and distributed for personal
+purposes provided that the following conditions are met:
+
+1. This copyright and license notice must be included in any copies or
+   derivative works of the software.
+2. The software must not be used for commercial purposes.
+
+--------------------------------------------------
+Commercial License
+--------------------------------------------------
+
+The software may be used for personal or commercial purposes provided that
+all of the following conditions are met:
+
+1. The software must be obtained directly by the end user from the official
+   distribution source provided by Azuki (such as the official Git repository
+   or website).
+2. The software must NOT be redistributed, bundled, or repackaged as part of
+   another downloadable product.
+3. Modified versions of the software may not be distributed.
+
+--------------------------------------------------
+VRChat Avatar Distribution License
+--------------------------------------------------
+
+The software may be included in compiled VRChat avatar asset bundles
+uploaded to VRChat servers, provided that:
+
+1. The software is included only as part of a compiled avatar upload.
+2. The original source files of the software are not redistributed in the
+   avatar package or project files.
+3. The software is not presented as a standalone product.
+
+--------------------------------------------------
+Restrictions
+--------------------------------------------------
+
+You may NOT:
+
+- Redistribute the software as a standalone download.
+- Sell, sublicense, or repackage the software itself.
+- Claim ownership of the original software.
+
+--------------------------------------------------
+Contact
+--------------------------------------------------
+
+For licensing questions or commercial partnerships, contact the author.

@@ -1,0 +1,10 @@
+*
+
+!.gitignore
+
+!README.md
+!LICENSE
+
+!Packages/
+!Packages/tech.azuki.vrc-avatar-system/
+!Packages/tech.azuki.vrc-avatar-system/**
