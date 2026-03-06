@@ -46,53 +46,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-2441724001563535259
-BlendTree:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Viseme Tongue Conditions
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 6207347824418302978}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9edaa32b152a1a94788752ff7a008a46, type: 2}
-    m_Threshold: 0.33333334
-    m_Position: {x: 1, y: 0}
-    m_TimeScale: 1e+10
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9edaa32b152a1a94788752ff7a008a46, type: 2}
-    m_Threshold: 0.6666667
-    m_Position: {x: 0, y: 0.5}
-    m_TimeScale: 1e+10
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9edaa32b152a1a94788752ff7a008a46, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 0.5}
-    m_TimeScale: 1e+10
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: Mayu/MMD
-  m_BlendParameterY: Proxy/Expressions/TongueOut
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 3
 --- !u!206 &-2081667426804994318
 BlendTree:
   m_ObjectHideFlags: 1
@@ -294,37 +247,6 @@ BlendTree:
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &6207347824418302978
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Viseme Tongue
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: d7dff5c614fa11842986194be2db46be, type: 2}
-    m_Threshold: 0.5
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueForward
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: b9393cfe838b24547973fca5a174d0b4, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueUp
-    m_Mirror: 0
-  m_BlendParameter: Mayu/MMD
-  m_BlendParameterY: Blend
-  m_MinThreshold: 0.5
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
 --- !u!206 &6419118072675828980
 BlendTree:
   m_ObjectHideFlags: 1

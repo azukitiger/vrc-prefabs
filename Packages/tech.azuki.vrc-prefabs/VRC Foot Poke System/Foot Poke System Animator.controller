@@ -12,7 +12,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 0a6b00a553e72aa4bb731a15c435bd24, type: 2}
     m_Threshold: 0.00001
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootLeftPass
     m_Mirror: 0
@@ -20,7 +20,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 623f93dff2ac714409f2f68955ea15ee, type: 2}
     m_Threshold: 0.00002
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootLeft
     m_Mirror: 0
@@ -43,7 +43,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 0a6b00a553e72aa4bb731a15c435bd24, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootLeft
     m_Mirror: 0
@@ -51,7 +51,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 623f93dff2ac714409f2f68955ea15ee, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootLeftPass
     m_Mirror: 0
@@ -69,7 +69,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Blend Tree
+  m_Name: Foot Poke System
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -100,7 +100,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 7665343ff95a7d7459c3820def74b4e4, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootRight
     m_Mirror: 0
@@ -108,7 +108,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 95b739fd90041f54681661e5df3af86d, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootRightPass
     m_Mirror: 0
@@ -162,7 +162,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 7665343ff95a7d7459c3820def74b4e4, type: 2}
     m_Threshold: 0.00001
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootRightPass
     m_Mirror: 0
@@ -170,7 +170,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 95b739fd90041f54681661e5df3af86d, type: 2}
     m_Threshold: 0.00002
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootRight
     m_Mirror: 0
@@ -193,7 +193,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 95b739fd90041f54681661e5df3af86d, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootRight
     m_Mirror: 0
@@ -201,7 +201,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 7665343ff95a7d7459c3820def74b4e4, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootRight
     m_Mirror: 0
@@ -239,7 +239,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 623f93dff2ac714409f2f68955ea15ee, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootLeft
     m_Mirror: 0
@@ -247,7 +247,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 0a6b00a553e72aa4bb731a15c435bd24, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootLeft
     m_Mirror: 0
@@ -334,64 +334,64 @@ AnimatorController:
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Touch/FootLeft
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Touch/FootRight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Smooth/Touch
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Touch/FootLeftDelta
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Touch/FootLeftPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Touch/FootLeft
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Touch/FootRightDelta
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Touch/FootRightPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Proxy/Touch/FootRight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Base Layer
+    m_Name: Foot Poke System
     m_StateMachine: {fileID: 253116581389657433}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -409,7 +409,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: Foot Poke System
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -5027098478072635986}
@@ -436,7 +436,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 0f245485240e61f4bb8c1811110cfe60, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootLeft
     m_Mirror: 0
@@ -444,7 +444,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 19b20f67bae081a4db5e144b6a99cf0d, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootLeft
     m_Mirror: 0
@@ -545,7 +545,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: ebc640d7673b38042ba6ea5eb05d3b85, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Touch/FootRight
     m_Mirror: 0
@@ -553,7 +553,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: a14a49d0bec12734cbd8418235d80a23, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Touch/FootRight
     m_Mirror: 0
