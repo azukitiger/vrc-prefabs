@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 8622204934418082534}
   - component: {fileID: 3380949450612323622}
   m_Layer: 0
-  m_Name: VRC Heartbeat Prefab
+  m_Name: Heartbeat System Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,7 +299,7 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: 425f2a7a0b9b5024ea2530e29ef4114f|Packages/tech.azuki.vrc-prefabs/VRC
-              Heartbeat/FX Heartbeat Controller.controller
+              Heartbeat System/FX Heartbeat Controller.controller
             objRef: {fileID: 9100000, guid: 425f2a7a0b9b5024ea2530e29ef4114f, type: 2}
           type: 5
         menus:
@@ -308,7 +308,7 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: ff35f4834ed718b49b43a6294c2eeb0d|Packages/tech.azuki.vrc-prefabs/VRC
-              Heartbeat/Menu/Heartbeat Slider.asset
+              Heartbeat System/Menu/Heartbeat Slider.asset
             objRef: {fileID: 11400000, guid: ff35f4834ed718b49b43a6294c2eeb0d, type: 2}
           prefix: Interactions/Heartbeat
         prms:
@@ -317,7 +317,7 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: 4d75b3d2fb37ef446814fbff85247a1b|Packages/tech.azuki.vrc-prefabs/VRC
-              Heartbeat/Menu/Heartbeat Parameter.asset
+              Heartbeat System/Menu/Heartbeat Parameter.asset
             objRef: {fileID: 11400000, guid: 4d75b3d2fb37ef446814fbff85247a1b, type: 2}
         smoothedPrms: []
         globalParams:
@@ -403,7 +403,7 @@ MonoBehaviour:
           fileID: 0
           guid: 
           id: 088d83ba2939249479ea8902e6b7bdc3|Packages/tech.azuki.vrc-prefabs/VRC
-            Heartbeat/Icons/Heart.png
+            Heartbeat System/Icons/Heart.png
           objRef: {fileID: 2800000, guid: 088d83ba2939249479ea8902e6b7bdc3, type: 3}
         enableDriveGlobalParam: 0
         driveGlobalParam: 
@@ -483,7 +483,7 @@ MonoBehaviour:
           fileID: 0
           guid: 
           id: 2ec0aaf224d17034ea177c5c4db2fb85|Packages/tech.azuki.vrc-prefabs/VRC
-            Heartbeat/Icons/Heartbeat.png
+            Heartbeat System/Icons/Heartbeat.png
           objRef: {fileID: 2800000, guid: 2ec0aaf224d17034ea177c5c4db2fb85, type: 3}
 --- !u!1 &6811037775154754322
 GameObject:
