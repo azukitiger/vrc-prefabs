@@ -3,8 +3,8 @@ using UnityEditor;
 
 public static class AzukiAvatarSystemMenu
 {
-    private const string HeartbeatPrefabPath = "Packages/tech.azuki.vrc-avatar-system/VRC Heartbeat/VRC Heartbeat Prefab.prefab";
-    private const string BellPrefabPath = "Packages/tech.azuki.vrc-avatar-system/VRC Bell Sound Logic/VRC Bell Sound Prefab.prefab";
+    private const string HeartbeatPrefabPath = "Packages/tech.azuki.vrc-prefabs/VRC Heartbeat/VRC Heartbeat Prefab.prefab";
+    private const string BellPrefabPath = "Packages/tech.azuki.vrc-prefabs/VRC Bell Sound Logic/VRC Bell Sound Prefab.prefab";
 
     [MenuItem("Tools/Azuki Prefabs/Add Heartbeat Prefab")]
     private static void AddHeartbeatPrefab()
