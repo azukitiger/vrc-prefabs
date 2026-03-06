@@ -1,4 +1,4 @@
-# Ignore everything by default
+# Ignore everything
 *
 
 # Allow root metadata
@@ -6,21 +6,15 @@
 !README.md
 !LICENSE
 
-# Allow GitHub folder
+# Allow GitHub/Website folders
 !.github/
 !.github/**
-
-# Allow Website folder
 !Website/
 !Website/**
 
-# Allow package folder
+# Allow parent Packages folder itself (so Git can descend)
 !Packages/
+
+# Allow only the specific package and its contents
 !Packages/tech.azuki.vrc-avatar-system/
 !Packages/tech.azuki.vrc-avatar-system/**
-
-/*/
-com.vrchat.*/
-com.vrchat.core.*/
-vpm-manifest.json
-manifest.json
