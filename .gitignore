@@ -18,3 +18,9 @@
 !Packages/
 !Packages/tech.azuki.vrc-avatar-system/
 !Packages/tech.azuki.vrc-avatar-system/**
+
+/*/
+com.vrchat.*/
+com.vrchat.core.*/
+vpm-manifest.json
+manifest.json
