@@ -280,7 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -299,7 +299,7 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: 425f2a7a0b9b5024ea2530e29ef4114f|Packages/tech.azuki.vrc-prefabs/VRC
-              Heartbeat System/FX Heartbeat Controller.controller
+              Heartbeat System/Heartbeat System Controller.controller
             objRef: {fileID: 9100000, guid: 425f2a7a0b9b5024ea2530e29ef4114f, type: 2}
           type: 5
         menus:
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -648,7 +648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -728,7 +728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []

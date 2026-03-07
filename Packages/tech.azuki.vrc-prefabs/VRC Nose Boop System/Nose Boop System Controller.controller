@@ -14,7 +14,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/NoseTimer
+    m_DirectBlendParameter: VAP/Touch/NoseTimer
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 029301b9230c2104e9784e687b3280ab, type: 2}
@@ -22,7 +22,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/StepSize/One
+    m_DirectBlendParameter: VAP/Smooth/StepSizeOne
     m_Mirror: 0
   m_BlendParameter: Mayu/Feet/RPuppet
   m_BlendParameterY: FXWeight
@@ -71,43 +71,43 @@ AnimatorController:
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Touch/Nose
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/StepSize/One
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Smooth/StepSizeOne
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Smooth/Touch
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Smooth/Touch
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/NosePass
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/NosePass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/Nose
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/Nose
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/NoseTimer
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/NoseTimer
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Nose Boop System
@@ -143,7 +143,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/NosePass
+    m_DirectBlendParameter: VAP/Touch/NosePass
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Gesture
   m_BlendParameterY: Blend
@@ -207,7 +207,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Touch
+  m_BlendParameter: VAP/Smooth/Touch
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -228,7 +228,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/NosePass
+    m_DirectBlendParameter: VAP/Touch/NosePass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ac6bed8146647314894d6f8fb9a73598, type: 2}
@@ -236,7 +236,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/Nose
+    m_DirectBlendParameter: VAP/Touch/Nose
     m_Mirror: 0
   m_BlendParameter: Proxy/Touch/NosePass
   m_BlendParameterY: Blend

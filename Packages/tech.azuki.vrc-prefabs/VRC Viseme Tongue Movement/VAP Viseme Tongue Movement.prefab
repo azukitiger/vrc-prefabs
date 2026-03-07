@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -75,9 +75,9 @@ MonoBehaviour:
         - FXWeight
         - Voice
         - Viseme
-        - Proxy/Smooth/Gesture
-        - Proxy/Viseme/TongueForward
-        - Proxy/Viseme/TongueUp
+        - VAP/Smooth/Gesture
+        - VAP/Viseme/TongueForward
+        - VAP/Viseme/TongueUp
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

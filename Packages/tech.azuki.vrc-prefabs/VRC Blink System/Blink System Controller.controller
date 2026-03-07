@@ -224,7 +224,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Blink/RightOverride
+  m_BlendParameter: VAP/Blink/RightOverride
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -355,25 +355,25 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Blink/Left
+  - m_Name: VAP/Blink/Left
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Blink/Right
+  - m_Name: VAP/Blink/Right
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Blink/LeftOverride
+  - m_Name: VAP/Blink/LeftOverride
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Blink/RightOverride
+  - m_Name: VAP/Blink/RightOverride
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -734,7 +734,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Blink/LeftOverride
+  m_BlendParameter: VAP/Blink/LeftOverride
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1

@@ -77,9 +77,9 @@ MonoBehaviour:
         - FXWeight
         - Touch/FootLeft
         - Touch/FootRight
-        - Proxy/Smooth/Touch
-        - Proxy/Touch/FootLeft
-        - Proxy/Touch/FootRight
+        - VAP/Smooth/Touch
+        - VAP/Touch/FootLeft
+        - VAP/Touch/FootRight
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

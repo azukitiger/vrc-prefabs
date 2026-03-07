@@ -75,10 +75,10 @@ MonoBehaviour:
         globalParams:
         - FXWeight
         - Touch/Nose
-        - Proxy/Smooth/Touch
-        - Proxy/StepSize/One
-        - Proxy/Touch/Nose
-        - Proxy/Touch/NoseTimer
+        - VAP/Smooth/Touch
+        - VAP/StepSize/One
+        - VAP/Touch/Nose
+        - VAP/Touch/NoseTimer
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

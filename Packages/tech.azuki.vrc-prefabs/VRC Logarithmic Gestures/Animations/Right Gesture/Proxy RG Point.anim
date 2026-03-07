@@ -33,7 +33,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: Proxy/GestureRight/Point
+    attribute: VAP/GestureRight/Point
     path: 
     classID: 95
     script: {fileID: 0}
@@ -48,7 +48,7 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 0
-      attribute: 451445187
+      attribute: 2822481383
       script: {fileID: 0}
       typeID: 95
       customType: 0
@@ -93,7 +93,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: Proxy/GestureRight/Point
+    attribute: VAP/GestureRight/Point
     path: 
     classID: 95
     script: {fileID: 0}

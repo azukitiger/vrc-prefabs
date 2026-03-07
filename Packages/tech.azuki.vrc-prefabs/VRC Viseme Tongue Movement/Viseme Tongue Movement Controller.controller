@@ -101,7 +101,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueForwardPass
+    m_DirectBlendParameter: VAP/Viseme/TongueForwardPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: e076b17a92d0cb64ab937ce9ab069271, type: 2}
@@ -109,7 +109,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueForward
+    m_DirectBlendParameter: VAP/Viseme/TongueForward
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 92ff015842fee7845bea422d8b8fe10b, type: 2}
@@ -117,7 +117,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueUpPass
+    m_DirectBlendParameter: VAP/Viseme/TongueUpPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4403f25bf7d577a41b72844a956b250f, type: 2}
@@ -125,7 +125,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueUp
+    m_DirectBlendParameter: VAP/Viseme/TongueUp
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Gesture
   m_BlendParameterY: Blend
@@ -170,49 +170,49 @@ AnimatorController:
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Voice
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Viseme
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Smooth/Gesture
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Smooth/Gesture
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Viseme/TongueForward
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Viseme/TongueForward
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Viseme/TongueForwardPass
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Viseme/TongueForwardPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Viseme/TongueUp
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Viseme/TongueUp
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Viseme/TongueUpPass
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Viseme/TongueUpPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Viseme Tongue Movement
@@ -250,7 +250,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Gesture
+  m_BlendParameter: VAP/Smooth/Gesture
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -271,7 +271,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueForwardPass
+    m_DirectBlendParameter: VAP/Viseme/TongueForwardPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4403f25bf7d577a41b72844a956b250f, type: 2}
@@ -279,7 +279,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Viseme/TongueUpPass
+    m_DirectBlendParameter: VAP/Viseme/TongueUpPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 8938038402028525805}

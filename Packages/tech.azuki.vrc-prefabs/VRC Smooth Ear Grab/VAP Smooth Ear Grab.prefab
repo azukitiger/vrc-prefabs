@@ -77,9 +77,9 @@ MonoBehaviour:
         - Ear/Right_Stretch
         - Ear/Left_IsGrabbed
         - Ear/Right_IsGrabbed
-        - Proxy/Smooth/Gesture
-        - Proxy/Ear/Left_Stretch
-        - Proxy/Ear/Right_Stretch
+        - VAP/Smooth/Gesture
+        - VAP/Ear/Left_Stretch
+        - VAP/Ear/Right_Stretch
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

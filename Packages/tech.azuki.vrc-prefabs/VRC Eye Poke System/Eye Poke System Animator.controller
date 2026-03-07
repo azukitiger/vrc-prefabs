@@ -24,7 +24,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Touch/EyeLeftDelta
+  m_BlendParameter: VAP/Touch/EyeLeftDelta
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0.00001
   m_MaxThreshold: 0.00002
@@ -53,7 +53,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeRight
+    m_DirectBlendParameter: VAP/Touch/EyeRight
     m_Mirror: 0
   m_BlendParameter: Ear/Bounce/Left_IsGrabbed
   m_BlendParameterY: Blend
@@ -84,7 +84,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeRightPass
+    m_DirectBlendParameter: VAP/Touch/EyeRightPass
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Gesture
   m_BlendParameterY: Blend
@@ -201,7 +201,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Touch/EyeRightDelta
+  m_BlendParameter: VAP/Touch/EyeRightDelta
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0.00001
   m_MaxThreshold: 0.00002
@@ -222,61 +222,61 @@ AnimatorController:
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Touch/EyeLeft
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Touch/EyeRight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Proxy/Smooth/Touch
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/EyeLeft
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/EyeLeft
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/EyeRight
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/EyeRight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/EyeLeftDelta
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/EyeLeftDelta
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/EyeLeftPass
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/EyeLeftPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/EyeRightDelta
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/EyeRightDelta
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Touch/EyeRightPass
+    m_Controller: {fileID: 0}
+  - m_Name: VAP/Touch/EyeRightPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Eye Poke System
@@ -335,7 +335,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeRightPass
+    m_DirectBlendParameter: VAP/Touch/EyeRightPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ad43cd74e801e4149a43846636f9c155, type: 2}
@@ -343,7 +343,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeRight
+    m_DirectBlendParameter: VAP/Touch/EyeRight
     m_Mirror: 0
   m_BlendParameter: Proxy/Touch/EyeRightPass
   m_BlendParameterY: Blend
@@ -374,7 +374,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeLeftPass
+    m_DirectBlendParameter: VAP/Touch/EyeLeftPass
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Gesture
   m_BlendParameterY: Blend
@@ -397,7 +397,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeLeftPass
+    m_DirectBlendParameter: VAP/Touch/EyeLeftPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 97dbfea273cb7f846be68cfddeab6d54, type: 2}
@@ -405,7 +405,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeLeft
+    m_DirectBlendParameter: VAP/Touch/EyeLeft
     m_Mirror: 0
   m_BlendParameter: Proxy/Touch/EyeLeftPass
   m_BlendParameterY: Blend
@@ -540,7 +540,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Touch/EyeLeft
+    m_DirectBlendParameter: VAP/Touch/EyeLeft
     m_Mirror: 0
   m_BlendParameter: Ear/Bounce/Left_IsGrabbed
   m_BlendParameterY: Blend

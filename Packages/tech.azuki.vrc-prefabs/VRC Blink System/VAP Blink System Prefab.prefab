@@ -82,10 +82,10 @@ MonoBehaviour:
         - FXWeight
         - IsLocal
         - BlinkActive
-        - Proxy/Blink/Left
-        - Proxy/Blink/Right
-        - Proxy/Blink/LeftOverride
-        - Proxy/Blink/RightOverride
+        - VAP/Blink/Left
+        - VAP/Blink/Right
+        - VAP/Blink/LeftOverride
+        - VAP/Blink/RightOverride
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

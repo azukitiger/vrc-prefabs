@@ -79,26 +79,26 @@ MonoBehaviour:
         - GestureRightWeight
         - GestureLeftOverride
         - GestureRightOverride
-        - Proxy/Smooth/Gesture
-        - Proxy/GestureLeft
-        - Proxy/GestureRight
-        - Proxy/GestureLeft/Weight
-        - Proxy/GestureRight/Weight
-        - Proxy/GestureLeft/Idle
-        - Proxy/GestureLeft/Fist
-        - Proxy/GestureLeft/Open
-        - Proxy/GestureLeft/Point
-        - Proxy/GestureLeft/Victory
-        - Proxy/GestureLeft/Rock&Roll
-        - Proxy/GestureLeft/Gun
-        - Proxy/GestureLeft/ThumbsUp
-        - Proxy/GestureRight/Fist
-        - Proxy/GestureRight/Open
-        - Proxy/GestureRight/Point
-        - Proxy/GestureRight/Victory
-        - Proxy/GestureRight/Rock&Roll
-        - Proxy/GestureRight/Gun
-        - Proxy/GestureRight/ThumbsUp
+        - VAP/Smooth/Gesture
+        - VAP/GestureLeft
+        - VAP/GestureRight
+        - VAP/GestureLeft/Weight
+        - VAP/GestureRight/Weight
+        - VAP/GestureLeft/Idle
+        - VAP/GestureLeft/Fist
+        - VAP/GestureLeft/Open
+        - VAP/GestureLeft/Point
+        - VAP/GestureLeft/Victory
+        - VAP/GestureLeft/Rock&Roll
+        - VAP/GestureLeft/Gun
+        - VAP/GestureLeft/ThumbsUp
+        - VAP/GestureRight/Fist
+        - VAP/GestureRight/Open
+        - VAP/GestureRight/Point
+        - VAP/GestureRight/Victory
+        - VAP/GestureRight/Rock&Roll
+        - VAP/GestureRight/Gun
+        - VAP/GestureRight/ThumbsUp
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

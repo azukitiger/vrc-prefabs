@@ -84,8 +84,8 @@ MonoBehaviour:
         - EarTwitchLeft
         - EarTwitchRight
         - EarTwitchActive
-        - Proxy/Ear/Left_Twitch
-        - Proxy/Ear/Right_Twitch
+        - VAP/Ear/Left_Twitch
+        - VAP/Ear/Right_Twitch
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

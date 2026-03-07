@@ -72,7 +72,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureRight
+  m_BlendParameter: VAP/GestureRight
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 7
@@ -101,7 +101,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/WeightPass
+    m_DirectBlendParameter: VAP/GestureLeft/WeightPass
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Gesture
   m_BlendParameterY: Blend
@@ -186,7 +186,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/IdlePass
+    m_DirectBlendParameter: VAP/GestureLeft/IdlePass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: d40abdbf95258054591db3259724c950, type: 2}
@@ -194,7 +194,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Idle
+    m_DirectBlendParameter: VAP/GestureLeft/Idle
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ab42c36011fcf974ebfc6a42ff623181, type: 2}
@@ -202,7 +202,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/FistPass
+    m_DirectBlendParameter: VAP/GestureLeft/FistPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: cdef57e41e8d45d4c823917939e8e310, type: 2}
@@ -210,7 +210,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Fist
+    m_DirectBlendParameter: VAP/GestureLeft/Fist
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: f66f08459d693784db8557a72e86f660, type: 2}
@@ -218,7 +218,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/OpenPass
+    m_DirectBlendParameter: VAP/GestureLeft/OpenPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 8bd2d8d0bb75e7944b4fd45b14e34818, type: 2}
@@ -226,7 +226,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Open
+    m_DirectBlendParameter: VAP/GestureLeft/Open
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 2836575d1eb08644bab17e3b257d5bc1, type: 2}
@@ -234,7 +234,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/PointPass
+    m_DirectBlendParameter: VAP/GestureLeft/PointPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: d43bed8e892858d4e8ffcce3fdddaab7, type: 2}
@@ -242,7 +242,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Point
+    m_DirectBlendParameter: VAP/GestureLeft/Point
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3704335d651e23742a9b5e03b3a09bd0, type: 2}
@@ -250,7 +250,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/VictoryPass
+    m_DirectBlendParameter: VAP/GestureLeft/VictoryPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c77c5bf4b764c3741ae31d976d33f589, type: 2}
@@ -258,7 +258,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Victory
+    m_DirectBlendParameter: VAP/GestureLeft/Victory
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 6f753d9ffa6decf4c869c34b46b4b946, type: 2}
@@ -266,7 +266,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Rock&RollPass
+    m_DirectBlendParameter: VAP/GestureLeft/Rock&RollPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4a452e23f88c67741893c46a3325a96c, type: 2}
@@ -274,7 +274,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Rock&Roll
+    m_DirectBlendParameter: VAP/GestureLeft/Rock&Roll
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 047fcecb48c58ca4a93d3110fb0cdd2e, type: 2}
@@ -282,7 +282,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/GunPass
+    m_DirectBlendParameter: VAP/GestureLeft/GunPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ea58e088e690eed41b0464ae64d476c7, type: 2}
@@ -290,7 +290,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Gun
+    m_DirectBlendParameter: VAP/GestureLeft/Gun
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 0c02a7ec7388fd54cb1d335a974bfaf2, type: 2}
@@ -298,7 +298,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/ThumbsUpPass
+    m_DirectBlendParameter: VAP/GestureLeft/ThumbsUpPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 88ee312cd41374b418c442168dd3c18b, type: 2}
@@ -306,7 +306,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/ThumbsUp
+    m_DirectBlendParameter: VAP/GestureLeft/ThumbsUp
     m_Mirror: 0
   m_BlendParameter: Proxy/GestureLeft/IdlePass
   m_BlendParameterY: Blend
@@ -416,7 +416,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/IdlePass
+    m_DirectBlendParameter: VAP/GestureLeft/IdlePass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: cdef57e41e8d45d4c823917939e8e310, type: 2}
@@ -424,7 +424,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/FistPass
+    m_DirectBlendParameter: VAP/GestureLeft/FistPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 8bd2d8d0bb75e7944b4fd45b14e34818, type: 2}
@@ -432,7 +432,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/OpenPass
+    m_DirectBlendParameter: VAP/GestureLeft/OpenPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: d43bed8e892858d4e8ffcce3fdddaab7, type: 2}
@@ -440,7 +440,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/PointPass
+    m_DirectBlendParameter: VAP/GestureLeft/PointPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c77c5bf4b764c3741ae31d976d33f589, type: 2}
@@ -448,7 +448,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/VictoryPass
+    m_DirectBlendParameter: VAP/GestureLeft/VictoryPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4a452e23f88c67741893c46a3325a96c, type: 2}
@@ -456,7 +456,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Rock&RollPass
+    m_DirectBlendParameter: VAP/GestureLeft/Rock&RollPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ea58e088e690eed41b0464ae64d476c7, type: 2}
@@ -464,7 +464,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/GunPass
+    m_DirectBlendParameter: VAP/GestureLeft/GunPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 88ee312cd41374b418c442168dd3c18b, type: 2}
@@ -472,7 +472,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/ThumbsUpPass
+    m_DirectBlendParameter: VAP/GestureLeft/ThumbsUpPass
     m_Mirror: 0
   m_BlendParameter: GestureLeft
   m_BlendParameterY: Blend
@@ -583,7 +583,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureHasWeight
+  m_BlendParameter: VAP/GestureHasWeight
   m_BlendParameterY: Blend
   m_MinThreshold: -0.00001
   m_MaxThreshold: 0
@@ -659,7 +659,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/WeightPass
+    m_DirectBlendParameter: VAP/GestureRight/WeightPass
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Gesture
   m_BlendParameterY: Blend
@@ -700,7 +700,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureHasWeight
+  m_BlendParameter: VAP/GestureHasWeight
   m_BlendParameterY: FXWeight
   m_MinThreshold: -0.00001
   m_MaxThreshold: 0.00001
@@ -721,7 +721,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/FistPass
+    m_DirectBlendParameter: VAP/GestureRight/FistPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 0efb434eec5e1844db301ce2ebb5058e, type: 2}
@@ -729,7 +729,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Fist
+    m_DirectBlendParameter: VAP/GestureRight/Fist
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 11bfc566957dc6d44bd64f918edeb8dc, type: 2}
@@ -737,7 +737,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/OpenPass
+    m_DirectBlendParameter: VAP/GestureRight/OpenPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ce8866a3fd3176e429b35b9c5b1c17c7, type: 2}
@@ -745,7 +745,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Open
+    m_DirectBlendParameter: VAP/GestureRight/Open
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 0c8d914289ca91d4397da4ba6b5d82ab, type: 2}
@@ -753,7 +753,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/PointPass
+    m_DirectBlendParameter: VAP/GestureRight/PointPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: a0c648f7529c19a4b9e53cd29c54ecbc, type: 2}
@@ -761,7 +761,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Point
+    m_DirectBlendParameter: VAP/GestureRight/Point
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: e9ee99ce92d7a6445a974bb09e5859c8, type: 2}
@@ -769,7 +769,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/VictoryPass
+    m_DirectBlendParameter: VAP/GestureRight/VictoryPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 70cada6f5f5cb3c4aa42ba657394f543, type: 2}
@@ -777,7 +777,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Victory
+    m_DirectBlendParameter: VAP/GestureRight/Victory
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c21c3c9ffb40b5840bcda469d8d285ca, type: 2}
@@ -785,7 +785,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Rock&RollPass
+    m_DirectBlendParameter: VAP/GestureRight/Rock&RollPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 192e52b3244502f4ca81caef7fb2fde4, type: 2}
@@ -793,7 +793,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Rock&Roll
+    m_DirectBlendParameter: VAP/GestureRight/Rock&Roll
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 58871201e04a5f14898f69fafe37ab3e, type: 2}
@@ -801,7 +801,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/GunPass
+    m_DirectBlendParameter: VAP/GestureRight/GunPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c5e727f784db772438cb10b42e7fa988, type: 2}
@@ -809,7 +809,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Gun
+    m_DirectBlendParameter: VAP/GestureRight/Gun
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 2e9f2d56a50be754c8fa3b2f777901cd, type: 2}
@@ -817,7 +817,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/ThumbsUpPass
+    m_DirectBlendParameter: VAP/GestureRight/ThumbsUpPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 76542889531c53840b9fe7e4d5bd575d, type: 2}
@@ -825,7 +825,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/ThumbsUp
+    m_DirectBlendParameter: VAP/GestureRight/ThumbsUp
     m_Mirror: 0
   m_BlendParameter: Proxy/GestureRight/IdlePass
   m_BlendParameterY: Blend
@@ -858,7 +858,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureRight/Fist
+  m_BlendParameter: VAP/GestureRight/Fist
   m_BlendParameterY: Proxy/GestureLeft/Fist
   m_MinThreshold: 0.499994
   m_MaxThreshold: 0.499995
@@ -889,7 +889,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureHasWeight
+  m_BlendParameter: VAP/GestureHasWeight
   m_BlendParameterY: Blend
   m_MinThreshold: -0.00001
   m_MaxThreshold: 0
@@ -947,229 +947,229 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Smooth/Gesture
+  - m_Name: VAP/Smooth/Gesture
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft
+  - m_Name: VAP/GestureLeft
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight
+  - m_Name: VAP/GestureRight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureHasWeight
+  - m_Name: VAP/GestureHasWeight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Weight
+  - m_Name: VAP/GestureLeft/Weight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/WeightPass
+  - m_Name: VAP/GestureLeft/WeightPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Weight
+  - m_Name: VAP/GestureRight/Weight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/WeightPass
+  - m_Name: VAP/GestureRight/WeightPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Idle
+  - m_Name: VAP/GestureLeft/Idle
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/IdlePass
+  - m_Name: VAP/GestureLeft/IdlePass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Fist
+  - m_Name: VAP/GestureLeft/Fist
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/FistPass
+  - m_Name: VAP/GestureLeft/FistPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Open
+  - m_Name: VAP/GestureLeft/Open
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/OpenPass
+  - m_Name: VAP/GestureLeft/OpenPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Point
+  - m_Name: VAP/GestureLeft/Point
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/PointPass
+  - m_Name: VAP/GestureLeft/PointPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Victory
+  - m_Name: VAP/GestureLeft/Victory
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/VictoryPass
+  - m_Name: VAP/GestureLeft/VictoryPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Rock&Roll
+  - m_Name: VAP/GestureLeft/Rock&Roll
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Rock&RollPass
+  - m_Name: VAP/GestureLeft/Rock&RollPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/Gun
+  - m_Name: VAP/GestureLeft/Gun
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/GunPass
+  - m_Name: VAP/GestureLeft/GunPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/ThumbsUp
+  - m_Name: VAP/GestureLeft/ThumbsUp
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureLeft/ThumbsUpPass
+  - m_Name: VAP/GestureLeft/ThumbsUpPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Fist
+  - m_Name: VAP/GestureRight/Fist
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/FistPass
+  - m_Name: VAP/GestureRight/FistPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Open
+  - m_Name: VAP/GestureRight/Open
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/OpenPass
+  - m_Name: VAP/GestureRight/OpenPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Point
+  - m_Name: VAP/GestureRight/Point
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/PointPass
+  - m_Name: VAP/GestureRight/PointPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Victory
+  - m_Name: VAP/GestureRight/Victory
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/VictoryPass
+  - m_Name: VAP/GestureRight/VictoryPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Rock&Roll
+  - m_Name: VAP/GestureRight/Rock&Roll
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Rock&RollPass
+  - m_Name: VAP/GestureRight/Rock&RollPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/Gun
+  - m_Name: VAP/GestureRight/Gun
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/GunPass
+  - m_Name: VAP/GestureRight/GunPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/ThumbsUp
+  - m_Name: VAP/GestureRight/ThumbsUp
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/GestureRight/ThumbsUpPass
+  - m_Name: VAP/GestureRight/ThumbsUpPass
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1202,7 +1202,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/WeightPass
+    m_DirectBlendParameter: VAP/GestureRight/WeightPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 690367ac70d6f874885c1f9187e3ce8e, type: 2}
@@ -1210,7 +1210,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Weight
+    m_DirectBlendParameter: VAP/GestureRight/Weight
     m_Mirror: 0
   m_BlendParameter: Proxy/GestureRight/WeightPass
   m_BlendParameterY: Blend
@@ -1241,7 +1241,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/FistPass
+    m_DirectBlendParameter: VAP/GestureRight/FistPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ce8866a3fd3176e429b35b9c5b1c17c7, type: 2}
@@ -1249,7 +1249,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/OpenPass
+    m_DirectBlendParameter: VAP/GestureRight/OpenPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: a0c648f7529c19a4b9e53cd29c54ecbc, type: 2}
@@ -1257,7 +1257,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/PointPass
+    m_DirectBlendParameter: VAP/GestureRight/PointPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 70cada6f5f5cb3c4aa42ba657394f543, type: 2}
@@ -1265,7 +1265,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/VictoryPass
+    m_DirectBlendParameter: VAP/GestureRight/VictoryPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 192e52b3244502f4ca81caef7fb2fde4, type: 2}
@@ -1273,7 +1273,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/Rock&RollPass
+    m_DirectBlendParameter: VAP/GestureRight/Rock&RollPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c5e727f784db772438cb10b42e7fa988, type: 2}
@@ -1281,7 +1281,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/GunPass
+    m_DirectBlendParameter: VAP/GestureRight/GunPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 76542889531c53840b9fe7e4d5bd575d, type: 2}
@@ -1289,7 +1289,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureRight/ThumbsUpPass
+    m_DirectBlendParameter: VAP/GestureRight/ThumbsUpPass
     m_Mirror: 0
   m_BlendParameter: GestureRight
   m_BlendParameterY: Blend
@@ -1322,7 +1322,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureLeft/Fist
+  m_BlendParameter: VAP/GestureLeft/Fist
   m_BlendParameterY: Proxy/GestureLeft/Fist
   m_MinThreshold: 0.499994
   m_MaxThreshold: 0.499995
@@ -1343,7 +1343,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/WeightPass
+    m_DirectBlendParameter: VAP/GestureLeft/WeightPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 622a06f5469eae8479db7b7212093dd5, type: 2}
@@ -1351,7 +1351,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/GestureLeft/Weight
+    m_DirectBlendParameter: VAP/GestureLeft/Weight
     m_Mirror: 0
   m_BlendParameter: Proxy/GestureLeft/WeightPass
   m_BlendParameterY: Blend
@@ -1657,7 +1657,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureLeft
+  m_BlendParameter: VAP/GestureLeft
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 7
@@ -1696,7 +1696,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/GestureHasWeight
+  m_BlendParameter: VAP/GestureHasWeight
   m_BlendParameterY: FXWeight
   m_MinThreshold: -0.00001
   m_MaxThreshold: 0.00001
@@ -1727,7 +1727,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Gesture
+  m_BlendParameter: VAP/Smooth/Gesture
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1

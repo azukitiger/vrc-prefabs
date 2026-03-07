@@ -74,9 +74,9 @@ MonoBehaviour:
         globalParams:
         - FXWeight
         - FrameTime
-        - Proxy/Smooth/Gesture
-        - Proxy/Smooth/Touch
-        - Proxy/StepSize/One
+        - VAP/Smooth/Gesture
+        - VAP/Smooth/Touch
+        - VAP/StepSize/One
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
