@@ -45,25 +45,27 @@ Adds **blend tree–driven gesture detection** with smoothing and menu-based ove
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| GestureLeftOverride | Float | Integer (Optional) | ✔ | Overrides the left gesture value via the provided expression menu |
-| GestureRightOverride | Float | Integer (Optional) | ✔ | Overrides the right gesture value via the provided expression menu |
-| Proxy/GestureLeft/Weight | Float | - | - | Smoothed weight value for the left gesture |
-| Proxy/GestureRight/Weight | Float | - | - | Smoothed weight value for the right gesture |
-| Proxy/GestureLeft/Idle | Float | - | - | Smoothed value when the left gesture is **Idle** |
-| Proxy/GestureLeft/Fist | Float | - | - | Smoothed value when the left gesture is **Fist** |
-| Proxy/GestureLeft/Open | Float | - | - | Smoothed value when the left gesture is **Open** |
-| Proxy/GestureLeft/Point | Float | - | - | Smoothed value when the left gesture is **Point** |
-| Proxy/GestureLeft/Victory | Float | - | - | Smoothed value when the left gesture is **Victory** |
-| Proxy/GestureLeft/Rock&Roll | Float | - | - | Smoothed value when the left gesture is **Rock & Roll** |
-| Proxy/GestureLeft/Gun | Float | - | - | Smoothed value when the left gesture is **Gun** |
-| Proxy/GestureLeft/ThumbsUp | Float | - | - | Smoothed value when the left gesture is **Thumbs Up** |
-| Proxy/GestureRight/Fist | Float | - | - | Smoothed value when the right gesture is **Fist** |
-| Proxy/GestureRight/Open | Float | - | - | Smoothed value when the right gesture is **Open** |
-| Proxy/GestureRight/Point | Float | - | - | Smoothed value when the right gesture is **Point** |
-| Proxy/GestureRight/Victory | Float | - | - | Smoothed value when the right gesture is **Victory** |
-| Proxy/GestureRight/Rock&Roll | Float | - | - | Smoothed value when the right gesture is **Rock & Roll** |
-| Proxy/GestureRight/Gun | Float | - | - | Smoothed value when the right gesture is **Gun** |
-| Proxy/GestureRight/ThumbsUp | Float | - | - | Smoothed value when the right gesture is **Thumbs Up** |
+| GestureLeftOverride | Float | Integer (Optional) | ✔ | Overrides left gesture via the provided expression menu |
+| GestureRightOverride | Float | Integer (Optional) | ✔ | Overrides right gesture via the provided expression menu |
+| Proxy/GestureLeft | Float | - | - | Output of gesture left |
+| Proxy/GestureRight | Float | - | - | Output of gesture right |
+| Proxy/GestureLeft/Weight | Float | - | - | Smoothed weight value for left gesture |
+| Proxy/GestureRight/Weight | Float | - | - | Smoothed weight value for right gesture |
+| Proxy/GestureLeft/Idle | Float | - | - | Smoothed value when left gesture is **Idle** |
+| Proxy/GestureLeft/Fist | Float | - | - | Smoothed value when left gesture is **Fist** |
+| Proxy/GestureLeft/Open | Float | - | - | Smoothed value when left gesture is **Open** |
+| Proxy/GestureLeft/Point | Float | - | - | Smoothed value when left gesture is **Point** |
+| Proxy/GestureLeft/Victory | Float | - | - | Smoothed value when left gesture is **Victory** |
+| Proxy/GestureLeft/Rock&Roll | Float | - | - | Smoothed value when left gesture is **Rock & Roll** |
+| Proxy/GestureLeft/Gun | Float | - | - | Smoothed value when left gesture is **Gun** |
+| Proxy/GestureLeft/ThumbsUp | Float | - | - | Smoothed value when left gesture is **Thumbs Up** |
+| Proxy/GestureRight/Fist | Float | - | - | Smoothed value when right gesture is **Fist** |
+| Proxy/GestureRight/Open | Float | - | - | Smoothed value when right gesture is **Open** |
+| Proxy/GestureRight/Point | Float | - | - | Smoothed value when right gesture is **Point** |
+| Proxy/GestureRight/Victory | Float | - | - | Smoothed value when right gesture is **Victory** |
+| Proxy/GestureRight/Rock&Roll | Float | - | - | Smoothed value when right gesture is **Rock & Roll** |
+| Proxy/GestureRight/Gun | Float | - | - | Smoothed value when right gesture is **Gun** |
+| Proxy/GestureRight/ThumbsUp | Float | - | - | Smoothed value when right gesture is **Thumbs Up** |
 
 ## Viseme Tongue Movement Prefab
 
