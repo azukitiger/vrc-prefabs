@@ -492,7 +492,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Blend Tree
+  m_Name: Foot Poke System
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: -3359006389141841208}

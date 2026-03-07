@@ -22,13 +22,28 @@ Adds a **Frame Time system** to the avatar. This is required for most if not all
 
 ## Blink System Prefab
 
-Adds a **custom blinking system** with the ability to **override the blink state** or **disable blinking entirely**.  
+Adds **custom blinking** with the ability to **override the blink state** or **disable blinking entirely**.  
 Create your blink logic or blend tree using the available properties below.
 
 ### Available Properties
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
+| EarTwitchActive | Bool | Bool (Optional) | ✖ | Controls twitch feature |
+| EarTwitchLeft | Bool | Bool | ✔ | Syncronizes left ear twitch |
+| EarTwitchRight | Bool | Bool | ✔ | Syncronizes right ear twitch |
+| Proxy/Ear/Left_Twitch | Float | - | - | Output value used to drive the **left ear twitch** animation, this value is set to 100 to override other animations through a direct blend tree |
+| Proxy/Ear/Right_Twitch | Float | - | - | Output value used to drive the **right ear twitch** animation, this value is set to 100 to override other animations through a direct blend tree |
+
+## Ear Twitch Prefab
+
+Adds occasional ear twitches that trigger at random intervals.
+
+### Available Properties
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| Blink | Bool | Bool | ✔ | Syncronizes blink |
 | BlinkActive | Bool | Bool (Optional) | ✖ | Controls blinking feature |
 | Proxy/Blink/Left | Float | - | - | Output value used to drive the **left eye blink** blendshape |
 | Proxy/Blink/Right | Float | - | - | Output value used to drive the **right eye blink** blendshape |
@@ -51,21 +66,21 @@ Adds **blend tree–driven gesture detection** with smoothing and menu-based ove
 | Proxy/GestureRight | Float | - | - | Output of gesture right |
 | Proxy/GestureLeft/Weight | Float | - | - | Smoothed weight value for left gesture |
 | Proxy/GestureRight/Weight | Float | - | - | Smoothed weight value for right gesture |
-| Proxy/GestureLeft/Idle | Float | - | - | Smoothed value when left gesture is **Idle** |
-| Proxy/GestureLeft/Fist | Float | - | - | Smoothed value when left gesture is **Fist** |
-| Proxy/GestureLeft/Open | Float | - | - | Smoothed value when left gesture is **Open** |
-| Proxy/GestureLeft/Point | Float | - | - | Smoothed value when left gesture is **Point** |
-| Proxy/GestureLeft/Victory | Float | - | - | Smoothed value when left gesture is **Victory** |
-| Proxy/GestureLeft/Rock&Roll | Float | - | - | Smoothed value when left gesture is **Rock & Roll** |
-| Proxy/GestureLeft/Gun | Float | - | - | Smoothed value when left gesture is **Gun** |
-| Proxy/GestureLeft/ThumbsUp | Float | - | - | Smoothed value when left gesture is **Thumbs Up** |
-| Proxy/GestureRight/Fist | Float | - | - | Smoothed value when right gesture is **Fist** |
-| Proxy/GestureRight/Open | Float | - | - | Smoothed value when right gesture is **Open** |
-| Proxy/GestureRight/Point | Float | - | - | Smoothed value when right gesture is **Point** |
-| Proxy/GestureRight/Victory | Float | - | - | Smoothed value when right gesture is **Victory** |
-| Proxy/GestureRight/Rock&Roll | Float | - | - | Smoothed value when right gesture is **Rock & Roll** |
-| Proxy/GestureRight/Gun | Float | - | - | Smoothed value when right gesture is **Gun** |
-| Proxy/GestureRight/ThumbsUp | Float | - | - | Smoothed value when right gesture is **Thumbs Up** |
+| Proxy/GestureLeft/Idle | Float | - | - | Smooth output when left gesture is **Idle** |
+| Proxy/GestureLeft/Fist | Float | - | - | Smooth output when left gesture is **Fist** |
+| Proxy/GestureLeft/Open | Float | - | - | Smooth output when left gesture is **Open** |
+| Proxy/GestureLeft/Point | Float | - | - | Smooth output when left gesture is **Point** |
+| Proxy/GestureLeft/Victory | Float | - | - | Smooth output when left gesture is **Victory** |
+| Proxy/GestureLeft/Rock&Roll | Float | - | - | Smooth output when left gesture is **Rock & Roll** |
+| Proxy/GestureLeft/Gun | Float | - | - | Smooth output when left gesture is **Gun** |
+| Proxy/GestureLeft/ThumbsUp | Float | - | - | Smooth output when left gesture is **Thumbs Up** |
+| Proxy/GestureRight/Fist | Float | - | - | Smooth output when right gesture is **Fist** |
+| Proxy/GestureRight/Open | Float | - | - | Smooth output when right gesture is **Open** |
+| Proxy/GestureRight/Point | Float | - | - | Smooth output when right gesture is **Point** |
+| Proxy/GestureRight/Victory | Float | - | - | Smooth output when right gesture is **Victory** |
+| Proxy/GestureRight/Rock&Roll | Float | - | - | Smooth output when right gesture is **Rock & Roll** |
+| Proxy/GestureRight/Gun | Float | - | - | Smooth output when right gesture is **Gun** |
+| Proxy/GestureRight/ThumbsUp | Float | - | - | Smooth output when right gesture is **Thumbs Up** |
 
 ## Viseme Tongue Movement Prefab
 
@@ -77,8 +92,8 @@ Adds **blend tree–driven tongue viseme movement**, separating it from the stan
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| Proxy/Viseme/TongueForward | Float | - | - | Smoothed value for activating Tongue Forward blendshape |
-| Proxy/Viseme/TongueUp | Float | - | - | Smoothed value for activating Tongue Up blendshape |
+| Proxy/Viseme/TongueForward | Float | - | - | Smooth output for activating Tongue Forward blendshape |
+| Proxy/Viseme/TongueUp | Float | - | - | Smooth output for activating Tongue Up blendshape |
 
 ## Smooth Ear Grab Prefab
 
@@ -90,8 +105,8 @@ Adds **smooth ear grab interactions** to the avatar for face stretch, use the pa
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| Proxy/Ear/Left_Stretch | Float | - | - | Smoothed value for left ear stretch, only present when left ear is grabbed |
-| Proxy/Ear/Right_Stretch | Float | - | - | Smoothed value for right ear stretch, only present when right is grabbed |
+| Proxy/Ear/Left_Stretch | Float | - | - | Smooth output for left ear stretch, only present when left ear is grabbed |
+| Proxy/Ear/Right_Stretch | Float | - | - | Smooth output for right ear stretch, only present when right is grabbed |
 
 ## Eye Poke System Prefab
 
