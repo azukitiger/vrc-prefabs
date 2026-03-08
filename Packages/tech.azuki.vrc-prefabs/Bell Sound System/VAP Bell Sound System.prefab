@@ -404,8 +404,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: d3ce7c67802986f42844622073003310|Packages/tech.azuki.vrc-prefabs/VRC
-              Bell Sound System/FX Bell Sound Controller.controller
+            id: d3ce7c67802986f42844622073003310|Packages/tech.azuki.vrc-prefabs/Bell
+              Sound System/FX Bell Sound Controller.controller
             objRef: {fileID: 9100000, guid: d3ce7c67802986f42844622073003310, type: 2}
           type: 5
         menus: []

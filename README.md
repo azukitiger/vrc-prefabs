@@ -108,6 +108,18 @@ Adds **smooth ear grab interactions** for face stretching. Use the parameters `E
 | VAP/Ear/Left_Stretch | Float | - | - | Smoothed output value representing left ear stretch when the ear is grabbed |
 | VAP/Ear/Right_Stretch | Float | - | - | Smoothed output value representing right ear stretch when the ear is grabbed |
 
+## Tail Wag Speed Prefab
+
+Controls **tail wag speed** through a menu value or animator override. Wagging automatically stops when the tail is grabbed or when a pose is active. Use the parameter `Tail` for the tail PhysBone.
+
+### Available Properties
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| TailWagSpeed | Float | Float (Optional) | ✔ | Menu value used to control tail wag speed |
+| VAP/Tail/WagSpeed | Float | - | - | Output value used as the tail wag animation speed multiplier |
+| VAP/Tail/WagOverride | Float | - | - | Overrides the wag speed when the value is lower than `1` |
+
 ## Eye Poke System Prefab
 
 > Requires the **Frame Time Prefab**.
@@ -172,6 +184,16 @@ Adds a **heartbeat sound effect and visual display**.
 - Position the **Heartbeat Sound** object at the avatar's chest.
 - A **Contact Receiver** ensures the **Audio Source** only activates when needed. This helps avoid the VRChat limit of **three active audio sources per avatar**.
 - Position the **Heartbeat Counter** object over the avatar's **left hand**. Remove the **VRCFury Armature Link** component if you want to attach the counter elsewhere.
+
+## GoGo Loco Simplified Prefab
+
+Provides **customized GoGo Loco controllers and menus** with simplified menu and additional improvements.
+
+### Features
+
+- Fixes the **Index controller finger tracking issue**
+- Toggle for **feral movement animations**
+- Simplified and improved **menu options**
 
 ###
 # Asset Prefabs
