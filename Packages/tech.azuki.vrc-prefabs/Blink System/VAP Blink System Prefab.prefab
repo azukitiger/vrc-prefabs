@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -64,8 +64,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: c3ab2a5d3b678c04daa1c6d16fcbad2a|Packages/tech.azuki.vrc-prefabs/VRC
-              Blink System/Blink System Controller.controller
+            id: c3ab2a5d3b678c04daa1c6d16fcbad2a|Packages/tech.azuki.vrc-prefabs/Blink
+              System/VAP Blink System Controller.controller
             objRef: {fileID: 9100000, guid: c3ab2a5d3b678c04daa1c6d16fcbad2a, type: 2}
           type: 5
         menus: []
@@ -74,8 +74,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 929235d50b19f404fa81985e2fccc391|Packages/tech.azuki.vrc-prefabs/VRC
-              Blink System/Blink System Parameters.asset
+            id: 929235d50b19f404fa81985e2fccc391|Packages/tech.azuki.vrc-prefabs/Blink
+              System/Blink System Parameters.asset
             objRef: {fileID: 11400000, guid: 929235d50b19f404fa81985e2fccc391, type: 2}
         smoothedPrms: []
         globalParams:
@@ -84,8 +84,8 @@ MonoBehaviour:
         - BlinkActive
         - VAP/Blink/Left
         - VAP/Blink/Right
-        - VAP/Blink/LeftOverride
-        - VAP/Blink/RightOverride
+        - VAP/Override/Blink/Left
+        - VAP/Override/Blink/Right
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

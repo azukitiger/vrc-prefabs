@@ -65,8 +65,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 590c39c135addcb41b60f71f4c176396|Packages/tech.azuki.vrc-prefabs/VRC
-              Nose Boop System/Nose Boop System Controller.controller
+            id: 590c39c135addcb41b60f71f4c176396|Packages/tech.azuki.vrc-prefabs/Nose
+              Boop System/VAP Nose Boop System Controller.controller
             objRef: {fileID: 9100000, guid: 590c39c135addcb41b60f71f4c176396, type: 2}
           type: 5
         menus: []

@@ -66,8 +66,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 081a121f3b395c846bc45f5fbb9640b0|Packages/tech.azuki.vrc-prefabs/VRC
-              Foot Poke System/Foot Poke System Animator.controller
+            id: 081a121f3b395c846bc45f5fbb9640b0|Packages/tech.azuki.vrc-prefabs/Foot
+              Poke System/VAP Foot Poke System Animator.controller
             objRef: {fileID: 9100000, guid: 081a121f3b395c846bc45f5fbb9640b0, type: 2}
           type: 5
         menus: []

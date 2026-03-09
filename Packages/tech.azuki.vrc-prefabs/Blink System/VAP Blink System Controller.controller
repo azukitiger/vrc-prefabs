@@ -25,7 +25,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7867716534865919149}
   m_Tag: 
-  m_SpeedParameter: Proxy/Blink/Multiplier
+  m_SpeedParameter: Driver/Blink/Multiplier
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -63,7 +63,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: Proxy/Blink/Double
+    m_ConditionEvent: Driver/Blink/Double
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -9102348726290397860}
@@ -224,7 +224,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/Blink/RightOverride
+  m_BlendParameter: VAP/Override/Blink/Right
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -294,7 +294,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Proxy/Blink/Double
+    m_ConditionEvent: Driver/Blink/Double
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5575205444082306748}
@@ -331,13 +331,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Blink/Multiplier
+  - m_Name: Driver/Blink/Multiplier
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Blink/Double
+  - m_Name: Driver/Blink/Double
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -367,13 +367,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: VAP/Blink/LeftOverride
+  - m_Name: VAP/Override/Blink/Left
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: VAP/Blink/RightOverride
+  - m_Name: VAP/Override/Blink/Right
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -406,7 +406,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: Proxy/Blink/Double
+    name: Driver/Blink/Double
     source: 
     value: 0
     valueMin: 0
@@ -447,7 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 2
-    name: Proxy/Blink/Multiplier
+    name: Driver/Blink/Multiplier
     source: 
     value: 0
     valueMin: 0.4
@@ -460,7 +460,7 @@ MonoBehaviour:
     destMin: 0
     destMax: 0
   - type: 2
-    name: Proxy/Blink/Double
+    name: Driver/Blink/Double
     source: 
     value: 0
     valueMin: 0.5
@@ -734,7 +734,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/Blink/LeftOverride
+  m_BlendParameter: VAP/Override/Blink/Left
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1

@@ -64,8 +64,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 83d4b57c9a1ac9843bec23899dbb4f41|Packages/tech.azuki.vrc-prefabs/VRC
-              Viseme Tongue Movement/Viseme Tongue Movement Controller.controller
+            id: 83d4b57c9a1ac9843bec23899dbb4f41|Packages/tech.azuki.vrc-prefabs/Viseme
+              Tongue Movement/VAP Viseme Tongue Movement Controller.controller
             objRef: {fileID: 9100000, guid: 83d4b57c9a1ac9843bec23899dbb4f41, type: 2}
           type: 5
         menus: []

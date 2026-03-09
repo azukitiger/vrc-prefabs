@@ -1,3 +1,6 @@
+## Version 1.2.2
+- Fixed AAPs breaking from avatar seats.
+
 ## Version 1.2.1
 - Added common matcap & fallback reflection.
 

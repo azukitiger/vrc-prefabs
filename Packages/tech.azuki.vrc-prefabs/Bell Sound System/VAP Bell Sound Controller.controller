@@ -12,7 +12,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 387ee6e58f6257647b13d07c535c443b, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/RotationSmooth
     m_Mirror: 0
@@ -69,7 +69,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 1d6afcd61de144548ab8280b19b5ee48, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -102,24 +102,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 3
-    name: Proxy/Bell/PreviousRotation
-    source: Proxy/Bell/CurrentRotation
+    name: Driver/Bell/PreviousRotation
+    source: Driver/Bell/CurrentRotation
     value: 0
     valueMin: 0
     valueMax: 0
     chance: 0
+    preventRepeats: 0
     convertRange: 0
     sourceMin: 0
     sourceMax: 0
     destMin: 0
     destMax: 0
   - type: 3
-    name: Proxy/Bell/CurrentRotation
+    name: Driver/Bell/CurrentRotation
     source: Bell_Angle
     value: 0
     valueMin: 0
     valueMax: 0
     chance: 0
+    preventRepeats: 0
     convertRange: 0
     sourceMin: 0
     sourceMax: 0
@@ -139,7 +141,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f41ac363543ac284f936bd597d808352, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/RotationSum
     m_Mirror: 0
@@ -147,7 +149,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 99b519fce7ba7574b877dc929bf7262a, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/RotationSmooth
     m_Mirror: 0
@@ -260,7 +262,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: a8cfa55db80e00643b1ced5f2a5ac21a, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/DifferenceRotation
     m_Mirror: 0
@@ -437,73 +439,73 @@ AnimatorController:
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsLocal
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: ScaleFactor
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Bell_Angle
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: FrameTime
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Bell/CurrentRotation
+    m_Controller: {fileID: 0}
+  - m_Name: Driver/Bell/CurrentRotation
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Proxy/Bell/PreviousRotation
+    m_Controller: {fileID: 0}
+  - m_Name: Driver/Bell/PreviousRotation
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Proxy/Bell/DifferenceRotation
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Proxy/Bell/RotationSum
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Proxy/Bell/RotationSmooth
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Proxy/Bell/VolumeDelta
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Proxy/Smoothing/Velocity
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Bell Rotation
@@ -624,24 +626,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 3
-    name: Proxy/Bell/PreviousRotation
-    source: Proxy/Bell/CurrentRotation
+    name: Driver/Bell/PreviousRotation
+    source: Driver/Bell/CurrentRotation
     value: 0
     valueMin: 0
     valueMax: 0
     chance: 0
+    preventRepeats: 0
     convertRange: 0
     sourceMin: 0
     sourceMax: 0
     destMin: 0
     destMax: 0
   - type: 3
-    name: Proxy/Bell/CurrentRotation
+    name: Driver/Bell/CurrentRotation
     source: Bell_Angle
     value: 0
     valueMin: 0
     valueMax: 0
     chance: 0
+    preventRepeats: 0
     convertRange: 0
     sourceMin: 0
     sourceMax: 0
@@ -661,17 +665,17 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 8e060e6d5b5b22d41b930bc4154f378c, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Bell/CurrentRotation
+    m_DirectBlendParameter: Driver/Bell/CurrentRotation
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3d3de059e18d42d438724e896545d7ee, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: Proxy/Bell/PreviousRotation
+    m_DirectBlendParameter: Driver/Bell/PreviousRotation
     m_Mirror: 0
   m_BlendParameter: Mayu/Bell
   m_BlendParameterY: Blend
@@ -707,7 +711,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 2405a7136ed9edf4dbf69d26621f7f66, type: 2}
     m_Threshold: 0.25
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Idle/Strength
     m_Mirror: 0
@@ -715,7 +719,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f73a1f61bd452784b9241ef85d8d09b4, type: 2}
     m_Threshold: 2.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -723,7 +727,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 218f3e462a4e0c944953a7b575a8cdb0, type: 2}
     m_Threshold: 4.75
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -774,16 +778,24 @@ BlendTree:
   m_Name: Bell Sound
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 04d87316d31ef1a48ae887c9fd1ef307, type: 2}
+    m_Motion: {fileID: 7400000, guid: f0fe67f698fd2994b9bf48b73954f0e2, type: 2}
     m_Threshold: 0.49292925
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 04d87316d31ef1a48ae887c9fd1ef307, type: 2}
+    m_Threshold: 0.50909084
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FrameTime
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 3870814336117880396}
-    m_Threshold: 0.5113997
+    m_Threshold: 0.52525246
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -791,7 +803,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -7040432079352593645}
-    m_Threshold: 0.5298701
+    m_Threshold: 0.5414141
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -799,15 +811,15 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: a8cfa55db80e00643b1ced5f2a5ac21a, type: 2}
-    m_Threshold: 0.5483405
+    m_Threshold: 0.5575757
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/RotationSum
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -4511593704397799475}
-    m_Threshold: 0.5668109
+    m_Threshold: 0.5737373
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -815,7 +827,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -4633411674950396314}
-    m_Threshold: 0.5852814
+    m_Threshold: 0.58989894
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -823,7 +835,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 1527025133269526787}
-    m_Threshold: 0.6037518
+    m_Threshold: 0.60606056
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -879,7 +891,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: bdbba37c6795f0f4d97a5e010249287c, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/DifferenceRotation
     m_Mirror: 0
@@ -902,7 +914,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f9aa26937d717e5448e3bb84b9fed2a2, type: 2}
     m_Threshold: -0.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -910,7 +922,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 84f74f5f891abcb4e89b6b809db32a3d, type: 2}
     m_Threshold: -0.05
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -918,7 +930,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 84f74f5f891abcb4e89b6b809db32a3d, type: 2}
     m_Threshold: 0.05
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -926,7 +938,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: f9aa26937d717e5448e3bb84b9fed2a2, type: 2}
     m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -949,7 +961,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 58e69369e054b6b498703ad780ddc07f, type: 2}
     m_Threshold: -0.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -957,7 +969,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 84f74f5f891abcb4e89b6b809db32a3d, type: 2}
     m_Threshold: -0.05
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -965,7 +977,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 84f74f5f891abcb4e89b6b809db32a3d, type: 2}
     m_Threshold: 0.05
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -973,7 +985,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 58e69369e054b6b498703ad780ddc07f, type: 2}
     m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
@@ -1011,7 +1023,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 387ee6e58f6257647b13d07c535c443b, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1e+10
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Proxy/Bell/RotationSum
     m_Mirror: 0

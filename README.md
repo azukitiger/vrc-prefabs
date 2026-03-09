@@ -33,8 +33,8 @@ Create your blink logic or blend tree using the available properties below.
 | Blink | Bool | Bool | ✔ | Synchronizes blink state |
 | VAP/Blink/Left | Float | - | - | Output value used to drive the **left eye blink** blendshape |
 | VAP/Blink/Right | Float | - | - | Output value used to drive the **right eye blink** blendshape |
-| VAP/Blink/LeftOverride | Float | - | - | Override value applied to `VAP/Blink/Left` |
-| VAP/Blink/RightOverride | Float | - | - | Override value applied to `VAP/Blink/Right` |
+| VAP/Override/Blink/Left | Float | - | - | Override value applied to `VAP/Blink/Left` |
+| VAP/Override/Blink/Right | Float | - | - | Override value applied to `VAP/Blink/Right` |
 
 ## Ear Twitch Prefab
 
@@ -118,7 +118,7 @@ Controls **tail wag speed** through a menu value or animator override. Wagging a
 |-|-|-|-|-|
 | TailWagSpeed | Float | Float (Optional) | ✔ | Menu value used to control tail wag speed |
 | VAP/Tail/WagSpeed | Float | - | - | Output value used as the tail wag animation speed multiplier |
-| VAP/Tail/WagOverride | Float | - | - | Overrides the wag speed when the value is lower than `1` |
+| VAP/Tail/Override/WagSpeed | Float | - | - | Overrides the wag speed when the value is lower than `1` |
 
 ## Eye Poke System Prefab
 
@@ -164,7 +164,7 @@ Adds a **smooth nose boop interaction** using a contact sensor.
 | VAP/Touch/NoseTimer | Float | - | - | Timer representing how long the nose contact is held |
 | Touch/Nose | Float | - | - | Raw proximity value from the nose contact sensor |
 
-## Toe Curl Prefab
+## Toe Curl System Prefab
 
 Adds a **toe curl feature** using two contact sensors. Adjust the `Left Curl` and `Right Curl` objects so they make contact with their respective foot contacts.
 
@@ -195,7 +195,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu and
 - Toggle for **feral movement animations**
 - Simplified and improved **menu options**
 
-## VRCFT Jerry's Eye Rotation
+## VRCFT Eye Rotation
 
 Additive controller for **eye tracking rotation** with improved rotation values that avoid interfering with the rig’s eye rotations used in **MMD worlds**. Requires the **VRCFT – Jerry's Face Tracking** package.
 

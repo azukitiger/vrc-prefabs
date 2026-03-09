@@ -9,7 +9,7 @@ BlendTree:
   m_Name: Frame Time Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9678705780d652e47bcd4baee8a50fec, type: 2}
+    m_Motion: {fileID: 7400000, guid: baf0ee658cbd4dd46b3c30fab150ad06, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -17,8 +17,16 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 9678705780d652e47bcd4baee8a50fec, type: 2}
+    m_Threshold: 0.22222224
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 39814aca242e76e4fb6b9c9607549e7e, type: 2}
-    m_Threshold: 0.33333334
+    m_Threshold: 0.44444448
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0

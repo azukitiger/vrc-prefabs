@@ -235,7 +235,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Proxy/Smooth/Touch
+  - m_Name: VAP/Smooth/Touch
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -314,7 +314,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Touch
+  m_BlendParameter: VAP/Smooth/Touch
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -464,7 +464,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Touch
+  m_BlendParameter: VAP/Smooth/Touch
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -480,7 +480,7 @@ BlendTree:
   m_Name: Eye Poke System
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 6391688471021901384}
+    m_Motion: {fileID: 7400000, guid: caabfbebc0863914cafbcba38e0660ae, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -488,8 +488,16 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
+    m_Motion: {fileID: 6391688471021901384}
+    m_Threshold: 0.25
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: -8588550924076670839}
-    m_Threshold: 0.33333334
+    m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -497,7 +505,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -7995743421533549837}
-    m_Threshold: 0.6666667
+    m_Threshold: 0.75
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0

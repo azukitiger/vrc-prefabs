@@ -1044,7 +1044,7 @@ BlendTree:
   m_Name: VRCFT Eye Tracking
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 20600000, guid: bcbe23140cb95c74b95fb1f5011d3e44, type: 2}
+    m_Motion: {fileID: 7400000, guid: e484fdfd650821e4dad0bdd15d6def55, type: 2}
     m_Threshold: 0.14285715
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1052,8 +1052,16 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
+    m_Motion: {fileID: 20600000, guid: bcbe23140cb95c74b95fb1f5011d3e44, type: 2}
+    m_Threshold: 0.2857143
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: -1402955046447516481}
-    m_Threshold: 0.31428573
+    m_Threshold: 0.42857146
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -1061,7 +1069,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -6889307434879591658}
-    m_Threshold: 0.48571432
+    m_Threshold: 0.5714286
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -1069,7 +1077,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 4238034582910710176}
-    m_Threshold: 0.6571429
+    m_Threshold: 0.71428573
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -1077,7 +1085,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -5354049983448555214}
-    m_Threshold: 0.82857144
+    m_Threshold: 0.85714287
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -1702,7 +1710,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VAP Additive Jerry's Eye Rotation Controller
+  m_Name: VAP Additive Eye Rotation Controller
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: FXWeight
@@ -1771,6 +1779,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: FT/EyeSync
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: OSCm/EyeSmoothing
     m_Type: 1
     m_DefaultFloat: 0
@@ -1786,12 +1800,6 @@ AnimatorController:
   - m_Name: OSCm/EyeMod
     m_Type: 1
     m_DefaultFloat: 0.25
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: FT/EyeSync
-    m_Type: 1
-    m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
