@@ -1,3 +1,6 @@
+## Version 1.2.3
+- Now fixed AAPs breaking from avatar seats.
+
 ## Version 1.2.2
 - Fixed AAPs breaking from avatar seats.
 

@@ -64,8 +64,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: d98fd14472eed544694d47b4b61947df|Packages/tech.azuki.vrc-prefabs/VRC
-              Frametime Logic/Frame Time Controller.controller
+            id: d98fd14472eed544694d47b4b61947df|Packages/tech.azuki.vrc-prefabs/Frame
+              Time Logic/VAP Frame Time Controller.controller
             objRef: {fileID: 9100000, guid: d98fd14472eed544694d47b4b61947df, type: 2}
           type: 5
         menus: []

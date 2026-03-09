@@ -1184,7 +1184,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -1463,14 +1463,6 @@ BlendTree:
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 38e9ae41d21833f459d483b8eda17e80, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 9122355664481011122}
     m_Threshold: 0.22222224
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1478,8 +1470,16 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
+    m_Motion: {fileID: 9122355664481011122}
+    m_Threshold: 0.3703704
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 4719186569573224471}
-    m_Threshold: 0.44444448
+    m_Threshold: 0.51851857
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -1495,7 +1495,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: Blend
   m_BlendParameterY: Blend
-  m_MinThreshold: 0
+  m_MinThreshold: 0.22222224
   m_MaxThreshold: 0.6666667
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
