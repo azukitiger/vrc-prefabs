@@ -195,6 +195,10 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu and
 - Toggle for **feral movement animations**
 - Simplified and improved **menu options**
 
+## VRCFT Jerry's Eye Rotation
+
+Additive controller for **eye tracking rotation** with improved rotation values that avoid interfering with the rig’s eye rotations used in **MMD worlds**. Requires the **VRCFT – Jerry's Face Tracking** package.
+
 ###
 # Asset Prefabs
 

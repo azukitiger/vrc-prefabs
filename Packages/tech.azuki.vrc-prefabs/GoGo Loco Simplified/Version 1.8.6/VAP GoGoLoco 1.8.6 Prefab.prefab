@@ -78,8 +78,8 @@ MonoBehaviour:
           version: 1
           fileID: 0
           guid: 
-          id: 05e528a037ca2354ebdf0733803a992f|Packages/tech.azuki.vrc-prefabs/Simplified
-            GogoLoco/Icons/Feral.png
+          id: 05e528a037ca2354ebdf0733803a992f|Packages/tech.azuki.vrc-prefabs/GoGo
+            Loco Simplified/Icons/Feral.png
           objRef: {fileID: 2800000, guid: 05e528a037ca2354ebdf0733803a992f, type: 3}
         enableDriveGlobalParam: 0
         driveGlobalParam: 
@@ -174,8 +174,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 683c23c22af461c4ea2bd6eec67e04dc|Packages/tech.azuki.vrc-prefabs/Simplified
-              GogoLoco/Version 1.8.6/VAP GoLocoBaseWD.controller
+            id: 683c23c22af461c4ea2bd6eec67e04dc|Packages/tech.azuki.vrc-prefabs/GoGo
+              Loco Simplified/Version 1.8.6/VAP GoLocoBaseWD.controller
             objRef: {fileID: 9100000, guid: 683c23c22af461c4ea2bd6eec67e04dc, type: 2}
           type: 0
         - controller:
@@ -211,8 +211,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 162a302d400799d44b42de883aca93aa|Packages/tech.azuki.vrc-prefabs/Simplified
-              GogoLoco/Version 1.8.6/VAP Locomotion Menu.asset
+            id: 162a302d400799d44b42de883aca93aa|Packages/tech.azuki.vrc-prefabs/GoGo
+              Loco Simplified/Version 1.8.6/VAP Locomotion Menu.asset
             objRef: {fileID: 11400000, guid: 162a302d400799d44b42de883aca93aa, type: 2}
           prefix: Body Controls/Locomotion
         - menu:
@@ -302,8 +302,8 @@ MonoBehaviour:
           version: 1
           fileID: 0
           guid: 
-          id: aa27c4760e38d5e40b4ec52aa1b6d991|Packages/tech.azuki.vrc-prefabs/Simplified
-            GogoLoco/Icons/Gogo.png
+          id: aa27c4760e38d5e40b4ec52aa1b6d991|Packages/tech.azuki.vrc-prefabs/GoGo
+            Loco Simplified/Icons/Gogo.png
           objRef: {fileID: 2800000, guid: aa27c4760e38d5e40b4ec52aa1b6d991, type: 3}
 --- !u!114 &6875435517254287550
 MonoBehaviour:
@@ -337,8 +337,8 @@ MonoBehaviour:
           version: 1
           fileID: 0
           guid: 
-          id: 26637a080b65e4e469e48b20bf832d76|Packages/tech.azuki.vrc-prefabs/Simplified
-            GogoLoco/Icons/Pose.png
+          id: 26637a080b65e4e469e48b20bf832d76|Packages/tech.azuki.vrc-prefabs/GoGo
+            Loco Simplified/Icons/Pose.png
           objRef: {fileID: 2800000, guid: 26637a080b65e4e469e48b20bf832d76, type: 3}
 --- !u!114 &7197864241558675477
 MonoBehaviour:
@@ -372,6 +372,6 @@ MonoBehaviour:
           version: 1
           fileID: 0
           guid: 
-          id: a3273b85f8423bb47bef9def85485eea|Packages/tech.azuki.vrc-prefabs/Simplified
-            GogoLoco/Icons/Emote.png
+          id: a3273b85f8423bb47bef9def85485eea|Packages/tech.azuki.vrc-prefabs/GoGo
+            Loco Simplified/Icons/Emote.png
           objRef: {fileID: 2800000, guid: a3273b85f8423bb47bef9def85485eea, type: 3}
