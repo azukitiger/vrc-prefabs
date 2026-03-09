@@ -1,8 +1,2 @@
-## Version 1.1.2
-- Even more prefabs!
-
-## Version 1.1.1
-- Added more prefabs!
-
-## Version 1.1.0
-- Initial release!
+## Version 1.2.0
+- First release!
