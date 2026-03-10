@@ -1,3 +1,6 @@
+## Version 1.2.5
+- Fixed override tail wag animation.
+
 ## Version 1.2.4
 - Fixed layer location of Reset Bell System AAP.
 
