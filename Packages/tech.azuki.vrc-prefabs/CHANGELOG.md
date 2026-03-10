@@ -1,3 +1,6 @@
+## Version 1.2.4
+- Fixed layer location of Reset Bell System AAP.
+
 ## Version 1.2.3
 - Now fixed AAPs breaking from avatar seats.
 
