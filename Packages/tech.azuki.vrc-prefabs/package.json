@@ -8,7 +8,8 @@
     "name": "Azuki",
     "url": "https://github.com/azukitiger"
   },
-   "keywords": [
+  "hideInEditor": false,
+  "keywords": [
     "vrchat",
     "avatar",
     "vrc"
