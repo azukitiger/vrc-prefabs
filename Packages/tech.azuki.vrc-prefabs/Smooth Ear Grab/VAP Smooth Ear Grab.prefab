@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1279.0
+  vrcfuryVersion: 1.1280.0
   somethingIsBroken: 0
   config:
     features: []
@@ -64,8 +64,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 0bcf05a52267c4c4b88f5c051bbc68ac|Packages/tech.azuki.vrc-prefabs/VRC
-              Smooth Ear Grab/Smooth Ear Grab Controller.controller
+            id: 0bcf05a52267c4c4b88f5c051bbc68ac|Packages/tech.azuki.vrc-prefabs/Smooth
+              Ear Grab/VAP Smooth Ear Grab Controller.controller
             objRef: {fileID: 9100000, guid: 0bcf05a52267c4c4b88f5c051bbc68ac, type: 2}
           type: 5
         menus: []

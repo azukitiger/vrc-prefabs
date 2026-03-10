@@ -66,8 +66,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 4895471c1ed50004cb738c5898721410|Packages/tech.azuki.vrc-prefabs/VRC
-              Eye Poke System/Eye Poke System Animator.controller
+            id: 4895471c1ed50004cb738c5898721410|Packages/tech.azuki.vrc-prefabs/Eye
+              Poke System/VAP Eye Poke System Animator.controller
             objRef: {fileID: 9100000, guid: 4895471c1ed50004cb738c5898721410, type: 2}
           type: 5
         menus: []

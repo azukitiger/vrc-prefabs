@@ -57,7 +57,7 @@ BlendTree:
   m_Name: Smoothing
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 4330927185644099513}
+    m_Motion: {fileID: -618015722362770744}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -65,7 +65,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -4799730473562871346}
+    m_Motion: {fileID: 1773920035165729093}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -79,37 +79,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-4799730473562871346
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: One
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 1773920035165729093}
-    m_Threshold: 0.2324219
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 6758711672141710185}
-    m_Threshold: 0.39843753
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Gesture
-  m_BlendParameterY: FXWeight
-  m_MinThreshold: 0.2324219
-  m_MaxThreshold: 0.39843753
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
 --- !u!206 &-3978495761413474848
 BlendTree:
   m_ObjectHideFlags: 1
@@ -257,7 +226,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ear Grabbed L Output
+  m_Name: Output
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1e797bbfdd35f96469a46e24b7c96aeb, type: 2}
@@ -275,10 +244,26 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/Ear/Left_IsGrabbed
     m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 68211018c59c2d34cb8a813e6a2a3117, type: 2}
+    m_Threshold: 0.00003
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: VAP/Ear/Right_IsGrabbedPass
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: ac35065d32fc78345b6a0920e8c59a56, type: 2}
+    m_Threshold: 0.00004
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: VAP/Ear/Right_IsGrabbed
+    m_Mirror: 0
   m_BlendParameter: Proxy/Ear/Left_IsGrabbedPass
   m_BlendParameterY: Blend
   m_MinThreshold: 0.00001
-  m_MaxThreshold: 0.00002
+  m_MaxThreshold: 0.00004
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 4
@@ -382,7 +367,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ear Grabbed L Input
+  m_Name: Input
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1e797bbfdd35f96469a46e24b7c96aeb, type: 2}
@@ -394,61 +379,15 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: f7952370e2d187d44b2072776a79b55d, type: 2}
-    m_Threshold: 1
+    m_Threshold: 0.33333334
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/Ear/Left_IsGrabbedPass
     m_Mirror: 0
-  m_BlendParameter: Ear/Left_IsGrabbed
-  m_BlendParameterY: Blend
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
---- !u!206 &4330927185644099513
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Zero
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: -618015722362770744}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7806396060787903243}
-    m_Threshold: 0.35483867
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: Proxy/Smooth/Gesture
-  m_BlendParameterY: FXWeight
-  m_MinThreshold: 0
-  m_MaxThreshold: 0.35483867
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
---- !u!206 &6758711672141710185
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Ear Grabbed R Input
-  m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 68211018c59c2d34cb8a813e6a2a3117, type: 2}
-    m_Threshold: 0
+    m_Threshold: 0.6666667
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -462,41 +401,10 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/Ear/Right_IsGrabbedPass
     m_Mirror: 0
-  m_BlendParameter: Ear/Right_IsGrabbed
+  m_BlendParameter: Ear/Left_IsGrabbed
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
---- !u!206 &7806396060787903243
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Ear Grabbed R Output
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 68211018c59c2d34cb8a813e6a2a3117, type: 2}
-    m_Threshold: 0.00001
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Ear/Right_IsGrabbedPass
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: ac35065d32fc78345b6a0920e8c59a56, type: 2}
-    m_Threshold: 0.00002
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Ear/Right_IsGrabbed
-    m_Mirror: 0
-  m_BlendParameter: Proxy/Ear/Right_IsGrabbedPass
-  m_BlendParameterY: Blend
-  m_MinThreshold: 0.00001
-  m_MaxThreshold: 0.00002
-  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 4
