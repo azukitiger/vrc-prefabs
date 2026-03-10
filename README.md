@@ -118,7 +118,7 @@ Controls **tail wag speed** through a menu value or animator override. Wagging a
 |-|-|-|-|-|
 | TailWagSpeed | Float | Float (Optional) | ✔ | Menu value used to control tail wag speed |
 | VAP/Tail/WagSpeed | Float | - | - | Output value used as the tail wag animation speed multiplier |
-| VAP/Tail/Override/WagSpeed | Float | - | - | Overrides the wag speed when the value is lower than `1` |
+| VAP/Override/Tail/WagSpeed | Float | - | - | Overrides the wag speed when the value is lower than `1` |
 
 ## Eye Poke System Prefab
 
