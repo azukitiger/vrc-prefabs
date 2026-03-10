@@ -1,4 +1,7 @@
 ## Version 1.2.5
+- Do not hide package on editor.
+
+## Version 1.2.5
 - Fixed override tail wag animation.
 
 ## Version 1.2.4
