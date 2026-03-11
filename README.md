@@ -169,10 +169,10 @@ Adds a **smooth nose boop interaction** using a contact sensor.
 Adds a **toe curl feature** using two contact sensors & two rotation constraints.
 
 ### Instructions
-- Add a game object to each foot without transforms (eg. `Curl_L` and `Curl_R`).
+- Add a game object to each **Foot** of your avatar without transforms (eg. `Curl_L` and `Curl_R`).
 - Update the `Root Transform` of the contact sensors of `Left Curl` & `Right Curl` game objects to your corresponding created `Curl_L` and `Curl_R` game objects.
 - Update the `Target Transform` of the rotation constraints of `Left Curl` & `Right Curl` game objects to your corresponding `Curl_L` and `Curl_R` game objects.
-- Update the `Source Transform` of the rotation constraints of `Left Curl` & `Right Curl` game objects to the corresponding `Foot` of your avatar. This will prevent the contact sensors from rotating.
+- Update the `Source Transform` of the rotation constraints of `Left Curl` & `Right Curl` game objects to the corresponding **Foot** of your avatar. This will prevent the contact sensors from rotating.
 
 ### Available Properties
 
