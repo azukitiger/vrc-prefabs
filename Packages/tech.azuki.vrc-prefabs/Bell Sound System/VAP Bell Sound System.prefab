@@ -311,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1282.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
@@ -386,7 +386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1282.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
