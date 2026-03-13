@@ -11,7 +11,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -5315941963191023936}
-    m_Position: {x: 30, y: 180, z: 0}
+    m_Position: {x: 30, y: 160, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -80,30 +80,30 @@ AnimatorController:
   m_Name: VAP Heartbeat Display Controller
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: FXWeight
+  - m_Name: IsAnimatorEnabled
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: ScaleFactor
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: HR
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: HRMotion
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: HR Display Controller
@@ -131,7 +131,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 8720205938885412592}
@@ -139,7 +139,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 20600000, guid: 1ad9ffa6766c7fa408943fe46246c4fe, type: 2}
@@ -147,7 +147,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   m_BlendParameter: FXWeight
   m_BlendParameterY: FXWeight

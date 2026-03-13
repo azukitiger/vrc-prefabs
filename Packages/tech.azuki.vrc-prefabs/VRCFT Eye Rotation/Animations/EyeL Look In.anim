@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Eye_Look_Down_Left_Rot
+  m_Name: EyeL Look In
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -33,7 +33,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: Left Eye Down-Up
+    attribute: Left Eye In-Out
     path: 
     classID: 95
     script: {fileID: 0}
@@ -48,7 +48,7 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 0
-      attribute: 57
+      attribute: 58
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -93,7 +93,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: Left Eye Down-Up
+    attribute: Left Eye In-Out
     path: 
     classID: 95
     script: {fileID: 0}

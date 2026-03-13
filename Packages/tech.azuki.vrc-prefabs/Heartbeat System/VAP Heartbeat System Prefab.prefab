@@ -280,7 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
@@ -321,6 +321,8 @@ MonoBehaviour:
             objRef: {fileID: 11400000, guid: 4d75b3d2fb37ef446814fbff85247a1b, type: 2}
         smoothedPrms: []
         globalParams:
+        - FXWeight
+        - IsAnimatorEnabled
         - IsLocal
         - HR
         allNonsyncedAreGlobal: 0
@@ -368,7 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
@@ -464,7 +466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
@@ -560,7 +562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
@@ -572,7 +574,7 @@ MonoBehaviour:
     - rid: 6131087477549302166
       type: {class: ArmatureLink, ns: VF.Model.Feature, asm: VRCFury}
       data:
-        version: 6
+        version: 7
         propBone: {fileID: 6811037775154754322}
         linkTo:
         - useBone: 1
@@ -588,9 +590,9 @@ MonoBehaviour:
         alignPosition: 0
         alignRotation: 0
         alignScale: 0
-        autoScaleFactor: 1
+        autoScaleFactor: 0
         scalingFactorPowersOf10Only: 1
-        skinRewriteScalingFactor: 0
+        skinRewriteScalingFactor: 1
         useOptimizedUpload: 0
         useBoneMerging: 0
         keepBoneOffsets: 0
@@ -648,7 +650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []
@@ -666,8 +668,8 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: f07cdcd92e7315341977340e34bd569f|Packages/tech.azuki.vrc-avatar-system/VRC
-              Heartbeat/FX HR Display Controller.controller
+            id: f07cdcd92e7315341977340e34bd569f|Packages/tech.azuki.vrc-prefabs/Heartbeat
+              System/VAP Heartbeat Display Controller.controller
             objRef: {fileID: 9100000, guid: f07cdcd92e7315341977340e34bd569f, type: 2}
           type: 5
         menus: []
@@ -676,11 +678,12 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 9f8e42e126191c84e964a0035cb3af11|Packages/tech.azuki.vrc-avatar-system/VRC
-              Heartbeat/Menu/HR Parameter.asset
+            id: 9f8e42e126191c84e964a0035cb3af11|Packages/tech.azuki.vrc-prefabs/Heartbeat
+              System/Menu/HR Parameter.asset
             objRef: {fileID: 11400000, guid: 9f8e42e126191c84e964a0035cb3af11, type: 2}
         smoothedPrms: []
         globalParams:
+        - IsAnimatorEnabled
         - ScaleFactor
         - HR
         allNonsyncedAreGlobal: 0
@@ -728,7 +731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1285.0
   somethingIsBroken: 0
   config:
     features: []

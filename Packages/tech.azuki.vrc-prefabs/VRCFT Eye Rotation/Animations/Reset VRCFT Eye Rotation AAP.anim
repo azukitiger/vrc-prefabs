@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ResetVRCFTEyeRotationAAP
+  m_Name: Reset VRCFT Eye Rotation AAP
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -33,7 +33,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/EyeMod
+    attribute: VAP/FT/v2/EyeRightX
     path: 
     classID: 95
     script: {fileID: 0}
@@ -54,7 +54,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/EyeScaler
+    attribute: VAP/FT/v2/EyeY
     path: 
     classID: 95
     script: {fileID: 0}
@@ -75,7 +75,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/EyeSmoothing
+    attribute: VAP/EyeSmoothing
     path: 
     classID: 95
     script: {fileID: 0}
@@ -96,49 +96,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/Smooth/FT/v2/EyeLeftX
-    path: 
-    classID: 95
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: OSCm/Smooth/FT/v2/EyeRightX
-    path: 
-    classID: 95
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: OSCm/Smooth/FT/v2/EyeY
+    attribute: VAP/FT/v2/EyeLeftX
     path: 
     classID: 95
     script: {fileID: 0}
@@ -153,7 +111,7 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 0
-      attribute: 2655482041
+      attribute: 1026222891
       script: {fileID: 0}
       typeID: 95
       customType: 0
@@ -162,7 +120,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 3740758712
+      attribute: 2742481336
       script: {fileID: 0}
       typeID: 95
       customType: 0
@@ -171,7 +129,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 3296156378
+      attribute: 3021270651
       script: {fileID: 0}
       typeID: 95
       customType: 0
@@ -180,25 +138,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 3992816066
-      script: {fileID: 0}
-      typeID: 95
-      customType: 0
-      isPPtrCurve: 0
-      isIntCurve: 0
-      isSerializeReferenceCurve: 0
-    - serializedVersion: 2
-      path: 0
-      attribute: 2863181931
-      script: {fileID: 0}
-      typeID: 95
-      customType: 0
-      isPPtrCurve: 0
-      isIntCurve: 0
-      isSerializeReferenceCurve: 0
-    - serializedVersion: 2
-      path: 0
-      attribute: 1462202366
+      attribute: 3179233737
       script: {fileID: 0}
       typeID: 95
       customType: 0
@@ -243,7 +183,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/EyeMod
+    attribute: VAP/FT/v2/EyeRightX
     path: 
     classID: 95
     script: {fileID: 0}
@@ -264,7 +204,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/EyeScaler
+    attribute: VAP/FT/v2/EyeY
     path: 
     classID: 95
     script: {fileID: 0}
@@ -285,7 +225,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/EyeSmoothing
+    attribute: VAP/EyeSmoothing
     path: 
     classID: 95
     script: {fileID: 0}
@@ -306,49 +246,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: OSCm/Smooth/FT/v2/EyeLeftX
-    path: 
-    classID: 95
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: OSCm/Smooth/FT/v2/EyeRightX
-    path: 
-    classID: 95
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: OSCm/Smooth/FT/v2/EyeY
+    attribute: VAP/FT/v2/EyeLeftX
     path: 
     classID: 95
     script: {fileID: 0}

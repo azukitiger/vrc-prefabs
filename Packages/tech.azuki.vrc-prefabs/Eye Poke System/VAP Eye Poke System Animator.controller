@@ -223,6 +223,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: IsAnimatorEnabled
+    m_Type: 1
+    m_DefaultFloat: 1
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: Touch/EyeLeft
     m_Type: 1
     m_DefaultFloat: 0
@@ -493,7 +499,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -8588550924076670839}
@@ -501,7 +507,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -7995743421533549837}
@@ -509,7 +515,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -526110263321731391}
@@ -517,7 +523,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
   m_BlendParameter: Blend
   m_BlendParameterY: Blend
