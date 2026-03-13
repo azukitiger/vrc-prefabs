@@ -242,7 +242,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tail Wag Speed
+  m_Name: Enabled
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3707a129c84268443a1ed421337b60d7, type: 2}
@@ -362,20 +362,28 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Conditions
+  m_Name: Tail Wag Speed
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -7893750831557347274}
+    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: IsAnimatorEnabled
     m_Mirror: 0
-  m_BlendParameter: Tail/_IsGrabbed
+  - serializedVersion: 2
+    m_Motion: {fileID: -7893750831557347274}
+    m_Threshold: 1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: IsAnimatorEnabled
+    m_Mirror: 0
+  m_BlendParameter: IsAnimatorEnabled
   m_BlendParameterY: Tail/_IsPosed
-  m_MinThreshold: 1
+  m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 4
+  m_BlendType: 0
