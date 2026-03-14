@@ -45,12 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootTransform: {fileID: 0}
-  shapeType: 1
+  shapeType: 0
   insideBounds: 0
-  radius: 0.08
-  height: 0.25
-  position: {x: 0, y: 0.12, z: -0.0025}
-  rotation: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
+  radius: 0.5
+  height: 2
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0, w: 1}
   bonesAsSpheres: 0
   globalCollisionFlags: 0
 --- !u!1 &6449109681641611767
@@ -63,7 +63,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6449109681641611764}
   - component: {fileID: 5650720474725318474}
-  - component: {fileID: 39298138184300470}
   m_Layer: 0
   m_Name: Bell Physbone
   m_TagString: Untagged
@@ -297,46 +296,6 @@ MonoBehaviour:
   showGizmos: 1
   boneOpacity: 0.5
   limitOpacity: 0.5
---- !u!114 &39298138184300470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6449109681641611767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
-  somethingIsBroken: 0
-  config:
-    features: []
-  content:
-    rid: 5935413850331152582
-  references:
-    version: 2
-    RefIds:
-    - rid: 5935413850331152582
-      type: {class: ApplyDuringUpload, ns: VF.Model.Feature, asm: VRCFury}
-      data:
-        version: 0
-        action:
-          actions:
-          - rid: 5935413850331152583
-    - rid: 5935413850331152583
-      type: {class: ObjectToggleAction, ns: VF.Model.StateAction, asm: VRCFury}
-      data:
-        version: 1
-        desktopActive: 0
-        androidActive: 0
-        localOnly: 0
-        remoteOnly: 0
-        obj: {fileID: 6449109681641611767}
-        mode: 1
 --- !u!1 &8475762421160494962
 GameObject:
   m_ObjectHideFlags: 0
