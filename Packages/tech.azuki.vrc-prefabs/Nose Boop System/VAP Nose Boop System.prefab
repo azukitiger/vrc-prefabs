@@ -74,7 +74,6 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - FXWeight
-        - IsAnimatorEnabled
         - Touch/Nose
         - VAP/Smooth/Touch
         - VAP/Smooth/StepSizeOne

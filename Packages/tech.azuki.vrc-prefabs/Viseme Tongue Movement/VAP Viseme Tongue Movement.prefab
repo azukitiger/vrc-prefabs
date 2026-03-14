@@ -73,7 +73,6 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - FXWeight
-        - IsAnimatorEnabled
         - Voice
         - Viseme
         - VAP/Smooth/Gesture

@@ -73,7 +73,6 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - FXWeight
-        - IsAnimatorEnabled
         - GestureLeft
         - GestureRight
         - GestureLeftWeight

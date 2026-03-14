@@ -416,7 +416,6 @@ MonoBehaviour:
         - IsLocal
         - ScaleFactor
         - FrameTime
-        - IsAnimatorEnabled
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 

@@ -36,3 +36,14 @@ MonoBehaviour:
     subParameters:
     - name: Heartbeat/Speed
     labels: []
+  - name: Enabled
+    icon: {fileID: 2800000, guid: 088d83ba2939249479ea8902e6b7bdc3, type: 3}
+    type: 102
+    parameter:
+      name: Heartbeat/Enabled
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: 
+    labels: []

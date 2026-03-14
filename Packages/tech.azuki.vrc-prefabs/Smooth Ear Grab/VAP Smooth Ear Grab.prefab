@@ -73,7 +73,6 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - FXWeight
-        - IsAnimatorEnabled
         - Ear/Left_Stretch
         - Ear/Right_Stretch
         - Ear/Left_IsGrabbed

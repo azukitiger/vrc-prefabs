@@ -14,17 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isEmpty: 0
   parameters:
+  - name: Heartbeat/HR
+    valueType: 0
+    saved: 0
+    defaultValue: 0
+    networkSynced: 1
   - name: Heartbeat/Speed
     valueType: 1
     saved: 1
     defaultValue: 0.25
-    networkSynced: 1
+    networkSynced: 0
   - name: Heartbeat/Adjust
     valueType: 2
     saved: 0
     defaultValue: 0
     networkSynced: 0
   - name: Heartbeat/Listen
+    valueType: 1
+    saved: 1
+    defaultValue: 0
+    networkSynced: 0
+  - name: Heartbeat/Enabled
+    valueType: 2
+    saved: 1
+    defaultValue: 1
+    networkSynced: 0
+  - name: HR
     valueType: 1
     saved: 1
     defaultValue: 0
