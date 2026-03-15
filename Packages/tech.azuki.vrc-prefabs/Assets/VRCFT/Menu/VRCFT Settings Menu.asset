@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -340790334, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
+  m_Name: VRCFT Settings Menu
+  m_EditorClassIdentifier: 
+  Parameters: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
+  controls:
+  - name: Remote Testing
+    icon: {fileID: 2800000, guid: fb5c2b6d3e7bcb4409431307cd905a8e, type: 3}
+    type: 102
+    parameter:
+      name: FT/RemoteModeActive
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: Smoothing/Local
+    labels: []
+  - name: Local Smoothing
+    icon: {fileID: 2800000, guid: a3c623764f1386146ac3e3c1a5dd905d, type: 3}
+    type: 203
+    parameter:
+      name: 
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: FT/LocalSmoothing
+    labels: []
+  - name: Face Tracking Emulation
+    icon: {fileID: 2800000, guid: 4da496cc81c9edd4e9eafa3d06787e56, type: 3}
+    type: 102
+    parameter:
+      name: FT/FaceTrackingEmulation
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: Smoothing/Local
+    labels: []
+  - name: Face Tracking Limits
+    icon: {fileID: 2800000, guid: 290f9f58d14007e4aa42386927c4f1b8, type: 3}
+    type: 102
+    parameter:
+      name: FT/FaceTrackingLimits
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: Smoothing/Local
+    labels: []
+  - name: Eye Sync
+    icon: {fileID: 2800000, guid: cbb237e4ffb54ac4b9319edc69e24807, type: 3}
+    type: 102
+    parameter:
+      name: FT/EyeSync
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: Smoothing/Local
+    labels: []
