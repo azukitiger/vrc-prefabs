@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -66,7 +66,7 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 4895471c1ed50004cb738c5898721410|Packages/tech.azuki.vrc-prefabs/Eye
+            id: 4895471c1ed50004cb738c5898721410|Packages/tech.azuki.vrc-prefabs/Assets/Eye
               Poke System/VAP Eye Poke System Animator.controller
             objRef: {fileID: 9100000, guid: 4895471c1ed50004cb738c5898721410, type: 2}
           type: 5

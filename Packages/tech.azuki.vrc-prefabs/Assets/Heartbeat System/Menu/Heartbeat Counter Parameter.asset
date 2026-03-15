@@ -10,32 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -1506855854, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
-  m_Name: Heartbeat Parameter
+  m_Name: Heartbeat Counter Parameter
   m_EditorClassIdentifier: 
   isEmpty: 0
   parameters:
-  - name: Heartbeat/HR
-    valueType: 0
+  - name: Heartbeat/Counter
+    valueType: 2
     saved: 1
     defaultValue: 0
     networkSynced: 1
-  - name: Heartbeat/Speed
-    valueType: 1
-    saved: 1
-    defaultValue: 0.25
-    networkSynced: 0
-  - name: Heartbeat/Adjust
-    valueType: 2
-    saved: 0
-    defaultValue: 0
-    networkSynced: 0
-  - name: Heartbeat/Listen
-    valueType: 1
-    saved: 1
-    defaultValue: 0
-    networkSynced: 0
-  - name: HR
-    valueType: 1
-    saved: 1
-    defaultValue: 0
-    networkSynced: 0
