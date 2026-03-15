@@ -72,5 +72,6 @@ MonoBehaviour:
     value: 1
     style: 0
     subMenu: {fileID: 0}
-    subParameters: []
+    subParameters:
+    - name: 
     labels: []
