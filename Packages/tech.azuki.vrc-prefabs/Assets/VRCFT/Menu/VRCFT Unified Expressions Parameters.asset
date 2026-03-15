@@ -64,7 +64,7 @@ MonoBehaviour:
     saved: 1
     defaultValue: 0.25
     networkSynced: 0
-  - name: State/TrackingActive
+  - name: FT/State/TrackingActive
     valueType: 2
     saved: 1
     defaultValue: 0
