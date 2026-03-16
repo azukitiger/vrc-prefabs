@@ -62,7 +62,7 @@ MonoBehaviour:
   - name: FT/LocalSmoothing
     valueType: 1
     saved: 1
-    defaultValue: 0.25
+    defaultValue: 0
     networkSynced: 0
   - name: FT/State/TrackingActive
     valueType: 2
