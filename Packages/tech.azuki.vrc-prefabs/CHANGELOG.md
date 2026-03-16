@@ -3,6 +3,7 @@
 - Heartbeat float can now be compressed by VRCFury.
 - Added toggle to heartbeat system to control counter visibility.
 - Updated face tracking icons.
+- Fixed Face Tracking mouth press blendshape being active all the time.
 
 ## Version 1.4.0
 - Public release.
