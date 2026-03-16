@@ -260,7 +260,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 
 > Requires the **Frame Time Prefab**.
 
-Adds **movement-based bell sounds** to an asset for more realistic motion effects.
+Adds **movement-based bell sounds** to an asset for more realistic motion effects. Uses only `8 bits` of synced expression parameters, the heartrate can be compressed by VRCFury as it's not a high priority value.
 
 ### Instructions
 1. Drag and drop the prefab into the asset's hierarchy.
