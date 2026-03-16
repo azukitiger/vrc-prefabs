@@ -160,6 +160,6 @@ MonoBehaviour:
           version: 1
           fileID: 0
           guid: 
-          id: 4a4bf2c3ec79f944da8d8e62fb3dceaf|Assets/AzukiTiger/VRC Mayu Avatar
-            Bundle/Avatar/Icons/Face Tracking.png
+          id: 4a4bf2c3ec79f944da8d8e62fb3dceaf|Packages/tech.azuki.vrc-prefabs/Assets/VRCFT/Icons/Face
+            Tracking.png
           objRef: {fileID: 2800000, guid: 4a4bf2c3ec79f944da8d8e62fb3dceaf, type: 3}

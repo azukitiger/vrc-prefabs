@@ -1,3 +1,6 @@
+## Version 1.4.2
+- Fixed eye tracking not activating.
+
 ## Version 1.4.1
 - Fixed initial playback of heartbeat to match heart rate.
 - Heartbeat float can now be compressed by VRCFury.
