@@ -290,6 +290,10 @@ Adds a **toe curl feature** using two contact sensors and two rotation constrain
 
 Adds a **heartbeat sound effect and visual display**.
 
+### Features
+- Uses a synced `float (7 bits)` for both Expression Menu–controlled and OSC values.
+- Uses a synced `bool (1 bit)` to toggle the heart rate counter.
+
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Position the **Heartbeat Sound** object at the avatar's chest.
@@ -305,14 +309,86 @@ Adds a **heartbeat sound effect and visual display**.
 
 Provides **customized GoGo Loco controllers and menus** with simplified menu options and additional improvements.
 
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. GoGo Loco version `1.8.6` must be installed in the project.
-
 ### Features
 - Fixes the **Index controller finger tracking issue**
 - Toggle for **feral movement animations**
 - Simplified and improved **menu options**
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. GoGo Loco version `1.8.6` must be installed in the project.
+
+</details>
+
+---
+
+<details>
+<summary><h2>VRCFT</h2></summary>
+
+Adds face tracking to the avatar with **Unified Expression** blendshapes.
+
+### Features
+- Uses `164 synced bits`.
+- Optimized blend tree designed to minimize animator parameter usage.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations to values typically used for MMD rigs.  
+Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
+3. Optionally, the animator parameters `VAP/FT/*` can be used to override values from a separate FX controller.
+
+### Available Properties
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| FT/EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
+| FT/LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
+| FT/EyeDilationEnable | Float | Boolean | ✔ | Toggle for enabling eye dilation |
+| FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for enabling face tracking emulation. Uses mouth parameters to drive eye blendshapes for headsets that do not support certain eye tracking movements |
+| FT/FaceTrackingLimits | Float | Boolean | ✔ | Toggle for enabling mouth blendshape limits to avoid distortion |
+| FT/VisemesEnable | Float | Boolean | ✔ | Toggle for enabling visemes |
+| FT/EyeSync | Float | Boolean | ✔ | Toggle for synchronizing both eyes when tracking drift occurs |
+| FT/LocalSmoothing | Float | - | - | Slider that controls the amount of local smoothing applied to face tracking values |
+| VAP/FT/v2/EyeLeftX | Float | - | - | Smoothed horizontal rotation value of the left eye used for eye bones and related blendshapes |
+| VAP/FT/v2/EyeRightX | Float | - | - | Smoothed horizontal rotation value of the right eye used for eye bones and related blendshapes |
+| VAP/FT/v2/EyeY | Float | - | - | Smoothed vertical rotation value shared by both eyes used for eye bones and related blendshapes |
+| VAP/FT/v2/EyeLidLeft | Float | - | - | Smoothed eyelid value controlling the left eyelid blendshapes |
+| VAP/FT/v2/EyeLidRight | Float | - | - | Smoothed eyelid value controlling the right eyelid blendshapes |
+| VAP/FT/v2/EyeSquintLeft | Float | - | - | Smoothed squint value for the left eye |
+| VAP/FT/v2/EyeSquintRight | Float | - | - | Smoothed squint value for the right eye |
+| VAP/FT/v2/PupilDilation | Float | - | - | Smoothed value controlling pupil dilation |
+| VAP/FT/v2/BrowExpressionLeft | Float | - | - | Smoothed value controlling left eyebrow expression movement |
+| VAP/FT/v2/BrowExpressionRight | Float | - | - | Smoothed value controlling right eyebrow expression movement |
+| VAP/FT/v2/CheekPuffSuckLeft | Float | - | - | Smoothed value controlling left cheek puff or suck movement |
+| VAP/FT/v2/CheekPuffSuckRight | Float | - | - | Smoothed value controlling right cheek puff or suck movement |
+| VAP/FT/v2/NoseSneer | Float | - | - | Smoothed value controlling nose sneer expressions |
+| VAP/FT/v2/JawOpen | Float | - | - | Smoothed value controlling jaw open movement |
+| VAP/FT/v2/MouthClosed | Float | - | - | Smoothed value representing mouth closed compression |
+| VAP/FT/v2/JawForward | Float | - | - | Smoothed value controlling forward jaw movement |
+| VAP/FT/v2/JawX | Float | - | - | Smoothed value controlling horizontal jaw movement |
+| VAP/FT/v2/MouthUpperUpLeft | Float | - | - | Smoothed value lifting the upper left lip |
+| VAP/FT/v2/MouthUpperUpRight | Float | - | - | Smoothed value lifting the upper right lip |
+| VAP/FT/v2/MouthLowerDown | Float | - | - | Smoothed value lowering the bottom lip |
+| VAP/FT/v2/SmileFrownLeft | Float | - | - | Smoothed value controlling the left side smile or frown |
+| VAP/FT/v2/SmileFrownRight | Float | - | - | Smoothed value controlling the right side smile or frown |
+| VAP/FT/v2/LipFunnel | Float | - | - | Smoothed value controlling lip funnel expressions |
+| VAP/FT/v2/LipPucker | Float | - | - | Smoothed value controlling lip pucker expressions |
+| VAP/FT/v2/LipSuckUpper | Float | - | - | Smoothed value controlling the upper lip suction |
+| VAP/FT/v2/LipSuckLower | Float | - | - | Smoothed value controlling the lower lip suction |
+| VAP/FT/v2/MouthStretchLeft | Float | - | - | Smoothed value stretching the left side of the mouth |
+| VAP/FT/v2/MouthStretchRight | Float | - | - | Smoothed value stretching the right side of the mouth |
+| VAP/FT/v2/MouthTightenerLeft | Float | - | - | Smoothed value tightening the left side of the mouth |
+| VAP/FT/v2/MouthTightenerRight | Float | - | - | Smoothed value tightening the right side of the mouth |
+| VAP/FT/v2/MouthPress | Float | - | - | Smoothed value pressing the lips together |
+| VAP/FT/v2/MouthRaiserUpper | Float | - | - | Smoothed value raising the upper lip region |
+| VAP/FT/v2/MouthRaiserLower | Float | - | - | Smoothed value raising the lower lip region |
+| VAP/FT/v2/MouthX | Float | - | - | Smoothed horizontal movement value of the mouth |
+| VAP/FT/v2/TongueOut | Float | - | - | Smoothed value controlling tongue extension |
+| VAP/FT/v2/TongueX | Float | - | - | Smoothed horizontal movement value of the tongue |
+| VAP/FT/v2/TongueY | Float | - | - | Smoothed vertical movement value of the tongue |
+| VAP/FT/Smile | Float | - | - | Combined smile expression value derived from face tracking data. `1` represents a smile and `-1` represents a frown |
+| VAP/FT/Brow | Float | - | - | Combined eyebrow expression value derived from face tracking data. `1` represents raised brows and `-1` represents lowered brows |
+| VAP/FT/Angry | Float | - | - | Combined anger expression value derived from face tracking data. `1` represents a lowered brow with nose sneer |
 
 </details>
 
