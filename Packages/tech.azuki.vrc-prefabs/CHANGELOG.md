@@ -1,3 +1,6 @@
+## Version 1.4.4
+- Adjusted remote face tracking smoothing to be snappier.
+
 ## Version 1.4.3
 - Default local face tracking smoothing to 0.
 
