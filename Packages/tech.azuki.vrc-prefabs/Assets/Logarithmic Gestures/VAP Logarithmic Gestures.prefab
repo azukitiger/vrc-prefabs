@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -64,7 +64,7 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 0d10b0a09cd08c24db2a4def4f067029|Packages/tech.azuki.vrc-prefabs/Logarithmic
+            id: 0d10b0a09cd08c24db2a4def4f067029|Packages/tech.azuki.vrc-prefabs/Assets/Logarithmic
               Gestures/VAP Logarithmic Gestures Controller.controller
             objRef: {fileID: 9100000, guid: 0d10b0a09cd08c24db2a4def4f067029, type: 2}
           type: 5
