@@ -7,7 +7,8 @@ A collection of prefabs and assets designed to enhance **VRChat avatars** with a
 
 Each avatar prefab should only be used **once per avatar**.
 
-## Frame Time Prefab
+<details>
+<summary><h3>Frame Time Prefab</h3></summary>
 
 Adds a **Frame Time system** to the avatar. This prefab is required for most other prefabs.
 
@@ -23,7 +24,12 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 | VAP/Smooth/Touch | Float | - | - | Smoothness factor used for touch interactions |
 | VAP/Smooth/StepSizeOne | Float | - | - | Step size increment applied every second |
 
-## Blink System Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Blink System Prefab</h3></summary>
 
 Adds **custom blinking** with the ability to **override the blink state** or **disable blinking entirely**.
 
@@ -44,7 +50,12 @@ Adds **custom blinking** with the ability to **override the blink state** or **d
 | VAP/Override/Blink/Left | Float | - | - | Override value applied to `VAP/Blink/Left` when not blinking |
 | VAP/Override/Blink/Right | Float | - | - | Override value applied to `VAP/Blink/Right` when not blinking |
 
-## Ear Twitch Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Ear Twitch Prefab</h3></summary>
 
 Adds occasional **ear twitches** that trigger at random intervals.
 
@@ -63,7 +74,12 @@ Adds occasional **ear twitches** that trigger at random intervals.
 | VAP/Ear/Left_Twitch | Float | - | - | Output value used to drive the **left ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
 | VAP/Ear/Right_Twitch | Float | - | - | Output value used to drive the **right ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
 
-## Logarithmic Gestures Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Logarithmic Gestures Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -100,7 +116,12 @@ Adds **blend tree–driven gesture detection** with smoothing and optional menu-
 | VAP/GestureRight/Gun | Float | - | - | Smoothed output value when the right gesture is **Gun** |
 | VAP/GestureRight/ThumbsUp | Float | - | - | Smoothed output value when the right gesture is **Thumbs Up** |
 
-## Viseme Tongue Movement Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Viseme Tongue Movement Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -117,7 +138,12 @@ Adds **blend tree–driven tongue viseme movement**, separated from the standard
 | VAP/Viseme/TongueForward | Float | - | - | Smoothed output value used to drive the **Tongue Forward** blendshape |
 | VAP/Viseme/TongueUp | Float | - | - | Smoothed output value used to drive the **Tongue Up** blendshape |
 
-## Smooth Ear Grab Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Smooth Ear Grab Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -135,7 +161,12 @@ Adds **smooth ear grab interactions** for face stretching.
 | VAP/Ear/Left_Stretch | Float | - | - | Smoothed output value representing left ear stretch when the ear is grabbed |
 | VAP/Ear/Right_Stretch | Float | - | - | Smoothed output value representing right ear stretch when the ear is grabbed |
 
-## Tail Wag Speed Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Tail Wag Speed Prefab</h3></summary>
 
 Controls **tail wag speed** through a menu value or animator override. Wagging automatically stops when the tail is grabbed or when a pose is active. Use the parameter `Tail` for the tail PhysBone.
 
@@ -152,7 +183,12 @@ Controls **tail wag speed** through a menu value or animator override. Wagging a
 | VAP/Tail/WagSpeed | Float | - | - | Output value used as the tail wag animation speed multiplier |
 | VAP/Override/Tail/WagSpeed | Float | - | - | Overrides the minimum wag speed of `VAP/Tail/WagSpeed` |
 
-## Eye Poke System Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Eye Poke System Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -172,7 +208,12 @@ Adds **smooth eye poke interactions** using a contact sensor for each eye.
 | Touch/EyeLeft | Float | - | - | Raw proximity value from the left eye contact sensor |
 | Touch/EyeRight | Float | - | - | Raw proximity value from the right eye contact sensor |
 
-## Foot Poke System Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Foot Poke System Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -192,7 +233,12 @@ Adds **smooth foot poke interactions** using a contact sensor for each foot.
 | Touch/FootLeft | Float | - | - | Raw proximity value from the left foot contact sensor |
 | Touch/FootRight | Float | - | - | Raw proximity value from the right foot contact sensor |
 
-## Nose Boop System Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Nose Boop System Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -212,7 +258,12 @@ Adds a **smooth nose boop interaction** using a contact sensor.
 | VAP/Touch/NoseTimer | Float | - | - | Timer representing how long the nose contact is held |
 | Touch/Nose | Float | - | - | Raw proximity value from the nose contact sensor |
 
-## Toe Curl System Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Toe Curl System Prefab</h3></summary>
 
 Adds a **toe curl feature** using two contact sensors and two rotation constraints.
 
@@ -230,7 +281,12 @@ Adds a **toe curl feature** using two contact sensors and two rotation constrain
 | Touch/FootLCurl | Float | - | - | Raw proximity value from the left toe curl contact sensor |
 | Touch/FootRCurl | Float | - | - | Raw proximity value from the right toe curl contact sensor |
 
-## Heartbeat System Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>Heartbeat System Prefab</h3></summary>
 
 Adds a **heartbeat sound effect and visual display**.
 
@@ -240,7 +296,12 @@ Adds a **heartbeat sound effect and visual display**.
 3. A **Contact Receiver** ensures the **Audio Source** only activates when needed. This helps avoid the VRChat limit of **three active audio sources per avatar**.
 4. Position the **Heartbeat Counter** object over the avatar's **left hand**. Remove the **VRCFury Armature Link** component if you want to attach the counter elsewhere.
 
-## GoGo Loco Simplified Prefab
+</details>
+
+---
+
+<details>
+<summary><h3>GoGo Loco Simplified Prefab</h3></summary>
 
 Provides **customized GoGo Loco controllers and menus** with simplified menu options and additional improvements.
 
@@ -253,17 +314,22 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 - Toggle for **feral movement animations**
 - Simplified and improved **menu options**
 
+</details>
+
 ###
 # Asset Prefabs
 
-## Bell Sound System Prefab
+<details>
+<summary><h3>Bell Sound System Prefab</h3></summary>
 
 > Requires the **Frame Time Prefab**.
 
-Adds **movement-based bell sounds** to an asset for more realistic motion effects. Uses only `8 bits` of synced expression parameters, the heartrate can be compressed by VRCFury as it's not a high priority value.
+Adds **movement-based bell sounds** to an asset for more realistic motion effects.
 
 ### Instructions
 1. Drag and drop the prefab into the asset's hierarchy.
 2. Attach the **Bell Sound** game object to the desired location using a **VRCFury Armature Link**. It will be attached at the root of the selected game object.
 3. A **PhysBone component** is included as a sample and can be modified or replaced as needed.
 4. A **Chest Collider** is included to prevent the bell from clipping into the avatar's chest. Remove it if it is not required.
+
+</details>
