@@ -1,3 +1,6 @@
+## Version 1.4.3
+- Default local face tracking smoothing to 0.
+
 ## Version 1.4.2
 - Fixed eye tracking not activating.
 
