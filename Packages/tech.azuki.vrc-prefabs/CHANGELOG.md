@@ -1,4 +1,7 @@
 ## Version 1.4.4
+- Fixed VAP/FT/Angry animation.
+
+## Version 1.4.4
 - Adjusted remote face tracking smoothing to be snappier.
 
 ## Version 1.4.3
