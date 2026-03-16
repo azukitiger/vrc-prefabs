@@ -8,7 +8,7 @@ A collection of prefabs and assets designed to enhance **VRChat avatars** with a
 Each avatar prefab should only be used **once per avatar**.
 
 <details>
-<summary><h3>Frame Time Prefab</h3></summary>
+<summary><h2>Frame Time Prefab</h2></summary>
 
 Adds a **Frame Time system** to the avatar. This prefab is required for most other prefabs.
 
@@ -29,7 +29,7 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 ---
 
 <details>
-<summary><h3>Blink System Prefab</h3></summary>
+<summary><h2>Blink System Prefab</h2></summary>
 
 Adds **custom blinking** with the ability to **override the blink state** or **disable blinking entirely**.
 
@@ -55,7 +55,7 @@ Adds **custom blinking** with the ability to **override the blink state** or **d
 ---
 
 <details>
-<summary><h3>Ear Twitch Prefab</h3></summary>
+<summary><h2>Ear Twitch Prefab</h2></summary>
 
 Adds occasional **ear twitches** that trigger at random intervals.
 
@@ -79,7 +79,7 @@ Adds occasional **ear twitches** that trigger at random intervals.
 ---
 
 <details>
-<summary><h3>Logarithmic Gestures Prefab</h3></summary>
+<summary><h2>Logarithmic Gestures Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -121,7 +121,7 @@ Adds **blend tree–driven gesture detection** with smoothing and optional menu-
 ---
 
 <details>
-<summary><h3>Viseme Tongue Movement Prefab</h3></summary>
+<summary><h2>Viseme Tongue Movement Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -143,7 +143,7 @@ Adds **blend tree–driven tongue viseme movement**, separated from the standard
 ---
 
 <details>
-<summary><h3>Smooth Ear Grab Prefab</h3></summary>
+<summary><h2>Smooth Ear Grab Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -166,7 +166,7 @@ Adds **smooth ear grab interactions** for face stretching.
 ---
 
 <details>
-<summary><h3>Tail Wag Speed Prefab</h3></summary>
+<summary><h2>Tail Wag Speed Prefab</h2></summary>
 
 Controls **tail wag speed** through a menu value or animator override. Wagging automatically stops when the tail is grabbed or when a pose is active. Use the parameter `Tail` for the tail PhysBone.
 
@@ -188,7 +188,7 @@ Controls **tail wag speed** through a menu value or animator override. Wagging a
 ---
 
 <details>
-<summary><h3>Eye Poke System Prefab</h3></summary>
+<summary><h2>Eye Poke System Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -213,7 +213,7 @@ Adds **smooth eye poke interactions** using a contact sensor for each eye.
 ---
 
 <details>
-<summary><h3>Foot Poke System Prefab</h3></summary>
+<summary><h2>Foot Poke System Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -238,7 +238,7 @@ Adds **smooth foot poke interactions** using a contact sensor for each foot.
 ---
 
 <details>
-<summary><h3>Nose Boop System Prefab</h3></summary>
+<summary><h2>Nose Boop System Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
@@ -263,7 +263,7 @@ Adds a **smooth nose boop interaction** using a contact sensor.
 ---
 
 <details>
-<summary><h3>Toe Curl System Prefab</h3></summary>
+<summary><h2>Toe Curl System Prefab</h2></summary>
 
 Adds a **toe curl feature** using two contact sensors and two rotation constraints.
 
@@ -286,7 +286,7 @@ Adds a **toe curl feature** using two contact sensors and two rotation constrain
 ---
 
 <details>
-<summary><h3>Heartbeat System Prefab</h3></summary>
+<summary><h2>Heartbeat System Prefab</h2></summary>
 
 Adds a **heartbeat sound effect and visual display**.
 
@@ -301,7 +301,7 @@ Adds a **heartbeat sound effect and visual display**.
 ---
 
 <details>
-<summary><h3>GoGo Loco Simplified Prefab</h3></summary>
+<summary><h2>GoGo Loco Simplified Prefab</h2></summary>
 
 Provides **customized GoGo Loco controllers and menus** with simplified menu options and additional improvements.
 
@@ -320,7 +320,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 # Asset Prefabs
 
 <details>
-<summary><h3>Bell Sound System Prefab</h3></summary>
+<summary><h2>Bell Sound System Prefab</h2></summary>
 
 > Requires the **Frame Time Prefab**.
 
