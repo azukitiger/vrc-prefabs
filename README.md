@@ -325,7 +325,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 <details>
 <summary><h2>VRCFT</h2></summary>
 
-Adds face tracking to the avatar with **Unified Expression** blendshapes.
+Adds face tracking to the avatar using the **Unified Expression** blendshapes.
 
 ### Features
 - Uses `164 synced bits`.
