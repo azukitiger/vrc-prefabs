@@ -1,4 +1,7 @@
 ## Version 1.4.5
+- Fixed Feral toggle for Gogo Loco.
+
+## Version 1.4.5
 - Fixed VAP/FT/Angry animation.
 
 ## Version 1.4.4

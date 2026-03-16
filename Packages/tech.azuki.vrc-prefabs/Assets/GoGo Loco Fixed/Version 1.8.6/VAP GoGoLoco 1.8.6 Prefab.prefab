@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -78,8 +78,8 @@ MonoBehaviour:
           version: 1
           fileID: 0
           guid: 
-          id: 05e528a037ca2354ebdf0733803a992f|Packages/tech.azuki.vrc-prefabs/GoGo
-            Loco Simplified/Icons/Feral.png
+          id: 05e528a037ca2354ebdf0733803a992f|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
+            Loco Fixed/Icons/Feral.png
           objRef: {fileID: 2800000, guid: 05e528a037ca2354ebdf0733803a992f, type: 3}
         enableDriveGlobalParam: 0
         driveGlobalParam: 
@@ -102,7 +102,7 @@ MonoBehaviour:
         simpleOutTransition: 1
         defaultSliderValue: 0
         useGlobalParam: 1
-        globalParam: LocoFeral
+        globalParam: Go/LocoFeral
         holdButton: 0
         invertRestLogic: 0
         expandIntoTransition: 1
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
