@@ -1,4 +1,7 @@
-## Version 1.4.5
+## Version 1.4.7
+- Fixed HR value not updating the counter.
+
+## Version 1.4.6
 - Fixed Feral toggle for Gogo Loco.
 
 ## Version 1.4.5
