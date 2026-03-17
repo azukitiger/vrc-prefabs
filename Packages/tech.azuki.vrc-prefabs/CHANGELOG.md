@@ -1,3 +1,6 @@
+## Version 1.4.8
+- Fixed HR having the wrong expression parameter type & settings.
+
 ## Version 1.4.7
 - Fixed HR value not updating the counter.
 
