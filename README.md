@@ -1,3 +1,5 @@
+<img src="./Website/banner.png"/>
+
 # VRChat Azuki Prefabs (VAP)
 
 A collection of prefabs and assets designed to enhance **VRChat avatars** with advanced animations and interactive systems.
