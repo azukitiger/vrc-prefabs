@@ -1,3 +1,6 @@
+## Version 1.4.9
+- Deleted `Editor` folder.
+
 ## Version 1.4.8
 - Fixed HR having the wrong expression parameter type & settings.
 
