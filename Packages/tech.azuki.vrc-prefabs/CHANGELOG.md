@@ -1,3 +1,6 @@
+## Version 1.4.10
+- Reduced jaw open amount when tongue out with face tracking limits.
+
 ## Version 1.4.9
 - Deleted `Editor` folder.
 
