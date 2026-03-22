@@ -345,7 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1286.0
   somethingIsBroken: 0
   config:
     features: []
@@ -363,7 +363,7 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: d3ce7c67802986f42844622073003310|Packages/tech.azuki.vrc-prefabs/Bell
+            id: d3ce7c67802986f42844622073003310|Packages/tech.azuki.vrc-prefabs/Assets/Bell
               Sound System/VAP Bell Sound Controller.controller
             objRef: {fileID: 9100000, guid: d3ce7c67802986f42844622073003310, type: 2}
           type: 5
@@ -372,7 +372,6 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - FXWeight
-        - IsLocal
         - ScaleFactor
         - FrameTime
         allNonsyncedAreGlobal: 0
