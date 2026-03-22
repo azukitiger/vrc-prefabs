@@ -1,3 +1,6 @@
+## Version 1.4.11
+- Adjusted bell sound sensitivity.
+
 ## Version 1.4.10
 - Reduced jaw open amount when tongue out with face tracking limits.
 
