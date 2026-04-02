@@ -1,3 +1,6 @@
+## Version 1.4.12
+- Added Raycast Floor Collider prefab.
+
 ## Version 1.4.11
 - Adjusted bell sound sensitivity.
 
