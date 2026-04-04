@@ -1,7 +1,7 @@
 {
   "name": "tech.azuki.vrc-prefabs",
   "version": "1.4.12",
-  "displayName": "VRChat Azuki Prefabs",
+  "displayName": "VAP (VRChat Azuki Prefabs)",
   "description": "A collection of prefabs & assets for enhancing VRChat avatars with advanced logic and interactions.",
   "unity": "2022.3",
   "author": {
