@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1285.0
+  vrcfuryVersion: 1.1296.0
   somethingIsBroken: 0
   config:
     features: []
@@ -65,7 +65,7 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 590c39c135addcb41b60f71f4c176396|Packages/tech.azuki.vrc-prefabs/Nose
+            id: 590c39c135addcb41b60f71f4c176396|Packages/tech.azuki.vrc-prefabs/Assets/Nose
               Boop System/VAP Nose Boop System Controller.controller
             objRef: {fileID: 9100000, guid: 590c39c135addcb41b60f71f4c176396, type: 2}
           type: 5
@@ -129,7 +129,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
-  contentTypes: -1
+  contentTypes: 1
   collisionTags:
   - Finger
   allowSelf: 1

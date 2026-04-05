@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1280.0
+  vrcfuryVersion: 1.1296.0
   somethingIsBroken: 0
   config:
     features: []
@@ -66,7 +66,7 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 081a121f3b395c846bc45f5fbb9640b0|Packages/tech.azuki.vrc-prefabs/Foot
+            id: 081a121f3b395c846bc45f5fbb9640b0|Packages/tech.azuki.vrc-prefabs/Assets/Foot
               Poke System/VAP Foot Poke System Animator.controller
             objRef: {fileID: 9100000, guid: 081a121f3b395c846bc45f5fbb9640b0, type: 2}
           type: 5
@@ -130,13 +130,12 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
-  contentTypes: -1
+  contentTypes: 1
   collisionTags:
   - Hand
-  - FingerIndex
-  - FingerMiddle
+  - Finger
   - Muzzle
-  allowSelf: 1
+  allowSelf: 0
   allowOthers: 1
   receiverType: 2
   parameter: Touch/FootLeft
@@ -160,13 +159,12 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
-  contentTypes: -1
+  contentTypes: 1
   collisionTags:
   - Hand
-  - FingerIndex
-  - FingerMiddle
+  - Finger
   - Muzzle
-  allowSelf: 1
+  allowSelf: 0
   allowOthers: 1
   receiverType: 0
   parameter: Touch/FootRight
