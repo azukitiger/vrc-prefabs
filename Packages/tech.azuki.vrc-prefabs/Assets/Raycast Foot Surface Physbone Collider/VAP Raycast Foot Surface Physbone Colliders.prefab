@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4052594160050359982}
   m_Layer: 0
-  m_Name: VAP Raycast Toes Physbone Colliders
+  m_Name: VAP Raycast Foot Surface Physbone Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   resultTransform: {fileID: 2310831260240792272}
-  applyRotation: 0
+  applyRotation: 1
   alignmentAxis: {x: 0, y: 1, z: 0}
   disableOnMiss: 1
   positioningOnMiss: 2
@@ -250,7 +250,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   resultTransform: {fileID: 8590342857064620613}
-  applyRotation: 0
+  applyRotation: 1
   alignmentAxis: {x: 0, y: 1, z: 0}
   disableOnMiss: 1
   positioningOnMiss: 2
