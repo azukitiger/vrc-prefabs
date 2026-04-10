@@ -29,8 +29,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5596741480823211207}
+  m_Children: []
   m_Father: {fileID: 3230843471831597500}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &9047507977499171360
@@ -216,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3232253228709160750}
   - component: {fileID: 5267550226181345152}
-  - component: {fileID: 2425675663033569553}
+  - component: {fileID: 9175224049616187990}
   m_Layer: 0
   m_Name: VAP Raycast Wall Physbone Collider
   m_TagString: Untagged
@@ -238,6 +237,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5926999222811282981}
+  - {fileID: 5596741480823211207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5267550226181345152
@@ -281,16 +281,18 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 
-            objRef: {fileID: 0}
-          prefix: 
+            id: 65ad531592dc6ee4aa9e14f2bbea86e0|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
+              Physbone Colliders/VAP Raycast Wall Physbone Collider Menu.asset
+            objRef: {fileID: 11400000, guid: 65ad531592dc6ee4aa9e14f2bbea86e0, type: 2}
+          prefix: Interactions/Colliders
         prms:
         - parameters:
             version: 1
             fileID: 0
             guid: 
-            id: 
-            objRef: {fileID: 0}
+            id: e4a462a9effc9584f8693a6de15a9709|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
+              Physbone Colliders/VAP Raycast Wall Physbone Collider Parameters.asset
+            objRef: {fileID: 11400000, guid: e4a462a9effc9584f8693a6de15a9709, type: 2}
         smoothedPrms: []
         globalParams:
         - FXWeight
@@ -327,91 +329,27 @@ MonoBehaviour:
         removePrefixes: []
         addPrefix: 
         useSecurityForToggle: 0
---- !u!114 &2425675663033569553
-MonoBehaviour:
+--- !u!95 &9175224049616187990
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5230865612980028144}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
-  somethingIsBroken: 0
-  config:
-    features: []
-  content:
-    rid: 3147176312603672658
-  references:
-    version: 2
-    RefIds:
-    - rid: 3147176312603672658
-      type: {class: Toggle, ns: VF.Model.Feature, asm: VRCFury}
-      data:
-        version: 3
-        name: Interactions/Colliders/Wall Collider
-        state:
-          actions:
-          - rid: 3147176312603672659
-        saved: 1
-        slider: 0
-        sliderInactiveAtZero: 0
-        securityEnabled: 0
-        defaultOn: 1
-        includeInRest: 0
-        exclusiveOffState: 0
-        enableExclusiveTag: 0
-        exclusiveTag: 
-        resetPhysbones: []
-        hasExitTime: 0
-        enableIcon: 1
-        icon:
-          version: 1
-          fileID: 0
-          guid: 
-          id: 8b673811f1466f7479e5b6861a4a9a9a|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
-            Physbone Colliders/Icons/Wall Collider.png
-          objRef: {fileID: 2800000, guid: 8b673811f1466f7479e5b6861a4a9a9a, type: 3}
-        enableDriveGlobalParam: 0
-        driveGlobalParam: 
-        separateLocal: 0
-        localState:
-          actions: []
-        hasTransition: 0
-        transitionStateIn:
-          actions: []
-        transitionStateOut:
-          actions: []
-        transitionTimeIn: 0
-        transitionTimeOut: 0
-        localTransitionStateIn:
-          actions: []
-        localTransitionStateOut:
-          actions: []
-        localTransitionTimeIn: 0
-        localTransitionTimeOut: 0
-        simpleOutTransition: 1
-        defaultSliderValue: 0
-        useGlobalParam: 0
-        globalParam: Mayu/FloorCollider
-        holdButton: 0
-        invertRestLogic: 0
-        expandIntoTransition: 1
-    - rid: 3147176312603672659
-      type: {class: ObjectToggleAction, ns: VF.Model.StateAction, asm: VRCFury}
-      data:
-        version: 1
-        desktopActive: 0
-        androidActive: 0
-        localOnly: 0
-        remoteOnly: 0
-        obj: {fileID: 5421323525288489849}
-        mode: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f814585ca286b2b4aae00a4835e3edba, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5421323525288489849
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +467,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3399073967896705708}
+  m_Father: {fileID: 3232253228709160750}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4041195046084071342
 MonoBehaviour:
