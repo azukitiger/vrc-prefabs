@@ -672,7 +672,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Back Transform Repeat
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4186735890275572842}
@@ -786,7 +786,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Right Transform
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4162338705454619786}
@@ -1026,7 +1026,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Transform Repeat
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4644416284772134717}
@@ -1075,7 +1075,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Right Enabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7863512858820310524}
@@ -1102,7 +1102,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Front Transform
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4989545506731787990}
@@ -1183,7 +1183,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Front Enabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4770178183739692397}
@@ -1276,7 +1276,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Enabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2585164544195346898}
@@ -1387,7 +1387,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Disabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2605689007594908221}
@@ -1501,7 +1501,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Back Disabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3623796260619151874}
@@ -1591,7 +1591,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Right Transform Repeat
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7909320063343551448}
@@ -1618,7 +1618,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Back Enabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2503983018577285304}
@@ -1839,7 +1839,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Transform
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6728753829858786638}
@@ -1939,7 +1939,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Right Frame
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 885156791472503258}
@@ -2146,7 +2146,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Back Transform
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1804380761230802481}
@@ -2255,7 +2255,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Front Disabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1451409187674767223}
@@ -2313,7 +2313,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Front Frame
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -5319170800792399788}
@@ -2522,7 +2522,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Enabled Fix
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3279247400328894893}
@@ -2593,7 +2593,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Front Transform Repeat
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4383727898710659259}
@@ -2683,7 +2683,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Back Frame
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3394298648339274783}
@@ -2710,7 +2710,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Right Disabled
-  m_Speed: 10
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8514933328604254855}
