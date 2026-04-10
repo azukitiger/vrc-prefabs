@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastDirection: {x: 0, y: -1, z: 0}
-  distance: 2
+  distance: 1
   applyTransformScale: 1
   collisionMode: 0
   customCollisionLayers:
