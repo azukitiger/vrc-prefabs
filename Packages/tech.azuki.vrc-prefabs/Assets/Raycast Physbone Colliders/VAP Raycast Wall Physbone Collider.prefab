@@ -29,7 +29,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5596741480823211207}
   m_Father: {fileID: 3230843471831597500}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &9047507977499171360
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsActive: 1
-  GlobalWeight: 1
+  GlobalWeight: 0
   TargetTransform: {fileID: 5596741480823211207}
   SolveInLocalSpace: 0
   FreezeToWorld: 0
@@ -56,7 +57,7 @@ MonoBehaviour:
       SourceTransform: {fileID: 3399073967896705708}
       Weight: 1
       ParentPositionOffset: {x: 0, y: 0, z: 0}
-      ParentRotationOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: -0, y: 0, z: 0}
     source1:
       SourceTransform: {fileID: 0}
       Weight: 0
@@ -136,7 +137,7 @@ MonoBehaviour:
     overflowList: []
   cachedExecutionGroupIndex: 0
   latestValidExecutionGroupIndex: 0
-  PositionAtRest: {x: 0, y: 0.5, z: 1}
+  PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
   AffectsPositionZ: 1
@@ -237,7 +238,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5926999222811282981}
-  - {fileID: 5596741480823211207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5267550226181345152
@@ -276,8 +276,21 @@ MonoBehaviour:
               Physbone Colliders/VAP Raycast Wall Physbone Collider Controller.controller
             objRef: {fileID: 9100000, guid: f814585ca286b2b4aae00a4835e3edba, type: 2}
           type: 5
-        menus: []
-        prms: []
+        menus:
+        - menu:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 
+            objRef: {fileID: 0}
+          prefix: 
+        prms:
+        - parameters:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 
+            objRef: {fileID: 0}
         smoothedPrms: []
         globalParams:
         - FXWeight
@@ -511,12 +524,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7804827811290222117}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.5, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3232253228709160750}
+  m_Father: {fileID: 3399073967896705708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4041195046084071342
 MonoBehaviour:
