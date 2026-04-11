@@ -33,10 +33,10 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_IsActive
+    attribute: m_Enabled
     path: Wall Physbone Collider
-    classID: 1
-    script: {fileID: 0}
+    classID: 114
+    script: {fileID: -1631200402, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
   m_PPtrCurves: []
   m_SampleRate: 60
@@ -48,10 +48,10 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 1265881917
-      attribute: 2086281974
-      script: {fileID: 0}
-      typeID: 1
-      customType: 0
+      attribute: 3305885265
+      script: {fileID: -1631200402, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
+      typeID: 114
+      customType: 24
       isPPtrCurve: 0
       isIntCurve: 0
       isSerializeReferenceCurve: 0
@@ -93,10 +93,10 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_IsActive
+    attribute: m_Enabled
     path: Wall Physbone Collider
-    classID: 1
-    script: {fileID: 0}
+    classID: 114
+    script: {fileID: -1631200402, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
