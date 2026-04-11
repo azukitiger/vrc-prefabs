@@ -102,7 +102,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3232253228709160750}
   - component: {fileID: 5267550226181345152}
-  - component: {fileID: 9175224049616187990}
   m_Layer: 0
   m_Name: VAP Raycast Wall Physbone Collider
   m_TagString: Untagged
@@ -218,27 +217,6 @@ MonoBehaviour:
         removePrefixes: []
         addPrefix: 
         useSecurityForToggle: 0
---- !u!95 &9175224049616187990
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5230865612980028144}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f814585ca286b2b4aae00a4835e3edba, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5421323525288489849
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,8 +368,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7804827811290222117}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalRotation: {x: -0.7071068, y: -0.000000030059486, z: -0.000000030059486, w: 0.7071068}
+  m_LocalPosition: {x: -0.00000008940697, y: 1, z: 0.9659258}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
