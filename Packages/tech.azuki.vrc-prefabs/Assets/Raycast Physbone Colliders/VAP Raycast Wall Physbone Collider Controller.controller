@@ -628,7 +628,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: -0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -671,7 +671,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: WallCollider/Low/_Ratio
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 2b73185b58e026345a795e4a4715b11d, type: 2}
@@ -679,7 +679,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: WallCollider/High/_Ratio
     m_Mirror: 0
   m_BlendParameter: FXWeight
   m_BlendParameterY: Blend
@@ -810,7 +810,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 6412702843388998781}
+  m_Motion: {fileID: 7252604625407923990}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -920,7 +920,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: 0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -1345,7 +1345,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: 0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -1831,7 +1831,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: -0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -3591,7 +3591,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: 0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -3710,7 +3710,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: -0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -4266,7 +4266,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: 0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -4297,7 +4297,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: VAP/WallCollider/Diff1
-    m_EventTreshold: -0.00005
+    m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
@@ -5174,37 +5174,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!206 &6412702843388998781
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Wall Raycast Left Idle Tree
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: ec6ab3c8c0a875d4783adff944b1d92d, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: d0e5f780947366c44b70b48b28208e41, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: FXWeight
-  m_BlendParameterY: FXWeight
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
 --- !u!1102 &6521271995671351221
 AnimatorState:
   serializedVersion: 6
