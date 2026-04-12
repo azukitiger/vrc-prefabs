@@ -318,9 +318,9 @@ MonoBehaviour:
   latestValidExecutionGroupIndex: 0
   PositionAtRest: {x: -0.05, y: 0, z: 0}
   PositionOffset: {x: -0.05, y: 0, z: 0}
-  AffectsPositionX: 1
+  AffectsPositionX: 0
   AffectsPositionY: 1
-  AffectsPositionZ: 1
+  AffectsPositionZ: 0
 --- !u!1 &5230865612980028144
 GameObject:
   m_ObjectHideFlags: 0
