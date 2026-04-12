@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1286.0
+  vrcfuryVersion: 1.1298.0
   somethingIsBroken: 0
   config:
     features: []
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1286.0
+  vrcfuryVersion: 1.1298.0
   somethingIsBroken: 0
   config:
     features: []
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1286.0
+  vrcfuryVersion: 1.1298.0
   somethingIsBroken: 0
   config:
     features: []
@@ -516,6 +516,7 @@ GameObject:
   - component: {fileID: 1879931746196839698}
   - component: {fileID: 1023724491265849286}
   - component: {fileID: 772981965999351520}
+  - component: {fileID: 8584480022661685223}
   m_Layer: 0
   m_Name: Heartbeat Counter
   m_TagString: Untagged
@@ -553,7 +554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1286.0
+  vrcfuryVersion: 1.1298.0
   somethingIsBroken: 0
   config:
     features: []
@@ -644,7 +645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1286.0
+  vrcfuryVersion: 1.1298.0
   somethingIsBroken: 0
   config:
     features: []
@@ -684,3 +685,43 @@ MonoBehaviour:
         fallbackBones: 
         keepBoneOffsets2: 0
         linkMode: 4
+--- !u!114 &8584480022661685223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8272738773566862568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  unityVersion: 2022.3.22f1
+  vrcfuryVersion: 1.1298.0
+  somethingIsBroken: 0
+  config:
+    features: []
+  content:
+    rid: 2198420992308543627
+  references:
+    version: 2
+    RefIds:
+    - rid: 2198420992308543627
+      type: {class: ApplyDuringUpload, ns: VF.Model.Feature, asm: VRCFury}
+      data:
+        version: 0
+        action:
+          actions:
+          - rid: 2198420992308543628
+    - rid: 2198420992308543628
+      type: {class: ObjectToggleAction, ns: VF.Model.StateAction, asm: VRCFury}
+      data:
+        version: 1
+        desktopActive: 0
+        androidActive: 0
+        localOnly: 0
+        remoteOnly: 0
+        obj: {fileID: 3432314153627876651}
+        mode: 1
