@@ -412,7 +412,6 @@ MonoBehaviour:
             objRef: {fileID: 11400000, guid: e4a462a9effc9584f8693a6de15a9709, type: 2}
         smoothedPrms: []
         globalParams:
-        - FXWeight
         - WallCollider/Low/_Ratio
         - WallCollider/Low/_Hit
         - WallCollider/High/_Ratio
