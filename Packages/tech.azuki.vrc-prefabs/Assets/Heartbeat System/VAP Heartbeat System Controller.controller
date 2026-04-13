@@ -1,5 +1,74 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9028303144073596424
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1859411423, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Source: {fileID: 0}
+  SourcePath: Heartbeat Sound/Heartbeat Audio Source
+  PlaybackOrder: 1
+  ParameterName: 
+  Volume: {x: 1, y: 1}
+  VolumeApplySettings: 2
+  Pitch: {x: 1, y: 1}
+  PitchApplySettings: 2
+  Clips:
+  - {fileID: 8300000, guid: a7607251995dad64dad0053eb91fb075, type: 3}
+  - {fileID: 8300000, guid: 7983ca5e3ea41e043ae056c5e1cda4c3, type: 3}
+  - {fileID: 8300000, guid: 7a759f5e300a03843bc6dfd1cae83427, type: 3}
+  - {fileID: 8300000, guid: d4cb9465e4e0a2847b95d9a1d3fd1924, type: 3}
+  - {fileID: 8300000, guid: 2f52d9cbd2b430f459adee8b8fe1b1ba, type: 3}
+  - {fileID: 8300000, guid: 1392ef66914d68b419749b930dcad79d, type: 3}
+  - {fileID: 8300000, guid: 82a0695b076be064e8ba32a50b6d7612, type: 3}
+  - {fileID: 8300000, guid: e4f97209c6d92c24592834dada02ac63, type: 3}
+  - {fileID: 8300000, guid: 7d04bd006c32bf1468a19be1fd606760, type: 3}
+  - {fileID: 8300000, guid: a5026c80a1d6cca458f7c2cd696a45ec, type: 3}
+  ClipsApplySettings: 0
+  Loop: 0
+  LoopApplySettings: 2
+  DelayInSeconds: 0
+  PlayOnEnter: 1
+  StopOnEnter: 0
+  PlayOnExit: 0
+  StopOnExit: 1
+  playbackIndex: 0
+--- !u!1102 &-8597599231616209119
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Manual With Sound
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: -2371864594458046945}
+  m_StateMachineBehaviours:
+  - {fileID: -9028303144073596424}
+  - {fileID: 346293180128120492}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 1
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 2884416874920272417}
+  m_Tag: 
+  m_SpeedParameter: Heartbeat/HR
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!114 &-8198607538337298912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -40,6 +109,35 @@ MonoBehaviour:
   PlayOnExit: 0
   StopOnExit: 1
   playbackIndex: 0
+--- !u!1102 &-8135350696786372267
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sensor With Sound
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: -5667822824954697052}
+  m_StateMachineBehaviours:
+  - {fileID: -5707408129878120867}
+  - {fileID: -5263666969817355624}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 1
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 2884416874920272417}
+  m_Tag: 
+  m_SpeedParameter: Heartbeat/HR
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1101 &-8100912834502096665
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -50,6 +148,28 @@ AnimatorStateTransition:
   m_Conditions: []
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3003313888834551653}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &-7745069233373191712
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8597599231616209119}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
@@ -94,13 +214,14 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Heartbeat Manual
+  m_Name: Manual
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: 6051753230250376966}
-  - {fileID: 8967730193430180749}
+  - {fileID: 3036572622136138590}
   - {fileID: -7659742441351530338}
+  - {fileID: 6051753230250376966}
+  - {fileID: 8844303931913021565}
   m_StateMachineBehaviours:
   - {fileID: -8198607538337298912}
   - {fileID: -1788488809209581149}
@@ -112,7 +233,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -3143474751463852562}
+  m_Motion: {fileID: 7400000, guid: b2d9e52dbcfbac348a0f3dacaba74da9, type: 2}
   m_Tag: 
   m_SpeedParameter: Heartbeat/HR
   m_MirrorParameter: 
@@ -146,6 +267,68 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-5707408129878120867
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1859411423, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Source: {fileID: 0}
+  SourcePath: Heartbeat Sound/Heartbeat Audio Source
+  PlaybackOrder: 1
+  ParameterName: 
+  Volume: {x: 1, y: 1}
+  VolumeApplySettings: 2
+  Pitch: {x: 1, y: 1}
+  PitchApplySettings: 2
+  Clips:
+  - {fileID: 8300000, guid: a7607251995dad64dad0053eb91fb075, type: 3}
+  - {fileID: 8300000, guid: 7983ca5e3ea41e043ae056c5e1cda4c3, type: 3}
+  - {fileID: 8300000, guid: 7a759f5e300a03843bc6dfd1cae83427, type: 3}
+  - {fileID: 8300000, guid: d4cb9465e4e0a2847b95d9a1d3fd1924, type: 3}
+  - {fileID: 8300000, guid: 2f52d9cbd2b430f459adee8b8fe1b1ba, type: 3}
+  - {fileID: 8300000, guid: 1392ef66914d68b419749b930dcad79d, type: 3}
+  - {fileID: 8300000, guid: 82a0695b076be064e8ba32a50b6d7612, type: 3}
+  - {fileID: 8300000, guid: e4f97209c6d92c24592834dada02ac63, type: 3}
+  - {fileID: 8300000, guid: 7d04bd006c32bf1468a19be1fd606760, type: 3}
+  - {fileID: 8300000, guid: a5026c80a1d6cca458f7c2cd696a45ec, type: 3}
+  ClipsApplySettings: 0
+  Loop: 0
+  LoopApplySettings: 2
+  DelayInSeconds: 0
+  PlayOnEnter: 1
+  StopOnEnter: 0
+  PlayOnExit: 0
+  StopOnExit: 1
+  playbackIndex: 0
+--- !u!1101 &-5667822824954697052
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8135350696786372267}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &-5586517316889219958
 AnimatorState:
   serializedVersion: 6
@@ -158,6 +341,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4139829525661777815}
+  - {fileID: -2094076601527665752}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -198,6 +382,34 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-5263666969817355624
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -706344726, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameters:
+  - type: 3
+    name: Heartbeat/HR
+    source: HR
+    value: 0
+    valueMin: 0
+    valueMax: 0
+    chance: 0
+    preventRepeats: 0
+    convertRange: 0
+    sourceMin: 0
+    sourceMax: 0
+    destMin: 0
+    destMax: 0
+  localOnly: 1
+  debugString: 
 --- !u!1107 &-5212963456371207014
 AnimatorStateMachine:
   serializedVersion: 6
@@ -218,10 +430,16 @@ AnimatorStateMachine:
     m_Position: {x: 260, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3003313888834551653}
-    m_Position: {x: -200, y: 110, z: 0}
+    m_Position: {x: -200, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5586517316889219958}
-    m_Position: {x: -200, y: 40, z: 0}
+    m_Position: {x: -200, y: 110, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -8597599231616209119}
+    m_Position: {x: 30, y: 170, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -8135350696786372267}
+    m_Position: {x: 260, y: 170, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 6518563347053493917}
@@ -280,8 +498,8 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0
-  m_HasExitTime: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -293,10 +511,11 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Heartbeat Sensor
+  m_Name: Sensor
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
+  - {fileID: 6385878789386614697}
   - {fileID: 8960691600327558612}
   - {fileID: 6854480452630135981}
   m_StateMachineBehaviours:
@@ -310,7 +529,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -3143474751463852562}
+  m_Motion: {fileID: 7400000, guid: b2d9e52dbcfbac348a0f3dacaba74da9, type: 2}
   m_Tag: 
   m_SpeedParameter: Heartbeat/HR
   m_MirrorParameter: 
@@ -335,43 +554,12 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0
-  m_HasExitTime: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!206 &-3143474751463852562
-BlendTree:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Heartbeat Local
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: b2d9e52dbcfbac348a0f3dacaba74da9, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: -884263525263221845}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: FXWeight
-  m_BlendParameterY: IsLocal
-  m_MinThreshold: 0
-  m_MaxThreshold: 0
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 4
 --- !u!206 &-2959941932743374447
 BlendTree:
   m_ObjectHideFlags: 1
@@ -459,37 +647,53 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!206 &-1926491569472131090
-BlendTree:
+--- !u!1101 &-2371864594458046945
+AnimatorStateTransition:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Listen
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: c2124693997e3e245a0bbf8d1dabbe8a, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6664fa2be51c9df4cae00ddc80ed9728, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: Heartbeat/Listen
-  m_BlendParameterY: Blend
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8597599231616209119}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &-2094076601527665752
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: IsLocal
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -6915409095162329371}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!114 &-1788488809209581149
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -518,37 +722,6 @@ MonoBehaviour:
     destMax: 120
   localOnly: 1
   debugString: 
---- !u!206 &-884263525263221845
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Adjust
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: -1926491569472131090}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6664fa2be51c9df4cae00ddc80ed9728, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: Heartbeat/Adjust
-  m_BlendParameterY: Blend
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
 --- !u!1102 &-452079886242966167
 AnimatorState:
   serializedVersion: 6
@@ -576,6 +749,31 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &-263363410028761764
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 7
+    m_ConditionEvent: HR
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -3820168284943784647}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -671,6 +869,34 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &346293180128120492
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -706344726, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameters:
+  - type: 3
+    name: Heartbeat/HR
+    source: Heartbeat/Speed
+    value: 0
+    valueMin: 0
+    valueMax: 0
+    chance: 0
+    preventRepeats: 0
+    convertRange: 1
+    sourceMin: 0
+    sourceMax: 1
+    destMin: 40
+    destMax: 120
+  localOnly: 1
+  debugString: 
 --- !u!1101 &1066324129765886672
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -696,6 +922,62 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &1559937072239693359
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 4
+    m_ConditionEvent: IsLocal
+    m_EventTreshold: 1
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 3003313888834551653}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!206 &2884416874920272417
+BlendTree:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Heartbeat Local
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: b2d9e52dbcfbac348a0f3dacaba74da9, type: 2}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 6418170863802178764}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  m_BlendParameter: FXWeight
+  m_BlendParameterY: IsLocal
+  m_MinThreshold: 0
+  m_MaxThreshold: 0
+  m_UseAutomaticThresholds: 1
+  m_NormalizedBlendValues: 0
+  m_BlendType: 4
 --- !u!1102 &3003313888834551653
 AnimatorState:
   serializedVersion: 6
@@ -703,13 +985,12 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Heartbeat Remote
+  m_Name: Remote With Sound
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8100912834502096665}
   - {fileID: -3281021432078716274}
-  - {fileID: 5416591459286072236}
   m_StateMachineBehaviours:
   - {fileID: 6462373469639774301}
   m_Position: {x: 50, y: 50, z: 0}
@@ -726,6 +1007,34 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &3036572622136138590
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: Heartbeat/Adjust
+    m_EventTreshold: 0
+  - m_ConditionMode: 3
+    m_ConditionEvent: Heartbeat/Listen
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8597599231616209119}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &3082399449218872298
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -822,31 +1131,37 @@ MonoBehaviour:
     destMax: 0
   localOnly: 1
   debugString: 
---- !u!1101 &5416591459286072236
-AnimatorStateTransition:
+--- !u!206 &5646047907970031718
+BlendTree:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 3
-    m_ConditionEvent: IsLocal
-    m_EventTreshold: 0
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: -6915409095162329371}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0
-  m_TransitionOffset: 0
-  m_ExitTime: 0
-  m_HasExitTime: 0
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
+  m_Name: Listen
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: c2124693997e3e245a0bbf8d1dabbe8a, type: 2}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 6664fa2be51c9df4cae00ddc80ed9728, type: 2}
+    m_Threshold: 1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  m_BlendParameter: Heartbeat/Listen
+  m_BlendParameterY: Blend
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 1
+  m_NormalizedBlendValues: 0
+  m_BlendType: 0
 --- !u!1101 &6051753230250376966
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -869,6 +1184,59 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &6385878789386614697
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8135350696786372267}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!206 &6418170863802178764
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Adjust
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 5646047907970031718}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 6664fa2be51c9df4cae00ddc80ed9728, type: 2}
+    m_Threshold: 1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  m_BlendParameter: Heartbeat/Adjust
+  m_BlendParameterY: Blend
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 1
+  m_NormalizedBlendValues: 0
+  m_BlendType: 0
 --- !u!114 &6462373469639774301
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -984,6 +1352,28 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &7796419339157179512
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8135350696786372267}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &8393968243906673284
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1040,6 +1430,31 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &8844303931913021565
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 4
+    m_ConditionEvent: IsLocal
+    m_EventTreshold: 1
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -5586517316889219958}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &8960691600327558612
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1065,7 +1480,7 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!1101 &8967730193430180749
+--- !u!1101 &9039817805625380557
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1073,11 +1488,11 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 4
-    m_ConditionEvent: IsLocal
-    m_EventTreshold: 1
+  - m_ConditionMode: 6
+    m_ConditionEvent: HR
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 3003313888834551653}
+  m_DstState: {fileID: -6915409095162329371}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
