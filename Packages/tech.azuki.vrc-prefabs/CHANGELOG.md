@@ -4,6 +4,7 @@
 - Updated Heartbeat Counter to hide during upload.
 - Updated Heartbeat Sound to play until next beat happens when listening.
 - Replaced Parameter Drivers in favor of AAP for Bell Sound System.
+- Updated Hearbeat Counter decals to avoid artifacts and bluriness.
 
 ## Version 1.4.11
 - Adjusted bell sound sensitivity.
