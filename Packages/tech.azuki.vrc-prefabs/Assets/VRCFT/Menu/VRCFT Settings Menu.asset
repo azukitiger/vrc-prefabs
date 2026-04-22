@@ -14,17 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parameters: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
   controls:
-  - name: Remote Testing
-    icon: {fileID: 2800000, guid: fb5c2b6d3e7bcb4409431307cd905a8e, type: 3}
-    type: 102
-    parameter:
-      name: FT/RemoteModeActive
-    value: 1
-    style: 0
-    subMenu: {fileID: 0}
-    subParameters:
-    - name: 
-    labels: []
   - name: Local Smoothing
     icon: {fileID: 2800000, guid: a3c623764f1386146ac3e3c1a5dd905d, type: 3}
     type: 203
