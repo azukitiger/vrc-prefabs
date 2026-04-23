@@ -1,3 +1,6 @@
+## Version 1.4.14
+- Fixed visemes for VRCFT.
+
 ## Version 1.4.13
 - Increased bell sound volume.
 - Removed Remote Testing toggle for VRCFT prefab.
