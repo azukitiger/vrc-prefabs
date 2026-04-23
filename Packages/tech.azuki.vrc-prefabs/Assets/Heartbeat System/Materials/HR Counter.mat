@@ -1427,7 +1427,7 @@ Material:
     - _FXProximityColor: 0
     - _FXProximityColorBackFace: 0
     - _FXProximityColorMaxColorThemeIndex: 0
-    - _FXProximityColorMaxDistance: 0.1
+    - _FXProximityColorMaxDistance: 1
     - _FXProximityColorMinColorThemeIndex: 0
     - _FXProximityColorMinDistance: 0
     - _FXProximityColorType: 1
@@ -3094,8 +3094,8 @@ Material:
     - m_lightingCategory: 0
     - m_mainCategory: 1
     - m_modifierCategory: 0
-    - m_renderingCategory: 1
-    - m_specialFXCategory: 0
+    - m_renderingCategory: 0
+    - m_specialFXCategory: 1
     - m_start_ALDecalSpectrum: 0
     - m_start_ALVolumeColor: 0
     - m_start_Alpha: 1
@@ -3236,7 +3236,7 @@ Material:
     - m_start_videoEffects: 0
     - m_start_voronoi: 0
     - m_start_voronoiRandom: 0
-    - m_thirdpartyCategory: 1
+    - m_thirdpartyCategory: 0
     - m_vertexCategory: 0
     - s_end_ALAlpha: 0
     - s_end_ALDecalAudioModsOptions: 0
@@ -3881,7 +3881,7 @@ Material:
     - _EmissiveScroll_Direction2: {r: 0, g: -10, b: 0, a: 0}
     - _EmissiveScroll_Direction3: {r: 0, g: -10, b: 0, a: 0}
     - _FXProximityColorMaxColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FXProximityColorMinColor: {r: 0.47843137, g: 0.47843137, b: 0.50980395, a: 1}
+    - _FXProximityColorMinColor: {r: 0, g: 0, b: 0, a: 1}
     - _FlipbookColor: {r: 1, g: 1, b: 1, a: 1}
     - _FlipbookCrossfadeRange: {r: 0.75, g: 1, b: 0, a: 1}
     - _FlipbookMaskPan: {r: 0, g: 0, b: 0, a: 0}

@@ -1,3 +1,11 @@
+## Version 1.4.13
+- Increased bell sound volume.
+- Removed Remote Testing toggle for VRCFT prefab.
+- Face Tracking Emulation toggle is off by default.
+- Face Tracking Local Smoothing slider removed by default.
+- Moved Face Tracking Visemes toggle under Settings, only disables visemes if Lip Tracking toggle active.
+- Fixed TongueOut Limits 2D blendtree.
+
 ## Version 1.4.12
 - Added Raycast Floor Collider prefab.
 - Added Raycast Wall Collider prefab.
