@@ -24,6 +24,17 @@ MonoBehaviour:
     subMenu: {fileID: 11400000, guid: 705c51dc57baf544fa19a9b51459f295, type: 2}
     subParameters: []
     labels: []
+  - name: Visemes
+    icon: {fileID: 2800000, guid: 02dccda0d4fe04c44bf3055c6cd17321, type: 3}
+    type: 102
+    parameter:
+      name: FT/VisemesEnable
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: 
+    labels: []
   - name: Disable Gestures
     icon: {fileID: 2800000, guid: 4f7e025b25fc17d4d842dec07adc377d, type: 3}
     type: 102

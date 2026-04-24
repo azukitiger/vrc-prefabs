@@ -14,6 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parameters: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
   controls:
+  - name: Remote Testing
+    icon: {fileID: 2800000, guid: abc6a6ad25e037849a0ec1e31e2b1e87, type: 3}
+    type: 102
+    parameter:
+      name: FT/RemoteModeActive
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: 
+    labels: []
+  - name: Local Smoothing
+    icon: {fileID: 2800000, guid: a3c623764f1386146ac3e3c1a5dd905d, type: 3}
+    type: 203
+    parameter:
+      name: 
+    value: 1
+    style: 0
+    subMenu: {fileID: 0}
+    subParameters:
+    - name: FT/LocalSmoothing
+    labels: []
   - name: Eye Sync
     icon: {fileID: 2800000, guid: cbb237e4ffb54ac4b9319edc69e24807, type: 3}
     type: 102
@@ -41,17 +63,6 @@ MonoBehaviour:
     type: 102
     parameter:
       name: FT/FaceTrackingLimits
-    value: 1
-    style: 0
-    subMenu: {fileID: 0}
-    subParameters:
-    - name: 
-    labels: []
-  - name: Visemes
-    icon: {fileID: 2800000, guid: 02dccda0d4fe04c44bf3055c6cd17321, type: 3}
-    type: 102
-    parameter:
-      name: FT/VisemesEnable
     value: 1
     style: 0
     subMenu: {fileID: 0}

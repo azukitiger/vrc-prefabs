@@ -1,3 +1,6 @@
+## Version 1.4.17
+- Re-added local smoothing & remote testing toggles.
+
 ## Version 1.4.16
 - Set icon size to 256.
 
