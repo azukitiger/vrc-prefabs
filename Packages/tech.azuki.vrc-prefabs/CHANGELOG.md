@@ -1,3 +1,11 @@
+## Version 1.4.15
+- New icons for VRCFT.
+- Fixed Tongue Out limit for VRCFT animator.
+- Fixed VRCFT Local Smoothing slider now saved between worlds.
+- Added Face Tracking Blep Gesture toggle.
+- Updated Wall Raycast animator & fixed VRCFury update breaking parameter name.
+- Disabled mipmaps for icons.
+
 ## Version 1.4.14
 - Fixed visemes for VRCFT.
 

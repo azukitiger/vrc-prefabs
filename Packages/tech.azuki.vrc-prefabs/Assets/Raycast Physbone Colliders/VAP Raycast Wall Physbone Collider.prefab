@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1317.0
   somethingIsBroken: 0
   config:
     features: []
@@ -370,7 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1317.0
   somethingIsBroken: 0
   config:
     features: []
@@ -410,11 +410,7 @@ MonoBehaviour:
               Physbone Colliders/Menu/VAP Raycast Wall Physbone Collider Parameters.asset
             objRef: {fileID: 11400000, guid: e4a462a9effc9584f8693a6de15a9709, type: 2}
         smoothedPrms: []
-        globalParams:
-        - WallCollider/Low/_Ratio
-        - WallCollider/Low/_Hit
-        - WallCollider/High/_Ratio
-        - WallCollider/High/_Hit
+        globalParams: []
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
@@ -556,7 +552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1317.0
   somethingIsBroken: 0
   config:
     features: []
@@ -978,7 +974,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1317.0
   somethingIsBroken: 0
   config:
     features: []
