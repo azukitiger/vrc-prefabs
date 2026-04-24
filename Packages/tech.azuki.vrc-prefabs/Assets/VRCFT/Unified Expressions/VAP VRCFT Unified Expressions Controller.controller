@@ -12194,7 +12194,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
     m_Threshold: 4
-    m_Position: {x: 6, y: 0}
+    m_Position: {x: 4, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
@@ -12210,7 +12210,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: d74d4c7783ecd674283e2b8e62b3aa8b, type: 2}
     m_Threshold: 12
-    m_Position: {x: 6, y: 1}
+    m_Position: {x: 4, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: EyeTrackingActive
