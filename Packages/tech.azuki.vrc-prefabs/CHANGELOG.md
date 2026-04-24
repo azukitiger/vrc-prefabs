@@ -1,3 +1,6 @@
+## Version 1.4.16
+- Set icon size to 256.
+
 ## Version 1.4.15
 - New icons for VRCFT.
 - Fixed Tongue Out limit for VRCFT animator.
