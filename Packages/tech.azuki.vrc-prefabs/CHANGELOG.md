@@ -1,4 +1,7 @@
 ## Version 1.4.17
+- Fix remote tongue blep.
+
+## Version 1.4.17
 - Re-added local smoothing & remote testing toggles.
 
 ## Version 1.4.16
