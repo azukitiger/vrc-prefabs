@@ -46,17 +46,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastDirection: {x: 0, y: -1, z: 0}
-  distance: 1
+  distance: 1.5
   applyTransformScale: 1
   collisionMode: 0
   customCollisionLayers:
     serializedVersion: 2
     m_Bits: 0
   resultTransform: {fileID: 8061910624564788282}
-  applyRotation: 0
+  applyRotation: 1
   alignmentAxis: {x: 0, y: 1, z: 0}
-  disableOnMiss: 1
-  behaviorOnMiss: 0
+  behaviorOnMiss: 2
   parameter: 
   param_HitValue: 0
   param_RatioValue: 0
@@ -108,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1325.0
   somethingIsBroken: 0
   config:
     features: []

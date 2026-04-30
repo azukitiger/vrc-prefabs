@@ -1,4 +1,8 @@
-## Version 1.4.17
+## Version 1.4.19
+- Fixed gesture weights affecting gesture lock.
+- Fixed rotation not being applied to floor collider.
+
+## Version 1.4.18
 - Fix remote tongue blep.
 
 ## Version 1.4.17
