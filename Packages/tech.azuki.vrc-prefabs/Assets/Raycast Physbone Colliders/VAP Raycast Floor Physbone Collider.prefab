@@ -56,7 +56,7 @@ MonoBehaviour:
   applyRotation: 1
   alignmentAxis: {x: 0, y: 1, z: 0}
   behaviorOnMiss: 2
-  parameter: 
+  parameter: FloorCollider/
   param_HitValue: 0
   param_RatioValue: 0
   param_DistanceValue: 0
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1962815490794609016}
-  - component: {fileID: 80850996425342955}
+  - component: {fileID: 2171512906711503933}
   m_Layer: 0
   m_Name: VAP Raycast Floor Physbone Collider
   m_TagString: Untagged
@@ -93,7 +93,7 @@ Transform:
   - {fileID: 7623723731988096115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &80850996425342955
+--- !u!114 &2171512906711503933
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,72 +112,74 @@ MonoBehaviour:
   config:
     features: []
   content:
-    rid: 3147176312603672658
+    rid: 2198421422206877701
   references:
     version: 2
     RefIds:
-    - rid: 3147176312603672658
-      type: {class: Toggle, ns: VF.Model.Feature, asm: VRCFury}
+    - rid: 2198421422206877701
+      type: {class: FullController, ns: VF.Model.Feature, asm: VRCFury}
       data:
-        version: 3
-        name: Interactions/Colliders/Floor Collider
-        state:
-          actions:
-          - rid: 3147176312603672659
-        saved: 1
-        slider: 0
-        sliderInactiveAtZero: 0
-        securityEnabled: 0
-        defaultOn: 1
-        includeInRest: 0
-        exclusiveOffState: 0
-        enableExclusiveTag: 0
-        exclusiveTag: 
-        resetPhysbones: []
-        hasExitTime: 0
-        enableIcon: 1
-        icon:
+        version: 4
+        controllers:
+        - controller:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 32c64b57c1ad48a419205b6ba9eab9a0|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
+              Physbone Colliders/VAP Raycast Floor Physbone Collider Controller.controller
+            objRef: {fileID: 9100000, guid: 32c64b57c1ad48a419205b6ba9eab9a0, type: 2}
+          type: 5
+        menus:
+        - menu:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 4c4cd493a082c944895c406fd584ff22|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
+              Physbone Colliders/Menu/VAP Raycast Floor Physbone Collider Menu.asset
+            objRef: {fileID: 11400000, guid: 4c4cd493a082c944895c406fd584ff22, type: 2}
+          prefix: Interactions/Colliders
+        prms:
+        - parameters:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 0120efb1f19acbc43b6178d92f03087e|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
+              Physbone Colliders/Menu/VAP Raycast Floor Physbone Collider Parameters.asset
+            objRef: {fileID: 11400000, guid: 0120efb1f19acbc43b6178d92f03087e, type: 2}
+        smoothedPrms: []
+        globalParams:
+        - FXWeight
+        allNonsyncedAreGlobal: 0
+        ignoreSaved: 0
+        toggleParam: 
+        rootObjOverride: {fileID: 0}
+        rootBindingsApplyToAvatar: 0
+        rewriteBindings: []
+        allowMissingAssets: 0
+        injectSpsDepthParam: 
+        injectSpsVelocityParam: 
+        controller:
           version: 1
           fileID: 0
           guid: 
-          id: 58ae274be2be77e4da5119d072a11cf2|Packages/tech.azuki.vrc-prefabs/Assets/Raycast
-            Physbone Colliders/Icons/Floor Collider.png
-          objRef: {fileID: 2800000, guid: 58ae274be2be77e4da5119d072a11cf2, type: 3}
-        enableDriveGlobalParam: 0
-        driveGlobalParam: 
-        separateLocal: 0
-        localState:
-          actions: []
-        hasTransition: 0
-        transitionStateIn:
-          actions: []
-        transitionStateOut:
-          actions: []
-        transitionTimeIn: 0
-        transitionTimeOut: 0
-        localTransitionStateIn:
-          actions: []
-        localTransitionStateOut:
-          actions: []
-        localTransitionTimeIn: 0
-        localTransitionTimeOut: 0
-        simpleOutTransition: 1
-        defaultSliderValue: 0
-        useGlobalParam: 0
-        globalParam: Mayu/FloorCollider
-        holdButton: 0
-        invertRestLogic: 0
-        expandIntoTransition: 1
-    - rid: 3147176312603672659
-      type: {class: ObjectToggleAction, ns: VF.Model.StateAction, asm: VRCFury}
-      data:
-        version: 1
-        desktopActive: 0
-        androidActive: 0
-        localOnly: 0
-        remoteOnly: 0
-        obj: {fileID: 1332057930028312991}
-        mode: 0
+          id: 
+          objRef: {fileID: 0}
+        menu:
+          version: 1
+          fileID: 0
+          guid: 
+          id: 
+          objRef: {fileID: 0}
+        parameters:
+          version: 1
+          fileID: 0
+          guid: 
+          id: 
+          objRef: {fileID: 0}
+        submenu: 
+        removePrefixes: []
+        addPrefix: 
+        useSecurityForToggle: 0
 --- !u!1 &7760665470249065167
 GameObject:
   m_ObjectHideFlags: 0

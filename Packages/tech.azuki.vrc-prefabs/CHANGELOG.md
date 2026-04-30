@@ -1,3 +1,6 @@
+## Version 1.4.21
+- Updated Floor Collider to disable on miss.
+
 ## Version 1.4.20
 - Wall Collider no longer on by default for performance.
 
