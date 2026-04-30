@@ -1,3 +1,6 @@
+## Version 1.4.20
+- Wall Collider no longer on by default for performance.
+
 ## Version 1.4.19
 - Fixed gesture weights affecting gesture lock.
 - Fixed rotation not being applied to floor collider.

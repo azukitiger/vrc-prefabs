@@ -16,6 +16,6 @@ MonoBehaviour:
   parameters:
   - name: WallCollider
     valueType: 2
-    saved: 1
-    defaultValue: 1
+    saved: 0
+    defaultValue: 0
     networkSynced: 1
