@@ -1,3 +1,6 @@
+## Version 1.4.22
+- Only override Unified Expression blendshapes when tracking is active.
+
 ## Version 1.4.21
 - Updated Floor Collider to disable on miss.
 
