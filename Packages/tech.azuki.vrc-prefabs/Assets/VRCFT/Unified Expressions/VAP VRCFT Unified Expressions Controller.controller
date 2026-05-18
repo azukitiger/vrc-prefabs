@@ -13453,14 +13453,6 @@ BlendTree:
   m_Name: Blendshape Driver
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: b6f04eb9ec0aa22408fcee2a54e7498a, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 2398853022827962049}
     m_Threshold: 0.31597224
     m_Position: {x: 0, y: 0}
@@ -13470,7 +13462,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 6265718779758052785}
-    m_Threshold: 0.6319445
+    m_Threshold: 0.6319444
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -13478,7 +13470,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 2541580680525063514}
-    m_Threshold: 0.9479167
+    m_Threshold: 0.9479166
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -13486,7 +13478,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: LeftEyeLidExpandedSqueeze
   m_BlendParameterY: LeftEyeLidExpandedSqueeze
-  m_MinThreshold: 0
+  m_MinThreshold: 0.31597224
   m_MaxThreshold: 0.9479167
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0

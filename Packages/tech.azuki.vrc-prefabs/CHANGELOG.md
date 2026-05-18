@@ -1,3 +1,6 @@
+## Version 1.4.23
+- New Quest Controllers toggle to disable gesture weight & victory gestures.
+
 ## Version 1.4.22
 - Only override Unified Expression blendshapes when tracking is active.
 
