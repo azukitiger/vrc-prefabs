@@ -1,4 +1,7 @@
 ## Version 1.4.23
+- Fixed Left Gesture Victory behavior with Mayu.
+
+## Version 1.4.23
 - New Quest Controllers toggle to disable gesture weight & victory gestures.
 
 ## Version 1.4.22
