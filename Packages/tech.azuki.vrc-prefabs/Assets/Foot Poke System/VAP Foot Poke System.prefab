@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1296.0
+  vrcfuryVersion: 1.1334.0
   somethingIsBroken: 0
   config:
     features: []
@@ -124,19 +124,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootTransform: {fileID: 0}
-  shapeType: 1
+  shapeType: 2
   radius: 1
   height: 1
+  size: {x: 0.1, y: 0.02, z: 0.1}
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
   contentTypes: 1
   collisionTags:
-  - Hand
   - Finger
   - Muzzle
   allowSelf: 0
   allowOthers: 1
+  useFaceProximity: 0
   receiverType: 2
   parameter: Touch/FootLeft
   minVelocity: 0.05
@@ -153,19 +154,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootTransform: {fileID: 0}
-  shapeType: 1
+  shapeType: 2
   radius: 1
   height: 1
+  size: {x: 0.1, y: 0.02, z: 0.1}
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
   contentTypes: 1
   collisionTags:
-  - Hand
   - Finger
   - Muzzle
   allowSelf: 0
   allowOthers: 1
-  receiverType: 0
+  useFaceProximity: 0
+  receiverType: 2
   parameter: Touch/FootRight
   minVelocity: 0.05

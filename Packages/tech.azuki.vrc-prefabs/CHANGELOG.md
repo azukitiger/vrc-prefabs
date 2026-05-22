@@ -1,3 +1,8 @@
+## Version 1.5.0
+- Updated collider tags for Eye Poke, Foot Poke & Node Boop.
+- Added Muzzle Global Collider Prefab.
+- Updated Foot Poke Contact Receivers to be box shape type.
+
 ## Version 1.4.23
 - Fixed Left Gesture Victory behavior with Mayu.
 
