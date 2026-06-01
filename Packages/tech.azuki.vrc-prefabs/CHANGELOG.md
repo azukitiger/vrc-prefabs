@@ -2,6 +2,7 @@
 - Updated collider tags for Eye Poke, Foot Poke & Node Boop.
 - Added Muzzle Global Collider Prefab.
 - Updated Foot Poke Contact Receivers to be box shape type.
+- Added Pupil Focus System Prefab.
 
 ## Version 1.4.23
 - Fixed Left Gesture Victory behavior with Mayu.
