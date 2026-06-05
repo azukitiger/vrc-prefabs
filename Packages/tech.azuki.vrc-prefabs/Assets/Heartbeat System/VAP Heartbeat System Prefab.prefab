@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 1610797297, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gain: 10
+  Gain: 0
   Far: 1
   Near: 0
   VolumetricRadius: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1338.0
   somethingIsBroken: 0
   config:
     features: []
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1338.0
   somethingIsBroken: 0
   config:
     features: []
@@ -440,6 +440,7 @@ MonoBehaviour:
   shapeType: 0
   radius: 0.1
   height: 2
+  size: {x: 1, y: 1, z: 1}
   position: {x: 0, y: -0.02, z: 0.1}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
@@ -448,6 +449,7 @@ MonoBehaviour:
   - Head
   allowSelf: 0
   allowOthers: 1
+  useFaceProximity: 0
   receiverType: 0
   parameter: Touch/Chest
   minVelocity: 0.05
@@ -465,7 +467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1338.0
   somethingIsBroken: 0
   config:
     features: []
@@ -554,7 +556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1338.0
   somethingIsBroken: 0
   config:
     features: []
@@ -645,7 +647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1338.0
   somethingIsBroken: 0
   config:
     features: []
@@ -699,7 +701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1298.0
+  vrcfuryVersion: 1.1338.0
   somethingIsBroken: 0
   config:
     features: []
