@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1335.0
+  vrcfuryVersion: 1.1353.0
   somethingIsBroken: 0
   config:
     features: []
@@ -62,7 +62,7 @@ MonoBehaviour:
         name: Body Controls/Locomotion/Feral
         state:
           actions: []
-        saved: 0
+        saved: 1
         slider: 0
         sliderInactiveAtZero: 0
         securityEnabled: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1335.0
+  vrcfuryVersion: 1.1353.0
   somethingIsBroken: 0
   config:
     features: []
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1335.0
+  vrcfuryVersion: 1.1353.0
   somethingIsBroken: 0
   config:
     features: []
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1335.0
+  vrcfuryVersion: 1.1353.0
   somethingIsBroken: 0
   config:
     features: []
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1335.0
+  vrcfuryVersion: 1.1353.0
   somethingIsBroken: 0
   config:
     features: []

@@ -1,3 +1,6 @@
+## Version 1.5.1
+- Feral Toggle is now saved between worlds.
+
 ## Version 1.5.0
 - Updated collider tags for Eye Poke, Foot Poke & Node Boop.
 - Added Muzzle Global Collider Prefab.
