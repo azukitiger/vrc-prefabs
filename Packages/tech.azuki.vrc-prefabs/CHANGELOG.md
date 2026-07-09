@@ -1,3 +1,6 @@
+## Version 1.5.2
+- Adjusted Bell System to be less annoying.
+
 ## Version 1.5.1
 - Feral Toggle is now saved between worlds.
 
