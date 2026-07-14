@@ -1,3 +1,7 @@
+## Version 1.5.3
+- Removed unused animations.
+- Added blendshape offset tool.
+
 ## Version 1.5.2
 - Adjusted Bell System to be less annoying.
 
