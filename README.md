@@ -96,6 +96,7 @@ Adds **blend tree–driven gesture detection** with smoothing and optional menu-
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
+| QuestControllers | Float | Boolean | ✔ | Add with VRCFury to disable victory gestures & trigger weights
 | GestureLeftOverride | Float | Integer (Optional) | ✔ | Overrides the left gesture using the provided expression menu |
 | GestureRightOverride | Float | Integer (Optional) | ✔ | Overrides the right gesture using the provided expression menu |
 | VAP/GestureLeft | Float | - | - | Output value representing the current left gesture |
@@ -346,6 +347,7 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | FT/EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
 | FT/LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
 | FT/EyeDilationEnable | Float | Boolean | ✔ | Toggle for enabling eye dilation |
+| FT/BlepGesture | Float | Boolean | ✔ | Add with VRCFury to activate tongue out with gesture right point |
 | FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for enabling face tracking emulation. Uses mouth parameters to drive eye blendshapes for headsets that do not support certain eye tracking movements |
 | FT/FaceTrackingLimits | Float | Boolean | ✔ | Toggle for enabling mouth blendshape limits to avoid distortion |
 | FT/VisemesEnable | Float | Boolean | ✔ | Toggle for enabling visemes |
@@ -391,6 +393,73 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | VAP/FT/Smile | Float | - | - | Combined smile expression value derived from face tracking data. `1` represents a smile and `-1` represents a frown |
 | VAP/FT/Brow | Float | - | - | Combined eyebrow expression value derived from face tracking data. `1` represents raised brows and `-1` represents lowered brows |
 | VAP/FT/Angry | Float | - | - | Combined anger expression value derived from face tracking data. `1` represents a lowered brow with nose sneer |
+
+</details>
+
+---
+
+<details>
+<summary><h2>Pupil Focus System Prefab</h2></summary>
+
+> Requires the **Frame Time Prefab**.
+
+Adds a **Face Proximity contact receiver** that drives a **VRC Rotation Constraint** on the avatar's eyes to constrict the pupils when something gets close to the face.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Position the contact receiver in front of the avatar's face, between the eyes.
+3. Use the animator parameter `VAP/Touch/PupilFocus`.
+
+### Available Properties
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| VAP/Touch/PupilFocus | Float | - | - | Smoothed proximity value from the face contact sensor |
+| Touch/PupilFocus | Float | - | - | Raw proximity value from the face contact sensor |
+
+</details>
+
+---
+
+<details>
+<summary><h2>Raycast Floor Physbone Collider Prefab</h2></summary>
+
+Uses a raycast component to set the floor PhysBone collider.
+
+### Features
+- Uses a synced, saved `bool` menu toggle to enable or disable the floor collider. Enabled by default.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Add the **Floor Physbone Collider** object to the **Colliders** list of any PhysBone components that should collide with the floor.
+
+### Available Properties
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| FloorCollider | Bool | Bool | ✔ | Menu toggle used to enable or disable the floor collider |
+
+</details>
+
+---
+
+<details>
+<summary><h2>Raycast Wall Physbone Collider Prefab</h2></summary>
+
+Uses 2 raycast components aiming outwards (left and right) to set the wall PhysBone collider in the right spot.
+
+### Features
+- Uses a synced `bool` menu toggle to enable or disable the wall collider. Disabled by default for performance.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Add the **Wall Physbone Collider** object to the **Colliders** list of any PhysBone components that should collide with walls.
+
+### Available Properties
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| WallCollider | Bool | Bool | ✔ | Menu toggle used to enable or disable the wall collider |
 
 </details>
 
