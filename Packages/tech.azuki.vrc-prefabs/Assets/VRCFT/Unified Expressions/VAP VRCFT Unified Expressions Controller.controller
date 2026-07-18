@@ -7630,7 +7630,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: One
+  m_Name: Inputs
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: -9183249234506266496}
@@ -7646,7 +7646,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FT/v2/PupilDilationPass
+    m_DirectBlendParameter: VAP/FT/v2/PupilDilationPass
     m_Mirror: 0
   m_BlendParameter: Proxy/Smooth/Pupil
   m_BlendParameterY: FXWeight
@@ -13879,7 +13879,7 @@ BlendTree:
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 4
 --- !u!206 &2541580680525063514
 BlendTree:
   m_ObjectHideFlags: 0
@@ -18220,7 +18220,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Zero
+  m_Name: Drivers
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: f9539a5481a7fea49845b7f18428102e, type: 2}
@@ -18228,7 +18228,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FT/v2/PupilDilationPass
+    m_DirectBlendParameter: VAP/FT/v2/PupilDilationPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: bb83b085353b5cc4a862af60cc20617a, type: 2}
@@ -18236,7 +18236,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FT/v2/PupilDilation
+    m_DirectBlendParameter: VAP/FT/v2/PupilDilation
     m_Mirror: 0
   m_BlendParameter: Proxy/FT/PupilPass
   m_BlendParameterY: FXWeight
