@@ -9146,7 +9146,7 @@ BlendTree:
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 4
 --- !u!206 &-415418414363619291
 BlendTree:
   m_ObjectHideFlags: 1
@@ -15759,7 +15759,7 @@ BlendTree:
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 4
 --- !u!206 &4698722803412393247
 BlendTree:
   m_ObjectHideFlags: 1
