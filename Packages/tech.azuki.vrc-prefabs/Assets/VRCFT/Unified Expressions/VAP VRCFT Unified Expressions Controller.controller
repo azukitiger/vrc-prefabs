@@ -13874,8 +13874,16 @@ BlendTree:
   m_Name: Simulated Eye Tracking
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 4223183990395295370}
+    m_Motion: {fileID: 7400000, guid: b6f04eb9ec0aa22408fcee2a54e7498a, type: 2}
     m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 4223183990395295370}
+    m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
