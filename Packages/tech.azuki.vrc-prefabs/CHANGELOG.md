@@ -1,3 +1,6 @@
+## Version 1.6.1
+- Fix gesture blep for FT.
+
 ## Version 1.6.0
 - Many Face Tracking improvements and features.
 
