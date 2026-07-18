@@ -1,3 +1,6 @@
+## Version 1.6.0
+- Many Face Tracking improvements and features.
+
 ## Version 1.5.3
 - Removed unused animations.
 - Added blendshape offset tool.
