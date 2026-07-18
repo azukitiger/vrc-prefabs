@@ -1,3 +1,6 @@
+## Version 1.6.2
+- Eye lid adjustment.
+
 ## Version 1.6.1
 - Fix gesture blep for FT.
 
