@@ -1074,7 +1074,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Smoothing
+  m_Name: Dilation Smoothing
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 8388753017595639559}
@@ -11503,7 +11503,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Smooth Pupil
+  m_Name: Emulated Dilation Smoothing
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7076225291202668837}
@@ -12932,7 +12932,7 @@ BlendTree:
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: -8365422246676909683}
-    m_Threshold: 1
+    m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -12948,7 +12948,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: FT/EyeDilationEnable
   m_BlendParameterY: VAP/FT/DilationSmoothing
-  m_MinThreshold: 1
+  m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
@@ -18231,7 +18231,7 @@ BlendTree:
     m_DirectBlendParameter: FT/v2/PupilDilationPass
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f9539a5481a7fea49845b7f18428102e, type: 2}
+    m_Motion: {fileID: 7400000, guid: bb83b085353b5cc4a862af60cc20617a, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
