@@ -1,3 +1,6 @@
+## Version 1.6.3
+- Fix FT emulation.
+
 ## Version 1.6.2
 - Eye lid adjustment.
 
