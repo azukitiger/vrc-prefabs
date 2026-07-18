@@ -58,14 +58,3 @@ MonoBehaviour:
     subParameters:
     - name: 
     labels: []
-  - name: Face Tracking Limits
-    icon: {fileID: 2800000, guid: 290f9f58d14007e4aa42386927c4f1b8, type: 3}
-    type: 102
-    parameter:
-      name: FT/FaceTrackingLimits
-    value: 1
-    style: 0
-    subMenu: {fileID: 0}
-    subParameters:
-    - name: 
-    labels: []
