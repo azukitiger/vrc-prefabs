@@ -1,4 +1,7 @@
-## Version 1.6.5
+## Version 1.6.7
+- FT Menu update.
+
+## Version 1.6.6
 - Fix Proxy Brow AAPs.
 
 ## Version 1.6.5
