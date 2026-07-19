@@ -8233,7 +8233,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/BrowExpressionLeft
+  m_BlendParameter: Proxy/FT/v2/BrowExpressionLeft
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -15260,7 +15260,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/BrowExpressionRight
+  m_BlendParameter: Proxy/FT/v2/BrowExpressionRight
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -18349,7 +18349,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/BrowExpressionLeft
+  m_BlendParameter: Proxy/FT/v2/BrowExpressionLeft
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -18910,7 +18910,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/BrowExpressionRight
+  m_BlendParameter: Proxy/FT/v2/BrowExpressionRight
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1
