@@ -1,3 +1,6 @@
+## Version 1.6.4
+- Greatly improved FT emulation.
+
 ## Version 1.6.3
 - Fix FT emulation.
 
