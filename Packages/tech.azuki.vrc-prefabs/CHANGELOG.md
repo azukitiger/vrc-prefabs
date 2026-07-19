@@ -1,3 +1,6 @@
+## Version 1.6.5
+- Remove BLINK blendtree.
+
 ## Version 1.6.4
 - Greatly improved FT emulation.
 
