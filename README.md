@@ -385,7 +385,7 @@ Adds face tracking to the avatar using the **Unified Expression** blendshapes. B
 Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
 3. Optionally, the animator parameters `VAP/FT/*` can be used to override values from a separate FX controller.
 
-### Blendshapes (Required + Optional)
+### Blendshapes
 
 #### Eye — eyelid
 | Blendshape                      | Required | Description                                                  |
