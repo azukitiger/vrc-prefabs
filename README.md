@@ -385,184 +385,159 @@ Adds face tracking to the avatar using the **Unified Expression** blendshapes. B
 Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
 3. Optionally, the animator parameters `VAP/FT/*` can be used to override values from a separate FX controller.
 
-### Blendshapes
+### Blendshapes (Required + Optional)
 
 #### Eye — eyelid
-| Blendshape         | Type | Description                              |
-|---------------------|------|-------------------------------------------|
-| EyeClosedLeft       | Eye  | Closes the left eyelid                    |
-| EyeClosedRight      | Eye  | Closes the right eyelid                   |
-| EyeWideLeft         | Eye  | Left eyelid widens beyond relaxed         |
-| EyeWideRight        | Eye  | Right eyelid widens beyond relaxed        |
-| EyeSquintLeft       | Eye  | Squeezes the left eye socket muscles      |
-| EyeSquintRight      | Eye  | Squeezes the right eye socket muscles     |
+| Blendshape                      | Required | Description                                                  |
+|-----------------------------------|:--------:|---------------------------------------------------------------|
+| EyeClosedLeft                      | ✓        | Closes the left eyelid                                        |
+| EyeClosedRight                     | ✓        | Closes the right eyelid                                       |
+| EyeWideLeft                        | ✓        | Left eyelid widens beyond relaxed                              |
+| EyeWideRight                       | ✓        | Right eyelid widens beyond relaxed                             |
+| EyeSquintLeft                      | ✓        | Squeezes the left eye socket muscles                           |
+| EyeSquintRight                     | ✓        | Squeezes the right eye socket muscles                          |
+| EyeAngryLeft                       | ✗        | Narrows and angles the left eye into an angry expression       |
+| EyeAngryRight                      | ✗        | Narrows and angles the right eye into an angry expression      |
+| EyeSadLeft                         | ✗        | Droops the left eye into a sad expression                      |
+| EyeSadRight                        | ✗        | Droops the right eye into a sad expression                     |
+| EyeClosedSquintCorrectiveLeft      | ✓        | Corrective for left eye closed + squinting simultaneously      |
+| EyeClosedSquintCorrectiveRight     | ✓        | Corrective for right eye closed + squinting simultaneously     |
 
 #### Eye — gaze direction
-| Blendshape         | Type | Description             |
-|---------------------|------|---------------------------|
-| EyeLookUpLeft       | Eye  | Left eye looks up         |
-| EyeLookUpRight      | Eye  | Right eye looks up        |
-| EyeLookDownLeft     | Eye  | Left eye looks down       |
-| EyeLookDownRight    | Eye  | Right eye looks down      |
-| EyeLookInLeft       | Eye  | Left eye looks in         |
-| EyeLookInRight      | Eye  | Right eye looks in        |
-| EyeLookOutLeft      | Eye  | Left eye looks out        |
-| EyeLookOutRight     | Eye  | Right eye looks out       |
+| Blendshape         | Required | Description             |
+|---------------------|:--------:|----------------------------|
+| EyeLookUpLeft       | ✓        | Left eye looks up          |
+| EyeLookUpRight      | ✓        | Right eye looks up         |
+| EyeLookDownLeft     | ✓        | Left eye looks down        |
+| EyeLookDownRight    | ✓        | Right eye looks down       |
+| EyeLookInLeft       | ✓        | Left eye looks in          |
+| EyeLookInRight      | ✓        | Right eye looks in         |
+| EyeLookOutLeft      | ✓        | Left eye looks out         |
+| EyeLookOutRight     | ✓        | Right eye looks out        |
 
 #### Eye — pupil dilation
-| Blendshape         | Type      | Description                     |
-|---------------------|-----------|-----------------------------------|
-| EyeConstrict    | Dilation  | Constricts (shrinks) both pupils   |
-| EyeDilation     | Dilation  | Dilates (enlarges) both pupils     |
+| Blendshape     | Required | Description                       |
+|-----------------|:--------:|---------------------------------------|
+| EyeConstrict    | ✓        | Constricts (shrinks) both pupils      |
+| EyeDilation     | ✓        | Dilates (enlarges) both pupils        |
 
 #### Brow
-| Blendshape         | Type | Description                          |
-|---------------------|------|-----------------------------------------|
-| BrowDownLeft        | Brow | Pulls the left eyebrow down and in      |
-| BrowDownRight       | Brow | Pulls the right eyebrow down and in     |
-| BrowInnerUpLeft     | Brow | Inner left eyebrow pulls up             |
-| BrowInnerUpRight    | Brow | Inner right eyebrow pulls up            |
-| BrowOuterUpLeft     | Brow | Inner left eyebrow pulls up             |
-| BrowOuterUpRight    | Brow | Inner right eyebrow pulls up            |
+| Blendshape                             | Required | Description                                                        |
+|-------------------------------------------|:--------:|----------------------------------------------------------------------|
+| BrowDownLeft                               | ✓        | Pulls the left eyebrow down and in                                   |
+| BrowDownRight                              | ✓        | Pulls the right eyebrow down and in                                  |
+| BrowInnerUpLeft                            | ✓        | Inner left eyebrow pulls up                                          |
+| BrowInnerUpRight                           | ✓        | Inner right eyebrow pulls up                                         |
+| BrowOuterUpLeft                            | ✓        | Inner left eyebrow pulls up                                          |
+| BrowOuterUpRight                           | ✓        | Inner right eyebrow pulls up                                         |
+| BrowSadLeft                                | ✗        | Raises the inner corner of the left eyebrow into a sad expression    |
+| BrowSadRight                               | ✗        | Raises the inner corner of the right eyebrow into a sad expression   |
+| BrowDownEyeClosedCorrectiveLeft            | ✗        | Corrective alongside a lowered left eyebrow                          |
+| BrowDownEyeClosedCorrectiveRight           | ✗        | Corrective alongside a lowered right eyebrow                         |
+| BrowInnerUpEyeClosedCorrectiveLeft         | ✗        | Corrective alongside a raised left eyebrow                           |
+| BrowInnerEyeClosedUpCorrectiveRight        | ✗        | Corrective alongside a raised right eyebrow (note: word order differs from Left) |
+| BrowOuterUpEyeClosedCorrectiveLeft         | ✗        | Corrective alongside a raised left eyebrow                           |
+| BrowOuterUpEyeClosedCorrectiveRight        | ✗        | Corrective alongside a raised right eyebrow                          |
 
 #### Cheek
-| Blendshape         | Type | Description                  |
-|---------------------|------|---------------------------------|
-| CheekPuffLeft       | Lip  | Puffs the left side cheek       |
-| CheekPuffRight      | Lip  | Puffs the right side cheek      |
-| CheekSquintLeft     | Lip  | Raises the left side cheek      |
-| CheekSquintRight    | Lip  | Raises the right side cheek     |
-| CheekSuckLeft       | Lip  | Sucks in the left side cheek    |
-| CheekSuckRight      | Lip  | Sucks in the right side cheek   |
+| Blendshape         | Required | Description                  |
+|---------------------|:--------:|----------------------------------|
+| CheekPuffLeft       | ✓        | Puffs the left side cheek        |
+| CheekPuffRight      | ✓        | Puffs the right side cheek       |
+| CheekSquintLeft     | ✓        | Raises the left side cheek       |
+| CheekSquintRight    | ✓        | Raises the right side cheek      |
+| CheekSuckLeft       | ✓        | Sucks in the left side cheek     |
+| CheekSuckRight      | ✓        | Sucks in the right side cheek    |
 
 #### Jaw
-| Blendshape  | Type | Description               |
-|--------------|------|------------------------------|
-| JawOpen      | Lip  | Opens jawbone                |
-| JawForward   | Lip  | Pushes jawbone forwards      |
-| JawLeft      | Lip  | Pushes jawbone left          |
-| JawRight     | Lip  | Pushes jawbone right         |
+| Blendshape  | Required | Description               |
+|--------------|:--------:|------------------------------|
+| JawOpen      | ✓        | Opens jawbone                 |
+| JawForward   | ✓        | Pushes jawbone forwards       |
+| JawLeft      | ✓        | Pushes jawbone left           |
+| JawRight     | ✓        | Pushes jawbone right          |
 
 #### Lip — funnel / pucker / suck
-| Blendshape     | Type | Description                    |
-|-----------------|------|-----------------------------------|
-| LipFunnel       | Lip  | Funnels in the upper and lower lips |
-| LipPucker       | Lip  | Lips push outward                 |
-| LipSuckUpper    | Lip  | Tucks in the upper lips           |
-| LipSuckLower    | Lip  | Tucks in the lower lips           |
+| Blendshape                          | Required | Description                                          |
+|----------------------------------------|:--------:|--------------------------------------------------------|
+| LipFunnel                              | ✓        | Funnels in the upper and lower lips                     |
+| LipPucker                              | ✓        | Lips push outward                                       |
+| LipSuckUpper                           | ✓        | Tucks in the upper lips                                 |
+| LipSuckLower                           | ✓        | Tucks in the lower lips                                 |
+| LipFunnelPuckerCorrective              | ✗        | Blended in when funnel and pucker are active together   |
+| LipSuckUpperMouthClosedCorrective      | ✗        | Blends upper lip suck with a closed mouth               |
+| LipSuckLowerMouthClosedCorrective      | ✗        | Blends lower lip suck with a closed mouth               |
 
 #### Mouth — position
-| Blendshape   | Type | Description                                |
-|---------------|------|-----------------------------------------------|
-| MouthClosed   | Lip  | Closes mouth (in relation to `JawOpen`)       |
-| MouthLeft     | Lip  | Moves mouth left                              |
-| MouthRight    | Lip  | Moves mouth right                             |
+| Blendshape   | Required | Description                                |
+|---------------|:--------:|-----------------------------------------------|
+| MouthClosed   | ✓        | Closes mouth (in relation to `JawOpen`)        |
+| MouthLeft     | ✓        | Moves mouth left                               |
+| MouthRight    | ✓        | Moves mouth right                              |
 
 #### Mouth — smile / frown
-| Blendshape       | Type | Description                       |
-|-------------------|------|---------------------------------------|
-| MouthSmileLeft    | Lip  | Left side mouth expresses a smile     |
-| MouthSmileRight   | Lip  | Right side mouth expresses a smile    |
-| MouthFrownLeft    | Lip  | Left corner lip pulls down            |
-| MouthFrownRight   | Lip  | Right corner lip pulls down           |
+| Blendshape                       | Required | Description                                          |
+|-------------------------------------|:--------:|---------------------------------------------------------|
+| MouthSmileLeft                      | ✓        | Left side mouth expresses a smile                        |
+| MouthSmileRight                     | ✓        | Right side mouth expresses a smile                       |
+| MouthFrownLeft                      | ✓        | Left corner lip pulls down                                |
+| MouthFrownRight                     | ✓        | Right corner lip pulls down                               |
+| MouthSmileMouthXCorrectiveLeft      | ✗        | Blends a left smile with leftward mouth movement          |
+| MouthSmileMouthXCorrectiveRight     | ✗        | Blends a right smile with rightward mouth movement        |
+| MouthFrownMouthXCorrectiveLeft      | ✗        | Blends a left frown with leftward mouth movement          |
+| MouthFrownMouthXCorrectiveRight     | ✗        | Blends a right frown with rightward mouth movement        |
 
 #### Mouth — dimple / stretch
-| Blendshape         | Type | Description                            |
-|---------------------|------|--------------------------------------------|
-| MouthDimple         | Lip  | Lip corner dimples                          |
-| MouthDimpleLeft     | Lip  | Left lip corner is pulled backwards         |
-| MouthDimpleRight    | Lip  | Right lip corner is pushed backwards        |
-| MouthStretchLeft    | Lip  | Left corner lip pulls out and down          |
-| MouthStretchRight   | Lip  | Right corner lip pulls out and down         |
+| Blendshape         | Required | Description                            |
+|---------------------|:--------:|---------------------------------------------|
+| MouthDimple         | ✓        | Lip corner dimples                            |
+| MouthDimpleLeft     | ✓        | Left lip corner is pulled backwards           |
+| MouthDimpleRight    | ✓        | Right lip corner is pushed backwards          |
+| MouthStretchLeft    | ✓        | Left corner lip pulls out and down            |
+| MouthStretchRight   | ✓        | Right corner lip pulls out and down           |
 
 #### Mouth — press / tighten
-| Blendshape            | Type | Description                                     |
-|-------------------------|------|-----------------------------------------------------|
-| MouthPress              | Lip  | Mouth presses together                              |
-| MouthTightener          | Lip  | Mouth tightens                                      |
-| MouthTightenerLeft      | Lip  | Left side lips squeeze together horizontally        |
-| MouthTightenerRight     | Lip  | Right side lips squeeze together horizontally       |
+| Blendshape            | Required | Description                                     |
+|-------------------------|:--------:|------------------------------------------------------|
+| MouthPress              | ✓        | Mouth presses together                                |
+| MouthTightener          | ✓        | Mouth tightens                                        |
+| MouthTightenerLeft      | ✓        | Left side lips squeeze together horizontally          |
+| MouthTightenerRight     | ✓        | Right side lips squeeze together horizontally         |
 
 #### Mouth — upper / lower raise
-| Blendshape        | Type | Description                          |
-|---------------------|------|------------------------------------------|
-| MouthUpperUpLeft    | Lip  | Upper left part of the lip pulls up      |
-| MouthUpperUpRight   | Lip  | Upper right part of the lip pulls up     |
-| MouthLowerDown      | Lip  | Lowers the lower lips                    |
-| MouthRaiserUpper    | Lip  | Raises the upper lip area                |
-| MouthRaiserLower    | Lip  | Raises the lower lip/chin area           |
+| Blendshape        | Required | Description                          |
+|---------------------|:--------:|------------------------------------------|
+| MouthUpperUpLeft    | ✓        | Upper left part of the lip pulls up       |
+| MouthUpperUpRight   | ✓        | Upper right part of the lip pulls up      |
+| MouthLowerDown      | ✓        | Lowers the lower lips                     |
+| MouthRaiserUpper    | ✓        | Raises the upper lip area                 |
+| MouthRaiserLower    | ✓        | Raises the lower lip/chin area            |
+
+#### Mouth/Jaw correctives
+| Blendshape                | Required | Description                                              |
+|------------------------------|:--------:|----------------------------------------------------------------|
+| MouthXJawXCorrectiveLeft      | ✗        | Blends leftward jaw movement with leftward mouth movement       |
+| MouthXJawXCorrectiveRight     | ✗        | Blends rightward jaw movement with rightward mouth movement     |
 
 #### Nose
-| Blendshape     | Type | Description               |
-|-----------------|------|-------------------------------|
-| NoseSneer       | Lip  | Entire face sneers            |
+| Blendshape     | Required | Description               |
+|-----------------|:--------:|-------------------------------|
+| NoseSneer       | ✓        | Entire face sneers            |
 
 #### Tongue
-| Blendshape   | Type | Description                             |
-|---------------|------|---------------------------------------------|
-| TongueOut     | Lip  | Tongue visibly sticks out of the mouth      |
-| TongueUp      | Lip  | Tongue points up                            |
-| TongueDown    | Lip  | Tongue points down                          |
-| TongueLeft    | Lip  | Tongue points left                          |
-| TongueRight   | Lip  | Tongue points right                         |
-
-
-### Extra Blendshapes
-
-#### Eye
-| Blendshape                        | Type | Description                                                  |
-|-------------------------------------|------|------------------------------------------------------------------|
-| EyeAngryLeft                        | Eye  | Narrows and angles the left eye into an angry expression         |
-| EyeAngryRight                       | Eye  | Narrows and angles the right eye into an angry expression        |
-| EyeSadLeft                          | Eye  | Droops the left eye into a sad expression                        |
-| EyeSadRight                         | Eye  | Droops the right eye into a sad expression                       |
-| EyeOpenSquintLeft                   | Eye  | Corrective for left eye open + squinting simultaneously          |
-| EyeOpenSquintRight                  | Eye  | Corrective for right eye open + squinting simultaneously         |
-| EyeClosedSquintCorrectiveLeft       | Eye  | Corrective for left eye closed + squinting simultaneously        |
-| EyeClosedSquintCorrectiveRight      | Eye  | Corrective for right eye closed + squinting simultaneously       |
-
-#### Brow
-| Blendshape                             | Type | Description                                                        |
-|-------------------------------------------|------|--------------------------------------------------------------------|
-| BrowSadLeft                                | Brow | Raises the inner corner of the left eyebrow into a sad expression  |
-| BrowSadRight                               | Brow | Raises the inner corner of the right eyebrow into a sad expression |
-| BrowDownEyeClosedCorrectiveLeft            | Brow | Corrective alongside a lowered left eyebrow                        |
-| BrowDownEyeClosedCorrectiveRight           | Brow | Corrective alongside a lowered right eyebrow                       |
-| BrowInnerUpEyeClosedCorrectiveLeft         | Brow | Corrective alongside a raised left eyebrow                         |
-| BrowInnerEyeClosedUpCorrectiveRight        | Brow | Corrective alongside a raised right eyebrow (note: word order differs from Left) |
-| BrowOuterUpEyeClosedCorrectiveLeft         | Brow | Corrective alongside a raised left eyebrow                         |
-| BrowOuterUpEyeClosedCorrectiveRight        | Brow | Corrective alongside a raised right eyebrow                        |
-
-#### Lip — jaw correctives
-| Blendshape                | Type | Description                                              |
-|------------------------------|------|--------------------------------------------------------------|
-| MouthXJawXCorrectiveLeft      | Lip  | Blends leftward jaw movement with leftward mouth movement    |
-| MouthXJawXCorrectiveRight     | Lip  | Blends rightward jaw movement with rightward mouth movement  |
-
-#### Lip — funnel / pucker / suck correctives
-| Blendshape                          | Type | Description                                  |
-|----------------------------------------|------|--------------------------------------------------|
-| LipFunnelPuckerCorrective              | Lip  | Blended in when funnel and pucker are active together |
-| LipSuckUpperMouthClosedCorrective      | Lip  | Blends upper lip suck with a closed mouth        |
-| LipSuckLowerMouthClosedCorrective      | Lip  | Blends lower lip suck with a closed mouth        |
-
-#### Lip — smile / frown correctives
-| Blendshape                          | Type | Description                                       |
-|----------------------------------------|------|--------------------------------------------------|
-| MouthFrownMouthXCorrectiveLeft         | Lip  | Blends a left frown with leftward mouth movement  |
-| MouthFrownMouthXCorrectiveRight        | Lip  | Blends a right frown with rightward mouth movement|
-| MouthSmileMouthXCorrectiveLeft         | Lip  | Blends a left smile with leftward mouth movement  |
-| MouthSmileMouthXCorrectiveRight        | Lip  | Blends a right smile with rightward mouth movement|
-
-#### Tongue
-| Blendshape           | Type | Description                                        |
-|------------------------|------|--------------------------------------------------------|
-| TongueOutStep1         | Lip  | First stage of sticking the tongue out (partial)        |
-| TongueOutStep2         | Lip  | Second stage of sticking the tongue out (full)           |
-| TongueUpLeftMorph      | Lip  | Diagonal corrective: upward + leftward tongue movement   |
-| TongueUpRightMorph     | Lip  | Diagonal corrective: upward + rightward tongue movement  |
-| TongueDownLeftMorph    | Lip  | Diagonal corrective: downward + leftward tongue movement |
-| TongueDownRightMorph   | Lip  | Diagonal corrective: downward + rightward tongue movement|
+| Blendshape           | Required | Description                                                |
+|------------------------|:--------:|----------------------------------------------------------------|
+| TongueOut               | ✓        | Tongue visibly sticks out of the mouth                          |
+| TongueUp                | ✓        | Tongue points up                                                 |
+| TongueDown              | ✓        | Tongue points down                                               |
+| TongueLeft              | ✓        | Tongue points left                                               |
+| TongueRight             | ✓        | Tongue points right                                              |
+| TongueOutStep1          | ✗        | First stage of sticking the tongue out (partial)                 |
+| TongueOutStep2          | ✗        | Second stage of sticking the tongue out (full)                   |
+| TongueUpLeftMorph       | ✓        | Diagonal corrective: upward + leftward tongue movement           |
+| TongueUpRightMorph      | ✓        | Diagonal corrective: upward + rightward tongue movement          |
+| TongueDownLeftMorph     | ✓        | Diagonal corrective: downward + leftward tongue movement         |
+| TongueDownRightMorph    | ✓        | Diagonal corrective: downward + rightward tongue movement        |
 
 ### Included Expression Parameters
 
