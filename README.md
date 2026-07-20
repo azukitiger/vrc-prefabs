@@ -456,7 +456,7 @@ Your avatar's mesh needs these blendshapes (from `Assets/VRCFT/Unified Expressio
 
 ### Extra Blendshapes
 
-These blendshapes aren't part of the [official Unified Expressions spec](https://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes) — they're custom/legacy shapes bundled with this asset, mostly correctives that blend two shapes together smoothly.
+These blendshapes aren't part of the [official Unified Expressions spec](https://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes) — they're custom shapes bundled with this asset, mostly correctives that blend two shapes together smoothly.
 
 | Blendshape | Type | Description |
 |-|-|-|
