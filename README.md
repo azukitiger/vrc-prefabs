@@ -543,10 +543,10 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| FT/EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
-| FT/LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
-| FT/EyeDilationEnable | Float | Boolean | ✔ | Toggle for enabling eye dilation |
+| EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
+| LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
 | FT/FacialExpressionsDisabled | Float | Boolean | ✔ | Toggle for disabling gesture based expressions |
+| FT/EyeDilationEnable | Float | Boolean | ✔ | Toggle for enabling eye dilation |
 | FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for enabling face tracking emulation. Uses mouth parameters to drive eye blendshapes for headsets that do not support certain eye tracking movements |
 | FT/VisemesEnable | Float | Boolean | ✔ | Toggle for enabling visemes |
 | FT/EyeSync | Float | Boolean | ✔ | Toggle for synchronizing both eyes when tracking drift occurs |
@@ -563,6 +563,9 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 
 | Property | Animator Type | Description |
 |-|-|-|
+| FT/EyeTrackingActive | Float | Same value as `EyeTrackingActive` |
+| FT/LipTrackingActive | Float | Same value as `LipTrackingActive` |
+| ExpressionTrackingActive | Float | Inverse value of `FT/FacialExpressionsDisabled` |
 | VAP/FT/Smile | Float | Combined smile expression value derived from face tracking data. `1` represents a smile and `-1` represents a frown |
 | VAP/FT/Brow | Float | Combined eyebrow expression value derived from face tracking data. `1` represents raised brows and `-1` represents lowered brows |
 | VAP/FT/Angry | Float | Combined anger expression value derived from face tracking data. `1` represents a lowered brow with nose sneer |

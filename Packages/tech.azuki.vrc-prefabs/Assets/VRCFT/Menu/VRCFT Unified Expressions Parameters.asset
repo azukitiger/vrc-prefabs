@@ -24,16 +24,6 @@ MonoBehaviour:
     saved: 1
     defaultValue: 0
     networkSynced: 1
-  - name: FT/EyeTrackingActive
-    valueType: 2
-    saved: 1
-    defaultValue: 0
-    networkSynced: 0
-  - name: FT/LipTrackingActive
-    valueType: 2
-    saved: 1
-    defaultValue: 0
-    networkSynced: 0
   - name: FT/EyeDilationEnable
     valueType: 2
     saved: 1
