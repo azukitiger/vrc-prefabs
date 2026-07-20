@@ -405,17 +405,20 @@ Your avatar's mesh needs these blendshapes (from `Assets/VRCFT/Unified Expressio
 | EyeSquintRight | Eye | Squeezes the right eye socket muscles |
 | EyeWideLeft | Eye | Left eyelid widens beyond relaxed |
 | EyeWideRight | Eye | Right eyelid widens beyond relaxed |
+| EyeConstrictLeft | Dilation | Constricts (shrinks) left pupil |
+| EyeConstrictRight | Dilation | Constricts (shrinks) right pupil |
+| EyeDilationLeft | Dilation | Dilates (enlarges) left pupil |
+| EyeDilationRight | Dilation | Dilates (enlarges) right pupil |
 | BrowDownLeft | Brow | Pulls the left eyebrow down and in |
 | BrowDownRight | Brow | Pulls the right eyebrow down and in |
-| BrowUp | Brow | Brows appear worried |
-| BrowUpLeft | Brow | Left brow appears worried |
-| BrowUpRight | Brow | Right brow appears worried |
-| CheekPuff | Lip | Puffs both cheeks |
+| BrowInnerUpRight | Brow | Inner right eyebrow pulls up |
+| BrowInnerUpLeft | Brow | Inner left eyebrow pulls up |
+| BrowOuterUpRight | Brow | Inner right eyebrow pulls up |
+| BrowOuterUpLeft | Brow | Inner left eyebrow pulls up |
 | CheekPuffLeft | Lip | Puffs the left side cheek |
 | CheekPuffRight | Lip | Puffs the right side cheek |
 | CheekSquintLeft | Lip | Raises the left side cheek |
 | CheekSquintRight | Lip | Raises the right side cheek |
-| CheekSuck | Lip | Sucks both cheeks |
 | CheekSuckLeft | Lip | Sucks in the left side cheek |
 | CheekSuckRight | Lip | Sucks in the right side cheek |
 | JawForward | Lip | Pushes jawbone forwards |
@@ -435,6 +438,8 @@ Your avatar's mesh needs these blendshapes (from `Assets/VRCFT/Unified Expressio
 | MouthLeft | Lip | Moves mouth left |
 | MouthLowerDown | Lip | Lowers the lower lips |
 | MouthPress | Lip | Mouth presses together |
+| MouthRaiserLower | Lip | Raises the lower lip/chin area |
+| MouthRaiserUpper | Lip | Raises the upper lip area |
 | MouthRight | Lip | Moves mouth right |
 | MouthSmileLeft | Lip | Left side mouth expresses a smile |
 | MouthSmileRight | Lip | Right side mouth expresses a smile |
@@ -449,6 +454,7 @@ Your avatar's mesh needs these blendshapes (from `Assets/VRCFT/Unified Expressio
 | NoseSneer | Lip | Entire face sneers |
 | NoseSneerLeft | Lip | Left side face sneers |
 | NoseSneerRight | Lip | Right side face sneers |
+| TongueOut | Lip | Tongue visibly sticks out of the mouth |
 | TongueDown | Lip | Tongue points down |
 | TongueLeft | Lip | Tongue points left |
 | TongueRight | Lip | Tongue points right |
@@ -468,16 +474,14 @@ These blendshapes aren't part of the [official Unified Expressions spec](https:/
 | EyeOpenSquintRight | Eye | Corrective shape blended in when the right eye is open and squinting at the same time, to prevent the two shapes from conflicting |
 | EyeSadLeft | Eye | Droops the left eye into a sad expression |
 | EyeSadRight | Eye | Droops the right eye into a sad expression |
-| BrowDownCorrectiveLeft | Brow | Corrective shape blended in alongside a lowered left eyebrow to fix shape artifacts |
-| BrowDownCorrectiveRight | Brow | Corrective shape blended in alongside a lowered right eyebrow to fix shape artifacts |
+| EyeClosedBrowDownCorrectiveLeft | Brow | Corrective shape blended in alongside a lowered left eyebrow to fix shape artifacts |
+| EyeClosedBrowDownCorrectiveRight | Brow | Corrective shape blended in alongside a lowered right eyebrow to fix shape artifacts |
 | BrowSadLeft | Brow | Raises the inner corner of the left eyebrow into a sad expression |
 | BrowSadRight | Brow | Raises the inner corner of the right eyebrow into a sad expression |
-| BrowUpCorrective | Brow | Corrective shape blended in alongside `BrowUp` to fix shape artifacts at full brow raise |
-| BrowUpCorrectiveLeft | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
-| BrowUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
-| EyesPupilConstrict | Dilation | Constricts (shrinks) both pupils |
-| EyesPupilDilation | Dilation | Dilates (enlarges) both pupils |
-| EyesPupilIdle | Dilation | Neutral, resting pupil size used when no dilation or constriction is active |
+| EyeClosedBrowInnerUpCorrectiveLeft | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
+| EyeClosedBrowInnerUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
+| EyeClosedBrowOuterUpCorrectiveLeft | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
+| EyeClosedBrowOuterUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
 | JawXMouthXCorrectiveLeft | Lip | Corrective shape blending leftward jaw movement with leftward mouth movement |
 | JawXMouthXCorrectiveRight | Lip | Corrective shape blending rightward jaw movement with rightward mouth movement |
 | LipFunnelLipPuckerCorrective | Lip | Corrective shape blended in when funnel and pucker are active together |
@@ -485,8 +489,6 @@ These blendshapes aren't part of the [official Unified Expressions spec](https:/
 | LipSuckUpperMouthClosedCorrective | Lip | Corrective shape blending upper lip suck with a closed mouth |
 | MouthFrownMouthXCorrectiveLeft | Lip | Corrective shape blending a left frown with leftward mouth movement |
 | MouthFrownMouthXCorrectiveRight | Lip | Corrective shape blending a right frown with rightward mouth movement |
-| MouthRaiserLower | Lip | Raises the lower lip/chin area |
-| MouthRaiserUpper | Lip | Raises the upper lip area |
 | MouthSmileMouthXCorrectiveLeft | Lip | Corrective shape blending a left smile with leftward mouth movement |
 | MouthSmileMouthXCorrectiveRight | Lip | Corrective shape blending a right smile with rightward mouth movement |
 | TongueDownLeftMorph | Lip | Diagonal corrective shape blending downward and leftward tongue movement |
