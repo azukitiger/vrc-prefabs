@@ -1,3 +1,8 @@
+## Version 1.6.8
+- Fixed eye condition when Eye Tracking is off & Facial Expressions Disabled is on.
+- Added EyeTrackingActive, ExpressionTrackingActive & LipTrackingActive animator parameters.
+- Only turn on Facial Expressions Disabled when both Eye Tracking & Lip Tracking are on.
+
 ## Version 1.6.7
 - FT Menu update.
 

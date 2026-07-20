@@ -59,7 +59,7 @@ MonoBehaviour:
     icon: {fileID: 2800000, guid: 281fed9f8e5dc2b43946485534bb00c7, type: 3}
     type: 102
     parameter:
-      name: FT/EyeTrackingActive
+      name: EyeTrackingActive
     value: 1
     style: 0
     subMenu: {fileID: 0}
@@ -69,7 +69,7 @@ MonoBehaviour:
     icon: {fileID: 2800000, guid: 9c9f198253aeb6d4f88bf2eb1b96ef12, type: 3}
     type: 102
     parameter:
-      name: FT/LipTrackingActive
+      name: LipTrackingActive
     value: 1
     style: 0
     subMenu: {fileID: 0}

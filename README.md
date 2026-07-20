@@ -17,14 +17,14 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| FrameTime | Float | - | - | Stores the calculated frame time |
-| VAP/Smooth/Gesture | Float | - | - | Smoothness factor used for gesture calculations |
-| VAP/Smooth/Touch | Float | - | - | Smoothness factor used for touch interactions |
-| VAP/Smooth/StepSizeOne | Float | - | - | Step size increment applied every second |
+| Property | Animator Type | Description |
+|-|-|-|
+| FrameTime | Float | Stores the calculated frame time |
+| VAP/Smooth/Gesture | Float | Smoothness factor used for gesture calculations |
+| VAP/Smooth/Touch | Float | Smoothness factor used for touch interactions |
+| VAP/Smooth/StepSizeOne | Float | Step size increment applied every second |
 
 </details>
 
@@ -41,16 +41,31 @@ Adds **custom blinking** with the ability to **override the blink state** or **d
 3. Optionally, create an expression parameter and toggle for `BlinkActive` to disable blinking.
 4. Optionally, use the animator parameters `VAP/Override/Blink/Left` and `VAP/Override/Blink/Right` for interactions such as eye pokes.
 
-### Available Properties
+### Included Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| BlinkActive | Bool | Bool (Optional) | ✖ | Enables or disables the blinking feature |
 | Blink | Bool | Bool | ✔ | Synchronizes the blink state |
-| VAP/Blink/Left | Float | - | - | Output value used to drive the **left eye blink** blendshape |
-| VAP/Blink/Right | Float | - | - | Output value used to drive the **right eye blink** blendshape |
-| VAP/Override/Blink/Left | Float | - | - | Override value applied to `VAP/Blink/Left` when not blinking |
-| VAP/Override/Blink/Right | Float | - | - | Override value applied to `VAP/Blink/Right` when not blinking |
+
+### Optional Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| BlinkActive | Bool | Bool | ✖ | Enables or disables the blinking feature |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Blink/Left | Float | Output value used to drive the **left eye blink** blendshape |
+| VAP/Blink/Right | Float | Output value used to drive the **right eye blink** blendshape |
+
+### Input Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Override/Blink/Left | Float | Override value applied to `VAP/Blink/Left` when not blinking |
+| VAP/Override/Blink/Right | Float | Override value applied to `VAP/Blink/Right` when not blinking |
 
 </details>
 
@@ -66,15 +81,25 @@ Adds occasional **ear twitches** that trigger at random intervals.
 2. Use the animator parameters `VAP/Ear/Left_Twitch` and `VAP/Ear/Right_Twitch` to drive ear rotations.
 3. Optionally, create an expression parameter and toggle for `EarTwitchActive` to disable ear twitches.
 
-### Available Properties
+### Included Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| EarTwitchActive | Bool | Bool (Optional) | ✖ | Enables or disables the ear twitch feature |
 | EarTwitchLeft | Bool | Bool | ✔ | Synchronizes the left ear twitch |
 | EarTwitchRight | Bool | Bool | ✔ | Synchronizes the right ear twitch |
-| VAP/Ear/Left_Twitch | Float | - | - | Output value used to drive the **left ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
-| VAP/Ear/Right_Twitch | Float | - | - | Output value used to drive the **right ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
+
+### Optional Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| EarTwitchActive | Bool | Bool | ✖ | Enables or disables the ear twitch feature |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Ear/Left_Twitch | Float | Output value used to drive the **left ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
+| VAP/Ear/Right_Twitch | Float | Output value used to drive the **right ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
 
 </details>
 
@@ -85,39 +110,49 @@ Adds occasional **ear twitches** that trigger at random intervals.
 
 > Requires the **Frame Time Prefab**.
 
-Adds **blend tree–driven gesture detection** with smoothing and optional menu-based overrides. Create your gesture blend tree using the available properties.
+Adds **blend tree–driven gesture detection** with smoothing and optional menu-based overrides. Create your gesture blend tree using the available Parameters.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Use the animator parameters `VAP/GestureLeft/*` and `VAP/GestureRight/*` to drive gestures.
 3. Optionally, use the assets `VAP Logarithmic Gestures Override Parameters`, `VAP Logarithmic Gestures Override Left Menu`, and `VAP Logarithmic Gestures Override Right Menu` to add gesture overrides to the expression menu.
 
-### Available Properties
+### Included Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| QuestControllers | Float | Boolean | ✔ | Add with VRCFury to disable victory gestures & trigger weights
-| GestureLeftOverride | Float | Integer (Optional) | ✔ | Overrides the left gesture using the provided expression menu |
-| GestureRightOverride | Float | Integer (Optional) | ✔ | Overrides the right gesture using the provided expression menu |
-| VAP/GestureLeft | Float | - | - | Output value representing the current left gesture |
-| VAP/GestureRight | Float | - | - | Output value representing the current right gesture |
-| VAP/GestureLeft/Weight | Float | - | - | Smoothed output value representing the left gesture weight |
-| VAP/GestureRight/Weight | Float | - | - | Smoothed output value representing the right gesture weight |
-| VAP/GestureLeft/Idle | Float | - | - | Smoothed output value when the left gesture is **Idle** |
-| VAP/GestureLeft/Fist | Float | - | - | Smoothed output value when the left gesture is **Fist** |
-| VAP/GestureLeft/Open | Float | - | - | Smoothed output value when the left gesture is **Open** |
-| VAP/GestureLeft/Point | Float | - | - | Smoothed output value when the left gesture is **Point** |
-| VAP/GestureLeft/Victory | Float | - | - | Smoothed output value when the left gesture is **Victory** |
-| VAP/GestureLeft/Rock&Roll | Float | - | - | Smoothed output value when the left gesture is **Rock & Roll** |
-| VAP/GestureLeft/Gun | Float | - | - | Smoothed output value when the left gesture is **Gun** |
-| VAP/GestureLeft/ThumbsUp | Float | - | - | Smoothed output value when the left gesture is **Thumbs Up** |
-| VAP/GestureRight/Fist | Float | - | - | Smoothed output value when the right gesture is **Fist** |
-| VAP/GestureRight/Open | Float | - | - | Smoothed output value when the right gesture is **Open** |
-| VAP/GestureRight/Point | Float | - | - | Smoothed output value when the right gesture is **Point** |
-| VAP/GestureRight/Victory | Float | - | - | Smoothed output value when the right gesture is **Victory** |
-| VAP/GestureRight/Rock&Roll | Float | - | - | Smoothed output value when the right gesture is **Rock & Roll** |
-| VAP/GestureRight/Gun | Float | - | - | Smoothed output value when the right gesture is **Gun** |
-| VAP/GestureRight/ThumbsUp | Float | - | - | Smoothed output value when the right gesture is **Thumbs Up** |
+| QuestControllers | Float | Boolean  | ✔ | Add with VRCFury to disable victory gestures & trigger weights
+
+### Optional Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| GestureLeftOverride | Float | Integer | ✔ | Overrides the left gesture using the provided expression menu |
+| GestureRightOverride | Float | Integer | ✔ | Overrides the right gesture using the provided expression menu |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/GestureLeft | Float | Output value representing the current left gesture |
+| VAP/GestureRight | Float | Output value representing the current right gesture |
+| VAP/GestureLeft/Weight | Float | Smoothed output value representing the left gesture weight |
+| VAP/GestureRight/Weight | Float | Smoothed output value representing the right gesture weight |
+| VAP/GestureLeft/Idle | Float | Smoothed output value when the left gesture is **Idle** |
+| VAP/GestureLeft/Fist | Float | Smoothed output value when the left gesture is **Fist** |
+| VAP/GestureLeft/Open | Float | Smoothed output value when the left gesture is **Open** |
+| VAP/GestureLeft/Point | Float | Smoothed output value when the left gesture is **Point** |
+| VAP/GestureLeft/Victory | Float | Smoothed output value when the left gesture is **Victory** |
+| VAP/GestureLeft/Rock&Roll | Float | Smoothed output value when the left gesture is **Rock & Roll** |
+| VAP/GestureLeft/Gun | Float | Smoothed output value when the left gesture is **Gun** |
+| VAP/GestureLeft/ThumbsUp | Float | Smoothed output value when the left gesture is **Thumbs Up** |
+| VAP/GestureRight/Fist | Float | Smoothed output value when the right gesture is **Fist** |
+| VAP/GestureRight/Open | Float | Smoothed output value when the right gesture is **Open** |
+| VAP/GestureRight/Point | Float | Smoothed output value when the right gesture is **Point** |
+| VAP/GestureRight/Victory | Float | Smoothed output value when the right gesture is **Victory** |
+| VAP/GestureRight/Rock&Roll | Float | Smoothed output value when the right gesture is **Rock & Roll** |
+| VAP/GestureRight/Gun | Float | Smoothed output value when the right gesture is **Gun** |
+| VAP/GestureRight/ThumbsUp | Float | Smoothed output value when the right gesture is **Thumbs Up** |
 
 </details>
 
@@ -134,12 +169,12 @@ Adds **blend tree–driven tongue viseme movement**, separated from the standard
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Use the animator parameters `VAP/Viseme/TongueForward` and `VAP/Viseme/TongueUp` to drive the tongue viseme blendshapes.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| VAP/Viseme/TongueForward | Float | - | - | Smoothed output value used to drive the **Tongue Forward** blendshape |
-| VAP/Viseme/TongueUp | Float | - | - | Smoothed output value used to drive the **Tongue Up** blendshape |
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Viseme/TongueForward | Float | Smoothed output value used to drive the **Tongue Forward** blendshape |
+| VAP/Viseme/TongueUp | Float | Smoothed output value used to drive the **Tongue Up** blendshape |
 
 </details>
 
@@ -157,12 +192,12 @@ Adds **smooth ear grab interactions** for face stretching.
 2. Set the parameters `Ear/Left` and `Ear/Right` for the ear PhysBones.
 3. Use the animator parameters `VAP/Ear/Left_Stretch` and `VAP/Ear/Right_Stretch` to drive face stretch blendshapes.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| VAP/Ear/Left_Stretch | Float | - | - | Smoothed output value representing left ear stretch when the ear is grabbed |
-| VAP/Ear/Right_Stretch | Float | - | - | Smoothed output value representing right ear stretch when the ear is grabbed |
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Ear/Left_Stretch | Float | Smoothed output value representing left ear stretch when the ear is grabbed |
+| VAP/Ear/Right_Stretch | Float | Smoothed output value representing right ear stretch when the ear is grabbed |
 
 </details>
 
@@ -178,13 +213,23 @@ Controls **tail wag speed** through a menu value or animator override. Wagging a
 2. Use the animator parameter `VAP/Tail/WagSpeed` as the multiplier for the tail wag animation.
 3. Optionally, use the animator parameter `VAP/Override/Tail/WagSpeed` to additively increase the speed.
 
-### Available Properties
+### Optional Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| TailWagSpeed | Float | Float (Optional) | ✔ | Menu value used to control tail wag speed |
-| VAP/Tail/WagSpeed | Float | - | - | Output value used as the tail wag animation speed multiplier |
-| VAP/Override/Tail/WagSpeed | Float | - | - | Overrides the minimum wag speed of `VAP/Tail/WagSpeed` |
+| TailWagSpeed | Float | Float | ✔ | Menu value used to control tail wag speed |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Tail/WagSpeed | Float | Output value used as the tail wag animation speed multiplier |
+
+### Input Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Override/Tail/WagSpeed | Float | Overrides the minimum wag speed of `VAP/Tail/WagSpeed` |
 
 </details>
 
@@ -202,14 +247,14 @@ Adds **smooth eye poke interactions** using a contact sensor for each eye.
 2. Position the contact sensors over the avatar's eyes.
 3. Use the animator parameters `VAP/Touch/EyeLeft` and `VAP/Touch/EyeRight`.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| VAP/Touch/EyeLeft | Float | - | - | Smoothed proximity value from the left eye contact sensor |
-| VAP/Touch/EyeRight | Float | - | - | Smoothed proximity value from the right eye contact sensor |
-| Touch/EyeLeft | Float | - | - | Raw proximity value from the left eye contact sensor |
-| Touch/EyeRight | Float | - | - | Raw proximity value from the right eye contact sensor |
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Touch/EyeLeft | Float | Smoothed proximity value from the left eye contact sensor |
+| VAP/Touch/EyeRight | Float | Smoothed proximity value from the right eye contact sensor |
+| Touch/EyeLeft | Float | Raw proximity value from the left eye contact sensor |
+| Touch/EyeRight | Float | Raw proximity value from the right eye contact sensor |
 
 </details>
 
@@ -227,14 +272,14 @@ Adds **smooth foot poke interactions** using a contact sensor for each foot.
 2. Position the contact sensors over the avatar's feet.
 3. Use the animator parameters `VAP/Touch/FootLeft` and `VAP/Touch/FootRight`.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| VAP/Touch/FootLeft | Float | - | - | Smoothed proximity value from the left foot contact sensor |
-| VAP/Touch/FootRight | Float | - | - | Smoothed proximity value from the right foot contact sensor |
-| Touch/FootLeft | Float | - | - | Raw proximity value from the left foot contact sensor |
-| Touch/FootRight | Float | - | - | Raw proximity value from the right foot contact sensor |
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Touch/FootLeft | Float | Smoothed proximity value from the left foot contact sensor |
+| VAP/Touch/FootRight | Float | Smoothed proximity value from the right foot contact sensor |
+| Touch/FootLeft | Float | Raw proximity value from the left foot contact sensor |
+| Touch/FootRight | Float | Raw proximity value from the right foot contact sensor |
 
 </details>
 
@@ -253,13 +298,13 @@ Adds a **smooth nose boop interaction** using a contact sensor.
 3. Use the animator parameter `VAP/Touch/Nose`.
 4. Optionally, use the animator parameter `VAP/Touch/NoseTimer` for an interaction.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| VAP/Touch/Nose | Float | - | - | Smoothed proximity value from the nose contact sensor |
-| VAP/Touch/NoseTimer | Float | - | - | Timer representing how long the nose contact is held |
-| Touch/Nose | Float | - | - | Raw proximity value from the nose contact sensor |
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Touch/Nose | Float | Smoothed proximity value from the nose contact sensor |
+| VAP/Touch/NoseTimer | Float | Timer representing how long the nose contact is held |
+| Touch/Nose | Float | Raw proximity value from the nose contact sensor |
 
 </details>
 
@@ -277,12 +322,12 @@ Adds a **toe curl feature** using two contact sensors and two rotation constrain
 4. Update the `Target Transform` of the rotation constraints of `Left Curl` and `Right Curl` to your corresponding `Curl_L` and `Curl_R` game objects.
 5. Update the `Source Transform` of the rotation constraints of `Left Curl` and `Right Curl` to the corresponding **foot** of your avatar. This will prevent the contact sensors from rotating.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| Touch/FootLCurl | Float | - | - | Raw proximity value from the left toe curl contact sensor |
-| Touch/FootRCurl | Float | - | - | Raw proximity value from the right toe curl contact sensor |
+| Property | Animator Type | Description |
+|-|-|-|
+| Touch/FootLCurl | Float | Raw proximity value from the left toe curl contact sensor |
+| Touch/FootRCurl | Float | Raw proximity value from the right toe curl contact sensor |
 
 </details>
 
@@ -340,59 +385,195 @@ Adds face tracking to the avatar using the **Unified Expression** blendshapes. B
 Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
 3. Optionally, the animator parameters `VAP/FT/*` can be used to override values from a separate FX controller.
 
-### Available Properties
+### Blendshapes
+
+Your avatar's mesh needs these blendshapes (from `Assets/VRCFT/Unified Expressions/Blendshapes`) for face tracking to drive them. Descriptions are from the [official Unified Expressions spec](https://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes).
+
+| Blendshape | Type | Description |
+|-|-|-|
+| EyeClosedLeft | Eye | Closes the left eyelid |
+| EyeClosedRight | Eye | Closes the right eyelid |
+| EyeLookDownLeft | Eye | Left eye looks down |
+| EyeLookDownRight | Eye | Right eye looks down |
+| EyeLookInLeft | Eye | Left eye looks in |
+| EyeLookInRight | Eye | Right eye looks in |
+| EyeLookOutLeft | Eye | Left eye looks out |
+| EyeLookOutRight | Eye | Right eye looks out |
+| EyeLookUpLeft | Eye | Left eye looks up |
+| EyeLookUpRight | Eye | Right eye looks up |
+| EyeSquintLeft | Eye | Squeezes the left eye socket muscles |
+| EyeSquintRight | Eye | Squeezes the right eye socket muscles |
+| EyeWideLeft | Eye | Left eyelid widens beyond relaxed |
+| EyeWideRight | Eye | Right eyelid widens beyond relaxed |
+| BrowDownLeft | Brow | Pulls the left eyebrow down and in |
+| BrowDownRight | Brow | Pulls the right eyebrow down and in |
+| BrowUp | Brow | Brows appear worried |
+| BrowUpLeft | Brow | Left brow appears worried |
+| BrowUpRight | Brow | Right brow appears worried |
+| CheekPuff | Lip | Puffs both cheeks |
+| CheekPuffLeft | Lip | Puffs the left side cheek |
+| CheekPuffRight | Lip | Puffs the right side cheek |
+| CheekSquintLeft | Lip | Raises the left side cheek |
+| CheekSquintRight | Lip | Raises the right side cheek |
+| CheekSuck | Lip | Sucks both cheeks |
+| CheekSuckLeft | Lip | Sucks in the left side cheek |
+| CheekSuckRight | Lip | Sucks in the right side cheek |
+| JawForward | Lip | Pushes jawbone forwards |
+| JawLeft | Lip | Pushes jawbone left |
+| JawOpen | Lip | Opens jawbone |
+| JawRight | Lip | Pushes jawbone right |
+| LipFunnel | Lip | Funnels in the upper and lower lips |
+| LipPucker | Lip | Lips push outward |
+| LipSuckLower | Lip | Tucks in the lower lips |
+| LipSuckUpper | Lip | Tucks in the upper lips |
+| MouthClosed | Lip | Closes mouth (in relation to `JawOpen`) |
+| MouthDimple | Lip | Lip corner dimples |
+| MouthDimpleLeft | Lip | Left lip corner is pulled backwards |
+| MouthDimpleRight | Lip | Right lip corner is pushed backwards |
+| MouthFrownLeft | Lip | Left corner lip pulls down |
+| MouthFrownRight | Lip | Right corner lip pulls down |
+| MouthLeft | Lip | Moves mouth left |
+| MouthLowerDown | Lip | Lowers the lower lips |
+| MouthPress | Lip | Mouth presses together |
+| MouthRight | Lip | Moves mouth right |
+| MouthSmileLeft | Lip | Left side mouth expresses a smile |
+| MouthSmileRight | Lip | Right side mouth expresses a smile |
+| MouthStretchLeft | Lip | Left corner lip pulls out and down |
+| MouthStretchRight | Lip | Right corner lip pulls out and down |
+| MouthTightener | Lip | Mouth tightens |
+| MouthTightenerLeft | Lip | Left side lips squeeze together horizontally |
+| MouthTightenerRight | Lip | Right side lips squeeze together horizontally |
+| MouthUpperUp | Lip | Raises the upper lips |
+| MouthUpperUpLeft | Lip | Upper left part of the lip pulls up |
+| MouthUpperUpRight | Lip | Upper right part of the lip pulls up |
+| NoseSneer | Lip | Entire face sneers |
+| NoseSneerLeft | Lip | Left side face sneers |
+| NoseSneerRight | Lip | Right side face sneers |
+| TongueDown | Lip | Tongue points down |
+| TongueLeft | Lip | Tongue points left |
+| TongueRight | Lip | Tongue points right |
+| TongueUp | Lip | Tongue points up |
+
+### Extra Blendshapes
+
+These blendshapes aren't part of the [official Unified Expressions spec](https://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes) — they're custom/legacy shapes bundled with this asset, mostly correctives that blend two shapes together smoothly.
+
+| Blendshape | Type | Description |
+|-|-|-|
+| EyeAngryLeft | Eye | Narrows and angles the left eye into an angry expression |
+| EyeAngryRight | Eye | Narrows and angles the right eye into an angry expression |
+| EyeClosedSquintCorrectiveLeft | Eye | Corrective shape blended in when the left eye is closed and squinting at the same time, to prevent the two shapes from conflicting |
+| EyeClosedSquintCorrectiveRight | Eye | Corrective shape blended in when the right eye is closed and squinting at the same time, to prevent the two shapes from conflicting |
+| EyeOpenSquintLeft | Eye | Corrective shape blended in when the left eye is open and squinting at the same time, to prevent the two shapes from conflicting |
+| EyeOpenSquintRight | Eye | Corrective shape blended in when the right eye is open and squinting at the same time, to prevent the two shapes from conflicting |
+| EyeSadLeft | Eye | Droops the left eye into a sad expression |
+| EyeSadRight | Eye | Droops the right eye into a sad expression |
+| BrowDownCorrectiveLeft | Brow | Corrective shape blended in alongside a lowered left eyebrow to fix shape artifacts |
+| BrowDownCorrectiveRight | Brow | Corrective shape blended in alongside a lowered right eyebrow to fix shape artifacts |
+| BrowSadLeft | Brow | Raises the inner corner of the left eyebrow into a sad expression |
+| BrowSadRight | Brow | Raises the inner corner of the right eyebrow into a sad expression |
+| BrowUpCorrective | Brow | Corrective shape blended in alongside `BrowUp` to fix shape artifacts at full brow raise |
+| BrowUpCorrectiveLeft | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
+| BrowUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
+| EyesPupilConstrict | Dilation | Constricts (shrinks) both pupils |
+| EyesPupilDilation | Dilation | Dilates (enlarges) both pupils |
+| EyesPupilIdle | Dilation | Neutral, resting pupil size used when no dilation or constriction is active |
+| JawXMouthXCorrectiveLeft | Lip | Corrective shape blending leftward jaw movement with leftward mouth movement |
+| JawXMouthXCorrectiveRight | Lip | Corrective shape blending rightward jaw movement with rightward mouth movement |
+| LipFunnelLipPuckerCorrective | Lip | Corrective shape blended in when funnel and pucker are active together |
+| LipSuckLowerMouthClosedCorrective | Lip | Corrective shape blending lower lip suck with a closed mouth |
+| LipSuckUpperMouthClosedCorrective | Lip | Corrective shape blending upper lip suck with a closed mouth |
+| MouthFrownMouthXCorrectiveLeft | Lip | Corrective shape blending a left frown with leftward mouth movement |
+| MouthFrownMouthXCorrectiveRight | Lip | Corrective shape blending a right frown with rightward mouth movement |
+| MouthRaiserLower | Lip | Raises the lower lip/chin area |
+| MouthRaiserUpper | Lip | Raises the upper lip area |
+| MouthSmileMouthXCorrectiveLeft | Lip | Corrective shape blending a left smile with leftward mouth movement |
+| MouthSmileMouthXCorrectiveRight | Lip | Corrective shape blending a right smile with rightward mouth movement |
+| TongueDownLeftMorph | Lip | Diagonal corrective shape blending downward and leftward tongue movement |
+| TongueDownRightMorph | Lip | Diagonal corrective shape blending downward and rightward tongue movement |
+| TongueOutStep1 | Lip | First stage of sticking the tongue out (partial extension) |
+| TongueOutStep2 | Lip | Second stage of sticking the tongue out (full extension) |
+| TongueUpLeftMorph | Lip | Diagonal corrective shape blending upward and leftward tongue movement |
+| TongueUpRightMorph | Lip | Diagonal corrective shape blending upward and rightward tongue movement |
+
+### Included Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
 | FT/EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
 | FT/LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
 | FT/EyeDilationEnable | Float | Boolean | ✔ | Toggle for enabling eye dilation |
-| FT/BlepGesture | Float | Boolean | ✔ | Add with VRCFury to activate tongue out with gesture right point |
+| FT/FacialExpressionsDisabled | Float | Boolean | ✔ | Toggle for disabling gesture based expressions |
 | FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for enabling face tracking emulation. Uses mouth parameters to drive eye blendshapes for headsets that do not support certain eye tracking movements |
-| FT/FaceTrackingLimits | Float | Boolean | ✔ | Toggle for enabling mouth blendshape limits to avoid distortion |
 | FT/VisemesEnable | Float | Boolean | ✔ | Toggle for enabling visemes |
 | FT/EyeSync | Float | Boolean | ✔ | Toggle for synchronizing both eyes when tracking drift occurs |
-| FT/LocalSmoothing | Float | - | - | Slider that controls the amount of local smoothing applied to face tracking values |
-| VAP/FT/v2/EyeLeftX | Float | - | - | Smoothed horizontal rotation value of the left eye used for eye bones and related blendshapes |
-| VAP/FT/v2/EyeRightX | Float | - | - | Smoothed horizontal rotation value of the right eye used for eye bones and related blendshapes |
-| VAP/FT/v2/EyeY | Float | - | - | Smoothed vertical rotation value shared by both eyes used for eye bones and related blendshapes |
-| VAP/FT/v2/EyeLidLeft | Float | - | - | Smoothed eyelid value controlling the left eyelid blendshapes |
-| VAP/FT/v2/EyeLidRight | Float | - | - | Smoothed eyelid value controlling the right eyelid blendshapes |
-| VAP/FT/v2/EyeSquintLeft | Float | - | - | Smoothed squint value for the left eye |
-| VAP/FT/v2/EyeSquintRight | Float | - | - | Smoothed squint value for the right eye |
-| VAP/FT/v2/PupilDilation | Float | - | - | Smoothed value controlling pupil dilation |
-| VAP/FT/v2/BrowExpressionLeft | Float | - | - | Smoothed value controlling left eyebrow expression movement |
-| VAP/FT/v2/BrowExpressionRight | Float | - | - | Smoothed value controlling right eyebrow expression movement |
-| VAP/FT/v2/CheekPuffSuckLeft | Float | - | - | Smoothed value controlling left cheek puff or suck movement |
-| VAP/FT/v2/CheekPuffSuckRight | Float | - | - | Smoothed value controlling right cheek puff or suck movement |
-| VAP/FT/v2/NoseSneer | Float | - | - | Smoothed value controlling nose sneer expressions |
-| VAP/FT/v2/JawOpen | Float | - | - | Smoothed value controlling jaw open movement |
-| VAP/FT/v2/MouthClosed | Float | - | - | Smoothed value representing mouth closed compression |
-| VAP/FT/v2/JawForward | Float | - | - | Smoothed value controlling forward jaw movement |
-| VAP/FT/v2/JawX | Float | - | - | Smoothed value controlling horizontal jaw movement |
-| VAP/FT/v2/MouthUpperUpLeft | Float | - | - | Smoothed value lifting the upper left lip |
-| VAP/FT/v2/MouthUpperUpRight | Float | - | - | Smoothed value lifting the upper right lip |
-| VAP/FT/v2/MouthLowerDown | Float | - | - | Smoothed value lowering the bottom lip |
-| VAP/FT/v2/SmileFrownLeft | Float | - | - | Smoothed value controlling the left side smile or frown |
-| VAP/FT/v2/SmileFrownRight | Float | - | - | Smoothed value controlling the right side smile or frown |
-| VAP/FT/v2/LipFunnel | Float | - | - | Smoothed value controlling lip funnel expressions |
-| VAP/FT/v2/LipPucker | Float | - | - | Smoothed value controlling lip pucker expressions |
-| VAP/FT/v2/LipSuckUpper | Float | - | - | Smoothed value controlling the upper lip suction |
-| VAP/FT/v2/LipSuckLower | Float | - | - | Smoothed value controlling the lower lip suction |
-| VAP/FT/v2/MouthStretchLeft | Float | - | - | Smoothed value stretching the left side of the mouth |
-| VAP/FT/v2/MouthStretchRight | Float | - | - | Smoothed value stretching the right side of the mouth |
-| VAP/FT/v2/MouthTightenerLeft | Float | - | - | Smoothed value tightening the left side of the mouth |
-| VAP/FT/v2/MouthTightenerRight | Float | - | - | Smoothed value tightening the right side of the mouth |
-| VAP/FT/v2/MouthPress | Float | - | - | Smoothed value pressing the lips together |
-| VAP/FT/v2/MouthRaiserUpper | Float | - | - | Smoothed value raising the upper lip region |
-| VAP/FT/v2/MouthRaiserLower | Float | - | - | Smoothed value raising the lower lip region |
-| VAP/FT/v2/MouthX | Float | - | - | Smoothed horizontal movement value of the mouth |
-| VAP/FT/v2/TongueOut | Float | - | - | Smoothed value controlling tongue extension |
-| VAP/FT/v2/TongueX | Float | - | - | Smoothed horizontal movement value of the tongue |
-| VAP/FT/v2/TongueY | Float | - | - | Smoothed vertical movement value of the tongue |
-| VAP/FT/Smile | Float | - | - | Combined smile expression value derived from face tracking data. `1` represents a smile and `-1` represents a frown |
-| VAP/FT/Brow | Float | - | - | Combined eyebrow expression value derived from face tracking data. `1` represents raised brows and `-1` represents lowered brows |
-| VAP/FT/Angry | Float | - | - | Combined anger expression value derived from face tracking data. `1` represents a lowered brow with nose sneer |
+| FT/LocalSmoothing | Float | Float | ✖ | Slider that controls the amount of local smoothing applied to face tracking values |
+| FT/RemoteModeActive | Boolean | Boolean | ✖ | Toggle for previewing your face tracking as it appears to other players over the network |
+
+### Optional Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| FT/BlepGesture | Float | Boolean | ✔ | Add with VRCFury to activate tongue out with gesture right point |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/FT/Smile | Float | Combined smile expression value derived from face tracking data. `1` represents a smile and `-1` represents a frown |
+| VAP/FT/Brow | Float | Combined eyebrow expression value derived from face tracking data. `1` represents raised brows and `-1` represents lowered brows |
+| VAP/FT/Angry | Float | Combined anger expression value derived from face tracking data. `1` represents a lowered brow with nose sneer |
+| VAP/FT/EyeLidNeutralLeft | Float | Output value that is `1` when the left eyelid is in a neutral, open state — use it to blend in custom eye blendshapes without conflicting with face tracking |
+| VAP/FT/EyeLidNeutralRight | Float | Output value that is `1` when the right eyelid is in a neutral, open state — use it to blend in custom eye blendshapes without conflicting with face tracking |
+
+### Input Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Override/FT/EyeLidLeft | Float | Set to `1` to override the left eye and left brow blendshapes of the face tracking output — useful for interactions such as ear pull |
+| VAP/Override/FT/EyeLidRight | Float | Set to `1` to override the right eye and right brow blendshapes of the face tracking output — useful for interactions such as ear pull |
+
+### Face Tracking Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/FT/v2/EyeLeftX | Float | Smoothed horizontal rotation value of the left eye used for eye bones and related blendshapes |
+| VAP/FT/v2/EyeRightX | Float | Smoothed horizontal rotation value of the right eye used for eye bones and related blendshapes |
+| VAP/FT/v2/EyeY | Float | Smoothed vertical rotation value shared by both eyes used for eye bones and related blendshapes |
+| VAP/FT/v2/EyeLidLeft | Float | Smoothed eyelid value controlling the left eyelid blendshapes |
+| VAP/FT/v2/EyeLidRight | Float | Smoothed eyelid value controlling the right eyelid blendshapes |
+| VAP/FT/v2/EyeSquintLeft | Float | Smoothed squint value for the left eye |
+| VAP/FT/v2/EyeSquintRight | Float | Smoothed squint value for the right eye |
+| VAP/FT/v2/PupilDilation | Float | Smoothed value controlling pupil dilation |
+| VAP/FT/v2/BrowExpressionLeft | Float | Smoothed value controlling left eyebrow expression movement |
+| VAP/FT/v2/BrowExpressionRight | Float | Smoothed value controlling right eyebrow expression movement |
+| VAP/FT/v2/CheekPuffSuckLeft | Float | Smoothed value controlling left cheek puff or suck movement |
+| VAP/FT/v2/CheekPuffSuckRight | Float | Smoothed value controlling right cheek puff or suck movement |
+| VAP/FT/v2/NoseSneer | Float | Smoothed value controlling nose sneer expressions |
+| VAP/FT/v2/JawOpen | Float | Smoothed value controlling jaw open movement |
+| VAP/FT/v2/MouthClosed | Float | Smoothed value representing mouth closed compression |
+| VAP/FT/v2/JawForward | Float | Smoothed value controlling forward jaw movement |
+| VAP/FT/v2/JawX | Float | Smoothed value controlling horizontal jaw movement |
+| VAP/FT/v2/MouthUpperUpLeft | Float | Smoothed value lifting the upper left lip |
+| VAP/FT/v2/MouthUpperUpRight | Float | Smoothed value lifting the upper right lip |
+| VAP/FT/v2/MouthLowerDown | Float | Smoothed value lowering the bottom lip |
+| VAP/FT/v2/SmileFrownLeft | Float | Smoothed value controlling the left side smile or frown |
+| VAP/FT/v2/SmileFrownRight | Float | Smoothed value controlling the right side smile or frown |
+| VAP/FT/v2/LipFunnel | Float | Smoothed value controlling lip funnel expressions |
+| VAP/FT/v2/LipPucker | Float | Smoothed value controlling lip pucker expressions |
+| VAP/FT/v2/LipSuckUpper | Float | Smoothed value controlling the upper lip suction |
+| VAP/FT/v2/LipSuckLower | Float | Smoothed value controlling the lower lip suction |
+| VAP/FT/v2/MouthStretchLeft | Float | Smoothed value stretching the left side of the mouth |
+| VAP/FT/v2/MouthStretchRight | Float | Smoothed value stretching the right side of the mouth |
+| VAP/FT/v2/MouthTightenerLeft | Float | Smoothed value tightening the left side of the mouth |
+| VAP/FT/v2/MouthTightenerRight | Float | Smoothed value tightening the right side of the mouth |
+| VAP/FT/v2/MouthPress | Float | Smoothed value pressing the lips together |
+| VAP/FT/v2/MouthRaiserUpper | Float | Smoothed value raising the upper lip region |
+| VAP/FT/v2/MouthRaiserLower | Float | Smoothed value raising the lower lip region |
+| VAP/FT/v2/MouthX | Float | Smoothed horizontal movement value of the mouth |
+| VAP/FT/v2/TongueOut | Float | Smoothed value controlling tongue extension |
+| VAP/FT/v2/TongueX | Float | Smoothed horizontal movement value of the tongue |
+| VAP/FT/v2/TongueY | Float | Smoothed vertical movement value of the tongue |
 
 </details>
 
@@ -410,12 +591,12 @@ Adds a **Face Proximity contact receiver** that drives a **VRC Rotation Constrai
 2. Position the contact receiver in front of the avatar's face, between the eyes.
 3. Use the animator parameter `VAP/Touch/PupilFocus`.
 
-### Available Properties
+### Output Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| VAP/Touch/PupilFocus | Float | - | - | Smoothed proximity value from the face contact sensor |
-| Touch/PupilFocus | Float | - | - | Raw proximity value from the face contact sensor |
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Touch/PupilFocus | Float | Smoothed proximity value from the face contact sensor |
+| Touch/PupilFocus | Float | Raw proximity value from the face contact sensor |
 
 </details>
 
@@ -433,7 +614,7 @@ Uses a raycast component to set the floor PhysBone collider.
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Add the **Floor Physbone Collider** object to the **Colliders** list of any PhysBone components that should collide with the floor.
 
-### Available Properties
+### Included Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
@@ -455,7 +636,7 @@ Uses 2 raycast components aiming outwards (left and right) to set the wall PhysB
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Add the **Wall Physbone Collider** object to the **Colliders** list of any PhysBone components that should collide with walls.
 
-### Available Properties
+### Included Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|

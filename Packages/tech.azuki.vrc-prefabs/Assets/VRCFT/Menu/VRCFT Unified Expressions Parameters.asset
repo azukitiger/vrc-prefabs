@@ -14,16 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isEmpty: 0
   parameters:
+  - name: EyeTrackingActive
+    valueType: 2
+    saved: 1
+    defaultValue: 0
+    networkSynced: 1
+  - name: LipTrackingActive
+    valueType: 2
+    saved: 1
+    defaultValue: 0
+    networkSynced: 1
   - name: FT/EyeTrackingActive
     valueType: 2
     saved: 1
     defaultValue: 0
-    networkSynced: 1
+    networkSynced: 0
   - name: FT/LipTrackingActive
     valueType: 2
     saved: 1
     defaultValue: 0
-    networkSynced: 1
+    networkSynced: 0
   - name: FT/EyeDilationEnable
     valueType: 2
     saved: 1
