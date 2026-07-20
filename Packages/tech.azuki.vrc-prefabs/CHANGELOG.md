@@ -1,31 +1,9 @@
-## Version 1.6.8
+## Version 1.6.9
+- Many Face Tracking improvements and features.
 - Fixed eye condition when Eye Tracking is off & Facial Expressions Disabled is on.
 - Added EyeTrackingActive, ExpressionTrackingActive & LipTrackingActive animator parameters.
 - Only turn on Facial Expressions Disabled when both Eye Tracking & Lip Tracking are on.
-
-## Version 1.6.7
-- FT Menu update.
-
-## Version 1.6.6
-- Fix Proxy Brow AAPs.
-
-## Version 1.6.5
-- Remove BLINK blendtree.
-
-## Version 1.6.4
 - Greatly improved FT emulation.
-
-## Version 1.6.3
-- Fix FT emulation.
-
-## Version 1.6.2
-- Eye lid adjustment.
-
-## Version 1.6.1
-- Fix gesture blep for FT.
-
-## Version 1.6.0
-- Many Face Tracking improvements and features.
 
 ## Version 1.5.3
 - Removed unused animations.

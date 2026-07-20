@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Jaw_X_Mouth_X_Corrective_Left
+  m_Name: Mouth_X_Jaw_X_Corrective_Right
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -33,7 +33,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.JawLeft
+    attribute: blendShape.JawRight
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -54,7 +54,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.MouthXJawXCorrectiveLeft
+    attribute: blendShape.MouthXJawXCorrectiveRight
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -69,7 +69,7 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 2073732236
-      attribute: 240943651
+      attribute: 1437652585
       script: {fileID: 0}
       typeID: 137
       customType: 20
@@ -123,7 +123,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.JawLeft
+    attribute: blendShape.JawRight
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -144,7 +144,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.MouthXJawXCorrectiveLeft
+    attribute: blendShape.MouthXJawXCorrectiveRight
     path: Body
     classID: 137
     script: {fileID: 0}
