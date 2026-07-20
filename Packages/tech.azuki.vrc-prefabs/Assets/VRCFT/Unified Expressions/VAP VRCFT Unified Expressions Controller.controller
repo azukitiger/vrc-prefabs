@@ -3254,7 +3254,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FT/EyeTrackingActive
     m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/SmileFrownRight
+  m_BlendParameter: VAP/FT/v2/SmileFrownLeft
   m_BlendParameterY: VAP/FT/v2/MouthX
   m_MinThreshold: -1
   m_MaxThreshold: 5
@@ -6934,7 +6934,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/SmileFrownLeft
+  m_BlendParameter: VAP/FT/v2/SmileFrownRight
   m_BlendParameterY: VAP/FT/v2/MouthX
   m_MinThreshold: 0
   m_MaxThreshold: 5
