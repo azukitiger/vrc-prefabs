@@ -705,7 +705,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowDownCorrectiveLeft
+    attribute: blendShape.BrowDownEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -726,7 +726,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowDownCorrectiveRight
+    attribute: blendShape.BrowDownEyeClosedCorrectiveRight
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -768,7 +768,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowOuterUpCorrectiveLeft
+    attribute: blendShape.BrowOuterUpEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -789,7 +789,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowOuterUpCorrectiveRight
+    attribute: blendShape.BrowOuterUpEyeClosedCorrectiveRight
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -2085,7 +2085,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowDownCorrectiveLeft
+    attribute: blendShape.BrowDownEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -2106,7 +2106,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowDownCorrectiveRight
+    attribute: blendShape.BrowDownEyeClosedCorrectiveRight
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -2148,7 +2148,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowOuterUpCorrectiveLeft
+    attribute: blendShape.BrowOuterUpEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -2169,7 +2169,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowOuterUpCorrectiveRight
+    attribute: blendShape.BrowOuterUpEyeClosedCorrectiveRight
     path: Body
     classID: 137
     script: {fileID: 0}

@@ -474,17 +474,17 @@ These blendshapes aren't part of the [official Unified Expressions spec](https:/
 | EyeOpenSquintRight | Eye | Corrective shape blended in when the right eye is open and squinting at the same time, to prevent the two shapes from conflicting |
 | EyeSadLeft | Eye | Droops the left eye into a sad expression |
 | EyeSadRight | Eye | Droops the right eye into a sad expression |
-| EyeClosedBrowDownCorrectiveLeft | Brow | Corrective shape blended in alongside a lowered left eyebrow to fix shape artifacts |
-| EyeClosedBrowDownCorrectiveRight | Brow | Corrective shape blended in alongside a lowered right eyebrow to fix shape artifacts |
+| BrowDownEyeClosedCorrectiveLeft | Brow | Corrective shape blended in alongside a lowered left eyebrow to fix shape artifacts |
+| BrowDownEyeClosedCorrectiveRight | Brow | Corrective shape blended in alongside a lowered right eyebrow to fix shape artifacts |
 | BrowSadLeft | Brow | Raises the inner corner of the left eyebrow into a sad expression |
 | BrowSadRight | Brow | Raises the inner corner of the right eyebrow into a sad expression |
-| EyeClosedBrowInnerUpCorrectiveLeft | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
-| EyeClosedBrowInnerUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
-| EyeClosedBrowOuterUpCorrectiveLeft | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
-| EyeClosedBrowOuterUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
-| JawXMouthXCorrectiveLeft | Lip | Corrective shape blending leftward jaw movement with leftward mouth movement |
-| JawXMouthXCorrectiveRight | Lip | Corrective shape blending rightward jaw movement with rightward mouth movement |
-| LipFunnelLipPuckerCorrective | Lip | Corrective shape blended in when funnel and pucker are active together |
+| BrowInnerUpEyeClosedCorrectiveLeft | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
+| BrowInnerEyeClosedUpCorrectiveRight | Brow | Corrective shape blended in alongside a raised left eyebrow to fix shape artifacts |
+| BrowOuterUpEyeClosedCorrectiveLeft | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
+| BrowOuterUpEyeClosedCorrectiveRight | Brow | Corrective shape blended in alongside a raised right eyebrow to fix shape artifacts |
+| MouthXJawXCorrectiveLeft | Lip | Corrective shape blending leftward jaw movement with leftward mouth movement |
+| MouthXJawXCorrectiveRight | Lip | Corrective shape blending rightward jaw movement with rightward mouth movement |
+| LipFunnelPuckerCorrective | Lip | Corrective shape blended in when funnel and pucker are active together |
 | LipSuckLowerMouthClosedCorrective | Lip | Corrective shape blending lower lip suck with a closed mouth |
 | LipSuckUpperMouthClosedCorrective | Lip | Corrective shape blending upper lip suck with a closed mouth |
 | MouthFrownMouthXCorrectiveLeft | Lip | Corrective shape blending a left frown with leftward mouth movement |

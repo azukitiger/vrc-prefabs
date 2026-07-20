@@ -33,7 +33,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowInnerUpCorrectiveLeft
+    attribute: blendShape.BrowInnerUpEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -54,7 +54,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowOuterUpCorrectiveLeft
+    attribute: blendShape.BrowOuterUpEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -183,7 +183,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowInnerUpCorrectiveLeft
+    attribute: blendShape.BrowInnerUpEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -204,7 +204,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.EyeClosedBrowOuterUpCorrectiveLeft
+    attribute: blendShape.BrowOuterUpEyeClosedCorrectiveLeft
     path: Body
     classID: 137
     script: {fileID: 0}

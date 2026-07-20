@@ -75,7 +75,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.LipFunnelLipPuckerCorrective
+    attribute: blendShape.LipFunnelPuckerCorrective
     path: Body
     classID: 137
     script: {fileID: 0}
@@ -195,7 +195,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: blendShape.LipFunnelLipPuckerCorrective
+    attribute: blendShape.LipFunnelPuckerCorrective
     path: Body
     classID: 137
     script: {fileID: 0}
