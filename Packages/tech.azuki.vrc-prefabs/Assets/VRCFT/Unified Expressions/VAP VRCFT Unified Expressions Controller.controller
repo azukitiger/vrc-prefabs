@@ -1622,37 +1622,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-7817004479925711366
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Mouth Upper Up Left Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: a53f2450d9bc2d74892adc5cbf251c72, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/DirectBlend
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/LipFunnel
-  m_BlendParameterY: FT/FaceTrackingLimits
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 0
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
 --- !u!1102 &-7802746523543081570
 AnimatorState:
   serializedVersion: 6
@@ -9090,7 +9059,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 5021878604184821661}
+    m_Motion: {fileID: 7400000, guid: f2eb139e666279044a2fa711cdf18827, type: 2}
     m_Threshold: 0.62068963
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -9098,7 +9067,7 @@ BlendTree:
     m_DirectBlendParameter: VAP/FT/v2/MouthUpperUpRight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -7817004479925711366}
+    m_Motion: {fileID: 7400000, guid: a53f2450d9bc2d74892adc5cbf251c72, type: 2}
     m_Threshold: 0.6551724
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -9106,7 +9075,7 @@ BlendTree:
     m_DirectBlendParameter: VAP/FT/v2/MouthUpperUpLeft
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 6723586803404691335}
+    m_Motion: {fileID: 7400000, guid: 955524ad918fcaa46a3f44c1ae78f1f4, type: 2}
     m_Threshold: 0.6896552
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -15912,37 +15881,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 3
---- !u!206 &5021878604184821661
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Mouth Upper Up Right Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f2eb139e666279044a2fa711cdf18827, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/DirectBlend
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/LipFunnel
-  m_BlendParameterY: FT/FaceTrackingLimits
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 0
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
 --- !u!206 &5143578730497016585
 BlendTree:
   m_ObjectHideFlags: 1
@@ -17694,37 +17632,6 @@ BlendTree:
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
---- !u!206 &6723586803404691335
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Mouth Lower Down Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 955524ad918fcaa46a3f44c1ae78f1f4, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/DirectBlend
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/LipFunnel
-  m_BlendParameterY: FT/FaceTrackingLimits
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!206 &6793183742419041824
