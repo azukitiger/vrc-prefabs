@@ -1,3 +1,6 @@
+## Version 1.6.10
+- Fixed missing jaw forward blenshape animation.
+
 ## Version 1.6.9
 - Many Face Tracking improvements and features.
 - Fixed eye condition when Eye Tracking is off & Facial Expressions Disabled is on.
