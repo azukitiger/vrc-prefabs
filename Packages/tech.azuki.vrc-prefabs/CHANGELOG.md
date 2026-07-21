@@ -1,3 +1,8 @@
+## Version 1.6.11
+- MouthUpperUp & MouthLowerDown now limited by MouthRaiserLower.
+- MouthRaiserUpper & MouthRaiserLower now limited by LipFunnel.
+- Removed LipSuckUpperMouthClosedCorrective & LipSuckLowerMouthClosedCorrective blendshapes.
+
 ## Version 1.6.10
 - Fixed missing jaw forward blenshape animation.
 

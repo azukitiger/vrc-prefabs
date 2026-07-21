@@ -465,8 +465,6 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | LipSuckUpper                           | ✔        | Tucks in the upper lips                                 |
 | LipSuckLower                           | ✔        | Tucks in the lower lips                                 |
 | LipFunnelPuckerCorrective              | ✖        | Blended in when funnel and pucker are active together   |
-| LipSuckUpperMouthClosedCorrective      | ✖        | Blends upper lip suck with a closed mouth               |
-| LipSuckLowerMouthClosedCorrective      | ✖        | Blends lower lip suck with a closed mouth               |
 
 #### Mouth — position
 | Blendshape   | Required | Description                                |
