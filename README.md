@@ -1,13 +1,7 @@
 <img src="./Website/banner.png"/>
 
-# VRChat Azuki Prefabs (VAP)
-
-A collection of prefabs and assets designed to enhance **VRChat avatars** with advanced animations and interactive systems.
-
-###
 # Avatar Prefabs
-
-Each avatar prefab should only be used **once per avatar**.
+A collection of prefabs and assets designed to enhance **VRChat avatars** with advanced animations and interactive systems.
 
 <details>
 <summary><h2>Frame Time Prefab</h2></summary>
@@ -385,6 +379,10 @@ Adds face tracking to the avatar using the **Unified Expression** blendshapes. B
 Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
 3. Optionally, the animator parameters `VAP/FT/*` can be used to override values from a separate FX controller.
 
+### Blendshape Notes
+- Lower Lip bite is shaped by `LipSuckLower` & `MouthUpperUp`.
+- Upper Lip bite is shaped by `JawForward`, `LipSuckUpper` & `MouthLowerDown`.
+
 ### Blendshapes
 
 #### Eye — eyelid
@@ -503,13 +501,13 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | MouthTightenerRight     | ✔        | Right side lips squeeze together horizontally         |
 
 #### Mouth — upper / lower raise
-| Blendshape        | Required | Description                          |
-|---------------------|:--------:|------------------------------------------|
-| MouthUpperUpLeft    | ✔        | Upper left part of the lip pulls up       |
-| MouthUpperUpRight   | ✔        | Upper right part of the lip pulls up      |
-| MouthLowerDown      | ✔        | Lowers the lower lips                     |
-| MouthRaiserUpper    | ✔        | Raises the upper lip area                 |
-| MouthRaiserLower    | ✔        | Raises the lower lip/chin area            |
+| Blendshape        | Required | Description                          | Limits |
+|---------------------|:--------:|------------------------------------------|------------------------------------------|
+| MouthUpperUpLeft    | ✔        | Upper left part of the lip pulls up       | Limited by `MouthRaiserLower` |
+| MouthUpperUpRight   | ✔        | Upper right part of the lip pulls up      | Limited by `MouthRaiserLower` |
+| MouthLowerDown      | ✔        | Lowers the lower lips                     | Limited by `MouthRaiserLower` |
+| MouthRaiserUpper    | ✔        | Raises the upper lip area                 | Limited by `LipFunnel` |
+| MouthRaiserLower    | ✔        | Raises the lower lip/chin area            | Limited by `LipFunnel` |
 
 #### Nose
 | Blendshape     | Required | Description               |
