@@ -435,7 +435,7 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | BrowDownEyeClosedCorrectiveLeft            | ✖        | Corrective alongside a lowered left eyebrow                          |
 | BrowDownEyeClosedCorrectiveRight           | ✖        | Corrective alongside a lowered right eyebrow                         |
 | BrowInnerUpEyeClosedCorrectiveLeft         | ✖        | Corrective alongside a raised left eyebrow                           |
-| BrowInnerEyeClosedUpCorrectiveRight        | ✖        | Corrective alongside a raised right eyebrow (note: word order differs from Left) |
+| BrowInnerEyeClosedUpCorrectiveRight        | ✖        | Corrective alongside a raised right eyebrow |
 | BrowOuterUpEyeClosedCorrectiveLeft         | ✖        | Corrective alongside a raised left eyebrow                           |
 | BrowOuterUpEyeClosedCorrectiveRight        | ✖        | Corrective alongside a raised right eyebrow                          |
 
@@ -488,7 +488,6 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 #### Mouth — dimple / stretch
 | Blendshape         | Required | Description                            |
 |---------------------|:--------:|---------------------------------------------|
-| MouthDimple         | ✔        | Lip corner dimples                            |
 | MouthDimpleLeft     | ✔        | Left lip corner is pulled backwards           |
 | MouthDimpleRight    | ✔        | Right lip corner is pushed backwards          |
 | MouthStretchLeft    | ✔        | Left corner lip pulls out and down            |
@@ -497,8 +496,7 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 #### Mouth — press / tighten
 | Blendshape            | Required | Description                                     |
 |-------------------------|:--------:|------------------------------------------------------|
-| MouthPress              | ✔        | Mouth presses together                                |
-| MouthTightener          | ✔        | Mouth tightens                                        |
+| MouthPress              | ✔        | Mouth presses together                                |                                      |
 | MouthTightenerLeft      | ✔        | Left side lips squeeze together horizontally          |
 | MouthTightenerRight     | ✔        | Right side lips squeeze together horizontally         |
 
