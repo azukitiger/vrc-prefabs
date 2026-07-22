@@ -472,6 +472,8 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | MouthClosed   | ✔        | Closes mouth (in relation to `JawOpen`)        |
 | MouthLeft     | ✔        | Moves mouth left                               |
 | MouthRight    | ✔        | Moves mouth right                              |
+| MouthXJawXCorrectiveLeft      | ✖        | Blends leftward jaw movement with leftward mouth movement       |
+| MouthXJawXCorrectiveRight     | ✖        | Blends rightward jaw movement with rightward mouth movement     |
 
 #### Mouth — smile / frown
 | Blendshape                       | Required | Description                                          |
@@ -508,12 +510,6 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | MouthLowerDown      | ✔        | Lowers the lower lips                     |
 | MouthRaiserUpper    | ✔        | Raises the upper lip area                 |
 | MouthRaiserLower    | ✔        | Raises the lower lip/chin area            |
-
-#### Mouth/Jaw correctives
-| Blendshape                | Required | Description                                              |
-|------------------------------|:--------:|----------------------------------------------------------------|
-| MouthXJawXCorrectiveLeft      | ✖        | Blends leftward jaw movement with leftward mouth movement       |
-| MouthXJawXCorrectiveRight     | ✖        | Blends rightward jaw movement with rightward mouth movement     |
 
 #### Nose
 | Blendshape     | Required | Description               |
