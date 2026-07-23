@@ -1,3 +1,6 @@
+## Version 1.6.13
+- Eye dilation sad threshold update.
+
 ## Version 1.6.12
 - Emulation Squint improvements.
 
