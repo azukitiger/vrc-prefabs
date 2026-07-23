@@ -377,7 +377,7 @@ Adds face tracking to the avatar using the **Unified Expression** blendshapes. B
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations to values typically used for MMD rigs.  
 Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
-3. Optionally, the animator parameters `VAP/FT/*` can be used to override values from a separate FX controller.
+3. Optionally, the animator parameters `VAP/FT/*` can be used to animate additional blendshapes or bones (ex. ears) from a separate FX controller.
 
 ### Blendshape Notes
 - Lower Lip bite is shaped by `LipSuckLower` & `MouthUpperUp`.
