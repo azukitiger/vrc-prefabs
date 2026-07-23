@@ -1,3 +1,6 @@
+## Version 1.6.12
+- Emulation Squint improvements.
+
 ## Version 1.6.11
 - MouthUpperUp & MouthLowerDown now limited by MouthRaiserLower.
 - MouthRaiserUpper & MouthRaiserLower now limited by LipFunnel.
