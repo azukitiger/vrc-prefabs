@@ -1,3 +1,6 @@
+## Version 1.6.14
+- Fix Mouth Dimple blend tree.
+
 ## Version 1.6.13
 - Eye dilation sad threshold update.
 
