@@ -1,3 +1,6 @@
+## Version 1.6.15
+- Remove `MouthRaiserUpper` & `MouthRaiserLower` 
+
 ## Version 1.6.14
 - Fix Mouth Dimple blend tree.
 

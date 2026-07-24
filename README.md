@@ -506,8 +506,8 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | MouthUpperUpLeft    | ✔        | Upper left part of the lip pulls up       | Limited by `MouthRaiserLower` |
 | MouthUpperUpRight   | ✔        | Upper right part of the lip pulls up      | Limited by `MouthRaiserLower` |
 | MouthLowerDown      | ✔        | Lowers the lower lips                     | Limited by `MouthRaiserLower` |
-| MouthRaiserUpper    | ✔        | Raises the upper lip area                 | Limited by `LipFunnel` |
-| MouthRaiserLower    | ✔        | Raises the lower lip/chin area            | Limited by `LipFunnel` |
+| MouthRaiserUpper    | ✔        | Raises the upper lip area                 |  |
+| MouthRaiserLower    | ✔        | Raises the lower lip/chin area            |  |
 
 #### Nose
 | Blendshape     | Required | Description               |

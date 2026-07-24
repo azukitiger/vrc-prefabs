@@ -6251,37 +6251,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-3117360224231252265
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Mouth Raiser Lower Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: dc26733413aeaed4eb29148ee4291a03, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/LipFunnel
-  m_BlendParameterY: FT/FaceTrackingLimits
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 0
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
 --- !u!206 &-3046069927401701812
 BlendTree:
   m_ObjectHideFlags: 1
@@ -9216,7 +9185,7 @@ BlendTree:
     m_DirectBlendParameter: VAP/FT/v2/LipSuckLower
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 6002821993587717100}
+    m_Motion: {fileID: 7400000, guid: 93b5530b22f0ef849959ab42a3828773, type: 2}
     m_Threshold: 0.79310346
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -9224,7 +9193,7 @@ BlendTree:
     m_DirectBlendParameter: VAP/FT/v2/MouthRaiserUpper
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -3117360224231252265}
+    m_Motion: {fileID: 7400000, guid: dc26733413aeaed4eb29148ee4291a03, type: 2}
     m_Threshold: 0.82758623
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -16893,37 +16862,6 @@ BlendTree:
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 4
---- !u!206 &6002821993587717100
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Mouth Raiser Upper Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 93b5530b22f0ef849959ab42a3828773, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/LipFunnel
-  m_BlendParameterY: FT/FaceTrackingLimits
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 0
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
 --- !u!206 &6008012473082068693
 BlendTree:
   m_ObjectHideFlags: 1
