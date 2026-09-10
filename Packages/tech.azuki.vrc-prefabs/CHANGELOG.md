@@ -1,3 +1,6 @@
+## Version 1.8.1
+- Update GogoLoco menu order.
+
 ## Version 1.8.0
 - Moved current version of VRCFT Unified Expression controller to `Deprecated` status to replace TongueOut & JawOpen helper with a corrective shape key: `TongueOutJawOpenCorrective`
 

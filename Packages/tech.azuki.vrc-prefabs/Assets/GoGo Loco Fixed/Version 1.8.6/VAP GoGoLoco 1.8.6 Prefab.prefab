@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1403.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []
@@ -116,9 +116,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6786686194535119629}
   - component: {fileID: 3404064225235338012}
-  - component: {fileID: 6384747876341687134}
-  - component: {fileID: 6875435517254287550}
-  - component: {fileID: 7197864241558675477}
   - component: {fileID: 39720112818846979}
   m_Layer: 0
   m_Name: VAP GoGoLoco 1.8.6 Prefab
@@ -157,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1403.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []
@@ -212,24 +209,10 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 162a302d400799d44b42de883aca93aa|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
-              Loco Fixed/Version 1.8.6/VAP Locomotion Menu.asset
-            objRef: {fileID: 11400000, guid: 162a302d400799d44b42de883aca93aa, type: 2}
-          prefix: Body Controls/Gogo Loco/Locomotion
-        - menu:
-            version: 1
-            fileID: 0
-            guid: 
-            id: 195aef2853af8c3449c051bc13ea7af3|Packages/gogoloco/Runtime/GoGo/GoLoco/MainMenu/Menu/SubMenu/GoMenuPose.asset
-            objRef: {fileID: 11400000, guid: 195aef2853af8c3449c051bc13ea7af3, type: 2}
-          prefix: Body Controls/Gogo Loco/Poses
-        - menu:
-            version: 1
-            fileID: 0
-            guid: 
-            id: 0983e60758c6c9e41a0d2099ff3e2439|Packages/gogoloco/Runtime/GoGo/GoLoco/MainMenu/Menu/SubMenu/GoMenuEmotes.asset
-            objRef: {fileID: 11400000, guid: 0983e60758c6c9e41a0d2099ff3e2439, type: 2}
-          prefix: Body Controls/Gogo Loco/Emotes
+            id: 3e18c7a7f969bfa41b4a47fa957316d2|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
+              Loco Fixed/Version 1.8.6/VAP GogoLoco Menu.asset
+            objRef: {fileID: 11400000, guid: 3e18c7a7f969bfa41b4a47fa957316d2, type: 2}
+          prefix: Body Controls/Gogo Loco
         prms:
         - parameters:
             version: 1
@@ -272,111 +255,6 @@ MonoBehaviour:
         removePrefixes: []
         addPrefix: 
         useSecurityForToggle: 0
---- !u!114 &6384747876341687134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7088152649172247296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1403.0
-  somethingIsBroken: 0
-  config:
-    features: []
-  content:
-    rid: 3147176312603672840
-  references:
-    version: 2
-    RefIds:
-    - rid: 3147176312603672840
-      type: {class: SetIcon, ns: VF.Model.Feature, asm: VRCFury}
-      data:
-        version: 1
-        path: Body Controls/Gogo Loco/Locomotion
-        icon:
-          version: 1
-          fileID: 0
-          guid: 
-          id: d25e1acf1a01bef40bfc8dd8d1c9dabd|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
-            Loco Fixed/Icons/Running.png
-          objRef: {fileID: 2800000, guid: d25e1acf1a01bef40bfc8dd8d1c9dabd, type: 3}
---- !u!114 &6875435517254287550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7088152649172247296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1403.0
-  somethingIsBroken: 0
-  config:
-    features: []
-  content:
-    rid: 3147176312603672842
-  references:
-    version: 2
-    RefIds:
-    - rid: 3147176312603672842
-      type: {class: SetIcon, ns: VF.Model.Feature, asm: VRCFury}
-      data:
-        version: 1
-        path: Body Controls/Gogo Loco/Poses
-        icon:
-          version: 1
-          fileID: 0
-          guid: 
-          id: 26637a080b65e4e469e48b20bf832d76|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
-            Loco Fixed/Icons/Pose.png
-          objRef: {fileID: 2800000, guid: 26637a080b65e4e469e48b20bf832d76, type: 3}
---- !u!114 &7197864241558675477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7088152649172247296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1403.0
-  somethingIsBroken: 0
-  config:
-    features: []
-  content:
-    rid: 3147176312603672841
-  references:
-    version: 2
-    RefIds:
-    - rid: 3147176312603672841
-      type: {class: SetIcon, ns: VF.Model.Feature, asm: VRCFury}
-      data:
-        version: 1
-        path: Body Controls/Gogo Loco/Emotes
-        icon:
-          version: 1
-          fileID: 0
-          guid: 
-          id: a3273b85f8423bb47bef9def85485eea|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
-            Loco Fixed/Icons/Emote.png
-          objRef: {fileID: 2800000, guid: a3273b85f8423bb47bef9def85485eea, type: 3}
 --- !u!114 &39720112818846979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,7 +269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1403.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []

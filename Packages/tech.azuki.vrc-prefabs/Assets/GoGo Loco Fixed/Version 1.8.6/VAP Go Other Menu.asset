@@ -21,7 +21,7 @@ MonoBehaviour:
       name: VRCEmote
     value: 255
     style: 0
-    subMenu: {fileID: 11400000, guid: 4ec35c17baffb7a46b6426a18af2ced6, type: 2}
+    subMenu: {fileID: 0}
     subParameters: []
     labels: []
   - name: <b>Hovering
@@ -63,5 +63,15 @@ MonoBehaviour:
     value: 1
     style: 0
     subMenu: {fileID: 11400000, guid: 4ec35c17baffb7a46b6426a18af2ced6, type: 2}
+    subParameters: []
+    labels: []
+  - name: Locomotion Poses
+    icon: {fileID: 2800000, guid: d330693a3b47d0b4681e311dee4c8d78, type: 3}
+    type: 103
+    parameter:
+      name: 
+    value: 1
+    style: 0
+    subMenu: {fileID: 11400000, guid: 964812f5dcfe6384eb612ebc3403e98b, type: 2}
     subParameters: []
     labels: []
