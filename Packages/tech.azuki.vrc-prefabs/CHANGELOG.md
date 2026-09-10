@@ -1,5 +1,8 @@
-## Version 1.8.1
-- Update GogoLoco menu order.
+## Version 1.9.0
+- Update GogoLoco menus.
+- Reduce size of contact for pupil focus.
+- Removed Feral animations.
+- Added Pupil Smoothing prefab.
 
 ## Version 1.8.0
 - Moved current version of VRCFT Unified Expression controller to `Deprecated` status to replace TongueOut & JawOpen helper with a corrective shape key: `TongueOutJawOpenCorrective`
