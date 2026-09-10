@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3347135011292735179}
   - component: {fileID: 1024708419020514010}
   m_Layer: 0
-  m_Name: VAP Pupil Smoothing
+  m_Name: VAP Pupil Dilation Smoothing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,8 +73,10 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - '*'
-        - '!VAP/Pupil/LeftDilationPass'
-        - '!VAP/Pupil/RightDilationPass'
+        - '!VAP/Pupil/LeftDilationDelayedPass'
+        - '!VAP/Pupil/RightDilationDelayedPass'
+        - '!VAP/Pupil/LeftDilationOutput'
+        - '!VAP/Pupil/RightDilationOutput'
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
