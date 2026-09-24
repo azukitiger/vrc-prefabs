@@ -23,7 +23,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 40
+        value: 30
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -33,7 +33,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/BinarySmoothing
+    attribute: VAP/FT/BinarySmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -54,7 +54,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/DilationSmoothing
+    attribute: VAP/FT/DilationSmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -65,7 +65,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 40
+        value: 30
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -75,7 +75,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/FloatSmoothing
+    attribute: VAP/FT/FloatSmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -96,7 +96,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/EmulatedDilationSmoothing
+    attribute: VAP/FT/EmulatedDilationSmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -173,7 +173,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 40
+        value: 30
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -183,7 +183,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/BinarySmoothing
+    attribute: VAP/FT/BinarySmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -204,7 +204,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/DilationSmoothing
+    attribute: VAP/FT/DilationSmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -215,7 +215,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 40
+        value: 30
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -225,7 +225,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/FloatSmoothing
+    attribute: VAP/FT/FloatSmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
@@ -246,7 +246,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/FT/EmulatedDilationSmoothing
+    attribute: VAP/FT/EmulatedDilationSmoothingK
     path: 
     classID: 95
     script: {fileID: 0}
