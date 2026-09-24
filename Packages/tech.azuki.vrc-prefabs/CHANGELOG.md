@@ -5,6 +5,7 @@
 - Added Pupil Smoothing prefab.
 - Improved Smoothing to be accurate across framerates.
 - Added TongueRoll to Face Tracking.
+- Added complimentary Eye Look blendshape support.
 
 ## Version 1.8.0
 - Moved current version of VRCFT Unified Expression controller to `Deprecated` status to replace TongueOut & JawOpen helper with a corrective shape key: `TongueOutJawOpenCorrective`

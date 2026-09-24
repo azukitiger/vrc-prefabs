@@ -402,16 +402,28 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | EyeClosedSquintCorrectiveRight     | ✔        | Corrective for right eye closed + squinting simultaneously     |
 
 #### Eye — gaze direction
-| Blendshape         | Required | Description             |
-|---------------------|:--------:|----------------------------|
-| EyeLookUpLeft       | ✔        | Left eye looks up          |
-| EyeLookUpRight      | ✔        | Right eye looks up         |
-| EyeLookDownLeft     | ✔        | Left eye looks down        |
-| EyeLookDownRight    | ✔        | Right eye looks down       |
-| EyeLookInLeft       | ✔        | Left eye looks in          |
-| EyeLookInRight      | ✔        | Right eye looks in         |
-| EyeLookOutLeft      | ✔        | Left eye looks out         |
-| EyeLookOutRight     | ✔        | Right eye looks out        |
+| Blendshape         | Required | Description             | Limits |
+|---------------------|:--------:|----------------------------|------------------------------------------|
+| EyeLookUpLeft       | ✔        | Left eye looks up          | Limited by `EyeSquintLeft`, `EyeClosedLeft` and `EyeWideLeft` |
+| EyeLookUpRight      | ✔        | Right eye looks up         | Limited by `EyeSquintRight`, `EyeClosedRight` and `EyeWideRight` |
+| EyeLookDownLeft     | ✔        | Left eye looks down        | Limited by `EyeSquintLeft`, `EyeClosedLeft` and `EyeWideLeft` |
+| EyeLookDownRight    | ✔        | Right eye looks down       | Limited by `EyeSquintRight`, `EyeClosedRight` and `EyeWideRight` |
+| EyeLookInLeft       | ✔        | Left eye looks in          |  |
+| EyeLookInRight      | ✔        | Right eye looks in         |  |
+| EyeLookOutLeft      | ✔        | Left eye looks out         |  |
+| EyeLookOutRight     | ✔        | Right eye looks out        |  |
+| EyeLookUpLeftRotate     | ✖        | Complementary eye rotation for `EyeLookUpLeft`     |  |
+| EyeLookUpRightRotate    | ✖        | Complementary eye rotation for `EyeLookUpRight`    |  |
+| EyeLookDownLeftRotate   | ✖        | Complementary eye rotation for `EyeLookDownLeft`   |  |
+| EyeLookDownRightRotate  | ✖        | Complementary eye rotation for `EyeLookDownRight`  |  |
+| EyeLookInLeftRotate     | ✖        | Complementary eye rotation for `EyeLookInLeft`     |  |
+| EyeLookInRightRotate    | ✖        | Complementary eye rotation for `EyeLookInRight`    |  |
+| EyeLookOutLeftRotate    | ✖        | Complementary eye rotation for `EyeLookOutLeft`    |  |
+| EyeLookOutRightRotate   | ✖        | Complementary eye rotation for `EyeLookOutRight`   |  |
+
+Vertical gaze (`EyeLookUp*` / `EyeLookDown*`) is automatically limited by the eyelid state — squinting, blinking, or widening an eye reduces how far it can visually look up or down. `VAP/Override/FT/EyeLookVerticalLeft` and `VAP/Override/FT/EyeLookVerticalRight` (see the Input Animator Parameters table below) can additionally be used to fade the intensity of vertical eye look per-eye, from `0` (normal, face tracked) to `1` (no vertical eye look).
+
+The `*Rotate` blendshapes (ex. `EyeLookUpLeftRotate`) are complementary eye rotation shapes driven alongside their corresponding `EyeLook*` blendshape. Unlike the base `EyeLook*` blendshapes, they are not limited by the eyelid state and are not affected by `VAP/Override/FT/EyeLidLeft` / `VAP/Override/FT/EyeLidRight`.
 
 #### Eye — pupil dilation
 | Blendshape     | Required | Description                       |
@@ -568,6 +580,8 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 |-|-|-|
 | VAP/Override/FT/EyeLidLeft | Float | Set to `1` to override the left eye and left brow blendshapes of the face tracking output — useful for interactions such as ear pull |
 | VAP/Override/FT/EyeLidRight | Float | Set to `1` to override the right eye and right brow blendshapes of the face tracking output — useful for interactions such as ear pull |
+| VAP/Override/FT/EyeLookVerticalLeft | Float | Fades the intensity of the left eye's vertical look (`EyeLookUpLeft` / `EyeLookDownLeft`) from `0` (normal, face tracked) to `1` (no vertical eye look) |
+| VAP/Override/FT/EyeLookVerticalRight | Float | Fades the intensity of the right eye's vertical look (`EyeLookUpRight` / `EyeLookDownRight`) from `0` (normal, face tracked) to `1` (no vertical eye look) |
 
 ### Face Tracking Animator Parameters
 
