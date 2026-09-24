@@ -3,6 +3,8 @@
 - Reduce size of contact for pupil focus.
 - Removed Feral animations.
 - Added Pupil Smoothing prefab.
+- Improved Smoothing to be accurate across framerates.
+- Added TongueRoll to Face Tracking.
 
 ## Version 1.8.0
 - Moved current version of VRCFT Unified Expression controller to `Deprecated` status to replace TongueOut & JawOpen helper with a corrective shape key: `TongueOutJawOpenCorrective`
