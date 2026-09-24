@@ -370,7 +370,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 Adds face tracking to the avatar using the **Unified Expression** blendshapes. Based on: https://github.com/Adjerry91/VRCFaceTracking-Templates
 
 ### Features
-- Uses `163 synced bits`.
+- Uses `166 synced bits`.
 - Optimized blend tree designed to minimize animator parameter usage.
 
 ### Instructions
@@ -529,6 +529,7 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | TongueUpRightMorph      | ✔        | Diagonal corrective: upward + rightward tongue movement          |
 | TongueDownLeftMorph     | ✔        | Diagonal corrective: downward + leftward tongue movement         |
 | TongueDownRightMorph    | ✔        | Diagonal corrective: downward + rightward tongue movement        |
+| TongueRoll              | ✔        | Tongue curls upward along its sides                              |
 
 ### Included Expression Parameters
 
@@ -609,6 +610,7 @@ Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits en
 | VAP/FT/v2/TongueOut | Float | Smoothed value controlling tongue extension |
 | VAP/FT/v2/TongueX | Float | Smoothed horizontal movement value of the tongue |
 | VAP/FT/v2/TongueY | Float | Smoothed vertical movement value of the tongue |
+| VAP/FT/v2/TongueRoll | Float | Smoothed value controlling tongue roll |
 
 </details>
 
