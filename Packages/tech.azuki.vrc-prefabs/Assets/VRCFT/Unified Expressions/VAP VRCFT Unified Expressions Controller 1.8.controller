@@ -9574,7 +9574,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: VAP/FT/v2/EyeSquintRight
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -5129911184889145224}
@@ -9582,7 +9582,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: VAP/FT/v2/EyeSquintLeft
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 5261784232158794624}
@@ -10297,7 +10297,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VAP VRCFT Unified Expressions Controller
+  m_Name: VAP VRCFT Unified Expressions Controller 1.8
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: FXWeight

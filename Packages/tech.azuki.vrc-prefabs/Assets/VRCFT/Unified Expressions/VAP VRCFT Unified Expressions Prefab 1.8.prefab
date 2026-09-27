@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1408.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 476144488768314255}
   - component: {fileID: 4625575595106969738}
   m_Layer: 0
-  m_Name: VAP VRCFT Unified Expressions Prefab
+  m_Name: VAP VRCFT Unified Expressions Prefab 1.8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1408.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []
@@ -181,7 +181,7 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: 681df4cb04ba5c34a932549b96f6ddaa|Packages/tech.azuki.vrc-prefabs/Assets/VRCFT/Unified
-              Expressions/VAP VRCFT Unified Expressions Controller.controller
+              Expressions/VAP VRCFT Unified Expressions Controller 1.8.controller
             objRef: {fileID: 9100000, guid: 681df4cb04ba5c34a932549b96f6ddaa, type: 2}
           type: 5
         menus:
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1408.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []
