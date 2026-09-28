@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1382.0
+  vrcfuryVersion: 1.1429.0
   somethingIsBroken: 0
   config:
     features: []
@@ -124,7 +124,7 @@ MonoBehaviour:
   shapeType: 2
   radius: 1
   height: 1
-  size: {x: 0.1, y: 0.02, z: 0.1}
+  size: {x: 0.1, y: 0.1, z: 0.025}
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   shapeType: 2
   radius: 1
   height: 1
-  size: {x: 0.1, y: 0.02, z: 0.1}
+  size: {x: 0.1, y: 0.1, z: 0.025}
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0

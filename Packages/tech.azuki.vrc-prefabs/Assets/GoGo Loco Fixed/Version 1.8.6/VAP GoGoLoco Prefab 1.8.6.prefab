@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3404064225235338012}
   - component: {fileID: 39720112818846979}
   m_Layer: 0
-  m_Name: VAP GoGoLoco 1.8.6 Prefab
+  m_Name: VAP GoGoLoco Prefab 1.8.6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
