@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -1506855854, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
-  m_Name: VRCFT Unified Expressions Parameters
+  m_Name: VRCFT Unified Expressions Parameters 1.0
   m_EditorClassIdentifier: 
   isEmpty: 0
   parameters:
@@ -745,26 +745,6 @@ MonoBehaviour:
     defaultValue: 0
     networkSynced: 1
   - name: FT/v2/TongueYNegative
-    valueType: 2
-    saved: 0
-    defaultValue: 0
-    networkSynced: 1
-  - name: FT/v2/TongueRoll
-    valueType: 1
-    saved: 0
-    defaultValue: 0
-    networkSynced: 0
-  - name: FT/v2/TongueRoll1
-    valueType: 2
-    saved: 0
-    defaultValue: 0
-    networkSynced: 1
-  - name: FT/v2/TongueRoll2
-    valueType: 2
-    saved: 0
-    defaultValue: 0
-    networkSynced: 1
-  - name: FT/v2/TongueRoll4
     valueType: 2
     saved: 0
     defaultValue: 0

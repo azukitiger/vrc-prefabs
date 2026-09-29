@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1430.0
   somethingIsBroken: 0
   config:
     features: []
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1430.0
   somethingIsBroken: 0
   config:
     features: []
@@ -181,7 +181,8 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: 681df4cb04ba5c34a932549b96f6ddaa|Packages/tech.azuki.vrc-prefabs/Assets/VRCFT/Unified
-              Expressions/Deprecated/VAP VRCFT Unified Expressions Controller 1.8.controller
+              Expressions/Deprecated/Version 1.8/VAP VRCFT Unified Expressions Controller
+              1.8.controller
             objRef: {fileID: 9100000, guid: 681df4cb04ba5c34a932549b96f6ddaa, type: 2}
           type: 5
         menus:
@@ -198,9 +199,10 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 946944f70a5b4bf43a8b5e74680aaf4e|Packages/tech.azuki.vrc-prefabs/Assets/VRCFT/Menu/VRCFT
-              Unified Expressions Parameters.asset
-            objRef: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
+            id: c7220ad257e92764ab79dd6bc2abe183|Packages/tech.azuki.vrc-prefabs/Assets/VRCFT/Unified
+              Expressions/Deprecated/Version 1.8/VRCFT Unified Expressions Parameters
+              1.8.asset
+            objRef: {fileID: 11400000, guid: c7220ad257e92764ab79dd6bc2abe183, type: 2}
         smoothedPrms: []
         globalParams:
         - '*'
@@ -252,7 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1430.0
   somethingIsBroken: 0
   config:
     features: []
