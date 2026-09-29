@@ -1401,45 +1401,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-8075475150226005059
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Tongue Out Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Always 1
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f35886a97b0be784fb688f5c53e3ebdd, type: 2}
-    m_Threshold: 0.5
-    m_Position: {x: 0.5, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9ad590184387c76438bb8aa395bde932, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/TongueOut
-  m_BlendParameterY: VAP/FT/v2/LipFunnel
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 0
-  m_NormalizedBlendValues: 0
-  m_BlendType: 0
 --- !u!206 &-8048669069245479401
 BlendTree:
   m_ObjectHideFlags: 1
@@ -2662,53 +2623,6 @@ BlendTree:
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-6867483913892679041
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Tongue Out Jaw Open Corrective
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 806d96eb2cbce1346ae1cb81cf8e33fa, type: 2}
-    m_Threshold: 0.33333334
-    m_Position: {x: 0, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 0.6666667
-    m_Position: {x: 1, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/JawOpen
-  m_BlendParameterY: VAP/FT/v2/TongueOut
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 3
 --- !u!206 &-6850572036075476528
 BlendTree:
   m_ObjectHideFlags: 1
@@ -9512,39 +9426,23 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1e8783f5467dcb44287d52b4a2a375ab, type: 2}
-    m_Threshold: 0.033333335
+    m_Threshold: 0.04
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/NoseSneer
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -4164268702089551237}
-    m_Threshold: 0.06666667
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 9133472732376041925}
-    m_Threshold: 0.1
+    m_Threshold: 0.08
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9027eb6129c715e4bb8f4b78a5fca443, type: 2}
-    m_Threshold: 0.13333334
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/MouthClosed
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: -2581640866358264826}
-    m_Threshold: 0.16666667
+    m_Motion: {fileID: -4164268702089551237}
+    m_Threshold: 0.12
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -9552,6 +9450,14 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -6001322674272182072}
+    m_Threshold: 0.16
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -2581640866358264826}
     m_Threshold: 0.2
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -9560,47 +9466,47 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -6697527132103207919}
-    m_Threshold: 0.23333333
+    m_Threshold: 0.24
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: df3d235f512d7db488907287867b0ca4, type: 2}
-    m_Threshold: 0.26666668
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/MouthTightenerRight
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: b75f20944d97f24408a487765ee1d4d8, type: 2}
-    m_Threshold: 0.3
+    m_Threshold: 0.28
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/MouthTightenerLeft
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: dc1b9f45c5bb0984eac972da0a3b40ee, type: 2}
-    m_Threshold: 0.33333334
+    m_Motion: {fileID: 7400000, guid: df3d235f512d7db488907287867b0ca4, type: 2}
+    m_Threshold: 0.32
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/MouthStretchRight
+    m_DirectBlendParameter: VAP/FT/v2/MouthTightenerRight
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1f8484eee1559d7438f91bf15698e7ef, type: 2}
-    m_Threshold: 0.36666667
+    m_Threshold: 0.36
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/MouthStretchLeft
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 194564853e39c9b4bac04fdad05607ec, type: 2}
+    m_Motion: {fileID: 7400000, guid: dc1b9f45c5bb0984eac972da0a3b40ee, type: 2}
     m_Threshold: 0.4
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: VAP/FT/v2/MouthStretchRight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 194564853e39c9b4bac04fdad05607ec, type: 2}
+    m_Threshold: 0.44
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -9608,43 +9514,27 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 332a2171769752f468029553862eaefd, type: 2}
-    m_Threshold: 0.43333334
+    m_Threshold: 0.48
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/JawForward
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: d74d4c7783ecd674283e2b8e62b3aa8b, type: 2}
-    m_Threshold: 0.46666667
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/JawOpen
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 4379127309156209181}
-    m_Threshold: 0.5
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 5021878604184821661}
-    m_Threshold: 0.53333336
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/MouthUpperUpRight
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: -7817004479925711366}
-    m_Threshold: 0.56666666
+    m_Threshold: 0.52
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/MouthUpperUpLeft
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 5021878604184821661}
+    m_Threshold: 0.56
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: VAP/FT/v2/MouthUpperUpRight
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 6723586803404691335}
@@ -9656,7 +9546,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: cb322b80795055a4a8b66ffc2eb21c12, type: 2}
-    m_Threshold: 0.6333333
+    m_Threshold: 0.64
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -9664,7 +9554,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 86a670e2cc8424c48b6d92abbb9d3e8d, type: 2}
-    m_Threshold: 0.6666667
+    m_Threshold: 0.68
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -9672,7 +9562,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 93b5530b22f0ef849959ab42a3828773, type: 2}
-    m_Threshold: 0.7
+    m_Threshold: 0.72
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -9680,19 +9570,11 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: dc26733413aeaed4eb29148ee4291a03, type: 2}
-    m_Threshold: 0.73333335
+    m_Threshold: 0.76
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/MouthRaiserLower
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 2eb0ade4cb582d5439d8d4ba99d0f93d, type: 2}
-    m_Threshold: 0.76666665
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/MouthDimpleLeft
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: a4112a2f5b6951b4eb3c896f662639b4, type: 2}
@@ -9703,47 +9585,40 @@ BlendTree:
     m_DirectBlendParameter: VAP/FT/v2/MouthDimpleRight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 522f050f43576104fbe216dd05ca64c6, type: 2}
-    m_Threshold: 0.8333333
+    m_Motion: {fileID: 7400000, guid: 2eb0ade4cb582d5439d8d4ba99d0f93d, type: 2}
+    m_Threshold: 0.84
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/FT/v2/CheekSquintRight
+    m_DirectBlendParameter: VAP/FT/v2/MouthDimpleLeft
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 2c48434e81704864b8894d0def4a9dac, type: 2}
-    m_Threshold: 0.8666667
+    m_Threshold: 0.88
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/CheekSquintLeft
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -8075475150226005059}
-    m_Threshold: 0.9
+    m_Motion: {fileID: 7400000, guid: 522f050f43576104fbe216dd05ca64c6, type: 2}
+    m_Threshold: 0.92
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
+    m_DirectBlendParameter: VAP/FT/v2/CheekSquintRight
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: ad85f73c5b2cafd40971630d9dae4e93, type: 2}
-    m_Threshold: 0.93333334
+    m_Threshold: 0.96
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: VAP/FT/v2/TongueRoll
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -6867483913892679041}
-    m_Threshold: 0.96666664
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: -36416553114060221}
+    m_Motion: {fileID: -3474111639006498216, guid: 65b4407d45f0ac947b92f618e94ad90f,
+      type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -10322,93 +10197,6 @@ BlendTree:
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
---- !u!206 &-36416553114060221
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Tongue Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 0
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: ecde5e7430667c54081af08f69bb1dff, type: 2}
-    m_Threshold: 0.125
-    m_Position: {x: 1, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 1f98490fa02c09e4686d4d3186689c10, type: 2}
-    m_Threshold: 0.25
-    m_Position: {x: -1, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: bf537f79271f3c0489b9f2429ba3bed3, type: 2}
-    m_Threshold: 0.375
-    m_Position: {x: 0, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 1c6f1f64b6fc862478a0c73f0043e9ab, type: 2}
-    m_Threshold: 0.5
-    m_Position: {x: 0, y: -1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FT/EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 5b93342a1bb3d0b44b95a949e6077d4f, type: 2}
-    m_Threshold: 0.625
-    m_Position: {x: 0.7, y: 0.7}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 852acaf40c819584eba7509a26953fcd, type: 2}
-    m_Threshold: 0.75
-    m_Position: {x: -0.7, y: 0.7}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6f4e2367c386b9946b5a6a4de0dfad16, type: 2}
-    m_Threshold: 0.875
-    m_Position: {x: 0.7, y: -0.7}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6eec890f68be6ca4fb7cef9fcc7563f5, type: 2}
-    m_Threshold: 1
-    m_Position: {x: -0.7, y: -0.7}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/TongueX
-  m_BlendParameterY: VAP/FT/v2/TongueY
-  m_MinThreshold: 0
-  m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
-  m_NormalizedBlendValues: 0
-  m_BlendType: 1
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -16467,61 +16255,6 @@ MonoBehaviour:
     destMax: 0
   localOnly: 0
   debugString: 
---- !u!206 &4379127309156209181
-BlendTree:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: JawX Blend
-  m_Childs:
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 78bec4431e0f61046a71ae64a9de762d, type: 2}
-    m_Threshold: -1
-    m_Position: {x: -1, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: a2d1ead63b931734fa7a5dd88ed27219, type: 2}
-    m_Threshold: 0
-    m_Position: {x: -1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: EyeTrackingActive
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f4a7617e2476ed44b931887ee76183f2, type: 2}
-    m_Threshold: 2
-    m_Position: {x: 1, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 971a07bf6c398664c9ec0891134067ef, type: 2}
-    m_Threshold: 3
-    m_Position: {x: 1, y: 1}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: FXWeight
-    m_Mirror: 0
-  m_BlendParameter: VAP/FT/v2/JawX
-  m_BlendParameterY: VAP/FT/v2/MouthX
-  m_MinThreshold: -1
-  m_MaxThreshold: 3
-  m_UseAutomaticThresholds: 0
-  m_NormalizedBlendValues: 0
-  m_BlendType: 3
 --- !u!206 &4462837923312055526
 BlendTree:
   m_ObjectHideFlags: 1
