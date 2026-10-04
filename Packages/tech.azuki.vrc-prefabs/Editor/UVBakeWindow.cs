@@ -100,7 +100,7 @@ namespace Azuki.Tools
 
             EditorGUILayout.Space(8);
             EditorGUILayout.BeginHorizontal();
-            DrawPathField("Blender", ref blenderExePath, extension: "exe",
+            DrawPathField("Blender", ref blenderExePath, extension: GetBlenderFilePickerExtension(),
                 onChanged: () => EditorPrefs.SetString(PrefBlenderPath, blenderExePath));
             if (GUILayout.Button("Auto-detect", GUILayout.Width(90)))
             {
@@ -113,7 +113,7 @@ namespace Azuki.Tools
                 else
                 {
                     EditorUtility.DisplayDialog("Blender not found",
-                        "Couldn't automatically locate blender.exe. Please browse to it manually.", "OK");
+                        "Couldn't automatically locate Blender. Please browse to the Blender executable manually.", "OK");
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -254,7 +254,7 @@ namespace Azuki.Tools
 
         private string GetValidationMessage()
         {
-            if (!File.Exists(blenderExePath)) return "Set a valid path to blender.exe.";
+            if (!File.Exists(blenderExePath)) return "Set a valid path to the Blender executable.";
             if (fbxAsset == null) return "Select an FBX asset.";
             if (textureAsset == null) return "Select a source texture asset.";
             if (!File.Exists(GetScriptPath())) return "bake_uv.py must sit next to this .cs file.";
@@ -447,7 +447,7 @@ namespace Azuki.Tools
 
             if (!File.Exists(blenderExePath) || !File.Exists(GetScriptPath()))
             {
-                AppendLogMainThread("Can't query Blender - set a valid Blender.exe path first.");
+                AppendLogMainThread("Can't query Blender - set a valid Blender executable path first.");
                 return;
             }
 
@@ -597,7 +597,7 @@ namespace Azuki.Tools
             return result.ToArray();
         }
 
-        // Auto-detects blender.exe / Blender across platforms.
+        // Auto-detects the Blender executable across platforms.
         private static string AutoDetectBlenderPath()
         {
 #if UNITY_EDITOR_WIN
@@ -637,10 +637,22 @@ namespace Azuki.Tools
             string macPath = "/Applications/Blender.app/Contents/MacOS/Blender";
             if (File.Exists(macPath)) return macPath;
 #elif UNITY_EDITOR_LINUX
-            string[] linuxCandidates = { "/usr/bin/blender", "/usr/local/bin/blender", "/snap/bin/blender" };
-            foreach (string c in linuxCandidates)
+            // Blender installed through Steam is not normally on PATH. Check the
+            // standard Steam and Flatpak Steam locations before falling back to PATH.
+            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string[] linuxCandidates =
             {
-                if (File.Exists(c)) return c;
+                "/usr/bin/blender",
+                "/usr/local/bin/blender",
+                "/snap/bin/blender",
+                Path.Combine(home, ".local/share/Steam/steamapps/common/Blender/blender"),
+                Path.Combine(home, ".steam/steam/steamapps/common/Blender/blender"),
+                Path.Combine(home, ".var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Blender/blender")
+            };
+
+            foreach (string candidate in linuxCandidates)
+            {
+                if (File.Exists(candidate)) return candidate;
             }
 #endif
             string exeName = Application.platform == RuntimePlatform.WindowsEditor ? "blender.exe" : "blender";
@@ -661,7 +673,17 @@ namespace Azuki.Tools
             return null;
         }
 
-        // Blender.exe isn't a Unity project asset, so it stays a plain filesystem path field.
+        private static string GetBlenderFilePickerExtension()
+        {
+#if UNITY_EDITOR_WIN
+            return "exe";
+#else
+            // Linux/macOS Blender executables normally have no file extension.
+            return "";
+#endif
+        }
+
+        // Blender is a plain filesystem path rather than a Unity project asset.
         private void DrawPathField(string label, ref string path, string extension, Action onChanged = null)
         {
             EditorGUILayout.BeginHorizontal();
