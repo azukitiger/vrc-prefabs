@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1415.0
   somethingIsBroken: 0
   config:
     features: []
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1415.0
   somethingIsBroken: 0
   config:
     features: []
@@ -199,7 +199,7 @@ MonoBehaviour:
             fileID: 0
             guid: 
             id: 946944f70a5b4bf43a8b5e74680aaf4e|Packages/tech.azuki.vrc-prefabs/Assets/VRCFT/Menu/VRCFT
-              Unified Expressions Parameters.asset
+              Unified Expressions Parameters 2.0.asset
             objRef: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
         smoothedPrms: []
         globalParams:
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1415.0
   somethingIsBroken: 0
   config:
     features: []

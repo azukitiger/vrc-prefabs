@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1430.0
   somethingIsBroken: 0
   config:
     features: []
@@ -65,8 +65,9 @@ MonoBehaviour:
             version: 1
             fileID: 0
             guid: 
-            id: 3fe95311f8402e147bd99d7fa91e2d7c|Packages/gogoloco/Runtime/GoGo/GoLoco/ControllersWD/GoLocoBaseWD.controller
-            objRef: {fileID: 9100000, guid: 3fe95311f8402e147bd99d7fa91e2d7c, type: 2}
+            id: fecc88047a124cd4d973c314f7f11dc1|Packages/tech.azuki.vrc-prefabs/Assets/GoGo
+              Loco Fixed/Version 1.8.6/GoLocoBaseWD 1.8.6.controller
+            objRef: {fileID: 9100000, guid: fecc88047a124cd4d973c314f7f11dc1, type: 2}
           type: 0
         - controller:
             version: 1
@@ -161,7 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1430.0
   somethingIsBroken: 0
   config:
     features: []

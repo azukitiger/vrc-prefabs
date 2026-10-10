@@ -296,6 +296,14 @@ BlendTree:
   m_Name: Right Dilation Set
   m_Childs:
   - serializedVersion: 2
+    m_Motion: {fileID: 4636016863682069454}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: weight
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 1658114107708482116}
     m_Threshold: 0.25
     m_Position: {x: 0, y: 0}
@@ -305,7 +313,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -8412083865807091141}
-    m_Threshold: 1.75
+    m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -313,8 +321,8 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: RightDilationSet
   m_BlendParameterY: Blend
-  m_MinThreshold: 0.25
-  m_MaxThreshold: 1.75
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
@@ -357,6 +365,14 @@ BlendTree:
   m_PrefabAsset: {fileID: 0}
   m_Name: Left Dilation Set
   m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 2923186934523088964}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: weight
+    m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -5189067221491076189}
     m_Threshold: 0.25
@@ -558,6 +574,53 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
+--- !u!206 &2923186934523088964
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Left Dilation Small
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
+    m_Threshold: 0
+    m_Position: {x: 0.25, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 7330f30a20be9b0489014bb27934403b, type: 2}
+    m_Threshold: 0.33333334
+    m_Position: {x: 1, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 7330f30a20be9b0489014bb27934403b, type: 2}
+    m_Threshold: 0.6666667
+    m_Position: {x: 0.25, y: 4}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 7330f30a20be9b0489014bb27934403b, type: 2}
+    m_Threshold: 1
+    m_Position: {x: 1, y: 4}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  m_BlendParameter: VAP/Pupil/DilationSmoothedInput
+  m_BlendParameterY: VAP/Pupil/LeftDilationDelayedOutput
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 1
+  m_NormalizedBlendValues: 0
+  m_BlendType: 3
 --- !u!206 &3320070812493529906
 BlendTree:
   m_ObjectHideFlags: 1
@@ -636,6 +699,53 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 4
+--- !u!206 &4636016863682069454
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Right Dilation Small
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
+    m_Threshold: 0.25
+    m_Position: {x: 0.25, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: a0c43b7b66ac47747bd50af9fe7f4303, type: 2}
+    m_Threshold: 0.5
+    m_Position: {x: 1, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: a0c43b7b66ac47747bd50af9fe7f4303, type: 2}
+    m_Threshold: 0.75
+    m_Position: {x: 0.25, y: 4}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: a0c43b7b66ac47747bd50af9fe7f4303, type: 2}
+    m_Threshold: 1
+    m_Position: {x: 1, y: 4}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  m_BlendParameter: VAP/Pupil/DilationSmoothedInput
+  m_BlendParameterY: VAP/Pupil/RightDilationDelayedOutput
+  m_MinThreshold: 0.25
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 1
+  m_NormalizedBlendValues: 0
+  m_BlendType: 3
 --- !u!206 &6506112743058914838
 BlendTree:
   m_ObjectHideFlags: 1
