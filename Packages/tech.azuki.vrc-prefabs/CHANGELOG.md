@@ -1,6 +1,6 @@
 ## Version 2.0.0
 - Improved Blendtree Smoothing to be accurate across framerates (gestures, interactions & facetracking).
-- Updated blinking to transition logarithmically instead of linearly.
+- Updated blinking to transition logarithmically instead of linearly, increased delay for blinking.
 - Added TongueRoll support for Face Tracking.
 - Added complimentary Eye Look blendshape support.
 - Added Pupil Smoothing prefab.
