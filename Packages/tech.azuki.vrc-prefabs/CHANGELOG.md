@@ -1,4 +1,4 @@
-## Version 1.9.0
+## Version 2.0.0
 - Update GogoLoco menus.
 - Reduce size of contact for pupil focus.
 - Removed Feral animations.
