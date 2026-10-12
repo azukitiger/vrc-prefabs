@@ -1,3 +1,7 @@
+## Version 2.0.1
+- Set delay blinking from 2.5 - 4 seconds.
+- Fixed blinking issues.
+
 ## Version 2.0.0
 - Improved Blendtree Smoothing to be accurate across framerates (gestures, interactions & facetracking).
 - Updated blinking to transition logarithmically instead of linearly, increased delay for blinking.
