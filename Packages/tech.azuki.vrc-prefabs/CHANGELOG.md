@@ -1,8 +1,9 @@
 ## Version 2.0.0
-- Improved Smoothing to be accurate across framerates.
-- Added Pupil Smoothing prefab.
-- Added TongueRoll to Face Tracking.
+- Improved Blendtree Smoothing to be accurate across framerates (gestures, interactions & facetracking).
+- Updated blinking to transition logarithmically instead of linearly.
+- Added TongueRoll support for Face Tracking.
 - Added complimentary Eye Look blendshape support.
+- Added Pupil Smoothing prefab.
 - Reduce size of contact for pupil focus.
 - Update GogoLoco menus.
 - Removed Feral animations.
