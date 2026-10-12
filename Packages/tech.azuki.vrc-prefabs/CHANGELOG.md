@@ -1,3 +1,6 @@
+## Version 2.0.2
+- Updated default size of nose boop.
+
 ## Version 2.0.1
 - Set delay blinking from 2.5 - 4 seconds.
 - Fixed blinking issues.
