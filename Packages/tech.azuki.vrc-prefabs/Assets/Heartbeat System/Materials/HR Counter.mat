@@ -3329,6 +3329,7 @@ Material:
     - _UzumoreEnabled: 1
     - _UzumoreMaskChannel: 3
     - _UzumoreMaskUV: 3
+    - _UzumoreObjectScale: 1
     - _VertexAudioLinkEnabled: 0
     - _VertexBarrelAlpha: 0
     - _VertexBarrelHeight: 0

@@ -1,3 +1,6 @@
+## Version 2.0.3
+- Fixed remote smoothing for deprecated FT controller.
+
 ## Version 2.0.2
 - Updated default size of nose boop.
 
