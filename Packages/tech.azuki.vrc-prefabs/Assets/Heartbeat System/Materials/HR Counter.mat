@@ -8,10 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: HR Counter
-  m_Shader: {fileID: 4800000, guid: e9f30272e2d12c945851329f504df73d, type: 3}
+  m_Shader: {fileID: 4800000, guid: f612ffa517fe5f745ba87d104385db4f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - GEOM_TYPE_BRANCH
   - POI_DECAL_1
   - POI_DECAL_2
@@ -22,12 +23,12 @@ Material:
   - _RIMSTYLE_POIYOMI
   - _STOCHASTICMODE_DELIOT_HEITZ
   - _STYLIZEDREFLECTIONMODE_UNITYCHAN
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2450
   stringTagMap:
+    AllLockedGUIDS: 3bf16a5128a0b1347b89c53a187c917a
     OriginalKeywords: GEOM_TYPE_BRANCH POI_DECAL_1 POI_DECAL_2 POI_DECAL_3 PROP_DECALMASK
       _LIGHTINGMODE_FLAT _RIM2STYLE_POIYOMI _RIMSTYLE_POIYOMI _STOCHASTICMODE_DELIOT_HEITZ
       _STYLIZEDREFLECTIONMODE_UNITYCHAN
@@ -50,6 +51,13 @@ Material:
     _UDIMDiscardRow3_1Animated: 2
     _UDIMDiscardRow3_2Animated: 2
     _UDIMDiscardRow3_3Animated: 2
+    _stripped_tex__ClothDFG: 76d65cbce584df7449699fb8406f60ea
+    _stripped_tex__DistortionFlowTexture: 07f0a54a3a4e7754eabc8ced70d7b30c
+    _stripped_tex__DistortionFlowTexture1: 70cd704e7a9550241b8a8b51fffc1a68
+    _stripped_tex__SkinLUT: d13510bb2be49aa40a66a0101efb6a36
+    _stripped_tex__TextGlyphs: bb52cc9d00ce83f49a4c555ae9ceeb45
+    _stripped_tex__ToonRamp: 61bd594533da4fc42bd46ef93ba5a4f6
+    thry_locked_rename_suffix: HRCounter
     thry_rendering_preset__poiyomi_Old_Versions_9_3_Poiyomi_Toon: 1
     thry_rendering_preset_owner: _Mode:0,1,2,3,4,5,6,7,9
   disabledShaderPasses: []
@@ -78,6 +86,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisoColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AnisotropyDirectionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -123,10 +135,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ClearCoatMaps:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ClothDFG:
-        m_Texture: {fileID: 2800000, guid: 76d65cbce584df7449699fb8406f60ea, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ClothMetallicSmoothnessMap:
@@ -207,14 +215,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _DissolveToTexture:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DistortionFlowTexture:
-        m_Texture: {fileID: 2800000, guid: 07f0a54a3a4e7754eabc8ced70d7b30c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DistortionFlowTexture1:
-        m_Texture: {fileID: 2800000, guid: 70cd704e7a9550241b8a8b51fffc1a68, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DistortionMask:
@@ -577,24 +577,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SkinLUT:
-        m_Texture: {fileID: 2800000, guid: d13510bb2be49aa40a66a0101efb6a36, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SkinThicknessMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SmoothnessTex:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TextGlyphs:
-        m_Texture: {fileID: 2800000, guid: bb52cc9d00ce83f49a4c555ae9ceeb45, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ToonRamp:
-        m_Texture: {fileID: 2800000, guid: 61bd594533da4fc42bd46ef93ba5a4f6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TruchetMask:
@@ -794,8 +782,11 @@ Material:
     - _AnisoUseBaseColor: 0
     - _AnisoUseLightColor: 1
     - _Anisotropy: 0
+    - _AnisotropyDirectionEnabled: 0
+    - _AnisotropyDirectionMapUV: 0
     - _AnisotropyMapChannel: 0
     - _AnisotropyMapUV: 0
+    - _AnisotropyMapVertexColor: 0
     - _Ap_Rim2Light_FeatherOff: 0
     - _Ap_Rim2Light_Power: 0.1
     - _Ap_RimLight_FeatherOff: 0
@@ -1053,13 +1044,21 @@ Material:
     - _ClearcoatExposureOcclusion: 0
     - _ClearcoatFresnelStrength: 0.5
     - _ClothLerp: 0
+    - _ClothMaskGlobalMask: 0
+    - _ClothMaskGlobalMaskBlendType: 2
     - _ClothMetallic: 0
+    - _ClothMetallicGlobalMask: 0
+    - _ClothMetallicGlobalMaskBlendType: 2
     - _ClothMetallicSmoothnessMapInvert: 0
     - _ClothMetallicSmoothnessMapUV: 0
     - _ClothPBRInfo: 0
     - _ClothReflectance: 0.5
+    - _ClothReflectanceGlobalMask: 0
+    - _ClothReflectanceGlobalMaskBlendType: 2
     - _ClothShadingWarning: 0
     - _ClothSmoothness: 0.5
+    - _ClothSmoothnessGlobalMask: 0
+    - _ClothSmoothnessGlobalMaskBlendType: 2
     - _ColorGradingToggle: 0
     - _ColorMask: 15
     - _ColorThemeIndex: 0
@@ -2193,7 +2192,9 @@ Material:
     - _LightingAdditiveType: 3
     - _LightingCap: 1
     - _LightingCapEnabled: 1
+    - _LightingCapLuminance: 0
     - _LightingCastedShadows: 0
+    - _LightingCleanCastedShadows: 0
     - _LightingColorMode: 0
     - _LightingDebugVisualize: 0
     - _LightingDetailShadowMapsUV: 0
@@ -3065,7 +3066,7 @@ Material:
     - _Set_RimLightMaskChannel: 1
     - _Set_RimLightMaskUV: 0
     - _ShadeColor_Step: 0
-    - _ShaderOptimizerEnabled: 0
+    - _ShaderOptimizerEnabled: 1
     - _ShaderUIWarning0: -0
     - _ShaderUIWarning1: -0
     - _ShadingEnabled: 0
@@ -3091,7 +3092,14 @@ Material:
     - _ShadowBlur: 0.1
     - _ShadowBorder: 0.5
     - _ShadowBorderMapToggle: 0
+    - _ShadowBorderMaskGlobalMask: 0
+    - _ShadowBorderMaskGlobalMaskBlendType: 2
     - _ShadowBorderMaskLOD: 0
+    - _ShadowBorderMaskMode: 0
+    - _ShadowBorderMaskStrengthA: 0
+    - _ShadowBorderMaskStrengthB: 0
+    - _ShadowBorderMaskStrengthG: 0
+    - _ShadowBorderMaskStrengthR: 1
     - _ShadowBorderMaskUV: 0
     - _ShadowBorderRange: 0
     - _ShadowColorTexAddition: 0
@@ -3107,6 +3115,8 @@ Material:
     - _ShadowReceive: 0
     - _ShadowStrength: 0.905
     - _ShadowStrengthMaskUV: 0
+    - _SkinDiffuseSoftnessEnabled: 0
+    - _SkinScatteringStability: 0
     - _SkinThicknessMapInvert: 0
     - _SkinThicknessMapUV: 0
     - _SkinThicknessPower: 1
@@ -3755,6 +3765,7 @@ Material:
     - s_end_CameraVisibilityVRC: 0
     - s_end_CenterOutDissolve: 0
     - s_end_ClearCoatTPSMaskGroup: 0
+    - s_end_ClothGlobalMask: 0
     - s_end_ColorAdjustColorGrading: 0
     - s_end_ContinuousAnimation: 0
     - s_end_CubeMapColorAdjust: 0
@@ -4062,6 +4073,7 @@ Material:
     - s_start_CameraVisibilityVRC: 1
     - s_start_CenterOutDissolve: 0
     - s_start_ClearCoatTPSMaskGroup: 0
+    - s_start_ClothGlobalMask: 0
     - s_start_ColorAdjustColorGrading: 0
     - s_start_ContinuousAnimation: 0
     - s_start_CubeMapColorAdjust: 0
@@ -4548,6 +4560,7 @@ Material:
     - _Aniso0Tint: {r: 1, g: 1, b: 1, a: 1}
     - _Aniso1Tint: {r: 1, g: 1, b: 1, a: 1}
     - _AnisoColorMapPan: {r: 0, g: 0, b: 0, a: 0}
+    - _AnisotropyDirectionMapPan: {r: 0, g: 0, b: 0, a: 0}
     - _AnisotropyMapPan: {r: 0, g: 0, b: 0, a: 0}
     - _Ap_Rim2LightColor: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}

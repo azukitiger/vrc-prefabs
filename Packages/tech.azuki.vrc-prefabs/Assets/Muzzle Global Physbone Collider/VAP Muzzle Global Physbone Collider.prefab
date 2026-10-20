@@ -53,7 +53,11 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   bonesAsSpheres: 0
+  globalCollision: 2
+  globalCollisionAllowSelf: 0
+  globalCollisionAllowOthers: 1
   globalCollisionFlags: -1
+  _globalCollisionSerializationVersion: 1
 --- !u!114 &1186392561327166874
 MonoBehaviour:
   m_ObjectHideFlags: 0
