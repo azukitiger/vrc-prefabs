@@ -29,11 +29,6 @@ MonoBehaviour:
     saved: 1
     defaultValue: 0
     networkSynced: 1
-  - name: FT/VisemesEnabled
-    valueType: 2
-    saved: 1
-    defaultValue: 0.6
-    networkSynced: 1
   - name: FT/FacialExpressionsDisabled
     valueType: 2
     saved: 1

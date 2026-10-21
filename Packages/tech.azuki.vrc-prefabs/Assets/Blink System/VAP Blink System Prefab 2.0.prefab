@@ -69,14 +69,7 @@ MonoBehaviour:
             objRef: {fileID: 9100000, guid: 86724681e47323a4bba3b3b40065ff79, type: 2}
           type: 5
         menus: []
-        prms:
-        - parameters:
-            version: 1
-            fileID: 0
-            guid: 
-            id: 929235d50b19f404fa81985e2fccc391|Packages/tech.azuki.vrc-prefabs/Assets/Blink
-              System/VAP Blink System Parameters.asset
-            objRef: {fileID: 11400000, guid: 929235d50b19f404fa81985e2fccc391, type: 2}
+        prms: []
         smoothedPrms: []
         globalParams:
         - '*'
