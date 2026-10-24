@@ -143,13 +143,14 @@ namespace VAP.Editor
                 }
                 keys.Add(k);
             }
+            var found = new HashSet<string>();
             foreach (string a in order)
                 foreach (string b in order)
                 {
                     if (a == b)
                         continue;
-                    string corrective = a + b + "Corrective";
-                    if (!shapes.Contains(corrective))
+                    string corrective = CorrectiveNames(a, b).FirstOrDefault(shapes.Contains);
+                    if (corrective == null || !found.Add(corrective))
                         continue;
                     var products = new List<string>();
                     foreach (int ka in keysOf[a])
@@ -158,6 +159,20 @@ namespace VAP.Editor
                     result.Add((corrective, MaxOf(products)));
                 }
             return result;
+        }
+
+        // AB + "Corrective" or "Morph"; a Morph may drop the start B shares with A (TongueDown + TongueLeft = TongueDownLeftMorph).
+        static IEnumerable<string> CorrectiveNames(string a, string b)
+        {
+            yield return a + b + "Corrective";
+            yield return a + b + "Morph";
+            int n = 0;
+            while (n < a.Length && n < b.Length && a[n] == b[n])
+                n++;
+            while (n > 0 && !(n < b.Length && char.IsUpper(b[n])))
+                n--;
+            if (n > 0)
+                yield return a + b.Substring(n) + "Morph";
         }
 
         static string MaxOf(List<string> terms)

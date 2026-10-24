@@ -20,6 +20,11 @@ namespace VAP.Editor
         static readonly GUIContent ParametersHeader = new GUIContent("Parameters");
         static readonly GUIContent MenuHeader = new GUIContent("Menu");
 
+        static GUIContent filesNote;
+        static GUIContent FilesNote => filesNote ??= new GUIContent("Edits here are saved directly to the asset files.",
+            EditorGUIUtility.IconContent("console.infoicon.sml").image,
+            "Changes to the parameters and menus below are written to the referenced assets, so everything using those assets gets them too.");
+
         ParametersSection parametersSection;
         MenuSection menuSection;
         SubMenusSection subMenusSection;
@@ -43,6 +48,8 @@ namespace VAP.Editor
             menuSection ??= new MenuSection(serializedObject, component);
             subMenusSection ??= new SubMenusSection(serializedObject, component);
             bool locked = PrefabUtility.IsPartOfPrefabInstance(component);
+            if (!locked && (component.menuAsset != null || component.parametersAsset != null))
+                EditorGUILayout.LabelField(FilesNote, EditorStyles.miniLabel);
 
             var menuProp = serializedObject.FindProperty(nameof(VAPExpressions.menuAsset));
             var paramsProp = serializedObject.FindProperty(nameof(VAPExpressions.parametersAsset));

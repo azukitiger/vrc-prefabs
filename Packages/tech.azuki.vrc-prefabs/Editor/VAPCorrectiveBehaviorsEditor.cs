@@ -12,8 +12,9 @@ namespace VAP.Editor
     public class VAPCorrectiveBehaviorsEditor : UnityEditor.Editor
     {
         static readonly GUIContent SetLabel = new GUIContent("Blendshapes Set",
-            "At build time, adds an Apply to Blendshape behavior for every blendshape named [A][B]Corrective, where A and B " +
-            "are blendshapes this set uses (e.g. MouthClosedLipPuckerCorrective). Its expression is KeyA * KeyB; when keys " +
+            "At build time, adds an Apply to Blendshape behavior for every blendshape named [A][B]Corrective or [A][B]Morph, where " +
+            "A and B are blendshapes this set uses (e.g. MouthClosedLipPuckerCorrective). A Morph may leave out the start B shares " +
+            "with A (TongueDown + TongueLeft = TongueDownLeftMorph). Its expression is KeyA * KeyB; when keys " +
             "share a blendshape, it is max() of every KeyA * KeyB pair. This set's weight scales them. Blendshapes another " +
             "Apply to Blendshape behavior already drives are skipped.");
         static readonly GUIContent PickContent = new GUIContent("", "Pick a Blendshapes Set from this avatar.");
@@ -102,7 +103,7 @@ namespace VAP.Editor
                 return cache = ("The avatar descriptor has no Face Tracking Meshes.", null, null);
             var found = ParameterBehaviorsBuild.FindCorrectives(names, shapes);
             if (found.Count == 0)
-                return cache = ($"No correctives found for \"{set}\" (blendshapes named like [A][B]Corrective).", null, null);
+                return cache = ($"No correctives found for \"{set}\" (blendshapes named like [A][B]Corrective or [A][B]Morph).", null, null);
             var applied = ParameterBehaviorsBuild.AppliedOnAvatar(descriptor);
             return cache = (null,
                 found.Where(f => !applied.Contains(f.shape)).ToList(),
