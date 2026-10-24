@@ -1,8 +1,3 @@
-// UVBakeWindow.cs
-// Place this file in an Editor folder (e.g. Assets/Editor/ or a package's Editor asmdef).
-// Place bake_uv.py in the SAME folder as this script - the tool finds it automatically.
-//
-// Menu: Tools/VAP/UV Bake Tool
 
 using System;
 using System.Collections.Generic;
@@ -21,19 +16,12 @@ namespace Azuki.Tools
         private const string PrefDeviceMode = "AzukiUVBake_DeviceMode";
         private const string ScriptFileName = "bake_uv.py";
 
-        // 0 = Auto (try GPU, fall back to CPU), 1 = GPU (force, warns if unavailable), 2 = CPU (forced).
-        // AMD/HIP has known bake-corruption bugs (patchy purple/garbled output on some
-        // driver/Blender combos), so this exists mainly to let a user pin CPU when that
-        // happens without touching the script.
         private static readonly string[] DeviceModeLabels = { "Auto", "GPU", "CPU" };
 
         private string blenderExePath = "";
         private UnityEngine.Object fbxAsset;
         private Texture2D textureAsset;
 
-        // Populated by a single combined Blender call per FBX (materials + every
-        // material's UV maps in one FBX import) so switching the Material dropdown
-        // afterward is instant - no per-click Blender relaunch.
         private string[] availableMaterials = Array.Empty<string>();
         private readonly Dictionary<string, string[]> uvMapsByMaterial = new Dictionary<string, string[]>();
         private string lastFetchedFbx = "";
@@ -126,10 +114,6 @@ namespace Azuki.Tools
                     MessageType.Warning);
             }
 
-            // Nothing below the Model field is actionable until one is selected - keep it
-            // hidden entirely instead of showing disabled controls. isBaking is included so
-            // an in-progress bake (and its Cancel button/log) doesn't vanish if the field
-            // gets cleared mid-bake.
             bool showRest = fbxAsset != null || isBaking;
 
             EditorGUILayout.Space(10);
@@ -215,8 +199,6 @@ namespace Azuki.Tools
             string logText;
             lock (logLock) { logText = logBuilder.ToString(); }
 
-            // Label sizes to its actual content (not the viewport) so the scroll view can tell
-            // when content overflows and show a scrollbar.
             float labelWidth = Mathf.Max(position.width - 40f, 50f);
             float labelHeight = Mathf.Max(EditorStyles.textArea.CalcHeight(new GUIContent(logText), labelWidth), 20f);
 
@@ -267,14 +249,6 @@ namespace Azuki.Tools
             return "";
         }
 
-        // A plain ObjectField's built-in browse button can't be given a search filter, and
-        // FBX has no distinct runtime type (imported models are just GameObjects, same as
-        // prefabs and any other format Blender could import), so clicking normally would
-        // still open the generic, unfiltered picker. This claims the field's mouse-down
-        // itself and opens ShowObjectPicker with a glob filter, so only *.fbx assets are
-        // listed. Everything else (drawing, drag-and-drop) still goes through the regular
-        // ObjectField call below - drag-and-drop bypasses the glob filter, which is why
-        // SetFbxAsset below still validates the extension as a safety net.
         private void DrawFbxField()
         {
             Rect fieldRect = EditorGUILayout.GetControlRect();
@@ -303,10 +277,6 @@ namespace Azuki.Tools
             }
         }
 
-        // Drag-and-drop onto the field above bypasses the glob filter (Unity only checks
-        // the GameObject type match for drops), so a plain prefab or a non-FBX model format
-        // (.obj/.blend/.dae) could still land here. bake_uv.py only ever calls
-        // bpy.ops.import_scene.fbx(...), so reject those, keeping whatever was selected before.
         private void SetFbxAsset(UnityEngine.Object candidate)
         {
             if (candidate == null)
@@ -369,8 +339,6 @@ namespace Azuki.Tools
             return Path.Combine(fullDir, ScriptFileName);
         }
 
-        // Auto-triggers the combined fetch when the FBX changes; clears everything if the
-        // FBX becomes invalid/unset.
         private void MaybeAutoFetch()
         {
             string fbxPath = GetFbxPath();
@@ -387,8 +355,6 @@ namespace Azuki.Tools
             }
         }
 
-        // Manual "Refresh" button. Re-fetches everything and restores the previous
-        // material/UV selections if they still exist post-refresh.
         private void RefreshAll()
         {
             string fbxPath = GetFbxPath();
@@ -433,9 +399,6 @@ namespace Azuki.Tools
             destUVIndex = -1;
         }
 
-        // Single Blender launch: imports the FBX once and returns every material plus
-        // every material's UV map names, so no further Blender calls are needed until
-        // the FBX selection changes again (switching Material/UV in the UI is then free).
         private void FetchMaterialsAndUVs(string fbxPath)
         {
             lastFetchedFbx = fbxPath;
@@ -487,9 +450,6 @@ namespace Azuki.Tools
                     else
                     {
                         AppendLogMainThread($"Materials: {string.Join(", ", availableMaterials)}");
-                        // Per-material breakdown so a material with zero UV maps (Blender found
-                        // no uv_layers on the mesh object representing it) is visible here
-                        // instead of just showing up as unexplained disabled UV dropdowns.
                         foreach (string mat in availableMaterials)
                         {
                             var uvs = uvMapsByMaterial[mat];
@@ -507,9 +467,6 @@ namespace Azuki.Tools
                 uvMapsByMaterial.Clear();
             }
 
-            // Default to the first material and a first->last UV bake so a freshly picked
-            // FBX is bake-ready without any clicking - the common case is exactly this
-            // (rebaking from the base UV map to a lightmap/second UV at the far end of the list).
             if (availableMaterials.Length > 0)
             {
                 materialIndex = 0;
@@ -536,8 +493,6 @@ namespace Azuki.Tools
                 return;
             }
 
-            // Toolbar accepts -1 as "nothing selected" (no button drawn pressed), which
-            // matches materialIndex's initial -1 state before anything is picked.
             int newIndex = GUILayout.Toolbar(materialIndex, availableMaterials);
             EditorGUILayout.EndHorizontal();
 
@@ -547,10 +502,6 @@ namespace Azuki.Tools
             }
         }
 
-        // Switches the active material, keeping the From/To UV selections if the new
-        // material happens to have UV maps with the same names (a common case - many FBX
-        // exports reuse names like "UVMap"/"UV0" across materials) instead of always
-        // resetting them. No Blender call needed: the new material's UV list is cached.
         private void SelectMaterial(int newIndex)
         {
             string previousSourceUV = (sourceUVIndex >= 0 && sourceUVIndex < CurrentUVs.Length) ? CurrentUVs[sourceUVIndex] : null;
@@ -563,10 +514,6 @@ namespace Azuki.Tools
             destUVIndex = !string.IsNullOrEmpty(previousDestUV) ? Array.IndexOf(uvs, previousDestUV) : -1;
         }
 
-        // Dropdown of available UV maps for the selected material (from cache). Index
-        // starts at -1 (nothing selected) until FetchMaterialsAndUVs' auto-select or a
-        // manual pick sets it - EditorGUILayout.Popup handles a -1 selectedIndex fine,
-        // just showing nothing highlighted, so no "-- select --" placeholder entry is needed.
         private void DrawUVPopup(string label, ref int index)
         {
             var uvs = CurrentUVs;
@@ -637,8 +584,6 @@ namespace Azuki.Tools
             string macPath = "/Applications/Blender.app/Contents/MacOS/Blender";
             if (File.Exists(macPath)) return macPath;
 #elif UNITY_EDITOR_LINUX
-            // Blender installed through Steam is not normally on PATH. Check the
-            // standard Steam and Flatpak Steam locations before falling back to PATH.
             string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string[] linuxCandidates =
             {
@@ -723,8 +668,6 @@ namespace Azuki.Tools
             AppendLogMainThread($"Output: {outputPath}");
             AppendLogMainThread($"Device mode: {deviceArg}");
 
-            // Captured now (not read again later) so a mid-bake selection change in the UI
-            // can't affect which texture's import settings get copied onto the result.
             Texture2D capturedSourceTexture = textureAsset;
 
             string scriptPath = GetScriptPath();
@@ -741,8 +684,6 @@ namespace Azuki.Tools
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            // Force Python's stdout to be unbuffered so log lines stream in live instead
-            // of arriving in one lump at process exit (the default when stdout is piped).
             psi.EnvironmentVariables["PYTHONUNBUFFERED"] = "1";
 
             bakeStartTime = DateTime.Now;
@@ -758,8 +699,6 @@ namespace Azuki.Tools
 
                 if (code == 0)
                 {
-                    // Process.Exited fires on a thread pool thread - Unity's asset APIs must
-                    // run on the main thread, so defer the import-settings copy via delayCall.
                     EditorApplication.delayCall += () => PostProcessOutputTexture(outputPath, capturedSourceTexture);
                 }
             };
@@ -778,10 +717,6 @@ namespace Azuki.Tools
             }
         }
 
-        // Runs on the main thread after a successful bake. The output PNG was written
-        // directly to disk by Blender, so Unity has never seen it and will import it with
-        // default TextureImporter settings (losing mip streaming, compression, sRGB, etc.
-        // from the source). This copies the source texture's full import settings onto it.
         private void PostProcessOutputTexture(string outputPathAbsolute, Texture2D sourceTexture)
         {
             try
@@ -813,8 +748,6 @@ namespace Azuki.Tools
                     return;
                 }
 
-                // Copies every serialized field (compression, mip maps, streaming mipmaps,
-                // sRGB, wrap/filter mode, per-platform overrides, etc.) from source to output.
                 EditorUtility.CopySerialized(srcImporter, dstImporter);
                 dstImporter.SaveAndReimport();
 

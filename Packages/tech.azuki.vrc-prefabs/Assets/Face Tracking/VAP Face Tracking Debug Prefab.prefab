@@ -1,0 +1,1431 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &926995562228051973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5519969181565201332}
+  - component: {fileID: 1782023305757014155}
+  - component: {fileID: 3162549876047353831}
+  - component: {fileID: 2879988463230978630}
+  - component: {fileID: 850527915469038532}
+  m_Layer: 0
+  m_Name: VAP Face Tracking Debug Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5519969181565201332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926995562228051973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 917397406642010216}
+  - {fileID: 2927285952260634355}
+  - {fileID: 1898002292601634699}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782023305757014155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926995562228051973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  unityVersion: 2022.3.22f1
+  vrcfuryVersion: 1.1434.1-beta.11
+  somethingIsBroken: 0
+  config:
+    features: []
+  content:
+    rid: 5658509530752353196
+  references:
+    version: 2
+    RefIds:
+    - rid: 5658509530752353196
+      type: {class: FullController, ns: VF.Model.Feature, asm: VRCFury}
+      data:
+        version: 4
+        controllers:
+        - controller:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 6d18f75e7802759408e579589f6a10e0|Packages/tech.azuki.vrc-prefabs/Assets/Face
+              Tracking/Debug/VAP Face Tracking Debug Controller.controller
+            objRef: {fileID: 9100000, guid: 6d18f75e7802759408e579589f6a10e0, type: 2}
+          type: 5
+        menus:
+        - menu:
+            version: 1
+            fileID: 0
+            guid: 
+            id: abadfcad2d3e23e4a90a02f8e6a7d2d2|Packages/tech.azuki.vrc-prefabs/Assets/Face
+              Tracking/Debug/VAP Face Tracking Menu Parameters.asset
+            objRef: {fileID: 11400000, guid: abadfcad2d3e23e4a90a02f8e6a7d2d2, type: 2}
+          prefix: Body Controls/Face Tracking/Settings
+        prms:
+        - parameters:
+            version: 1
+            fileID: 0
+            guid: 
+            id: 7e153aa2c5142c845a9476e6b57b554b|Packages/tech.azuki.vrc-prefabs/Assets/Face
+              Tracking/Debug/VAP Face Tracking Debug Parameters.asset
+            objRef: {fileID: 11400000, guid: 7e153aa2c5142c845a9476e6b57b554b, type: 2}
+        smoothedPrms: []
+        globalParams: []
+        allNonsyncedAreGlobal: 0
+        ignoreSaved: 0
+        toggleParam: 
+        rootObjOverride: {fileID: 0}
+        rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
+        rewriteBindings: []
+        allowMissingAssets: 0
+        injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets:
+        - setName: 
+          setWeight: 0
+          faceTrackingBlendshapeNames:
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          faceTrackingBlendshapeMultipliers:
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          visemeBlendshapeNames:
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          - 
+          visemeBlendshapeMultipliers:
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+        faceTrackingParameterBehaviors: []
+        injectSpsDepthParam: 
+        injectSpsVelocityParam: 
+        controller:
+          version: 1
+          fileID: 0
+          guid: 
+          id: 
+          objRef: {fileID: 0}
+        menu:
+          version: 1
+          fileID: 0
+          guid: 
+          id: 
+          objRef: {fileID: 0}
+        parameters:
+          version: 1
+          fileID: 0
+          guid: 
+          id: 
+          objRef: {fileID: 0}
+        submenu: 
+        removePrefixes: []
+        addPrefix: 
+        useSecurityForToggle: 0
+--- !u!114 &3162549876047353831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926995562228051973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e12f7da9ceedc6b4dba178e3415e837c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blendshapesSet:
+    setName: Debug
+    setWeight: 1
+    faceTrackingBlendshapeNames:
+    - EyeLookOutRightDebug
+    - EyeLookInRightDebug
+    - EyeLookUpRightDebug
+    - EyeLookDownRightDebug
+    - EyeLookOutLeftDebug
+    - EyeLookInLeftDebug
+    - EyeLookUpLeftDebug
+    - EyeLookDownLeftDebug
+    - EyeClosedRightDebug
+    - EyeClosedLeftDebug
+    - EyeDilationRightDebug
+    - EyeDilationLeftDebug
+    - EyeConstrictRightDebug
+    - EyeConstrictLeftDebug
+    - EyeSquintRightDebug
+    - EyeSquintLeftDebug
+    - EyeWideRightDebug
+    - EyeWideLeftDebug
+    - BrowPinchRightDebug
+    - BrowPinchLeftDebug
+    - BrowLowererRightDebug
+    - BrowLowererLeftDebug
+    - BrowInnerUpRightDebug
+    - BrowInnerUpLeftDebug
+    - BrowOuterUpRightDebug
+    - BrowOuterUpLeftDebug
+    - NasalDilationRightDebug
+    - NasalDilationLeftDebug
+    - NasalConstrictRightDebug
+    - NasalConstrictLeftDebug
+    - CheekSquintRightDebug
+    - CheekSquintLeftDebug
+    - CheekPuffRightDebug
+    - CheekPuffLeftDebug
+    - CheekSuckRightDebug
+    - CheekSuckLeftDebug
+    - JawOpenDebug
+    - JawRightDebug
+    - JawLeftDebug
+    - JawForwardDebug
+    - JawBackwardDebug
+    - JawClenchDebug
+    - JawMandibleRaiseDebug
+    - MouthClosedDebug
+    - LipSuckUpperRightDebug
+    - LipSuckUpperLeftDebug
+    - LipSuckLowerRightDebug
+    - LipSuckLowerLeftDebug
+    - LipSuckCornerRightDebug
+    - LipSuckCornerLeftDebug
+    - LipFunnelUpperRightDebug
+    - LipFunnelUpperLeftDebug
+    - LipFunnelLowerRightDebug
+    - LipFunnelLowerLeftDebug
+    - LipPuckerUpperRightDebug
+    - LipPuckerUpperLeftDebug
+    - LipPuckerLowerRightDebug
+    - LipPuckerLowerLeftDebug
+    - MouthUpperUpRightDebug
+    - MouthUpperUpLeftDebug
+    - MouthUpperDeepenRightDebug
+    - MouthUpperDeepenLeftDebug
+    - NoseSneerRightDebug
+    - NoseSneerLeftDebug
+    - MouthLowerDownRightDebug
+    - MouthLowerDownLeftDebug
+    - MouthUpperRightDebug
+    - MouthUpperLeftDebug
+    - MouthLowerRightDebug
+    - MouthLowerLeftDebug
+    - MouthCornerPullRightDebug
+    - MouthCornerPullLeftDebug
+    - MouthCornerSlantRightDebug
+    - MouthCornerSlantLeftDebug
+    - MouthFrownRightDebug
+    - MouthFrownLeftDebug
+    - MouthStretchRightDebug
+    - MouthStretchLeftDebug
+    - MouthDimpleRightDebug
+    - MouthDimpleLeftDebug
+    - MouthRaiserUpperDebug
+    - MouthRaiserLowerDebug
+    - MouthPressRightDebug
+    - MouthPressLeftDebug
+    - MouthTightenerRightDebug
+    - MouthTightenerLeftDebug
+    - TongueOutDebug
+    - TongueUpDebug
+    - TongueDownDebug
+    - TongueRightDebug
+    - TongueLeftDebug
+    - TongueRollDebug
+    - TongueBendDownDebug
+    - TongueCurlUpDebug
+    - TongueSquishDebug
+    - TongueFlatDebug
+    - TongueTwistRightDebug
+    - TongueTwistLeftDebug
+    - SoftPalateCloseDebug
+    - ThroatSwallowDebug
+    - NeckFlexRightDebug
+    - NeckFlexLeftDebug
+    faceTrackingBlendshapeMultipliers:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    visemeBlendshapeNames:
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    visemeBlendshapeMultipliers:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+  nameFormat: '*Debug'
+  meshes:
+  - {fileID: 3150195593725753733}
+  setName: 
+  setWeight: -1
+--- !u!114 &2879988463230978630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926995562228051973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08d9ff2b2284b39488f8d296cc47c9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blendshapesSet:
+    setName: FaceTracking
+    setWeight: 1
+    faceTrackingBlendshapeNames:
+    - EyeLookOutRightHook
+    - EyeLookInRightHook
+    - EyeLookUpRightHook
+    - EyeLookDownRightHook
+    - EyeLookOutLeftHook
+    - EyeLookInLeftHook
+    - EyeLookUpLeftHook
+    - EyeLookDownLeftHook
+    - EyeClosedRightHook
+    - EyeClosedLeftHook
+    - EyeDilationRightHook
+    - EyeDilationLeftHook
+    - EyeConstrictRightHook
+    - EyeConstrictLeftHook
+    - EyeSquintRightHook
+    - EyeSquintLeftHook
+    - EyeWideRightHook
+    - EyeWideLeftHook
+    - BrowPinchRightHook
+    - BrowPinchLeftHook
+    - BrowLowererRightHook
+    - BrowLowererLeftHook
+    - BrowInnerUpRightHook
+    - BrowInnerUpLeftHook
+    - BrowOuterUpRightHook
+    - BrowOuterUpLeftHook
+    - NasalDilationRightHook
+    - NasalDilationLeftHook
+    - NasalConstrictRightHook
+    - NasalConstrictLeftHook
+    - CheekSquintRightHook
+    - CheekSquintLeftHook
+    - CheekPuffRightHook
+    - CheekPuffLeftHook
+    - CheekSuckRightHook
+    - CheekSuckLeftHook
+    - JawOpenHook
+    - JawRightHook
+    - JawLeftHook
+    - JawForwardHook
+    - JawBackwardHook
+    - JawClenchHook
+    - JawMandibleRaiseHook
+    - MouthClosedHook
+    - LipSuckUpperRightHook
+    - LipSuckUpperLeftHook
+    - LipSuckLowerRightHook
+    - LipSuckLowerLeftHook
+    - LipSuckCornerRightHook
+    - LipSuckCornerLeftHook
+    - LipFunnelUpperRightHook
+    - LipFunnelUpperLeftHook
+    - LipFunnelLowerRightHook
+    - LipFunnelLowerLeftHook
+    - LipPuckerUpperRightHook
+    - LipPuckerUpperLeftHook
+    - LipPuckerLowerRightHook
+    - LipPuckerLowerLeftHook
+    - MouthUpperUpRightHook
+    - MouthUpperUpLeftHook
+    - MouthUpperDeepenRightHook
+    - MouthUpperDeepenLeftHook
+    - NoseSneerRightHook
+    - NoseSneerLeftHook
+    - MouthLowerDownRightHook
+    - MouthLowerDownLeftHook
+    - MouthUpperRightHook
+    - MouthUpperLeftHook
+    - MouthLowerRightHook
+    - MouthLowerLeftHook
+    - MouthCornerPullRightHook
+    - MouthCornerPullLeftHook
+    - MouthCornerSlantRightHook
+    - MouthCornerSlantLeftHook
+    - MouthFrownRightHook
+    - MouthFrownLeftHook
+    - MouthStretchRightHook
+    - MouthStretchLeftHook
+    - MouthDimpleRightHook
+    - MouthDimpleLeftHook
+    - MouthRaiserUpperHook
+    - MouthRaiserLowerHook
+    - MouthPressRightHook
+    - MouthPressLeftHook
+    - MouthTightenerRightHook
+    - MouthTightenerLeftHook
+    - TongueOutHook
+    - TongueUpHook
+    - TongueDownHook
+    - TongueRightHook
+    - TongueLeftHook
+    - TongueRollHook
+    - TongueBendDownHook
+    - TongueCurlUpHook
+    - TongueSquishHook
+    - TongueFlatHook
+    - TongueTwistRightHook
+    - TongueTwistLeftHook
+    - SoftPalateCloseHook
+    - ThroatSwallowHook
+    - NeckFlexRightHook
+    - NeckFlexLeftHook
+    faceTrackingBlendshapeMultipliers:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    visemeBlendshapeNames:
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    visemeBlendshapeMultipliers:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+  nameFormat: '*Hook'
+  meshes:
+  - {fileID: 3150195593725753733}
+--- !u!114 &850527915469038532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926995562228051973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  unityVersion: 2022.3.22f1
+  vrcfuryVersion: 1.1434.1-beta.11
+  somethingIsBroken: 0
+  config:
+    features: []
+  content:
+    rid: 5658509571197239615
+  references:
+    version: 2
+    RefIds:
+    - rid: 5658509571197239615
+      type: {class: BlendShapeLink, ns: VF.Model.Feature, asm: VRCFury}
+      data:
+        version: 1
+        objs: []
+        linkSkins:
+        - renderer: {fileID: 3150195593725753733}
+        baseObj: Body
+        includeAll: 1
+        exactMatch: 0
+        excludes: []
+        includes: []
+--- !u!1 &6010132898909706325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 917397406642010216}
+  m_Layer: 0
+  m_Name: Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &917397406642010216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6010132898909706325}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7363656464176760444}
+  m_Father: {fileID: 5519969181565201332}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6466363132929973544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1898002292601634699}
+  - component: {fileID: 4751341135824052957}
+  - component: {fileID: 9039675540993605824}
+  m_Layer: 0
+  m_Name: World Constraint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1898002292601634699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6466363132929973544}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5519969181565201332}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4751341135824052957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6466363132929973544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1116338486, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActive: 1
+  GlobalWeight: 1
+  TargetTransform: {fileID: 917397406642010216}
+  SmoothingFactor: 0
+  SolveInLocalSpace: 0
+  FreezeToWorld: 0
+  RebakeOffsetsWhenUnfrozen: 0
+  Locked: 1
+  Sources:
+    source0:
+      SourceTransform: {fileID: 2927285952260634355}
+      Weight: 1
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source1:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source2:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source3:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source4:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source5:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source6:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source7:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source8:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source9:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source10:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source11:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source12:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source13:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source14:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source15:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    totalLength: 1
+    overflowList: []
+  cachedExecutionGroupIndex: 0
+  latestValidExecutionGroupIndex: 0
+  PositionAtRest: {x: 0, y: 0, z: 0}
+  PositionOffset: {x: 0, y: 0, z: 0}
+  AffectsPositionX: 1
+  AffectsPositionY: 1
+  AffectsPositionZ: 1
+--- !u!114 &9039675540993605824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6466363132929973544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1788371120, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsActive: 1
+  GlobalWeight: 1
+  TargetTransform: {fileID: 917397406642010216}
+  SmoothingFactor: 0
+  SolveInLocalSpace: 0
+  FreezeToWorld: 0
+  RebakeOffsetsWhenUnfrozen: 0
+  Locked: 1
+  Sources:
+    source0:
+      SourceTransform: {fileID: 2927285952260634355}
+      Weight: 1
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source1:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source2:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source3:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source4:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source5:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source6:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source7:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source8:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source9:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source10:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source11:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source12:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source13:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source14:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    source15:
+      SourceTransform: {fileID: 0}
+      Weight: 0
+      ParentPositionOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
+    totalLength: 1
+    overflowList: []
+  cachedExecutionGroupIndex: 1
+  latestValidExecutionGroupIndex: 1
+  RotationAtRest: {x: -0, y: 0, z: 0}
+  RotationOffset: {x: -0, y: 0, z: 0}
+  AffectsRotationX: 0
+  AffectsRotationY: 1
+  AffectsRotationZ: 0
+--- !u!1 &8506432165468655591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2927285952260634355}
+  - component: {fileID: 9022445678077188796}
+  m_Layer: 0
+  m_Name: Head Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2927285952260634355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506432165468655591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5519969181565201332}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9022445678077188796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506432165468655591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  unityVersion: 2022.3.22f1
+  vrcfuryVersion: 1.1434.1-beta.11
+  somethingIsBroken: 0
+  config:
+    features: []
+  content:
+    rid: 5658509530752353195
+  references:
+    version: 2
+    RefIds:
+    - rid: 5658509530752353195
+      type: {class: ArmatureLink, ns: VF.Model.Feature, asm: VRCFury}
+      data:
+        version: 7
+        propBone: {fileID: 8506432165468655591}
+        linkTo:
+        - useBone: 1
+          bone: 10
+          useObj: 0
+          obj: {fileID: 0}
+          offset: 
+        removeBoneSuffix: 
+        removeParentConstraints: 1
+        forceMergedName: 
+        forceOneWorldScale: 0
+        recursive: 0
+        alignPosition: 1
+        alignRotation: 0
+        alignScale: 0
+        autoScaleFactor: 1
+        scalingFactorPowersOf10Only: 1
+        skinRewriteScalingFactor: 1
+        useOptimizedUpload: 0
+        useBoneMerging: 0
+        keepBoneOffsets: 0
+        physbonesOnAvatarBones: 0
+        boneOnAvatar: 0
+        bonePathOnAvatar: 
+        fallbackBones: 
+        keepBoneOffsets2: 0
+        linkMode: 4
+--- !u!1001 &7042028890931241367
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 917397406642010216}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.00000005338508
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.00000005338508
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.98
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2aeb951a6b4021d46bebeab174e9ccd8, type: 2}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: -0.1239481
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: 0.2752
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 0.6910892
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 0.1239481
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.2752
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2aeb951a6b4021d46bebeab174e9ccd8, type: 2}
+    - target: {fileID: 919132149155446097, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_Name
+      value: FaceTrackingDebugPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b272f29e880a59e48bbe35e5974db6a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b272f29e880a59e48bbe35e5974db6a4, type: 3}
+--- !u!137 &3150195593725753733 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: b272f29e880a59e48bbe35e5974db6a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7042028890931241367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7363656464176760444 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b272f29e880a59e48bbe35e5974db6a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7042028890931241367}
+  m_PrefabAsset: {fileID: 0}

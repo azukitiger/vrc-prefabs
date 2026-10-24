@@ -1,3 +1,6 @@
+## Version 3.0.0
+- VRChat Face Tracking implementation!
+
 ## Version 2.0.4
 - Improved sound quality of audio files.
 

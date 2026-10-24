@@ -1,0 +1,17 @@
+{
+    "name": "VAP.Runtime",
+    "rootNamespace": "VAP",
+    "references": [
+        "VRC.SDKBase",
+        "VRC.SDK3A"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

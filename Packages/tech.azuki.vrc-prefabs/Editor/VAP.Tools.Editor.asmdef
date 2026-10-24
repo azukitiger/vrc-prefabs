@@ -1,7 +1,15 @@
 {
     "name": "VAP.Tools.Editor",
     "rootNamespace": "VAP.Editor",
-    "references": [],
+    "references": [
+        "VAP.Runtime",
+        "VRC.SDKBase",
+        "VRC.SDK3A",
+        "VRC.SDKBase.Editor",
+        "VRC.SDKBase.Editor.BuildPipeline",
+        "VRC.SDK3A.Editor",
+        "nadena.dev.ndmf"
+    ],
     "includePlatforms": [
         "Editor"
     ],
@@ -11,6 +19,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "nadena.dev.ndmf",
+            "expression": "1.0.0",
+            "define": "VAP_NDMF"
+        }
+    ],
     "noEngineReferences": false
 }

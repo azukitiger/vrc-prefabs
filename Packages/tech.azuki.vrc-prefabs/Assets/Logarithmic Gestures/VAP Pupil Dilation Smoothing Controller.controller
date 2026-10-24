@@ -88,7 +88,7 @@ BlendTree:
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 0.975
+    m_Threshold: 0.9
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -104,7 +104,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: VAP/Pupil/LeftEyeClosedInput
   m_BlendParameterY: Blend
-  m_MinThreshold: 0.975
+  m_MinThreshold: 0.9
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
@@ -145,7 +145,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Pupil/LeftDilationDelayedPass
+    m_DirectBlendParameter: Proxy/Pupil/LeftDilationDelayedPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 64db52510c238ef459fe61d5f427f593, type: 2}
@@ -153,7 +153,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Pupil/LeftDilationDelayedOutput
+    m_DirectBlendParameter: Proxy/Pupil/LeftDilationDelayed
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: a8d3627fcf200a34ca74bc58c08e78e3, type: 2}
@@ -161,7 +161,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Pupil/RightDilationDelayedPass
+    m_DirectBlendParameter: Proxy/Pupil/RightDilationDelayedPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 9890009770024a1459991da5abc2ad70, type: 2}
@@ -169,7 +169,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Pupil/RightDilationDelayedOutput
+    m_DirectBlendParameter: Proxy/Pupil/RightDilationDelayed
     m_Mirror: 0
   m_BlendParameter: VAP/Smooth/Touch
   m_BlendParameterY: Blend
@@ -188,7 +188,7 @@ BlendTree:
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 7a4b546834f8c29429d2aea7414c6d5a, type: 2}
-    m_Threshold: 0.975
+    m_Threshold: 0.9
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -204,7 +204,7 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: VAP/Pupil/RightEyeClosedInput
   m_BlendParameterY: Blend
-  m_MinThreshold: 0.975
+  m_MinThreshold: 0.9
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
@@ -250,7 +250,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   m_BlendParameter: VAP/Pupil/DilationSmoothedInput
-  m_BlendParameterY: VAP/Pupil/LeftDilationDelayedOutput
+  m_BlendParameterY: Proxy/Pupil/LeftDilationDelayed
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -367,30 +367,6 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: VAP/Pupil/LeftDilationDelayedPass
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: VAP/Pupil/RightDilationDelayedPass
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: VAP/Pupil/LeftDilationDelayedOutput
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: VAP/Pupil/RightDilationDelayedOutput
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
   - m_Name: VAP/Pupil/LeftDilation
     m_Type: 1
     m_DefaultFloat: 0
@@ -416,6 +392,30 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: VAP/Pupil/LeftEyeClosedInput
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Proxy/Pupil/LeftDilationDelayedPass
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Proxy/Pupil/RightDilationDelayedPass
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Proxy/Pupil/LeftDilationDelayed
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Proxy/Pupil/RightDilationDelayed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -475,7 +475,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   m_BlendParameter: VAP/Pupil/DilationSmoothedInput
-  m_BlendParameterY: VAP/Pupil/RightDilationDelayedOutput
+  m_BlendParameterY: Proxy/Pupil/RightDilationDelayed
   m_MinThreshold: 0.25
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -553,7 +553,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   m_BlendParameter: VAP/Pupil/DilationSmoothedInput
-  m_BlendParameterY: VAP/Pupil/LeftDilationDelayedOutput
+  m_BlendParameterY: Proxy/Pupil/LeftDilationDelayed
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -620,7 +620,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Pupil/LeftDilationDelayedPass
+    m_DirectBlendParameter: Proxy/Pupil/LeftDilationDelayedPass
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 9890009770024a1459991da5abc2ad70, type: 2}
@@ -628,7 +628,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: VAP/Pupil/RightDilationDelayedPass
+    m_DirectBlendParameter: Proxy/Pupil/RightDilationDelayedPass
     m_Mirror: 0
   m_BlendParameter: VAP/Smooth/Touch
   m_BlendParameterY: Blend
@@ -678,7 +678,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   m_BlendParameter: VAP/Pupil/DilationSmoothedInput
-  m_BlendParameterY: VAP/Pupil/RightDilationDelayedOutput
+  m_BlendParameterY: Proxy/Pupil/RightDilationDelayed
   m_MinThreshold: 0.25
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1

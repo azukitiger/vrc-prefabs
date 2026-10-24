@@ -27,39 +27,40 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 <details>
 <summary><h2>Blink System Prefab</h2></summary>
 
-Adds **custom blinking** with the ability to **override the blink state** or **disable blinking entirely**.
+Adds a **smooth blink animation** that follows the eyelid values from VRChat's face tracking, with an occasional **double blink**, with the ability to **override the blink state** or **disable blinking entirely**.
+
+### Features
+- A blink plays whenever both eyelids close past halfway (`EyeLidLeft` and `EyeLidRight` below `0.5`), so it follows VRChat's eyelid data.
+- Each blink has a **25% chance** to be followed by a second blink.
+- Includes **Face Tracking Parameter Behaviors** that output `EyeLidLeft` and `EyeLidRight`, so no setup is needed on the avatar descriptor.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Use the animator parameters `VAP/Blink/Left` and `VAP/Blink/Right` to drive the blink blendshapes.
+2. Use the animator parameters `VAP/BlinkLeft` and `VAP/BlinkRight` to drive the blink blendshapes.
 3. Optionally, create an expression parameter and toggle for `BlinkActive` to disable blinking.
-4. Optionally, use the animator parameters `VAP/Override/Blink/Left` and `VAP/Override/Blink/Right` for interactions such as eye pokes.
-
-### Included Expression Parameters
-
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| Blink | Bool | Bool | ✔ | Synchronizes the blink state |
+4. Optionally, use the animator parameters `VAP/BlinkLeftOverride` and `VAP/BlinkRightOverride` for interactions such as eye pokes.
 
 ### Optional Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| BlinkActive | Bool | Bool | ✖ | Enables or disables the blinking feature |
+| BlinkActive | Bool | Bool | ✔ | Enables or disables the blinking feature. On by default |
 
 ### Output Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/Blink/Left | Float | Output value used to drive the **left eye blink** blendshape |
-| VAP/Blink/Right | Float | Output value used to drive the **right eye blink** blendshape |
+| VAP/BlinkLeft | Float | Output value used to drive the **left eye blink** blendshape. `1` is closed |
+| VAP/BlinkRight | Float | Output value used to drive the **right eye blink** blendshape. `1` is closed |
+| EyeLidLeft | Float | Left eyelid from face tracking: `(1 - EyeClosedLeft) * 0.75 + EyeWideLeft * 0.25`. `0` is closed, `0.75` is open and `1` is wide |
+| EyeLidRight | Float | Right eyelid from face tracking: `(1 - EyeClosedRight) * 0.75 + EyeWideRight * 0.25`. `0` is closed, `0.75` is open and `1` is wide |
 
 ### Input Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/Override/Blink/Left | Float | Override value applied to `VAP/Blink/Left` when not blinking |
-| VAP/Override/Blink/Right | Float | Override value applied to `VAP/Blink/Right` when not blinking |
+| VAP/BlinkLeftOverride | Float | Override value applied to `VAP/BlinkLeft` when not blinking |
+| VAP/BlinkRightOverride | Float | Override value applied to `VAP/BlinkRight` when not blinking |
 
 </details>
 
@@ -147,28 +148,6 @@ Adds **blend tree–driven gesture detection** with smoothing and optional menu-
 | VAP/GestureRight/Rock&Roll | Float | Smoothed output value when the right gesture is **Rock & Roll** |
 | VAP/GestureRight/Gun | Float | Smoothed output value when the right gesture is **Gun** |
 | VAP/GestureRight/ThumbsUp | Float | Smoothed output value when the right gesture is **Thumbs Up** |
-
-</details>
-
----
-
-<details>
-<summary><h2>Viseme Tongue Movement Prefab</h2></summary>
-
-> Requires the **Frame Time Prefab**.
-
-Adds **blend tree–driven tongue viseme movement**, separated from the standard viseme blendshapes so they can be disabled independently.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Use the animator parameters `VAP/Viseme/TongueForward` and `VAP/Viseme/TongueUp` to drive the tongue viseme blendshapes.
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/Viseme/TongueForward | Float | Smoothed output value used to drive the **Tongue Forward** blendshape |
-| VAP/Viseme/TongueUp | Float | Smoothed output value used to drive the **Tongue Up** blendshape |
 
 </details>
 
@@ -365,183 +344,33 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 ---
 
 <details>
-<summary><h2>VRCFT</h2></summary>
+<summary><h2>Face Tracking Prefab</h2></summary>
 
-Adds face tracking to the avatar using the **Unified Expression** blendshapes. Based on: https://github.com/Adjerry91/VRCFaceTracking-Templates
+> Requires the **Frame Time Prefab**. Works with the **Blink System Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
+
+VRChat now drives the **Unified Expressions** blendshapes and smooths them through the avatar descriptor's **Blendshapes Sets**, so this prefab no longer animates those blendshapes or applies smoothing. It handles what VRChat doesn't: the menu toggles, emulation, combined expression values, mouth corrections and the eye tracking sensitivity setting.
 
 ### Features
-- Uses `166 synced bits`.
-- Optimized blend tree designed to minimize animator parameter usage.
+- Uses `13 synced bits`.
+- **Menu** under `Body Controls/Face Tracking` to toggle eye tracking, lip tracking, dilation tracking and **Disable Gestures**, with a **Settings** submenu for **Eye Sensitivity** and **Brow & Squint Emulation**.
+- **Brow & Squint Emulation** for headsets that don't track brows or squint: brows follow nose sneer, the lower lip raiser and smile/frown, and squint follows smile and eyelid.
+- **Eyelids**: with eye tracking on, `VAP/FT/EyeLidLeft` and `VAP/FT/EyeLidRight` follow the tracked eyelids. With it off, they follow the **Blink System Prefab**.
+- **Pupil dilation**: uses tracked dilation when **Dilation Tracking** is on. Otherwise the pupils are emulated from expressions (smile dilates, anger constricts) and from the **Pupil Focus System Prefab** if it is installed.
+- **Eye Sensitivity** (radial, default `0.6`): while eye tracking is on, eye look can be scaled from **1×** to **2×**. Used by the **Eye Rotation Prefab**.
+- **Mouth corrections** applied to your `FaceTracking` Blendshapes Set.
+- **Corrective blendshapes are triggered automatically**: any blendshape named after two blendshapes of your `FaceTracking` set followed by `Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`) gets an **Apply to Blendshape** behavior at build time, with the expression `KeyA * KeyB`. When several tracking keys use the same blendshape, the strongest pair wins (`max(LipPuckerUpperLeft * MouthClosed, ...)`). Add the **Face Tracking Corrective Behaviors** component and pick the set: it lists them live, and any can be unchecked.
+- Includes **Face Tracking Parameter Behaviors** for every input parameter, so no setup is needed for them on the avatar descriptor.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations to values typically used for MMD rigs.  
-Face tracking multiplies eye rotation by **1.4×**, so using MMD-style limits ensures the final eye rotation matches what MMD worlds expect.
-3. Optionally, the animator parameters `VAP/FT/*` can be used to animate additional blendshapes or bones (ex. ears) from a separate FX controller.
-
-### Blendshape Notes
-- Lower Lip bite is shaped by `LipSuckLower` & `MouthUpperUp`.
-- Upper Lip bite is shaped by `JawForward`, `LipSuckUpper` & `MouthLowerDown`.
-
-### Blendshapes
-
-#### Eye — eyelid
-| Blendshape                      | Required | Description                                                  |
-|-----------------------------------|:--------:|---------------------------------------------------------------|
-| EyeClosedLeft                      | ✔        | Closes the left eyelid                                        |
-| EyeClosedRight                     | ✔        | Closes the right eyelid                                       |
-| EyeWideLeft                        | ✔        | Left eyelid widens beyond relaxed                              |
-| EyeWideRight                       | ✔        | Right eyelid widens beyond relaxed                             |
-| EyeSquintLeft                      | ✔        | Squeezes the left eye socket muscles                           |
-| EyeSquintRight                     | ✔        | Squeezes the right eye socket muscles                          |
-| EyeAngryLeft                       | ✖        | Narrows and angles the left eye into an angry expression       |
-| EyeAngryRight                      | ✖        | Narrows and angles the right eye into an angry expression      |
-| EyeSadLeft                         | ✖        | Droops the left eye into a sad expression                      |
-| EyeSadRight                        | ✖        | Droops the right eye into a sad expression                     |
-| EyeClosedSquintCorrectiveLeft      | ✔        | Corrective for left eye closed + squinting simultaneously      |
-| EyeClosedSquintCorrectiveRight     | ✔        | Corrective for right eye closed + squinting simultaneously     |
-
-#### Eye — gaze direction
-| Blendshape         | Required | Description             | Limits |
-|---------------------|:--------:|----------------------------|------------------------------------------|
-| EyeLookUpLeft       | ✔        | Left eye looks up          | Limited by `EyeSquintLeft`, `EyeClosedLeft` and `EyeWideLeft` |
-| EyeLookUpRight      | ✔        | Right eye looks up         | Limited by `EyeSquintRight`, `EyeClosedRight` and `EyeWideRight` |
-| EyeLookDownLeft     | ✔        | Left eye looks down        | Limited by `EyeSquintLeft`, `EyeClosedLeft` and `EyeWideLeft` |
-| EyeLookDownRight    | ✔        | Right eye looks down       | Limited by `EyeSquintRight`, `EyeClosedRight` and `EyeWideRight` |
-| EyeLookInLeft       | ✔        | Left eye looks in          |  |
-| EyeLookInRight      | ✔        | Right eye looks in         |  |
-| EyeLookOutLeft      | ✔        | Left eye looks out         |  |
-| EyeLookOutRight     | ✔        | Right eye looks out        |  |
-| EyeLookUpLeftRotate     | ✖        | Complementary eye rotation for `EyeLookUpLeft`     |  |
-| EyeLookUpRightRotate    | ✖        | Complementary eye rotation for `EyeLookUpRight`    |  |
-| EyeLookDownLeftRotate   | ✖        | Complementary eye rotation for `EyeLookDownLeft`   |  |
-| EyeLookDownRightRotate  | ✖        | Complementary eye rotation for `EyeLookDownRight`  |  |
-| EyeLookInLeftRotate     | ✖        | Complementary eye rotation for `EyeLookInLeft`     |  |
-| EyeLookInRightRotate    | ✖        | Complementary eye rotation for `EyeLookInRight`    |  |
-| EyeLookOutLeftRotate    | ✖        | Complementary eye rotation for `EyeLookOutLeft`    |  |
-| EyeLookOutRightRotate   | ✖        | Complementary eye rotation for `EyeLookOutRight`   |  |
-
-Vertical gaze (`EyeLookUp*` / `EyeLookDown*`) is automatically limited by the eyelid state — squinting, blinking, or widening an eye reduces how far it can visually look up or down. `VAP/Override/FT/EyeLookVerticalLeft` and `VAP/Override/FT/EyeLookVerticalRight` (see the Input Animator Parameters table below) can additionally be used to fade the intensity of vertical eye look per-eye, from `0` (normal, face tracked) to `1` (no vertical eye look).
-
-The `*Rotate` blendshapes (ex. `EyeLookUpLeftRotate`) are complementary eye rotation shapes driven alongside their corresponding `EyeLook*` blendshape. Unlike the base `EyeLook*` blendshapes, they are not limited by the eyelid state and are not affected by `VAP/Override/FT/EyeLidLeft` / `VAP/Override/FT/EyeLidRight`.
-
-#### Eye — pupil dilation
-| Blendshape     | Required | Description                       |
-|-----------------|:--------:|---------------------------------------|
-| EyeConstrict    | ✔        | Constricts (shrinks) both pupils      |
-| EyeDilation     | ✔        | Dilates (enlarges) both pupils        |
-
-#### Brow
-| Blendshape                             | Required | Description                                                        |
-|-------------------------------------------|:--------:|----------------------------------------------------------------------|
-| BrowDownLeft                               | ✔        | Pulls the left eyebrow down and in                                   |
-| BrowDownRight                              | ✔        | Pulls the right eyebrow down and in                                  |
-| BrowInnerUpLeft                            | ✔        | Inner left eyebrow pulls up                                          |
-| BrowInnerUpRight                           | ✔        | Inner right eyebrow pulls up                                         |
-| BrowOuterUpLeft                            | ✔        | Inner left eyebrow pulls up                                          |
-| BrowOuterUpRight                           | ✔        | Inner right eyebrow pulls up                                         |
-| BrowSadLeft                                | ✖        | Raises the inner corner of the left eyebrow into a sad expression    |
-| BrowSadRight                               | ✖        | Raises the inner corner of the right eyebrow into a sad expression   |
-| BrowDownEyeClosedCorrectiveLeft            | ✖        | Corrective alongside a lowered left eyebrow                          |
-| BrowDownEyeClosedCorrectiveRight           | ✖        | Corrective alongside a lowered right eyebrow                         |
-| BrowInnerUpEyeClosedCorrectiveLeft         | ✖        | Corrective alongside a raised left eyebrow                           |
-| BrowInnerEyeClosedUpCorrectiveRight        | ✖        | Corrective alongside a raised right eyebrow |
-| BrowOuterUpEyeClosedCorrectiveLeft         | ✖        | Corrective alongside a raised left eyebrow                           |
-| BrowOuterUpEyeClosedCorrectiveRight        | ✖        | Corrective alongside a raised right eyebrow                          |
-
-#### Cheek
-| Blendshape         | Required | Description                  |
-|---------------------|:--------:|----------------------------------|
-| CheekPuffLeft       | ✔        | Puffs the left side cheek        |
-| CheekPuffRight      | ✔        | Puffs the right side cheek       |
-| CheekSquintLeft     | ✔        | Raises the left side cheek       |
-| CheekSquintRight    | ✔        | Raises the right side cheek      |
-| CheekSuckLeft       | ✔        | Sucks in the left side cheek     |
-| CheekSuckRight      | ✔        | Sucks in the right side cheek    |
-
-#### Jaw
-| Blendshape  | Required | Description               |
-|--------------|:--------:|------------------------------|
-| JawOpen      | ✔        | Opens jawbone                 |
-| JawForward   | ✔        | Pushes jawbone forwards       |
-| JawLeft      | ✔        | Pushes jawbone left           |
-| JawRight     | ✔        | Pushes jawbone right          |
-
-#### Lip — funnel / pucker / suck
-| Blendshape                          | Required | Description                                          |
-|----------------------------------------|:--------:|--------------------------------------------------------|
-| LipFunnel                              | ✔        | Funnels in the upper and lower lips                     |
-| LipPucker                              | ✔        | Lips push outward                                       |
-| LipSuckUpper                           | ✔        | Tucks in the upper lips                                 |
-| LipSuckLower                           | ✔        | Tucks in the lower lips                                 |
-| LipFunnelPuckerCorrective              | ✖        | Blended in when funnel and pucker are active together   |
-
-#### Mouth — position
-| Blendshape   | Required | Description                                |
-|---------------|:--------:|-----------------------------------------------|
-| MouthClosed   | ✔        | Closes mouth (in relation to `JawOpen`)        |
-| MouthLeft     | ✔        | Moves mouth left                               |
-| MouthRight    | ✔        | Moves mouth right                              |
-| MouthXJawXCorrectiveLeft      | ✖        | Blends leftward jaw movement with leftward mouth movement       |
-| MouthXJawXCorrectiveRight     | ✖        | Blends rightward jaw movement with rightward mouth movement     |
-
-#### Mouth — smile / frown
-| Blendshape                       | Required | Description                                          |
-|-------------------------------------|:--------:|---------------------------------------------------------|
-| MouthSmileLeft                      | ✔        | Left side mouth expresses a smile                        |
-| MouthSmileRight                     | ✔        | Right side mouth expresses a smile                       |
-| MouthFrownLeft                      | ✔        | Left corner lip pulls down                                |
-| MouthFrownRight                     | ✔        | Right corner lip pulls down                               |
-| MouthSmileMouthXCorrectiveLeft      | ✖        | Blends a left smile with leftward mouth movement          |
-| MouthSmileMouthXCorrectiveRight     | ✖        | Blends a right smile with rightward mouth movement        |
-| MouthFrownMouthXCorrectiveLeft      | ✖        | Blends a left frown with leftward mouth movement          |
-| MouthFrownMouthXCorrectiveRight     | ✖        | Blends a right frown with rightward mouth movement        |
-
-#### Mouth — dimple / stretch
-| Blendshape         | Required | Description                            |
-|---------------------|:--------:|---------------------------------------------|
-| MouthDimpleLeft     | ✔        | Left lip corner is pulled backwards           |
-| MouthDimpleRight    | ✔        | Right lip corner is pushed backwards          |
-| MouthStretchLeft    | ✔        | Left corner lip pulls out and down            |
-| MouthStretchRight   | ✔        | Right corner lip pulls out and down           |
-
-#### Mouth — press / tighten
-| Blendshape            | Required | Description                                     |
-|-------------------------|:--------:|------------------------------------------------------|
-| MouthPress              | ✔        | Mouth presses together                                |                                      |
-| MouthTightenerLeft      | ✔        | Left side lips squeeze together horizontally          |
-| MouthTightenerRight     | ✔        | Right side lips squeeze together horizontally         |
-
-#### Mouth — upper / lower raise
-| Blendshape        | Required | Description                          | Limits |
-|---------------------|:--------:|------------------------------------------|------------------------------------------|
-| MouthUpperUpLeft    | ✔        | Upper left part of the lip pulls up       | Limited by `MouthRaiserLower` |
-| MouthUpperUpRight   | ✔        | Upper right part of the lip pulls up      | Limited by `MouthRaiserLower` |
-| MouthLowerDown      | ✔        | Lowers the lower lips                     | Limited by `MouthRaiserLower` |
-| MouthRaiserUpper    | ✔        | Raises the upper lip area                 |  |
-| MouthRaiserLower    | ✔        | Raises the lower lip/chin area            |  |
-
-#### Nose
-| Blendshape     | Required | Description               |
-|-----------------|:--------:|-------------------------------|
-| NoseSneer       | ✔        | Entire face sneers            |
-
-#### Tongue
-| Blendshape           | Required | Description                                                |
-|------------------------|:--------:|----------------------------------------------------------------|
-| TongueOut               | ✔        | Tongue visibly sticks out of the mouth                          |
-| TongueOutJawOpenCorrective               | ✖        | Active with TongueOut when JawOpen=0; blends out to 0 as JawOpen→1.                         |
-| TongueUp                | ✔        | Tongue points up                                                 |
-| TongueDown              | ✔        | Tongue points down                                               |
-| TongueLeft              | ✔        | Tongue points left                                               |
-| TongueRight             | ✔        | Tongue points right                                              |
-| TongueOutStep1          | ✖        | First stage of sticking the tongue out (partial)                 |
-| TongueOutStep2          | ✖        | Second stage of sticking the tongue out (full)                   |
-| TongueUpLeftMorph       | ✔        | Diagonal corrective: upward + leftward tongue movement           |
-| TongueUpRightMorph      | ✔        | Diagonal corrective: upward + rightward tongue movement          |
-| TongueDownLeftMorph     | ✔        | Diagonal corrective: downward + leftward tongue movement         |
-| TongueDownRightMorph    | ✔        | Diagonal corrective: downward + rightward tongue movement        |
-| TongueRoll              | ✔        | Tongue curls upward along its sides                              |
+2. Name the face blendshapes on your avatar exactly as VRChat's [tracking keys](https://vrc-beta-docs.netlify.app/avatars/face-tracking/osc) (ex. `JawOpen`, `EyeClosedLeft`).
+3. On the **VRC Avatar Descriptor**, set:
+   - **LipSync** > **Mode**: `Viseme Blend Shape Face Tracking`
+   - **Eye Look**: enabled, with **Eye Gaze Mode** set to `Face Tracking` and **Eyelid Type** set to `None`
+   - **Face Tracking**: enabled, with **Use All Tracking Keys** on, your face mesh in **Face Tracking Mesh**, **Viseme Dampen** set to `Dampen Tracking` and **Dampen Amount** set to `0.6`
+4. Create a **Blendshapes Set** on the **VRC Avatar Descriptor** (under **Face Tracking**) named exactly `FaceTracking`, and map your face blendshapes in it. The prefab doesn't include one, and its Parameter Behaviors only work on a set with this name.
+5. Optionally, add corrective blendshapes to your face mesh named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosedLipPuckerCorrective`). They're picked up automatically by the **Face Tracking Corrective Behaviors** component.
+6. Optionally, the animator parameters `VAP/FT/*` can be used to animate additional blendshapes or bones (ex. ears) from a separate FX controller.
 
 ### Included Expression Parameters
 
@@ -549,82 +378,98 @@ The `*Rotate` blendshapes (ex. `EyeLookUpLeftRotate`) are complementary eye rota
 |-|-|-|-|-|
 | EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
 | LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
+| FT/EyeDilationEnabled | Float | Boolean | ✔ | Toggle for using tracked pupil dilation instead of emulated dilation |
 | FT/FacialExpressionsDisabled | Float | Boolean | ✔ | Toggle for disabling gesture based expressions |
-| FT/EyeDilationEnable | Float | Boolean | ✔ | Toggle for enabling eye dilation |
-| FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for enabling face tracking emulation. Uses mouth parameters to drive eye blendshapes for headsets that do not support certain eye tracking movements |
-| FT/VisemesEnable | Float | Boolean | ✔ | Toggle for enabling visemes |
-| FT/EyeSync | Float | Boolean | ✔ | Toggle for synchronizing both eyes when tracking drift occurs |
-| FT/LocalSmoothing | Float | Float | ✖ | Slider that controls the amount of local smoothing applied to face tracking values |
-| FT/RemoteModeActive | Boolean | Boolean | ✖ | Toggle for previewing your face tracking as it appears to other players over the network |
+| FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for brow & squint emulation. On by default |
+| FT/EyeSensitivity | Float | Float | ✔ | Eye look sensitivity while eye tracking is on |
+| FT/State/TrackingActive | Float | Boolean | ✖ | Remembers whether tracking was on, so gestures are only switched when tracking is turned on or off |
 
-### Optional Expression Parameters
+<a name="vrcft-input"></a>
+### Input Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| FT/BlepGesture | Float | Boolean | ✔ | Add with VRCFury to activate tongue out with gesture right point |
+Set by the prefab's **Face Tracking Parameter Behaviors**.
+
+| Property | Animator Type | Expression |
+|-|-|-|
+| VAP/FT/EyeSquintLeftForward | Float | `EyeSquintLeft` |
+| VAP/FT/EyeSquintRightForward | Float | `EyeSquintRight` |
+| VAP/FT/BrowExpressionLeftForward | Float | `BrowInnerUpLeft - BrowLowererLeft` |
+| VAP/FT/BrowExpressionRightForward | Float | `BrowInnerUpRight - BrowLowererRight` |
+| VAP/FT/PupilDilationForward | Float | `(EyeDilationLeft + EyeDilationRight - EyeConstrictLeft - EyeConstrictRight) / 4 + 0.5` |
+| EyeLidLeft | Float | From the **Blink System Prefab** |
+| EyeLidRight | Float | From the **Blink System Prefab** |
+| VAP/BlinkLeft | Float | From the **Blink System Prefab**. Used for the eyelids when eye tracking is off |
+| VAP/BlinkRight | Float | From the **Blink System Prefab**. Used for the eyelids when eye tracking is off |
+| Touch/PupilFocus | Float | Optional. Set by the **Pupil Focus System Prefab** |
 
 ### Output Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| FT/EyeTrackingActive | Float | Same value as `EyeTrackingActive` |
-| FT/LipTrackingActive | Float | Same value as `LipTrackingActive` |
-| ExpressionTrackingActive | Float | Inverse value of `FT/FacialExpressionsDisabled` |
-| VAP/FT/Smile | Float | Combined smile expression value derived from face tracking data. `1` represents a smile and `-1` represents a frown |
-| VAP/FT/Brow | Float | Combined eyebrow expression value derived from face tracking data. `1` represents raised brows and `-1` represents lowered brows |
-| VAP/FT/Angry | Float | Combined anger expression value derived from face tracking data. `1` represents a lowered brow with nose sneer |
+| VAP/FT/EyeLidLeft | Float | Left eyelid, tracked or from blinking. `0` is closed, `0.75` is open and `1` is wide |
+| VAP/FT/EyeLidRight | Float | Right eyelid, tracked or from blinking. `0` is closed, `0.75` is open and `1` is wide |
+| VAP/FT/EyeSquintLeft | Float | Left squint, tracked or emulated |
+| VAP/FT/EyeSquintRight | Float | Right squint, tracked or emulated |
+| VAP/FT/BrowExpressionLeft | Float | Left brow, tracked or emulated. `1` is raised and `-1` is lowered |
+| VAP/FT/BrowExpressionRight | Float | Right brow, tracked or emulated. `1` is raised and `-1` is lowered |
+| VAP/FT/PupilDilation | Float | Pupil dilation, tracked or emulated |
+| VAP/FT/Smile | Float | Combined smile expression value. `1` represents a smile and `-1` represents a frown |
+| VAP/FT/Brow | Float | Combined eyebrow expression value. `1` represents raised brows and `-1` represents lowered brows |
+| VAP/FT/Angry | Float | Combined anger expression value. `1` represents a lowered brow with nose sneer |
+| VAP/FT/NoseSneer | Float | `(NoseSneerLeft + NoseSneerRight) / 2` |
+| VAP/FT/SmileFrownLeft | Float | `max(MouthCornerPullLeft, MouthCornerSlantLeft * 0.3) - MouthFrownLeft` |
+| VAP/FT/SmileFrownRight | Float | `max(MouthCornerPullRight, MouthCornerSlantRight * 0.3) - MouthFrownRight` |
+| VAP/FT/MouthRaiserLower | Float | `MouthRaiserLower` |
+| VAP/FT/MouthX | Float | `(MouthUpperRight + MouthLowerRight - MouthUpperLeft - MouthLowerLeft) / 2` |
+| VAP/FT/JawX | Float | `JawRight - JawLeft` |
+| VAP/FT/JawOpen | Float | `JawOpen` |
+| VAP/FT/TongueOut | Float | `TongueOut` |
+| VAP/FT/TongueX | Float | `TongueRight - TongueLeft`, limited to `±(0.5 + TongueOut * 0.5)` |
+| VAP/FT/TongueY | Float | `TongueUp - TongueDown`, limited by how far the tongue is out |
+| VAP/FT/TongueTwist | Float | `TongueTwistRight - TongueTwistLeft` |
+| VAP/EyeSensitivityInput | Float | Eye look sensitivity for the **Eye Rotation Prefab**. `0` while eye tracking is off |
+
+</details>
+
+---
+
+<details>
+<summary><h2>Eye Rotation Prefab</h2></summary>
+
+> Works with the **Face Tracking Prefab**, which provides the eye tracking toggle and **Eye Sensitivity**.
+
+Rotates the eyes from VRChat's eye look data, through both the **eye bones** and **eye blendshapes**.
+
+### Features
+- Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so no setup is needed on the avatar descriptor.
+- Applies the **Eye Sensitivity** from the VRCFT prefab: from **1×** up to **2×** while eye tracking is on.
+- **Eye bones**: drives the humanoid eye muscles through the **Additive** controller while eye tracking is on.
+- **Eye blendshapes**: drives the `EyeLook*` blendshapes and the `EyeLook*Rotate` blendshapes on the `Body` mesh from the FX controller.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations.
+3. Optionally, use the animator parameters `VAP/EyeLook/EaseOut`, `VAP/EyeLook/LeftVerticalEaseOut` and `VAP/EyeLook/RightVerticalEaseOut` to fade out the `EyeLook*` blendshapes.
 
 ### Input Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/Override/FT/EyeLidLeft | Float | Set to `1` to override the left eye and left brow blendshapes of the face tracking output — useful for interactions such as ear pull |
-| VAP/Override/FT/EyeLidRight | Float | Set to `1` to override the right eye and right brow blendshapes of the face tracking output — useful for interactions such as ear pull |
-| VAP/Override/FT/EyeLookVerticalLeft | Float | Fades the intensity of the left eye's vertical look (`EyeLookUpLeft` / `EyeLookDownLeft`) from `0` (normal, face tracked) to `1` (no vertical eye look) |
-| VAP/Override/FT/EyeLookVerticalRight | Float | Fades the intensity of the right eye's vertical look (`EyeLookUpRight` / `EyeLookDownRight`) from `0` (normal, face tracked) to `1` (no vertical eye look) |
+| EyeLeftX | Float | Set by the prefab: `EyeLookInLeft - EyeLookOutLeft` |
+| EyeRightX | Float | Set by the prefab: `EyeLookOutRight - EyeLookInRight` |
+| EyeY | Float | Set by the prefab: `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
+| VAP/EyeSensitivityInput | Float | Set by the **VRCFT** prefab. `0` is 1× and `1` is 2× |
+| VAP/EyeLook/EaseOut | Float | Optional. `1` turns off all the `EyeLook*` blendshapes |
+| VAP/EyeLook/LeftVerticalEaseOut | Float | Optional. `1` turns off the left eye's up/down `EyeLook*` blendshapes |
+| VAP/EyeLook/RightVerticalEaseOut | Float | Optional. `1` turns off the right eye's up/down `EyeLook*` blendshapes |
 
-### Face Tracking Animator Parameters
+### Output Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/FT/v2/EyeLeftX | Float | Smoothed horizontal rotation value of the left eye used for eye bones and related blendshapes |
-| VAP/FT/v2/EyeRightX | Float | Smoothed horizontal rotation value of the right eye used for eye bones and related blendshapes |
-| VAP/FT/v2/EyeY | Float | Smoothed vertical rotation value shared by both eyes used for eye bones and related blendshapes |
-| VAP/FT/v2/EyeLidLeft | Float | Smoothed eyelid value controlling the left eyelid blendshapes |
-| VAP/FT/v2/EyeLidRight | Float | Smoothed eyelid value controlling the right eyelid blendshapes |
-| VAP/FT/v2/EyeSquintLeft | Float | Smoothed squint value for the left eye |
-| VAP/FT/v2/EyeSquintRight | Float | Smoothed squint value for the right eye |
-| VAP/FT/v2/PupilDilation | Float | Smoothed value controlling pupil dilation |
-| VAP/FT/v2/BrowExpressionLeft | Float | Smoothed value controlling left eyebrow expression movement |
-| VAP/FT/v2/BrowExpressionRight | Float | Smoothed value controlling right eyebrow expression movement |
-| VAP/FT/v2/CheekPuffSuckLeft | Float | Smoothed value controlling left cheek puff or suck movement |
-| VAP/FT/v2/CheekPuffSuckRight | Float | Smoothed value controlling right cheek puff or suck movement |
-| VAP/FT/v2/NoseSneer | Float | Smoothed value controlling nose sneer expressions |
-| VAP/FT/v2/JawOpen | Float | Smoothed value controlling jaw open movement |
-| VAP/FT/v2/MouthClosed | Float | Smoothed value representing mouth closed compression |
-| VAP/FT/v2/JawForward | Float | Smoothed value controlling forward jaw movement |
-| VAP/FT/v2/JawX | Float | Smoothed value controlling horizontal jaw movement |
-| VAP/FT/v2/MouthUpperUpLeft | Float | Smoothed value lifting the upper left lip |
-| VAP/FT/v2/MouthUpperUpRight | Float | Smoothed value lifting the upper right lip |
-| VAP/FT/v2/MouthLowerDown | Float | Smoothed value lowering the bottom lip |
-| VAP/FT/v2/SmileFrownLeft | Float | Smoothed value controlling the left side smile or frown |
-| VAP/FT/v2/SmileFrownRight | Float | Smoothed value controlling the right side smile or frown |
-| VAP/FT/v2/LipFunnel | Float | Smoothed value controlling lip funnel expressions |
-| VAP/FT/v2/LipPucker | Float | Smoothed value controlling lip pucker expressions |
-| VAP/FT/v2/LipSuckUpper | Float | Smoothed value controlling the upper lip suction |
-| VAP/FT/v2/LipSuckLower | Float | Smoothed value controlling the lower lip suction |
-| VAP/FT/v2/MouthStretchLeft | Float | Smoothed value stretching the left side of the mouth |
-| VAP/FT/v2/MouthStretchRight | Float | Smoothed value stretching the right side of the mouth |
-| VAP/FT/v2/MouthTightenerLeft | Float | Smoothed value tightening the left side of the mouth |
-| VAP/FT/v2/MouthTightenerRight | Float | Smoothed value tightening the right side of the mouth |
-| VAP/FT/v2/MouthPress | Float | Smoothed value pressing the lips together |
-| VAP/FT/v2/MouthRaiserUpper | Float | Smoothed value raising the upper lip region |
-| VAP/FT/v2/MouthRaiserLower | Float | Smoothed value raising the lower lip region |
-| VAP/FT/v2/MouthX | Float | Smoothed horizontal movement value of the mouth |
-| VAP/FT/v2/TongueOut | Float | Smoothed value controlling tongue extension |
-| VAP/FT/v2/TongueX | Float | Smoothed horizontal movement value of the tongue |
-| VAP/FT/v2/TongueY | Float | Smoothed vertical movement value of the tongue |
-| VAP/FT/v2/TongueRoll | Float | Smoothed value controlling tongue roll |
+| VAP/EyeLeftX | Float | Horizontal look of the left eye, with sensitivity applied |
+| VAP/EyeRightX | Float | Horizontal look of the right eye, with sensitivity applied |
+| VAP/EyeY | Float | Vertical look shared by both eyes, with sensitivity applied |
 
 </details>
 
@@ -648,6 +493,47 @@ Adds a **Face Proximity contact receiver** that drives a **VRC Rotation Constrai
 |-|-|-|
 | VAP/Touch/PupilFocus | Float | Smoothed proximity value from the face contact sensor |
 | Touch/PupilFocus | Float | Raw proximity value from the face contact sensor |
+
+</details>
+
+---
+
+<details>
+<summary><h2>Pupil Dilation Smoothing Prefab</h2></summary>
+
+Combines **pupil dilation** from three sources into one value per eye:
+- **User dilation**: a value the user sets, per eye (ex. from the **Expression Menu**).
+- **Input dilation**: dilation from an input (ex. **gestures** or **face tracking**).
+- **Closed eye dilation**: additional dilation that builds up while an eye is closed.
+
+The prefab doesn't set any inputs itself: feed them from your own animator, menu or Face Tracking Parameter Behaviors.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Feed the input parameters below, and optionally the user dilation parameters.
+3. Use the animator parameters `VAP/Pupil/LeftDilation` and `VAP/Pupil/RightDilation` to animate the pupils.
+
+### Optional Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| LeftDilationSet | Float | Float | Optional | User dilation for the left eye: `0` is small (default), `0.25` is default and `1` is high |
+| RightDilationSet | Float | Float | Optional | User dilation for the right eye: `0` is small (default), `0.25` is default and `1` is high |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Pupil/LeftDilation | Float | Combined left pupil dilation |
+| VAP/Pupil/RightDilation | Float | Combined right pupil dilation |
+
+### Input Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Pupil/DilationSmoothedInput | Float | Input dilation (ex. from gestures or face tracking) |
+| VAP/Pupil/LeftEyeClosedInput | Float | Left eye closed amount. Above `0.9` adds closed eye dilation |
+| VAP/Pupil/RightEyeClosedInput | Float | Right eye closed amount. Above `0.9` adds closed eye dilation |
 
 </details>
 

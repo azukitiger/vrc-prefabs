@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  vrcfuryVersion: 1.1434.1-beta.3
   somethingIsBroken: 0
   config:
     features: []
@@ -73,10 +73,7 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - '*'
-        - '!VAP/Pupil/LeftDilationDelayedPass'
-        - '!VAP/Pupil/RightDilationDelayedPass'
-        - '!VAP/Pupil/LeftDilationOutput'
-        - '!VAP/Pupil/RightDilationOutput'
+        - '!Proxy/*'
         allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
