@@ -71,6 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1962815490794609016}
+  - component: {fileID: 2505176336919546663}
   - component: {fileID: 2171512906711503933}
   m_Layer: 0
   m_Name: VAP Raycast Floor Physbone Collider
@@ -95,6 +96,22 @@ Transform:
   - {fileID: 7623723731988096115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2505176336919546663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5731977128526610642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef73524af7b644d0ad6cd211e9165d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 11400000, guid: 4c4cd493a082c944895c406fd584ff22, type: 2}
+  parametersAsset: {fileID: 11400000, guid: 0120efb1f19acbc43b6178d92f03087e, type: 2}
+  defaultOverrides: []
+  controlOverrides: []
 --- !u!114 &2171512906711503933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.2
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -156,9 +173,13 @@ MonoBehaviour:
         toggleParam: 
         rootObjOverride: {fileID: 0}
         rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
         rewriteBindings: []
         allowMissingAssets: 0
         injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets: []
+        faceTrackingParameterBehaviors: []
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
         controller:

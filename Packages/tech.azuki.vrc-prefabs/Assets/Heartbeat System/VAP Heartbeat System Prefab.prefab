@@ -239,6 +239,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3250776908042793388}
+  - component: {fileID: 3703312668346630170}
   - component: {fileID: 4088525506264637371}
   - component: {fileID: 3380949450612323622}
   m_Layer: 0
@@ -265,6 +266,22 @@ Transform:
   - {fileID: 1879931746196839698}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3703312668346630170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720086161310375279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef73524af7b644d0ad6cd211e9165d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 11400000, guid: ff35f4834ed718b49b43a6294c2eeb0d, type: 2}
+  parametersAsset: {fileID: 11400000, guid: 4d75b3d2fb37ef446814fbff85247a1b, type: 2}
+  defaultOverrides: []
+  controlOverrides: []
 --- !u!114 &4088525506264637371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1338.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -329,8 +346,13 @@ MonoBehaviour:
         toggleParam: 
         rootObjOverride: {fileID: 0}
         rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
         rewriteBindings: []
         allowMissingAssets: 0
+        injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets: []
+        faceTrackingParameterBehaviors: []
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
         controller:
@@ -369,7 +391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1338.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -453,6 +475,11 @@ MonoBehaviour:
   receiverType: 0
   parameter: Touch/Chest
   minVelocity: 0.05
+  writeToMaterials: 0
+  writeToMaterialsContactTags: 0
+  separateShaderParameter: 
+  shaderTargetRenderers: []
+  advancedParameters: 0
 --- !u!114 &5608240345790754309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,7 +494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1338.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -556,7 +583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1338.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -607,8 +634,13 @@ MonoBehaviour:
         toggleParam: 
         rootObjOverride: {fileID: 0}
         rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
         rewriteBindings: []
         allowMissingAssets: 0
+        injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets: []
+        faceTrackingParameterBehaviors: []
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
         controller:
@@ -647,7 +679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1338.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -701,7 +733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1338.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []

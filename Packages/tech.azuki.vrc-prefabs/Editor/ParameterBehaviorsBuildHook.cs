@@ -229,12 +229,12 @@ namespace VAP.Editor
             string set = c.blendshapesSet;
             if (string.IsNullOrEmpty(set))
             {
-                Debug.LogWarning(Log + $"{c.name}: Corrective Behaviors has no Blendshapes Set; skipped.", c);
+                Debug.LogWarning(Log + $"{c.name}: Auto Corrective Behaviors has no Blendshapes Set; skipped.", c);
                 yield break;
             }
             if (!sets.TryGetValue(set, out var setNames))
             {
-                Debug.LogWarning(Log + $"{c.name}: Corrective Behaviors: the avatar has no Blendshapes Set named \"{set}\"; skipped.", c);
+                Debug.LogWarning(Log + $"{c.name}: Auto Corrective Behaviors: the avatar has no Blendshapes Set named \"{set}\"; skipped.", c);
                 yield break;
             }
             foreach (var (shape, expression) in FindCorrectives(setNames, shapes))

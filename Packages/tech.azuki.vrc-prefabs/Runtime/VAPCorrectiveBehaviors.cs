@@ -4,7 +4,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/Face Tracking Corrective Behaviors")]
+    [AddComponentMenu("VAP/Face Tracking Auto Corrective Behaviors")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPCorrectiveBehaviors : MonoBehaviour, IEditorOnly
     {

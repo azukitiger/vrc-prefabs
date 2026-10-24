@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1317.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -196,6 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 1472509199, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  version: 0
+  rootTransform: {fileID: 0}
   raycastDirection: {x: 0, y: 0, z: 1}
   distance: 1.5
   applyTransformScale: 1
@@ -226,6 +228,7 @@ MonoBehaviour:
   IsActive: 1
   GlobalWeight: 1
   TargetTransform: {fileID: 3230843471831597500}
+  SmoothingFactor: 0
   SolveInLocalSpace: 0
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0
@@ -329,6 +332,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3232253228709160750}
+  - component: {fileID: 7599358009510387244}
   - component: {fileID: 5267550226181345152}
   m_Layer: 0
   m_Name: VAP Raycast Wall Physbone Collider
@@ -356,6 +360,22 @@ Transform:
   - {fileID: 3814753503027568993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7599358009510387244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5230865612980028144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef73524af7b644d0ad6cd211e9165d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 11400000, guid: 65ad531592dc6ee4aa9e14f2bbea86e0, type: 2}
+  parametersAsset: {fileID: 11400000, guid: e4a462a9effc9584f8693a6de15a9709, type: 2}
+  defaultOverrides: []
+  controlOverrides: []
 --- !u!114 &5267550226181345152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,7 +390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1317.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -416,8 +436,13 @@ MonoBehaviour:
         toggleParam: 
         rootObjOverride: {fileID: 0}
         rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
         rewriteBindings: []
         allowMissingAssets: 0
+        injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets: []
+        faceTrackingParameterBehaviors: []
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
         controller:
@@ -552,7 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1317.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []
@@ -638,6 +663,8 @@ MonoBehaviour:
   m_Script: {fileID: 1472509199, guid: 67cc4cb7839cd3741b63733d5adf0442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  version: 0
+  rootTransform: {fileID: 0}
   raycastDirection: {x: 0, y: 0, z: 1}
   distance: 1.5
   applyTransformScale: 1
@@ -668,6 +695,7 @@ MonoBehaviour:
   IsActive: 1
   GlobalWeight: 1
   TargetTransform: {fileID: 1279971801207564894}
+  SmoothingFactor: 0
   SolveInLocalSpace: 0
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0
@@ -815,7 +843,11 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   bonesAsSpheres: 0
+  globalCollision: 0
+  globalCollisionAllowSelf: 1
+  globalCollisionAllowOthers: 1
   globalCollisionFlags: 0
+  _globalCollisionSerializationVersion: 1
 --- !u!114 &2695229394751232923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,6 +863,7 @@ MonoBehaviour:
   IsActive: 1
   GlobalWeight: 1
   TargetTransform: {fileID: 5596741480823211207}
+  SmoothingFactor: 0
   SolveInLocalSpace: 0
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0
@@ -974,7 +1007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1317.0
+  vrcfuryVersion: 1.1434.1-beta.13
   somethingIsBroken: 0
   config:
     features: []

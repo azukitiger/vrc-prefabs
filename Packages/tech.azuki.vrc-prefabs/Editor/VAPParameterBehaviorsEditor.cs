@@ -73,8 +73,7 @@ namespace VAP.Editor
             using (new EditorGUI.DisabledScope(targets.Length > 1))
             using (new EditorGUILayout.HorizontalScope())
             {
-                // The prefab note shares this row, so showing it never moves anything.
-                VAPPrefabLock.DrawInline(targets);
+                GUILayout.FlexibleSpace();
                 if (GUILayout.Button(CopyAll, EditorStyles.miniButtonLeft, GUILayout.Width(70)))
                     EditorGUIUtility.systemCopyBuffer = FaceTrackingClipboard.SerializeParameterBehaviors(
                         Enumerable.Range(0, ((VAPParameterBehaviors)target).parameterBehaviors.Count).Select(BuildCopy).ToList());

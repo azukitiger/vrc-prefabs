@@ -37,10 +37,45 @@ namespace VAP.Editor
             Changed(c);
         }
 
+        // The same component in the prefab this one comes from, if any.
+        static VAPExpressions Source(VAPExpressions c) => PrefabUtility.GetCorrespondingObjectFromSource(c);
+
+        // Changed here, compared to the prefab this comes from (or to the asset when there is none).
+        internal static bool DefaultChanged(VAPExpressions c, string name)
+        {
+            var mine = c.FindDefault(name);
+            var source = Source(c);
+            if (source == null)
+                return mine != null;
+            var theirs = source.FindDefault(name);
+            if (mine == null || theirs == null)
+                return (mine == null) != (theirs == null);
+            return !Mathf.Approximately(mine.value, theirs.value);
+        }
+
+        internal static bool RemovedChanged(VAPExpressions c, VRCExpressionsMenu menu, int control)
+        {
+            var source = Source(c);
+            return c.IsRemoved(menu, control) != (source != null && source.IsRemoved(menu, control));
+        }
+
+        internal static bool MenuChanged(VAPExpressions c, VRCExpressionsMenu menu)
+        {
+            if (menu == null || menu.controls == null)
+                return false;
+            for (int i = 0; i < menu.controls.Count; i++)
+                if (RemovedChanged(c, menu, i))
+                    return true;
+            return false;
+        }
+
         internal static void RevertDefault(VAPExpressions c, string name)
         {
             Undo.RecordObject(c, "Revert Default");
+            var theirs = Source(c)?.FindDefault(name);
             c.defaultOverrides.RemoveAll(o => o != null && o.name == name);
+            if (theirs != null)
+                c.defaultOverrides.Add(new VAPExpressions.DefaultOverride { name = name, value = theirs.value });
             Changed(c);
         }
 
@@ -55,21 +90,10 @@ namespace VAP.Editor
             return o;
         }
 
-        internal static void SetName(VAPExpressions c, VRCExpressionsMenu menu, int control, int label, string value, string assetValue)
+        internal static void SetRemoved(VAPExpressions c, VRCExpressionsMenu menu, int control, bool removed)
         {
-            Undo.RecordObject(c, "Change Name");
-            var o = Get(c, menu, control, label);
-            o.overrideName = value != assetValue;
-            o.name = o.overrideName ? value : "";
-            Changed(c);
-        }
-
-        internal static void SetIcon(VAPExpressions c, VRCExpressionsMenu menu, int control, int label, Texture2D value, Texture2D assetValue)
-        {
-            Undo.RecordObject(c, "Change Icon");
-            var o = Get(c, menu, control, label);
-            o.overrideIcon = value != assetValue;
-            o.icon = o.overrideIcon ? value : null;
+            Undo.RecordObject(c, removed ? "Remove Menu Item" : "Restore Menu Item");
+            Get(c, menu, control, -1).removed = removed;
             Changed(c);
         }
 
@@ -79,7 +103,10 @@ namespace VAP.Editor
         internal static void RevertControl(VAPExpressions c, VRCExpressionsMenu menu, int control)
         {
             Undo.RecordObject(c, "Revert Menu Item");
+            bool removed = Source(c)?.IsRemoved(menu, control) ?? false;
             c.controlOverrides.RemoveAll(o => o != null && o.menu == menu && o.control == control);
+            if (removed)
+                Get(c, menu, control, -1).removed = true;
             Changed(c);
         }
 

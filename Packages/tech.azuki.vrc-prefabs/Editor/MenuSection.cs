@@ -1,306 +1,278 @@
 #if UNITY_EDITOR && VRC_SDK_VRCSDK3
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using ControlType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionsMenu.Control.ControlType;
 
 namespace VAP.Editor
 {
+    // Shows a menu asset, one row per item. Start values and removed items are stored on the component.
     internal class MenuSection
     {
-        static readonly GUIContent NameLabel = new GUIContent("Name");
-        static readonly GUIContent TypeLabel = new GUIContent("Type");
-        static readonly GUIContent ParameterLabel = new GUIContent("Parameter", "Set to Value while the control is used.");
-        static readonly GUIContent ValueLabel = new GUIContent("Value");
-        static readonly GUIContent SubMenuLabel = new GUIContent("Sub Menu");
-        static readonly GUIContent LabelsHeader = new GUIContent("Labels");
-        static readonly GUIContent PickContent = new GUIContent("", "Pick one of the parameters above.");
-        static readonly GUIContent ImportLabel = new GUIContent("Import Menu...",
-            "Pick an Expressions Menu asset to replace these controls with its controls.");
         static readonly string[] RadialParams = { "Rotation" };
-        static readonly string[] TwoAxisParams = { "Horizontal", "Vertical" };
-        static readonly string[] FourAxisParams = { "Up", "Right", "Down", "Left" };
-        static readonly string[] LabelNames = { "Up", "Right", "Down", "Left" };
-        const string ImportPickerHint = "VAPMenuImport";
-        const float LabelWidth = 80f, IconWidth = 150f;
+        static readonly Color RowTint = new Color(1f, 1f, 1f, 0.035f);
+        static readonly Color Divider = new Color(0f, 0f, 0f, 0.45f);
+        const float RowHeight = 26f, IconSize = 24f, IconPad = 4f, DefaultWidth = 200f, CheckWidth = 16f, Indent = 20f;
 
         static float Line => EditorGUIUtility.singleLineHeight;
         static float Step => Line + EditorGUIUtility.standardVerticalSpacing;
 
-        readonly SerializedObject componentSO;
         readonly VAPExpressions owner;
         readonly VRCExpressionsMenu subMenu;
         SerializedObject assetSO;
         ReorderableList list;
-        bool locked;
+        readonly System.Func<VRCExpressionsMenu, string> pathOf;
+        static GUIStyle nameStyle, pathStyle;
 
         // subMenu is null for the main menu.
-        internal MenuSection(SerializedObject so, VAPExpressions owner, VRCExpressionsMenu subMenu = null)
+        internal MenuSection(VAPExpressions owner, VRCExpressionsMenu subMenu = null, System.Func<VRCExpressionsMenu, string> pathOf = null)
         {
-            componentSO = so;
             this.owner = owner;
             this.subMenu = subMenu;
+            this.pathOf = pathOf;
         }
 
-        bool IsSub => !ReferenceEquals(subMenu, null);
+        VRCExpressionsMenu Asset => !ReferenceEquals(subMenu, null) ? subMenu : owner.menuAsset;
 
-        VRCExpressionsMenu Asset => IsSub ? subMenu : owner.menuAsset;
-
-        bool Overriding => locked && Asset != null;
-
-        SerializedProperty Source()
+        internal void Draw()
         {
             var asset = Asset;
             if (asset == null)
-                return componentSO.FindProperty(nameof(VAPExpressions.controls));
+                return;
             if (assetSO == null || assetSO.targetObject != asset)
                 assetSO = new SerializedObject(asset);
             assetSO.Update();
-            return assetSO.FindProperty(nameof(VRCExpressionsMenu.controls));
-        }
-
-        internal void Draw(bool locked)
-        {
-            this.locked = locked;
-            var prop = Source();
-            if (!locked)
-                DrawImport(prop);
+            var prop = assetSO.FindProperty(nameof(VRCExpressionsMenu.controls));
             GetList(prop).DoLayoutList();
-            if (prop.arraySize > VRCExpressionsMenu.MAX_CONTROLS)
+            if (Kept() > VRCExpressionsMenu.MAX_CONTROLS)
                 EditorGUILayout.HelpBox($"VRChat menus show at most {VRCExpressionsMenu.MAX_CONTROLS} controls.", MessageType.Warning);
-            if (Asset != null)
-                assetSO.ApplyModifiedProperties();
-        }
-
-        void DrawImport(SerializedProperty prop)
-        {
-            int pickerId = GUIUtility.GetControlID((ImportPickerHint + (IsSub ? subMenu.GetInstanceID() : 0)).GetHashCode(), FocusType.Passive);
-            if (GUILayout.Button(ImportLabel))
-                EditorGUIUtility.ShowObjectPicker<VRCExpressionsMenu>(null, false, "", pickerId);
-            var e = Event.current;
-            if (e.type != EventType.ExecuteCommand || e.commandName != "ObjectSelectorClosed" ||
-                EditorGUIUtility.GetObjectPickerControlID() != pickerId)
-                return;
-            var source = EditorGUIUtility.GetObjectPickerObject() as VRCExpressionsMenu;
-            e.Use();
-            if (source == null || source == Asset || source.controls == null)
-                return;
-            if (prop.arraySize > 0 && !EditorUtility.DisplayDialog("Import Menu",
-                    $"Replace the {prop.arraySize} controls here with the {source.controls.Count} in \"{source.name}\"?", "Replace", "Cancel"))
-                return;
-            prop.arraySize = source.controls.Count;
-            for (int i = 0; i < source.controls.Count; i++)
-                prop.GetArrayElementAtIndex(i).boxedValue = VAPExpressions.Copy(source.controls[i]);
-            prop.serializedObject.ApplyModifiedProperties();
         }
 
         ReorderableList GetList(SerializedProperty prop)
         {
             if (list == null || list.serializedProperty == null || list.serializedProperty.serializedObject != prop.serializedObject)
             {
-                list = new ReorderableList(prop.serializedObject, prop, true, true, true, true)
+                list = new ReorderableList(prop.serializedObject, prop, false, false, false, false)
                 {
-                    drawHeaderCallback = rect => EditorGUI.LabelField(rect, $"Controls ({list.count}/{VRCExpressionsMenu.MAX_CONTROLS})"),
-                    elementHeightCallback = i => Height(list.serializedProperty.GetArrayElementAtIndex(i)) + 6f,
+                    headerHeight = 0f,
+                    elementHeightCallback = i => Height(list.serializedProperty.GetArrayElementAtIndex(i), i) + 4f,
                     drawElementCallback = (rect, i, active, focused) => DrawControl(rect, list.serializedProperty.GetArrayElementAtIndex(i), i),
-                    onAddCallback = l =>
-                    {
-                        var p = l.serializedProperty;
-                        p.arraySize++;
-                        p.GetArrayElementAtIndex(p.arraySize - 1).boxedValue = new VRCExpressionsMenu.Control
-                        {
-                            name = "New Control",
-                            type = ControlType.Toggle,
-                            value = 1f,
-                            parameter = new VRCExpressionsMenu.Control.Parameter { name = "" },
-                            subParameters = new VRCExpressionsMenu.Control.Parameter[0],
-                            labels = new VRCExpressionsMenu.Control.Label[0],
-                        };
-                    },
+                    drawElementBackgroundCallback = (rect, i, active, focused) => DrawBackground(rect, i),
+                    footerHeight = 0f,
+                    drawFooterCallback = rect => { },
                 };
             }
             list.serializedProperty = prop;
-            list.draggable = list.displayRemove = !locked;
-            list.displayAdd = !locked && prop.arraySize < VRCExpressionsMenu.MAX_CONTROLS;
             return list;
+        }
+
+        int Kept()
+        {
+            int n = 0;
+            for (int i = 0; i < list.count; i++)
+                if (!owner.IsRemoved(Asset, i))
+                    n++;
+            return n;
+        }
+
+        void DrawBackground(Rect rect, int index)
+        {
+            if (Event.current.type != EventType.Repaint || index < 0)
+                return;
+            if (index % 2 == 1)
+                EditorGUI.DrawRect(rect, RowTint);
+            if (index < list.count - 1)
+                EditorGUI.DrawRect(new Rect(rect.x, rect.yMax - 1f, rect.width, 1f), Divider);
         }
 
         static ControlType TypeOf(SerializedProperty control) =>
             (ControlType)control.FindPropertyRelative("type").intValue;
 
+        // Axis puppets spring back to the center when let go, so only radial puppets get a start value.
         static string[] SubParamNames(ControlType type) =>
-            type == ControlType.RadialPuppet ? RadialParams
-            : type == ControlType.TwoAxisPuppet ? TwoAxisParams
-            : type == ControlType.FourAxisPuppet ? FourAxisParams
-            : new string[0];
+            type == ControlType.RadialPuppet ? RadialParams : new string[0];
 
-        static bool HasLabels(ControlType type) => type == ControlType.TwoAxisPuppet || type == ControlType.FourAxisPuppet;
+        static bool IsToggleLike(ControlType type) => type == ControlType.Toggle || type == ControlType.Button;
 
-        static float Height(SerializedProperty control)
+        static string ParamName(SerializedProperty control) =>
+            control.FindPropertyRelative("parameter").FindPropertyRelative("name").stringValue;
+
+        VRCExpressionParameters.Parameter Param(string name)
         {
-            var type = TypeOf(control);
-            int rows = 3;
-            if (type == ControlType.SubMenu)
-                rows++;
-            rows += SubParamNames(type).Length;
-            if (HasLabels(type))
-                rows += 1 + LabelNames.Length;
-            return rows * Step;
+            var asset = owner.parametersAsset;
+            if (asset == null || asset.parameters == null || string.IsNullOrEmpty(name))
+                return null;
+            foreach (var p in asset.parameters)
+                if (p != null && p.name == name)
+                    return p;
+            return null;
+        }
+
+        // Puppet axes with a parameter in the parameters asset.
+        List<(string axis, VRCExpressionParameters.Parameter param)> Axes(SerializedProperty control, ControlType type)
+        {
+            var result = new List<(string, VRCExpressionParameters.Parameter)>();
+            var names = SubParamNames(type);
+            var subs = control.FindPropertyRelative("subParameters");
+            for (int i = 0; i < names.Length && i < subs.arraySize; i++)
+            {
+                var p = Param(subs.GetArrayElementAtIndex(i).FindPropertyRelative("name").stringValue);
+                if (p != null)
+                    result.Add((names[i], p));
+            }
+            return result;
+        }
+
+        float Height(SerializedProperty control, int index)
+        {
+            if (owner.IsRemoved(Asset, index))
+                return RowHeight;
+            int axes = Axes(control, TypeOf(control)).Count;
+            return RowHeight + (axes > 1 ? axes * Step : 0f);
         }
 
         void DrawControl(Rect rect, SerializedProperty control, int index)
         {
-            if (Overriding && ExpressionsOverrides.HasControl(owner, Asset, index))
-            {
-                ExpressionsOverrides.DrawBar(rect);
-                if (ExpressionsOverrides.ContextClick(rect))
-                {
-                    var menu = Asset;
-                    ExpressionsOverrides.ShowRevert("Revert Menu Item", () => ExpressionsOverrides.RevertControl(owner, menu, index));
-                }
-            }
-            else if (locked && Asset == null && VAPPrefabAsset.RevertMenu(rect, control, "Menu Item"))
-                return;
-
-            var type = TypeOf(control);
-            FitArrays(control, type);
-            var row = new Rect(rect.x, rect.y + 3f, rect.width, Line);
-
-            DrawNameIcon(row, NameLabel, control.FindPropertyRelative("name"), control.FindPropertyRelative("icon"), index, -1);
-            row.y += Step;
-
-            using (new EditorGUI.DisabledScope(locked))
-            {
-                DrawLabelled(row, TypeLabel, control.FindPropertyRelative("type"));
-                row.y += Step;
-
-                const float valueWidth = 110f;
-                DrawParameter(new Rect(row.x, row.y, row.width - valueWidth - 8f, Line), ParameterLabel,
-                    control.FindPropertyRelative("parameter").FindPropertyRelative("name"));
-                var valueRect = new Rect(row.xMax - valueWidth, row.y, valueWidth, Line);
-                float old = EditorGUIUtility.labelWidth;
-                EditorGUIUtility.labelWidth = 40f;
-                EditorGUI.PropertyField(valueRect, control.FindPropertyRelative("value"), ValueLabel);
-                EditorGUIUtility.labelWidth = old;
-                row.y += Step;
-
-                if (type == ControlType.SubMenu)
-                {
-                    DrawLabelled(row, SubMenuLabel, control.FindPropertyRelative("subMenu"));
-                    row.y += Step;
-                }
-
-                var names = SubParamNames(type);
-                var subs = control.FindPropertyRelative("subParameters");
-                for (int i = 0; i < names.Length && i < subs.arraySize; i++)
-                {
-                    DrawParameter(row, new GUIContent(names[i]), subs.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
-                    row.y += Step;
-                }
-            }
-
-            if (HasLabels(type))
-            {
-                EditorGUI.LabelField(row, LabelsHeader, EditorStyles.miniBoldLabel);
-                row.y += Step;
-                var labels = control.FindPropertyRelative("labels");
-                for (int i = 0; i < LabelNames.Length && i < labels.arraySize; i++)
-                {
-                    var label = labels.GetArrayElementAtIndex(i);
-                    DrawNameIcon(row, new GUIContent(LabelNames[i]), label.FindPropertyRelative("name"), label.FindPropertyRelative("icon"), index, i);
-                    row.y += Step;
-                }
-            }
-        }
-
-        // Name and icon: on instances they are stored as overrides when the menu is an asset.
-        void DrawNameIcon(Rect row, GUIContent label, SerializedProperty name, SerializedProperty icon, int control, int labelIndex)
-        {
-            var nameRect = new Rect(row.x, row.y, row.width - IconWidth - 8f, Line);
-            var iconRect = new Rect(row.xMax - IconWidth, row.y, IconWidth, Line);
-            if (!Overriding)
-            {
-                DrawLabelled(nameRect, label, name);
-                EditorGUI.PropertyField(iconRect, icon, GUIContent.none);
-                return;
-            }
             var menu = Asset;
-            var over = owner.FindControl(menu, control, labelIndex);
-            float old = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = LabelWidth;
-            EditorGUI.BeginChangeCheck();
-            string n = EditorGUI.TextField(nameRect, label, over != null && over.overrideName ? over.name : name.stringValue);
-            if (EditorGUI.EndChangeCheck())
-                ExpressionsOverrides.SetName(owner, menu, control, labelIndex, n, name.stringValue);
-            EditorGUIUtility.labelWidth = old;
-            var assetIcon = icon.objectReferenceValue as Texture2D;
-            EditorGUI.BeginChangeCheck();
-            var t = EditorGUI.ObjectField(iconRect, over != null && over.overrideIcon ? over.icon : assetIcon, typeof(Texture2D), false) as Texture2D;
-            if (EditorGUI.EndChangeCheck())
-                ExpressionsOverrides.SetIcon(owner, menu, control, labelIndex, t, assetIcon);
-        }
+            var type = TypeOf(control);
+            var axes = Axes(control, type);
+            var related = new List<string>();
+            if (IsToggleLike(type) && Param(ParamName(control)) != null)
+                related.Add(ParamName(control));
+            foreach (var (_, p) in axes)
+                related.Add(p.name);
+            bool removed = owner.IsRemoved(menu, index);
+            bool changed = ExpressionsOverrides.RemovedChanged(owner, menu, index) ||
+                           related.Exists(n => ExpressionsOverrides.DefaultChanged(owner, n));
+            if (changed)
+                ExpressionsOverrides.DrawBar(rect);
+            if (ExpressionsOverrides.ContextClick(rect))
+                ShowContext(menu, index, removed, changed, related);
 
-        void FitArrays(SerializedProperty control, ControlType type)
-        {
-            if (locked)
+            var full = new Rect(rect.x, rect.y + 2f, rect.width, RowHeight);
+            var row = new Rect(rect.x, full.y + (RowHeight - Line) * 0.5f, rect.width, Line);
+            var check = new Rect(row.xMax - CheckWidth, row.y, CheckWidth, Line);
+            var value = new Rect(row.xMax - DefaultWidth, row.y, DefaultWidth, Line);
+            var name = new Rect(row.x, row.y, check.x - row.x - 8f, Line);
+            bool inline = axes.Count == 1;
+            if (inline)
+                name.width = value.x - row.x - 8f;
+
+            string path = type == ControlType.SubMenu && !removed && pathOf != null
+                ? pathOf(control.FindPropertyRelative("subMenu").objectReferenceValue as VRCExpressionsMenu)
+                : null;
+            if (path != null)
+                name.width = Mathf.Min(name.width, row.width * 0.45f);
+
+            using (new EditorGUI.DisabledScope(removed))
+                DrawName(new Rect(name.x, full.y, name.width, RowHeight), control);
+            if (removed)
                 return;
-            var subs = control.FindPropertyRelative("subParameters");
-            int wantSubs = SubParamNames(type).Length;
-            if (subs.arraySize < wantSubs)
-                subs.arraySize = wantSubs;
-            var labels = control.FindPropertyRelative("labels");
-            if (HasLabels(type) && labels.arraySize < LabelNames.Length)
-                labels.arraySize = LabelNames.Length;
-        }
 
-        static void DrawLabelled(Rect rect, GUIContent label, SerializedProperty prop)
-        {
-            float old = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = LabelWidth;
-            EditorGUI.PropertyField(rect, prop, label);
-            EditorGUIUtility.labelWidth = old;
-        }
-
-        void DrawParameter(Rect rect, GUIContent label, SerializedProperty nameProp)
-        {
-            const float pickWidth = 20f;
-            DrawLabelled(new Rect(rect.x, rect.y, rect.width - pickWidth - 2f, rect.height), label, nameProp);
-            var pick = new Rect(rect.xMax - pickWidth, rect.y, pickWidth, rect.height);
-            if (!EditorGUI.DropdownButton(pick, PickContent, FocusType.Passive))
-                return;
-            var names = KnownParameters();
-            var menu = new GenericMenu();
-            if (names.Count == 0)
-                menu.AddDisabledItem(new GUIContent("No parameters yet (add them above)"));
-            var so = nameProp.serializedObject;
-            string path = nameProp.propertyPath;
-            foreach (var n in names)
+            if (path != null)
             {
-                string name = n;
-                menu.AddItem(new GUIContent(name.Replace("/", "\u2215")), nameProp.stringValue == name, () =>
-                {
-                    so.Update();
-                    so.FindProperty(path).stringValue = name;
-                    so.ApplyModifiedProperties();
-                });
+                pathStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, clipping = TextClipping.Clip };
+                var target = new Rect(name.xMax + 8f, row.y, row.xMax - name.xMax - 8f, Line);
+                EditorGUI.LabelField(target, new GUIContent(path, path), pathStyle);
             }
-            menu.DropDown(pick);
+
+            if (IsToggleLike(type) && Param(ParamName(control)) is VRCExpressionParameters.Parameter p0)
+                DrawToggleDefault(check, control, p0);
+
+            if (inline)
+            {
+                DrawSliderDefault(value, axes[0].param, type == ControlType.RadialPuppet);
+                return;
+            }
+            foreach (var (axis, p) in axes)
+            {
+                row.y += Step;
+                var axisValue = new Rect(value.x, row.y, row.xMax - value.x, Line);
+                EditorGUI.LabelField(new Rect(row.x + Indent, row.y, axisValue.x - row.x - Indent - 8f, Line), axis, EditorStyles.miniLabel);
+                DrawSliderDefault(axisValue, p, type == ControlType.RadialPuppet);
+            }
         }
 
-        List<string> KnownParameters()
+        void ShowContext(VRCExpressionsMenu menu, int index, bool removed, bool changed, List<string> related)
         {
-            IEnumerable<VRCExpressionParameters.Parameter> own = owner.parametersAsset != null
-                ? owner.parametersAsset.parameters ?? new VRCExpressionParameters.Parameter[0]
-                : (IEnumerable<VRCExpressionParameters.Parameter>)owner.parameters;
-            var names = own.Where(x => x != null).Select(x => x.name).ToList();
-            var descriptor = owner.GetComponentInParent<VRCAvatarDescriptor>(true);
-            if (descriptor != null && descriptor.expressionParameters != null && descriptor.expressionParameters.parameters != null)
-                names.AddRange(descriptor.expressionParameters.parameters.Where(x => x != null).Select(x => x.name));
-            return names.Where(n => !string.IsNullOrEmpty(n)).Distinct().ToList();
+            var context = new GenericMenu();
+            if (changed)
+                context.AddItem(new GUIContent("Revert Menu Item"), false, () =>
+                {
+                    ExpressionsOverrides.RevertControl(owner, menu, index);
+                    foreach (var n in related)
+                        ExpressionsOverrides.RevertDefault(owner, n);
+                });
+            if (removed)
+                context.AddItem(new GUIContent("Restore Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, menu, index, false));
+            else
+                context.AddItem(new GUIContent("Remove Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, menu, index, true));
+            context.ShowAsContext();
+            Event.current.Use();
+        }
+
+        // Menu item names as one plain line: rich text tags and line breaks removed.
+        internal static string CleanName(string name) =>
+            Regex.Replace(Regex.Replace(name ?? "", "<[^>]*>", ""), @"\s+", " ").Trim();
+
+        static void DrawName(Rect rect, SerializedProperty control)
+        {
+            nameStyle ??= new GUIStyle(EditorStyles.label)
+            {
+                alignment = TextAnchor.MiddleLeft, wordWrap = false, clipping = TextClipping.Clip, padding = new RectOffset(0, 0, 0, 0),
+            };
+            var icon = control.FindPropertyRelative("icon").objectReferenceValue as Texture2D;
+            string text = CleanName(control.FindPropertyRelative("name").stringValue);
+            float x = rect.x;
+            if (icon != null)
+            {
+                var iconRect = new Rect(rect.x + IconPad, rect.y + (rect.height - IconSize) * 0.5f, IconSize, IconSize);
+                if (Event.current.type == EventType.Repaint)
+                {
+                    var color = GUI.color;
+                    if (!GUI.enabled)
+                        GUI.color = new Color(color.r, color.g, color.b, color.a * 0.5f);
+                    GUI.DrawTexture(iconRect, icon, ScaleMode.ScaleToFit);
+                    GUI.color = color;
+                }
+                x = iconRect.xMax + IconPad;
+            }
+            EditorGUI.LabelField(new Rect(x, rect.y, rect.xMax - x, rect.height), text, nameStyle);
+        }
+
+        static readonly GUIContent DefaultOnLabel = new GUIContent("", "Starts on.");
+        static readonly GUIContent DefaultChoiceLabel = new GUIContent("", "This is the item that's on at the start. Only one item using the same parameter can be.");
+
+        void DrawToggleDefault(Rect rect, SerializedProperty control, VRCExpressionParameters.Parameter p)
+        {
+            float value = control.FindPropertyRelative("value").floatValue;
+            float current = owner.FindDefault(p.name)?.value ?? p.defaultValue;
+            bool isBool = p.valueType == VRCExpressionParameters.ValueType.Bool;
+            bool on = isBool ? current != 0f : Mathf.Approximately(current, value);
+            EditorGUI.BeginChangeCheck();
+            on = GUI.Toggle(rect, on, isBool ? DefaultOnLabel : DefaultChoiceLabel, EditorStyles.toggle);
+            if (!EditorGUI.EndChangeCheck())
+                return;
+            float v = isBool ? (on ? 1f : 0f) : (on ? value : 0f);
+            ExpressionsOverrides.SetDefault(owner, p.name, v, p.defaultValue);
+        }
+
+        void DrawSliderDefault(Rect rect, VRCExpressionParameters.Parameter p, bool radial)
+        {
+            float current = owner.FindDefault(p.name)?.value ?? p.defaultValue;
+            EditorGUI.BeginChangeCheck();
+            float v;
+            if (p.valueType == VRCExpressionParameters.ValueType.Int)
+                v = EditorGUI.IntSlider(rect, Mathf.RoundToInt(current), 0, 255);
+            else if (p.valueType == VRCExpressionParameters.ValueType.Bool)
+                v = EditorGUI.Toggle(rect, current != 0f) ? 1f : 0f;
+            else
+                v = EditorGUI.Slider(rect, current, radial ? 0f : -1f, 1f);
+            if (EditorGUI.EndChangeCheck())
+                ExpressionsOverrides.SetDefault(owner, p.name, v, p.defaultValue);
         }
     }
 }

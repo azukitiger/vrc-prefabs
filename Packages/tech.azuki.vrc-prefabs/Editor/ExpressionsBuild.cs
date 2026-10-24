@@ -27,7 +27,7 @@ namespace VAP.Editor
             var components = avatarRoot.GetComponentsInChildren<VAPExpressions>(true);
             foreach (var c in components)
             {
-                if (c.parametersAsset == null && c.menuAsset == null && c.controls.All(x => x?.subMenu == null))
+                if (c.parametersAsset == null && c.menuAsset == null)
                 {
                     Debug.LogWarning(Log + $"{c.name}: VRC Menu & Parameters has no assets; skipped.", c);
                     continue;

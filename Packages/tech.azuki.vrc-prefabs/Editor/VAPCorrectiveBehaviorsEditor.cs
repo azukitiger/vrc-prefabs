@@ -33,7 +33,7 @@ namespace VAP.Editor
         {
             var root = new VisualElement();
             root.Add(new IMGUIContainer(DrawFields));
-            VAPInspectorHeader.Attach(root, "Face Tracking Corrective Behaviors");
+            VAPInspectorHeader.Attach(root, "Face Tracking Auto Corrective Behaviors");
             return root;
         }
 

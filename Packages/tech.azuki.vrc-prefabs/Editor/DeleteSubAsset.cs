@@ -7,13 +7,13 @@ namespace VAP.Editor
 {
     internal static class DeleteSubAsset
     {
-        const string MenuPath = "Assets/VAP/Delete Sub-Asset";
+        internal const string MenuPath = "Assets/VAP/Delete Sub-Asset";
 
         [MenuItem(MenuPath, true)]
-        static bool Validate() => Selection.objects.Length > 0 && Selection.objects.All(IsSubAsset);
+        internal static bool Validate() => Selection.objects.Length > 0 && Selection.objects.All(IsSubAsset);
 
         [MenuItem(MenuPath, false, 2000)]
-        static void Delete()
+        internal static void Delete()
         {
             var targets = Selection.objects.Where(IsSubAsset).ToList();
             string names = string.Join("\n", targets.Select(t => t.name));
@@ -27,7 +27,7 @@ namespace VAP.Editor
             AssetDatabase.SaveAssets();
         }
 
-        static bool IsSubAsset(Object o) =>
+        internal static bool IsSubAsset(Object o) =>
             o != null && EditorUtility.IsPersistent(o) && !AssetDatabase.IsMainAsset(o) && !(o is GameObject) && !(o is Component);
     }
 }

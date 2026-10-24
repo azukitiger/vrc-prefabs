@@ -12,18 +12,14 @@ namespace VAP
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPExpressions : MonoBehaviour, IEditorOnly
     {
-        [Tooltip("The Expressions Menu asset edited here (inside the prefab).")]
+        [Tooltip("The Expressions Menu asset. It is never changed; values set here are applied to a copy at build time.")]
         [FormerlySerializedAs("asset")]
         public VRCExpressionsMenu menuAsset;
 
-        [Tooltip("The Expression Parameters asset edited here (inside the prefab).")]
+        [Tooltip("The Expression Parameters asset. It is never changed; values set here are applied to a copy at build time.")]
         public VRCExpressionParameters parametersAsset;
 
-        // Used until an asset is created; then the asset holds them.
-        public List<VRCExpressionParameters.Parameter> parameters = new List<VRCExpressionParameters.Parameter>();
-        public List<VRCExpressionsMenu.Control> controls = new List<VRCExpressionsMenu.Control>();
-
-        // Prefab instance values, applied over the assets at build time.
+        // Values set on this component, applied over the assets at build time.
         public List<DefaultOverride> defaultOverrides = new List<DefaultOverride>();
         public List<ControlOverride> controlOverrides = new List<ControlOverride>();
 
@@ -40,12 +36,9 @@ namespace VAP
             public VRCExpressionsMenu menu;
             public int control;
             public int label = -1;
-            public bool overrideName;
-            public string name = "";
-            public bool overrideIcon;
-            public Texture2D icon;
+            public bool removed;
 
-            public bool IsEmpty => !overrideName && !overrideIcon;
+            public bool IsEmpty => !removed;
         }
 
         // Every menu reachable through Sub Menu controls, each once, in menu order.
@@ -53,24 +46,64 @@ namespace VAP
         {
             var result = new List<VRCExpressionsMenu>();
             var seen = new HashSet<VRCExpressionsMenu>();
-            if (menuAsset != null)
-                seen.Add(menuAsset);
-            Collect(menuAsset != null ? menuAsset.controls : controls, seen, result);
+            if (menuAsset == null)
+                return result;
+            seen.Add(menuAsset);
+            Collect(menuAsset, seen, result, true);
             return result;
         }
 
-        static void Collect(List<VRCExpressionsMenu.Control> list, HashSet<VRCExpressionsMenu> seen, List<VRCExpressionsMenu> result)
+        void Collect(VRCExpressionsMenu menu, HashSet<VRCExpressionsMenu> seen, List<VRCExpressionsMenu> result, bool skipRemoved)
         {
-            if (list == null)
+            if (menu.controls == null)
                 return;
-            foreach (var c in list)
+            for (int i = 0; i < menu.controls.Count; i++)
             {
-                var menu = c?.subMenu;
-                if (menu == null || !seen.Add(menu))
+                var sub = menu.controls[i]?.subMenu;
+                if (sub == null || (skipRemoved && IsRemoved(menu, i)) || !seen.Add(sub))
                     continue;
-                result.Add(menu);
-                Collect(menu.controls, seen, result);
+                result.Add(sub);
+                Collect(sub, seen, result, skipRemoved);
             }
+        }
+
+        public bool IsRemoved(VRCExpressionsMenu menu, int control) => FindControl(menu, control, -1)?.removed ?? false;
+
+        // Parameter names used by menu items, with or without the removed ones.
+        HashSet<string> UsedParameters(bool skipRemoved)
+        {
+            var result = new HashSet<string>();
+            if (menuAsset == null)
+                return result;
+            var menus = new List<VRCExpressionsMenu> { menuAsset };
+            var seen = new HashSet<VRCExpressionsMenu> { menuAsset };
+            Collect(menuAsset, seen, menus, skipRemoved);
+            foreach (var menu in menus)
+            {
+                if (menu.controls == null)
+                    continue;
+                for (int i = 0; i < menu.controls.Count; i++)
+                {
+                    var c = menu.controls[i];
+                    if (c == null || (skipRemoved && IsRemoved(menu, i)))
+                        continue;
+                    if (!string.IsNullOrEmpty(c.parameter?.name))
+                        result.Add(c.parameter.name);
+                    if (c.subParameters != null)
+                        foreach (var p in c.subParameters)
+                            if (!string.IsNullOrEmpty(p?.name))
+                                result.Add(p.name);
+                }
+            }
+            return result;
+        }
+
+        // Parameters only removed menu items used, which are left out at build time.
+        public HashSet<string> DroppedParameters()
+        {
+            var before = UsedParameters(false);
+            before.ExceptWith(UsedParameters(true));
+            return before;
         }
 
         public DefaultOverride FindDefault(string name) =>
@@ -81,10 +114,10 @@ namespace VAP
 
         public VRCExpressionParameters.Parameter[] BuildParameters()
         {
-            IEnumerable<VRCExpressionParameters.Parameter> source = parametersAsset != null
-                ? parametersAsset.parameters ?? new VRCExpressionParameters.Parameter[0]
-                : (IEnumerable<VRCExpressionParameters.Parameter>)parameters;
-            return source.Where(p => p != null).Select(p => new VRCExpressionParameters.Parameter
+            var source = parametersAsset != null && parametersAsset.parameters != null
+                ? parametersAsset.parameters : new VRCExpressionParameters.Parameter[0];
+            var dropped = DroppedParameters();
+            return source.Where(p => p != null && !dropped.Contains(p.name)).Select(p => new VRCExpressionParameters.Parameter
             {
                 name = p.name,
                 valueType = p.valueType,
@@ -101,23 +134,11 @@ namespace VAP
                 return result;
             for (int i = 0; i < menu.controls.Count; i++)
             {
-                var c = Copy(menu.controls[i]);
-                Apply(FindControl(menu, i, -1), ref c.name, ref c.icon);
-                for (int l = 0; l < c.labels.Length; l++)
-                    Apply(FindControl(menu, i, l), ref c.labels[l].name, ref c.labels[l].icon);
-                result.Add(c);
+                if (IsRemoved(menu, i))
+                    continue;
+                result.Add(Copy(menu.controls[i]));
             }
             return result;
-        }
-
-        static void Apply(ControlOverride o, ref string name, ref Texture2D icon)
-        {
-            if (o == null)
-                return;
-            if (o.overrideName)
-                name = o.name;
-            if (o.overrideIcon)
-                icon = o.icon;
         }
 
         public static VRCExpressionsMenu.Control Copy(VRCExpressionsMenu.Control c)
