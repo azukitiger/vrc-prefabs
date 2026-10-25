@@ -332,7 +332,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3232253228709160750}
-  - component: {fileID: 7599358009510387244}
   - component: {fileID: 5267550226181345152}
   m_Layer: 0
   m_Name: VAP Raycast Wall Physbone Collider
@@ -360,22 +359,6 @@ Transform:
   - {fileID: 3814753503027568993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7599358009510387244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5230865612980028144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef73524af7b644d0ad6cd211e9165d4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuAsset: {fileID: 11400000, guid: 65ad531592dc6ee4aa9e14f2bbea86e0, type: 2}
-  parametersAsset: {fileID: 11400000, guid: e4a462a9effc9584f8693a6de15a9709, type: 2}
-  defaultOverrides: []
-  controlOverrides: []
 --- !u!114 &5267550226181345152
 MonoBehaviour:
   m_ObjectHideFlags: 0

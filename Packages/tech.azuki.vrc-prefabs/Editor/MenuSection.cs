@@ -100,16 +100,7 @@ namespace VAP.Editor
         static string ParamName(SerializedProperty control) =>
             control.FindPropertyRelative("parameter").FindPropertyRelative("name").stringValue;
 
-        VRCExpressionParameters.Parameter Param(string name)
-        {
-            var asset = owner.parametersAsset;
-            if (asset == null || asset.parameters == null || string.IsNullOrEmpty(name))
-                return null;
-            foreach (var p in asset.parameters)
-                if (p != null && p.name == name)
-                    return p;
-            return null;
-        }
+        VRCExpressionParameters.Parameter Param(string name) => owner.FindParameter(name);
 
         // Puppet axes with a parameter in the parameters asset.
         List<(string axis, VRCExpressionParameters.Parameter param)> Axes(SerializedProperty control, ControlType type)

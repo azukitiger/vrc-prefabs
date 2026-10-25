@@ -25,36 +25,45 @@ namespace VAP.Editor
             // Each component's asset is replaced by a copy with this instance's values.
             var swaps = new List<(Component owner, Object original, Object copy)>();
             var components = avatarRoot.GetComponentsInChildren<VAPExpressions>(true);
+            var parameterCopies = new Dictionary<VAPExpressions, List<VRCExpressionParameters>>();
+            var descriptorUsed = false;
             foreach (var c in components)
             {
-                if (c.parametersAsset == null && c.menuAsset == null)
+                if (c is VAPFullController f)
+                    FullControllerSource.Resolve(f);
+                if (c is VAPDescriptorExpressions)
                 {
-                    Debug.LogWarning(Log + $"{c.name}: VRC Menu & Parameters has no assets; skipped.", c);
+                    if (descriptorUsed)
+                    {
+                        Debug.LogError(Log + $"{c.name}: only one VRC Avatar Descriptor Expressions is allowed per avatar; this one was skipped.", c);
+                        continue;
+                    }
+                    descriptorUsed = true;
+                }
+                var roots = c.RootMenus();
+                var parameterAssets = c.ParameterAssets();
+                if (roots.Count == 0 && parameterAssets.Count == 0)
+                {
+                    Debug.LogWarning(Log + $"{c.name}: no menu or parameters to work with; skipped.", c);
                     continue;
                 }
-                VRCExpressionParameters parametersCopy = null;
-                if (c.parametersAsset != null)
+                var ownCopies = new List<VRCExpressionParameters>();
+                foreach (var asset in parameterAssets)
                 {
-                    parametersCopy = ScriptableObject.CreateInstance<VRCExpressionParameters>();
-                    parametersCopy.name = c.parametersAsset.name + " (VAP)";
-                    parametersCopy.parameters = c.BuildParameters();
-                    swaps.Add((c, c.parametersAsset, parametersCopy));
+                    var copy = ScriptableObject.CreateInstance<VRCExpressionParameters>();
+                    copy.name = asset.name + " (VAP)";
+                    copy.parameters = c.BuildParameters(asset);
+                    swaps.Add((c, asset, copy));
+                    ownCopies.Add(copy);
                 }
-                if (c.menuAsset != null)
+                parameterCopies[c] = ownCopies;
+                foreach (var menu in roots.Concat(c.SubMenus()))
                 {
                     var menuCopy = ScriptableObject.CreateInstance<VRCExpressionsMenu>();
-                    menuCopy.name = c.menuAsset.name + " (VAP)";
-                    menuCopy.controls = c.BuildControls(c.menuAsset);
-                    menuCopy.Parameters = parametersCopy != null ? parametersCopy : c.menuAsset.Parameters;
-                    swaps.Add((c, c.menuAsset, menuCopy));
-                }
-                foreach (var sub in c.SubMenus())
-                {
-                    var subCopy = ScriptableObject.CreateInstance<VRCExpressionsMenu>();
-                    subCopy.name = sub.name + " (VAP)";
-                    subCopy.controls = c.BuildControls(sub);
-                    subCopy.Parameters = parametersCopy != null ? parametersCopy : sub.Parameters;
-                    swaps.Add((c, sub, subCopy));
+                    menuCopy.name = menu.name + " (VAP)";
+                    menuCopy.controls = c.BuildControls(menu);
+                    menuCopy.Parameters = menu.Parameters;
+                    swaps.Add((c, menu, menuCopy));
                 }
             }
 
@@ -63,11 +72,14 @@ namespace VAP.Editor
             foreach (var (_, original, copy) in swaps)
                 if (!copyOf.ContainsKey(original))
                     copyOf[original] = copy;
-            foreach (var (_, _, copy) in swaps)
+            foreach (var (owner, _, copy) in swaps)
                 if (copy is VRCExpressionsMenu m)
                 {
+                    // A menu's own parameters, or the component's only parameters file when that isn't one of them.
                     if (m.Parameters != null && copyOf.TryGetValue(m.Parameters, out var p))
                         m.Parameters = (VRCExpressionParameters)p;
+                    else if (parameterCopies.TryGetValue((VAPExpressions)owner, out var own) && own.Count == 1)
+                        m.Parameters = own[0];
                     foreach (var control in m.controls)
                         if (control?.subMenu != null && copyOf.TryGetValue(control.subMenu, out var sub))
                             control.subMenu = (VRCExpressionsMenu)sub;
@@ -77,7 +89,8 @@ namespace VAP.Editor
             {
                 saveAsset?.Invoke(copy);
                 // References under this component's object first; if there are none, the whole avatar.
-                int replaced = Replace(owner.gameObject, original, copy, owner);
+                // The descriptor's own menu is used by the whole avatar.
+                int replaced = owner is VAPDescriptorExpressions ? 0 : Replace(owner.gameObject, original, copy, owner);
                 if (replaced == 0)
                     replaced = Replace(avatarRoot, original, copy, owner);
                 bool inMenu = swaps.Any(s => s.copy is VRCExpressionsMenu m && m.controls.Any(c => c?.subMenu == copy));

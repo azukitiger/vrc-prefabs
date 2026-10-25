@@ -35,12 +35,22 @@ namespace VAP.Editor
         List<Entry> Entries()
         {
             var result = new List<Entry>();
-            var root = owner.menuAsset;
-            if (root == null)
-                return result;
-            var seen = new HashSet<VRCExpressionsMenu> { root };
-            result.Add(new Entry { menu = root, path = RootLabel, steps = new List<string> { RootLabel } });
-            Walk(root, null, seen, result);
+            var roots = owner.RootMenus();
+            var seen = new HashSet<VRCExpressionsMenu>(roots);
+            foreach (var root in roots)
+            {
+                // A root placed under a path in the avatar's menu shows that path; one merged into the main menu doesn't.
+                string at = owner.RootPath(root);
+                string label = at ?? (roots.Count == 1 ? RootLabel : $"{RootLabel} ({root.name})");
+                var entry = new Entry
+                {
+                    menu = root,
+                    path = label,
+                    steps = at != null ? at.Split('/').ToList() : new List<string> { label },
+                };
+                result.Add(entry);
+                Walk(root, at != null ? entry : null, seen, result);
+            }
             return result;
         }
 
@@ -74,7 +84,7 @@ namespace VAP.Editor
         MenuSection Section(VRCExpressionsMenu menu)
         {
             if (!sections.TryGetValue(menu, out var section))
-                sections[menu] = section = new MenuSection(owner, menu == owner.menuAsset ? null : menu, PathOf);
+                sections[menu] = section = new MenuSection(owner, menu, PathOf);
             return section;
         }
 

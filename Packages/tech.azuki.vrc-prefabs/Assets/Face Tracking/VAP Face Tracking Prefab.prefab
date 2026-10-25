@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2160260361826797620}
-  - component: {fileID: 4834240853803870313}
+  - component: {fileID: 893825668527365861}
   - component: {fileID: 67991107304017948}
   - component: {fileID: 9186226835122448967}
   - component: {fileID: 5527116933560190243}
@@ -36,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4834240853803870313
+--- !u!114 &893825668527365861
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,13 +45,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 9058907458269832273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef73524af7b644d0ad6cd211e9165d4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e081b1046ec462428b1dac7b70e9feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuAsset: {fileID: 11400000, guid: 0c42b12551cedc04fb2d82a0b24c7d9f, type: 2}
-  parametersAsset: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
+  menuAsset: {fileID: 0}
+  parametersAsset: {fileID: 0}
   defaultOverrides: []
   controlOverrides: []
+  wrapped: {fileID: 5527116933560190243}
 --- !u!114 &67991107304017948
 MonoBehaviour:
   m_ObjectHideFlags: 0

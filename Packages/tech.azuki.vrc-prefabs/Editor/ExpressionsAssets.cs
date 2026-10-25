@@ -12,8 +12,6 @@ namespace VAP.Editor
     internal static class ExpressionsAssets
     {
         internal const string AssetsMenu = "Assets/VAP/Create Menu && Parameters";
-        const string ComponentMenu = "CONTEXT/VAPExpressions/Create Menu && Parameters";
-        const string PendingKey = "VAP.Expressions.LinkPending.";
 
         [MenuItem(AssetsMenu, true)]
         internal static bool ValidateAssets() => Selection.objects.Length > 0 && Selection.objects.All(IsPrefab);
@@ -23,22 +21,6 @@ namespace VAP.Editor
         {
             foreach (var o in Selection.objects.Where(IsPrefab).ToList())
                 Create(AssetDatabase.GetAssetPath(o));
-        }
-
-        [MenuItem(ComponentMenu, true)]
-        static bool ValidateComponent(MenuCommand cmd) =>
-            cmd.context is VAPExpressions c && !PrefabUtility.IsPartOfPrefabInstance(c) && VAPPrefabAsset.PrefabPath(c) != null;
-
-        [MenuItem(ComponentMenu)]
-        static void CreateFromComponent(MenuCommand cmd)
-        {
-            var c = (VAPExpressions)cmd.context;
-            string path = VAPPrefabAsset.PrefabPath(c);
-            if (path == null)
-                return;
-            // Saving the prefab file can reload Prefab Mode, so the fields are filled on the next inspector draw.
-            SessionState.SetBool(PendingKey + path, true);
-            Create(path);
         }
 
         static bool IsPrefab(Object o) =>
@@ -111,21 +93,6 @@ namespace VAP.Editor
                 return;
             AssetDatabase.SaveAssets();
             AssetDatabase.ImportAsset(prefabPath);
-        }
-
-        // Fills empty asset fields with the prefab's assets right after Create Menu & Parameters.
-        internal static void LinkCreated(VAPExpressions c, SerializedProperty menuProp, SerializedProperty paramsProp)
-        {
-            string path = VAPPrefabAsset.PrefabPath(c);
-            if (path == null || !SessionState.GetBool(PendingKey + path, false))
-                return;
-            SessionState.EraseBool(PendingKey + path);
-            var assets = AssetDatabase.LoadAllAssetsAtPath(path);
-            if (menuProp.objectReferenceValue == null)
-                menuProp.objectReferenceValue = assets.OfType<VRCExpressionsMenu>().FirstOrDefault(a => a.name == MenuName(path));
-            if (paramsProp.objectReferenceValue == null)
-                paramsProp.objectReferenceValue = assets.OfType<VRCExpressionParameters>().FirstOrDefault(a => a.name == ParametersName(path));
-            menuProp.serializedObject.ApplyModifiedProperties();
         }
     }
 }

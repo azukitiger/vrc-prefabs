@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6786686194535119629}
-  - component: {fileID: 770526226334330228}
+  - component: {fileID: 5233669067643946347}
   - component: {fileID: 3404064225235338012}
   - component: {fileID: 39720112818846979}
   m_Layer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &770526226334330228
+--- !u!114 &5233669067643946347
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,13 +43,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7088152649172247296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef73524af7b644d0ad6cd211e9165d4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e081b1046ec462428b1dac7b70e9feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuAsset: {fileID: 11400000, guid: 3e18c7a7f969bfa41b4a47fa957316d2, type: 2}
-  parametersAsset: {fileID: 11400000, guid: 6ce7211da2038b64a99f63a070b15b30, type: 2}
+  menuAsset: {fileID: 0}
+  parametersAsset: {fileID: 0}
   defaultOverrides: []
   controlOverrides: []
+  wrapped: {fileID: 3404064225235338012}
 --- !u!114 &3404064225235338012
 MonoBehaviour:
   m_ObjectHideFlags: 0

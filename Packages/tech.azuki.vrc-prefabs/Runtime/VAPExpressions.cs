@@ -8,9 +8,9 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/VRC Menu & Parameters")]
+    // Base of the VRCFury Full Controller and VRC Avatar Descriptor Expressions components.
     [Icon(VAPFaceTrackingDebug.IconPath)]
-    public class VAPExpressions : MonoBehaviour, IEditorOnly
+    public abstract class VAPExpressions : MonoBehaviour, IEditorOnly
     {
         [Tooltip("The Expressions Menu asset. It is never changed; values set here are applied to a copy at build time.")]
         [FormerlySerializedAs("asset")]
@@ -41,15 +41,36 @@ namespace VAP
             public bool IsEmpty => !removed;
         }
 
-        // Every menu reachable through Sub Menu controls, each once, in menu order.
+        // The menus and parameter files this component reads.
+        public virtual List<VRCExpressionsMenu> RootMenus() =>
+            menuAsset != null ? new List<VRCExpressionsMenu> { menuAsset } : new List<VRCExpressionsMenu>();
+
+        public virtual List<VRCExpressionParameters> ParameterAssets() =>
+            parametersAsset != null ? new List<VRCExpressionParameters> { parametersAsset } : new List<VRCExpressionParameters>();
+
+        // Where a root menu shows up in the avatar's menu, or null when it is the main menu.
+        public virtual string RootPath(VRCExpressionsMenu root) => null;
+
+        public VRCExpressionParameters.Parameter FindParameter(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+            foreach (var asset in ParameterAssets())
+                if (asset.parameters != null)
+                    foreach (var p in asset.parameters)
+                        if (p != null && p.name == name)
+                            return p;
+            return null;
+        }
+
+        // Every menu reachable through Sub Menu controls, each once, in menu order. Root menus are not included.
         public List<VRCExpressionsMenu> SubMenus()
         {
             var result = new List<VRCExpressionsMenu>();
-            var seen = new HashSet<VRCExpressionsMenu>();
-            if (menuAsset == null)
-                return result;
-            seen.Add(menuAsset);
-            Collect(menuAsset, seen, result, true);
+            var roots = RootMenus();
+            var seen = new HashSet<VRCExpressionsMenu>(roots);
+            foreach (var root in roots)
+                Collect(root, seen, result, true);
             return result;
         }
 
@@ -73,11 +94,11 @@ namespace VAP
         HashSet<string> UsedParameters(bool skipRemoved)
         {
             var result = new HashSet<string>();
-            if (menuAsset == null)
-                return result;
-            var menus = new List<VRCExpressionsMenu> { menuAsset };
-            var seen = new HashSet<VRCExpressionsMenu> { menuAsset };
-            Collect(menuAsset, seen, menus, skipRemoved);
+            var roots = RootMenus();
+            var menus = new List<VRCExpressionsMenu>(roots);
+            var seen = new HashSet<VRCExpressionsMenu>(roots);
+            foreach (var root in roots)
+                Collect(root, seen, menus, skipRemoved);
             foreach (var menu in menus)
             {
                 if (menu.controls == null)
@@ -112,10 +133,10 @@ namespace VAP
         public ControlOverride FindControl(VRCExpressionsMenu menu, int control, int label) =>
             controlOverrides.FirstOrDefault(o => o != null && o.menu == menu && o.control == control && o.label == label);
 
-        public VRCExpressionParameters.Parameter[] BuildParameters()
+        public VRCExpressionParameters.Parameter[] BuildParameters(VRCExpressionParameters asset)
         {
-            var source = parametersAsset != null && parametersAsset.parameters != null
-                ? parametersAsset.parameters : new VRCExpressionParameters.Parameter[0];
+            var source = asset != null && asset.parameters != null
+                ? asset.parameters : new VRCExpressionParameters.Parameter[0];
             var dropped = DroppedParameters();
             return source.Where(p => p != null && !dropped.Contains(p.name)).Select(p => new VRCExpressionParameters.Parameter
             {
