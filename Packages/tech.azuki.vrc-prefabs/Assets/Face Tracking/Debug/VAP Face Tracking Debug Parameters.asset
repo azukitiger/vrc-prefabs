@@ -16,6 +16,6 @@ MonoBehaviour:
   parameters:
   - name: FaceTrackingDebug
     valueType: 2
-    saved: 1
+    saved: 0
     defaultValue: 0
     networkSynced: 1
