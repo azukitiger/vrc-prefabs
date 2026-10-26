@@ -31,6 +31,7 @@ namespace VAP.Editor
                 rebuilt.Clear();
                 HideSelected();
             };
+            EditorApplication.update += Check;
             EditorApplication.hierarchyChanged += HideSelected;
             Undo.undoRedoPerformed += HideSelected;
             EditorApplication.delayCall += () =>
@@ -50,22 +51,37 @@ namespace VAP.Editor
             HideShownEditors();
         }
 
-        // Components the inspector was already rebuilt for, so a rebuild can never repeat endlessly.
-        static readonly HashSet<int> rebuilt = new HashSet<int>();
+        // Rebuilds per component since the last selection change, so a rebuild can never repeat endlessly.
+        static readonly Dictionary<int, int> rebuilt = new Dictionary<int, int>();
+        const int MaxRebuilds = 3;
+        static double nextCheck;
 
-        // Rebuilds the inspector when it still holds an editor for a wrapped component.
+        // The inspector can end up holding an editor for a wrapped component (shown as an empty header) when it
+        // rebuilds while the flag is cleared, e.g. during a save or a prefab instance reload. Checked a few times a second.
+        static void Check()
+        {
+            if (EditorApplication.timeSinceStartup < nextCheck)
+                return;
+            nextCheck = EditorApplication.timeSinceStartup + 0.25;
+            HideShownEditors();
+        }
+
+        // Hides wrapped components the inspector still shows and rebuilds it.
         internal static void HideShownEditors()
         {
             var tracker = ActiveEditorTracker.sharedTracker;
             foreach (var editor in tracker.activeEditors)
             {
-                if (editor == null || !(editor.target is Component c) || (c.hideFlags & HideFlags.HideInInspector) == 0)
+                if (editor == null || !(editor.target is Component c) || c == null || Released.Contains(c) || !IsWrapped(c))
                     continue;
-                if (IsWrapped(c) && rebuilt.Add(c.GetInstanceID()))
-                {
-                    EditorApplication.delayCall += tracker.ForceRebuild;
-                    return;
-                }
+                Set(c, true);
+                int id = c.GetInstanceID();
+                rebuilt.TryGetValue(id, out int count);
+                if (count >= MaxRebuilds)
+                    continue;
+                rebuilt[id] = count + 1;
+                EditorApplication.delayCall += tracker.ForceRebuild;
+                return;
             }
         }
 

@@ -467,7 +467,7 @@ MonoBehaviour:
   position: {x: 0, y: -0.02, z: 0.1}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
-  contentTypes: -1
+  contentTypes: 1
   collisionTags:
   - Head
   allowSelf: 0
