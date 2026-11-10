@@ -5,6 +5,7 @@
 !.gitignore
 !README.md
 !LICENSE
+!/source.json
 
 # Allow GitHub/Website folders
 !.github/
