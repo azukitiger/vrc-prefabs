@@ -25,13 +25,18 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 ---
 
 <details>
-<summary><h2>Blink System Prefab</h2></summary>
+<summary><h2>Better Blink Prefab</h2></summary>
 
-Adds a **smooth blink animation** that follows the eyelid values from VRChat's face tracking, with an occasional **double blink**, with the ability to **override the blink state** or **disable blinking entirely**.
+Adds a **smooth blink animation** driven by VRChat's eyelid data, with an occasional **double blink**, with the ability to **override the blink state** or **disable blinking entirely**.
+
+The eyelids come from VRChat's gaze system through **Face Tracking Parameter Behaviors** (`EyeLidLeft` and `EyeLidRight`), so the prefab works the same way with or without eye tracking hardware:
+- **Without eye tracking**: VRChat's built-in blinks close the eyelids, and the prefab replaces each one with its own smooth blink animation.
+- **With eye tracking** (`UserEyeTracking` is on): the tracked eyelids drive `VAP/BlinkLeft` and `VAP/BlinkRight` directly, with no blink animation or smoothing.
 
 ### Features
-- A blink plays whenever both eyelids close past halfway (`EyeLidLeft` and `EyeLidRight` below `0.5`), so it follows VRChat's eyelid data.
+- Without eye tracking, a blink plays whenever both eyelids close past halfway (`EyeLidLeft` and `EyeLidRight` below `0.5`).
 - Each blink has a **25% chance** to be followed by a second blink.
+- With eye tracking, the user's own eyelids are used as-is, so winks and squints come through.
 - Includes **Face Tracking Parameter Behaviors** that output `EyeLidLeft` and `EyeLidRight`, so no setup is needed on the avatar descriptor.
 
 ### Instructions
@@ -61,6 +66,7 @@ Adds a **smooth blink animation** that follows the eyelid values from VRChat's f
 |-|-|-|
 | VAP/BlinkLeftOverride | Float | Override value applied to `VAP/BlinkLeft` when not blinking |
 | VAP/BlinkRightOverride | Float | Override value applied to `VAP/BlinkRight` when not blinking |
+| UserEyeTracking | Bool | Built-in VRChat parameter. When on, the tracked eyelids are used directly instead of the blink animation |
 
 </details>
 
@@ -346,7 +352,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 <details>
 <summary><h2>Face Tracking Prefab</h2></summary>
 
-> Requires the **Frame Time Prefab**. Works with the **Blink System Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
+> Requires the **Frame Time Prefab**. Works with the **Better Blink Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
 
 VRChat now drives the **Unified Expressions** blendshapes and smooths them through the avatar descriptor's **Blendshapes Sets**, so this prefab no longer animates those blendshapes or applies smoothing. It handles what VRChat doesn't: the menu toggles, emulation, combined expression values, mouth corrections and the eye tracking sensitivity setting.
 
@@ -354,7 +360,7 @@ VRChat now drives the **Unified Expressions** blendshapes and smooths them throu
 - Uses `11 synced bits`.
 - **Menu** under `Body Controls/Face Tracking` to toggle eye tracking, lip tracking, dilation tracking and **Disable Gestures**, with a **Settings** submenu for **Eye Sensitivity**, **Brow & Squint Emulation** and **Pupil Dilation Emulation**.
 - **Brow & Squint Emulation** for headsets that don't track brows or squint: brows follow nose sneer, the lower lip raiser and smile/frown, and squint follows smile and eyelid.
-- **Eyelids**: with eye tracking on, `VAP/FT/EyeLidLeft` and `VAP/FT/EyeLidRight` follow the tracked eyelids. With it off, they follow the **Blink System Prefab**.
+- **Eyelids**: with eye tracking on, `VAP/FT/EyeLidLeft` and `VAP/FT/EyeLidRight` follow the tracked eyelids. With it off, they follow the **Better Blink Prefab**.
 - **Pupil dilation**: uses tracked dilation when **Dilation Tracking** is on. **Pupil Dilation Emulation** (on by default) emulates the pupils from expressions (smile dilates, anger constricts) and from the **Pupil Focus System Prefab** if it is installed. Both can be on at the same time to combine tracked and emulated dilation.
 - **Eye Sensitivity** (radial, default `0.6`): scales eye look from **1×** to **2×**, only while the user's own eye tracking is active (`UserEyeTracking`). Used by the **Eye Rotation Prefab**.
 - **Mouth corrections** applied to your `FaceTracking` Blendshapes Set.
@@ -397,10 +403,10 @@ Set by the prefab's **Face Tracking Parameter Behaviors**.
 | VAP/FT/BrowExpressionLeftForward | Float | `BrowInnerUpLeft - BrowLowererLeft` |
 | VAP/FT/BrowExpressionRightForward | Float | `BrowInnerUpRight - BrowLowererRight` |
 | VAP/FT/PupilDilationForward | Float | `(EyeDilationLeft + EyeDilationRight - EyeConstrictLeft - EyeConstrictRight) / 4 + 0.5` |
-| EyeLidLeft | Float | From the **Blink System Prefab** |
-| EyeLidRight | Float | From the **Blink System Prefab** |
-| VAP/BlinkLeft | Float | From the **Blink System Prefab**. Used for the eyelids when eye tracking is off |
-| VAP/BlinkRight | Float | From the **Blink System Prefab**. Used for the eyelids when eye tracking is off |
+| EyeLidLeft | Float | From the **Better Blink Prefab** |
+| EyeLidRight | Float | From the **Better Blink Prefab** |
+| VAP/BlinkLeft | Float | From the **Better Blink Prefab**. Used for the eyelids when eye tracking is off |
+| VAP/BlinkRight | Float | From the **Better Blink Prefab**. Used for the eyelids when eye tracking is off |
 | Touch/PupilFocus | Float | Optional. Set by the **Pupil Focus System Prefab** |
 
 ### Output Animator Parameters
