@@ -1,7 +1,7 @@
 ## Version 3.0.7
 - Fixed Eye Rotation Sensitivity not working for Additive Controller.
 - Fixed Eyelid movement.
-- Eye Rotation Sensitivity changed to only effect User Eye Tracking.
+- Eye Rotation Sensitivity changed to only affect User Eye Tracking.
 - Added new toggle for Pupil Dilation Emulation (enabled by default), can be combined with Dilation Tracking.
 
 ## Version 3.0.6
