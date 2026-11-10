@@ -2,6 +2,7 @@
 - VRChat Face Tracking implementation!
 - Improved Ear Twitch logic.
 - Custom eye blink no longer uses a bit parameter.
+- Removed old face tracking implementation.
 
 ## Version 2.0.4
 - Improved sound quality of audio files.
