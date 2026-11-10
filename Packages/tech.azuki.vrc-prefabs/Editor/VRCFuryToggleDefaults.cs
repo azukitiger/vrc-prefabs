@@ -12,7 +12,6 @@ using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
-    // Reads and sets VRCFury Toggle defaults through serialized data, since VRCFury's model classes are internal.
     internal static class VRCFuryToggleDefaults
     {
         internal static void SetDefault(Component c, bool isOn, float sliderValue, bool record = false)
@@ -31,7 +30,6 @@ namespace VAP.Editor
                 so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        // Reads the wrapped toggle's own slider flag and defaults.
         internal static (bool slider, bool on, float value) GetDefault(Component c)
         {
             using var so = new SerializedObject(c);

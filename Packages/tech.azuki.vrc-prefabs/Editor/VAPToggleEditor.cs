@@ -42,7 +42,6 @@ namespace VAP.Editor
             bool on = owner.overrideDefault ? owner.defaultOn : ownOn;
             float value = owner.overrideDefault ? owner.defaultValue : ownValue;
 
-            // Changed here, compared to the prefab this comes from (or to VRCFury's value when there is none).
             var source = PrefabUtility.GetCorrespondingObjectFromSource(owner);
             bool changed = source == null
                 ? owner.overrideDefault

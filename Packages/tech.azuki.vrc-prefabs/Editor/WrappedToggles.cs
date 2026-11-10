@@ -9,12 +9,9 @@ using UnityEngine.SceneManagement;
 
 namespace VAP.Editor
 {
-    // Hides the VRCFury component a VAP wrapper (VAPToggle, VAPFullController) wraps, in the editor only. The flag is cleared while
-    // scenes and prefabs are saved, so files always hold a normal, visible VRCFury component.
     [InitializeOnLoad]
     internal static class WrappedToggles
     {
-        // Wrapped components that must stay when their wrapper goes away.
         internal static readonly HashSet<Component> Released = new HashSet<Component>();
 
         static WrappedToggles()
@@ -51,13 +48,10 @@ namespace VAP.Editor
             HideShownEditors();
         }
 
-        // Rebuilds per component since the last selection change, so a rebuild can never repeat endlessly.
         static readonly Dictionary<int, int> rebuilt = new Dictionary<int, int>();
         const int MaxRebuilds = 3;
         static double nextCheck;
 
-        // The inspector can end up holding an editor for a wrapped component (shown as an empty header) when it
-        // rebuilds while the flag is cleared, e.g. during a save or a prefab instance reload. Checked a few times a second.
         static void Check()
         {
             if (EditorApplication.timeSinceStartup < nextCheck)
@@ -66,7 +60,6 @@ namespace VAP.Editor
             HideShownEditors();
         }
 
-        // Hides wrapped components the inspector still shows and rebuilds it.
         internal static void HideShownEditors()
         {
             var tracker = ActiveEditorTracker.sharedTracker;
@@ -126,7 +119,6 @@ namespace VAP.Editor
         static bool ValidateWrap(MenuCommand command) =>
             command.context is Component c && WrapperFor(c) != null && !IsWrapped(c);
 
-        // Puts a VAP wrapper in place of an existing VRCFury Toggle or Full Controller and hides the original under it.
         [MenuItem("CONTEXT/VRCFury/Wrap with VAP")]
         static void Wrap(MenuCommand command)
         {
@@ -153,7 +145,6 @@ namespace VAP.Editor
         [MenuItem("CONTEXT/VAPToggle/Unwrap", true)]
         static bool ValidateUnwrapToggle(MenuCommand command) => CanUnwrap(command.context);
 
-        // Replaces the wrapper with the plain VRCFury Toggle, keeping its default override.
         [MenuItem("CONTEXT/VAPToggle/Unwrap")]
         static void UnwrapToggle(MenuCommand command)
         {
@@ -172,8 +163,6 @@ namespace VAP.Editor
         [MenuItem("CONTEXT/VAPFullController/Unwrap", true)]
         static bool ValidateUnwrapFullController(MenuCommand command) => CanUnwrap(command.context);
 
-        // Replaces the wrapper with the plain VRCFury Full Controller. Start values and removed items set on
-        // the wrapper live only on it, so they are lost.
         [MenuItem("CONTEXT/VAPFullController/Unwrap")]
         static void UnwrapFullController(MenuCommand command)
         {

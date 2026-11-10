@@ -5,7 +5,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // Double-clicking a menu or parameters file stored inside a prefab selects it instead of opening the prefab.
     internal static class OpenSubAssets
     {
         [OnOpenAsset(0)]

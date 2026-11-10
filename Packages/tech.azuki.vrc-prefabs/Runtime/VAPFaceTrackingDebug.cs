@@ -7,7 +7,6 @@ namespace VAP
     [Icon(IconPath)]
     public class VAPFaceTrackingDebug : VAPBlendshapeSetBase
     {
-        // Older versions stored the set name and weight as separate fields.
         [SerializeField, HideInInspector] string setName;
         [SerializeField, HideInInspector] float setWeight = -1f;
 

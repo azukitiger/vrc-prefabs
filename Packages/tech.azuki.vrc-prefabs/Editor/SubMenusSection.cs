@@ -7,7 +7,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // The main menu and every menu it reaches, each drawn once under its path.
     internal class SubMenusSection
     {
         const string RootLabel = "Main Menu";
@@ -39,7 +38,6 @@ namespace VAP.Editor
             var seen = new HashSet<VRCExpressionsMenu>(roots);
             foreach (var root in roots)
             {
-                // A root placed under a path in the avatar's menu shows that path; one merged into the main menu doesn't.
                 string at = owner.RootPath(root);
                 string label = at ?? (roots.Count == 1 ? RootLabel : $"{RootLabel} ({root.name})");
                 var entry = new Entry

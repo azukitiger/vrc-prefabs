@@ -204,11 +204,10 @@ namespace Azuki.Tools
 
             if (scrollLogToBottom)
             {
-                logScroll.y = labelHeight; // scroll view clamps this to its actual max automatically
+                logScroll.y = labelHeight;
                 scrollLogToBottom = false;
             }
 
-            // Scroll view fills whatever vertical space is left in the window.
             logScroll = EditorGUILayout.BeginScrollView(logScroll, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
             EditorGUILayout.SelectableLabel(logText, EditorStyles.textArea,
                 GUILayout.Height(labelHeight), GUILayout.ExpandWidth(true));
@@ -544,7 +543,6 @@ namespace Azuki.Tools
             return result.ToArray();
         }
 
-        // Auto-detects the Blender executable across platforms.
         private static string AutoDetectBlenderPath()
         {
 #if UNITY_EDITOR_WIN
@@ -611,7 +609,6 @@ namespace Azuki.Tools
                 }
                 catch
                 {
-                    // malformed PATH entry, skip
                 }
             }
 
@@ -623,12 +620,10 @@ namespace Azuki.Tools
 #if UNITY_EDITOR_WIN
             return "exe";
 #else
-            // Linux/macOS Blender executables normally have no file extension.
             return "";
 #endif
         }
 
-        // Blender is a plain filesystem path rather than a Unity project asset.
         private void DrawPathField(string label, ref string path, string extension, Action onChanged = null)
         {
             EditorGUILayout.BeginHorizontal();
@@ -660,7 +655,7 @@ namespace Azuki.Tools
             var uvs = CurrentUVs;
             string sourceUV = uvs[sourceUVIndex];
             string destUV = uvs[destUVIndex];
-            string deviceArg = DeviceModeLabels[deviceModeIndex].ToUpperInvariant(); // AUTO / GPU / CPU
+            string deviceArg = DeviceModeLabels[deviceModeIndex].ToUpperInvariant();
 
             AppendLogMainThread($"Starting bake: material='{materialName}'  {sourceUV} -> {destUV}");
             AppendLogMainThread($"FBX: {fbxPath}");
@@ -693,7 +688,7 @@ namespace Azuki.Tools
             bakeProcess.Exited += (s, e) =>
             {
                 int code = -1;
-                try { code = bakeProcess.ExitCode; } catch { /* process may already be disposed */ }
+                try { code = bakeProcess.ExitCode; } catch { }
                 QueueLog(code == 0 ? "Bake finished successfully." : $"Blender exited with code {code}.");
                 isBaking = false;
 

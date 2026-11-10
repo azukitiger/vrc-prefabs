@@ -16,7 +16,6 @@ namespace VAP.Editor
         string conflict;
         double conflictTime = -10;
 
-        // The set name must be unique on this avatar (checked about once a second).
         protected override void DrawNotices()
         {
             if (targets.Length != 1)
@@ -34,7 +33,6 @@ namespace VAP.Editor
 
     public abstract class VAPBlendshapeSetEditorBase : UnityEditor.Editor
     {
-        // What differs between the components using this inspector.
         protected virtual string Title => "Face Tracking BlendShape Set";
         protected virtual string LogName => "VAP Face Tracking BlendShape Set";
         protected virtual GUIContent SetNameLabel => NameLabel;
@@ -48,7 +46,6 @@ namespace VAP.Editor
         const float Padding = 10f;
         protected static float Line => EditorGUIUtility.singleLineHeight;
         protected static float Step => Line + EditorGUIUtility.standardVerticalSpacing;
-        // VRChat's drawer starts with: name, weight, 5px, filter, 5px, buttons.
         static float HiddenTop => Step * 4f + 10f;
 
         static readonly GUIContent CopyContent = new GUIContent("Copy", "Copy this Blendshapes Set, to paste into the avatar descriptor or another component.");
@@ -63,7 +60,6 @@ namespace VAP.Editor
             "that have blendshapes used by this set or matching the auto-fill format.");
 
         List<SkinnedMeshRenderer> catalogMeshes = new List<SkinnedMeshRenderer>();
-        // Our own copy of VRChat's drawer, so we can reach its scroll position.
         readonly FaceTrackingBlendshapesSetDrawer drawer = new FaceTrackingBlendshapesSetDrawer();
         static readonly System.Reflection.FieldInfo StatesField = typeof(FaceTrackingBlendshapesSetDrawer).GetField(
             "_states", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
@@ -78,7 +74,6 @@ namespace VAP.Editor
 
         string lastError;
 
-        // Shows an error in the inspector instead of a blank component if drawing fails.
         void SafeDrawFields()
         {
             try
@@ -134,7 +129,6 @@ namespace VAP.Editor
             GUI.Box(box, GUIContent.none, GUI.skin.box);
             var position = new Rect(box.x + Padding, box.y + Padding, box.width - Padding * 2, box.height - Padding * 2);
 
-            // Header: like the descriptor's "Blendshapes Sets" row.
             var header = TakeLine(ref position);
             EditorGUI.LabelField(header, "Blendshapes Set", EditorStyles.boldLabel);
             if (GUI.Button(new Rect(header.xMax - 134f, header.y, 64f, Line), CopyContent))
@@ -182,7 +176,6 @@ namespace VAP.Editor
                     RefreshDrawer();
                 }
 
-                // VRChat's tabs, search, multipliers and mapping rows.
                 var clip = new Rect(position.x, position.y, position.width, sdkHeight - HiddenTop);
                 HandleScrollWheel(clip);
                 GUI.BeginClip(clip);
@@ -220,7 +213,6 @@ namespace VAP.Editor
             searchField.SetValue(state, EditorGUI.TextField(search, (string)searchField.GetValue(state) ?? "",
                 GUI.skin.FindStyle("ToolbarSearchTextField") ?? EditorStyles.toolbarTextField));
 
-            // Working scrollbar over the greyed-out one.
             var scrollField = type.GetField("scroll");
             var heightField = type.GetField("contentHeight");
             if (scrollField == null || heightField == null)
@@ -252,7 +244,6 @@ namespace VAP.Editor
 
             float content = (float)heightField.GetValue(state);
             float view = Mathf.Min(280f, content);
-            // Below the hidden rows: tabs, search, multipliers and column headers.
             var viewport = new Rect(clip.x, clip.y + Step * 4f, clip.width, view);
             if (content <= view || !viewport.Contains(e.mousePosition))
                 return;
@@ -269,7 +260,6 @@ namespace VAP.Editor
             return line;
         }
 
-        // The mapping pickers list blendshapes from the avatar's face tracking meshes plus this component's meshes.
         void UpdateCatalog(VAPBlendshapeSetBase component, SerializedProperty set)
         {
             var list = new List<SkinnedMeshRenderer>();
@@ -305,7 +295,6 @@ namespace VAP.Editor
                       target);
         }
 
-        // VRChat's drawer caches its rows; its refresh method is internal, so call it by name.
         static readonly System.Reflection.MethodInfo InvalidateBindings = typeof(FaceTrackingEditorContext).GetMethod(
             "InvalidateBindings", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
 

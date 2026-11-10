@@ -9,7 +9,6 @@ using ControlType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionsMenu.Contro
 
 namespace VAP.Editor
 {
-    // Shows a menu asset, one row per item. Start values and removed items are stored on the component.
     internal class MenuSection
     {
         static readonly string[] RadialParams = { "Rotation" };
@@ -27,7 +26,6 @@ namespace VAP.Editor
         readonly System.Func<VRCExpressionsMenu, string> pathOf;
         static GUIStyle nameStyle, pathStyle;
 
-        // subMenu is null for the main menu.
         internal MenuSection(VAPExpressions owner, VRCExpressionsMenu subMenu = null, System.Func<VRCExpressionsMenu, string> pathOf = null)
         {
             this.owner = owner;
@@ -91,7 +89,6 @@ namespace VAP.Editor
         static ControlType TypeOf(SerializedProperty control) =>
             (ControlType)control.FindPropertyRelative("type").intValue;
 
-        // Axis puppets spring back to the center when let go, so only radial puppets get a start value.
         static string[] SubParamNames(ControlType type) =>
             type == ControlType.RadialPuppet ? RadialParams : new string[0];
 
@@ -102,7 +99,6 @@ namespace VAP.Editor
 
         VRCExpressionParameters.Parameter Param(string name) => owner.FindParameter(name);
 
-        // Puppet axes with a parameter in the parameters asset.
         List<(string axis, VRCExpressionParameters.Parameter param)> Axes(SerializedProperty control, ControlType type)
         {
             var result = new List<(string, VRCExpressionParameters.Parameter)>();
@@ -205,7 +201,6 @@ namespace VAP.Editor
             Event.current.Use();
         }
 
-        // Menu item names as one plain line: rich text tags and line breaks removed.
         internal static string CleanName(string name) =>
             Regex.Replace(Regex.Replace(name ?? "", "<[^>]*>", ""), @"\s+", " ").Trim();
 

@@ -7,7 +7,6 @@ namespace VAP.Editor
 {
     internal static class VAPPrefabAsset
     {
-        // The prefab file this component is edited in, or null outside a prefab.
         internal static string PrefabPath(Component component)
         {
             var stage = PrefabStageUtility.GetPrefabStage(component.gameObject);

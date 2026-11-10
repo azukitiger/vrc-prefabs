@@ -79,7 +79,6 @@ def list_all(args):
                     material_to_obj[slot.material.name] = obj
                     material_names.append(slot.material.name)
 
-    # Machine-readable blocks for Unity's parser - plain, unprefixed, flushed immediately.
     print("MATLIST_START", flush=True)
     for n in material_names:
         print(n, flush=True)
@@ -114,7 +113,6 @@ def list_materials(args):
                 if slot.material and slot.material.name not in names:
                     names.append(slot.material.name)
 
-    # Machine-readable block for Unity's parser - plain, unprefixed, flushed immediately.
     print("MATLIST_START", flush=True)
     for n in names:
         print(n, flush=True)
@@ -130,7 +128,6 @@ def list_uvs(args):
 
     _mat, target_obj = import_fbx_and_find_target(fbx_path, material_name)
 
-    # Machine-readable block for Unity's parser - plain, unprefixed, flushed immediately.
     print("UVLIST_START", flush=True)
     for uv in target_obj.data.uv_layers:
         print(uv.name, flush=True)
@@ -155,7 +152,7 @@ def try_enable_gpu(preferred_backend=None):
             try:
                 cprefs.compute_device_type = backend
             except TypeError:
-                continue  # not a valid backend on this platform/build
+                continue
 
             cprefs.get_devices()
             gpu_devices = [d for d in cprefs.devices if d.type == backend]
@@ -183,7 +180,7 @@ def bake(args):
     input_path = os.path.abspath(args[4])
     output_path = os.path.abspath(args[5])
     margin = int(args[6]) if len(args) > 6 else 32
-    device_mode = args[7].upper() if len(args) > 7 else "AUTO"  # AUTO / GPU / CPU
+    device_mode = args[7].upper() if len(args) > 7 else "AUTO"
 
     mat, target_obj = import_fbx_and_find_target(fbx_path, material_name)
 
@@ -220,7 +217,6 @@ def bake(args):
     src_img = bpy.data.images.load(input_path)
     log("Loaded source image")
 
-    # Resolution: match the source image
     src_width, src_height = src_img.size[0], src_img.size[1]
     if src_width == 0 or src_height == 0:
         log("ERROR: could not read source image dimensions")
@@ -228,7 +224,6 @@ def bake(args):
 
     log("Setting up temporary bake nodes...")
 
-    # Temp nodes: source (reads source UV) -> Emission -> Output
     src_node = nodes.new("ShaderNodeTexImage")
     src_node.image = src_img
     src_node.location = (-600, 300)
@@ -249,7 +244,6 @@ def bake(args):
     orig_socket = out_node.inputs["Surface"].links[0].from_socket if out_node.inputs["Surface"].is_linked else None
     links.new(emit_node.outputs["Emission"], out_node.inputs["Surface"])
 
-    # Destination image + node (bake target), same resolution as source
     dest_name = f"BAKE_DEST_{material_name}"
     if dest_name in bpy.data.images:
         bpy.data.images.remove(bpy.data.images[dest_name])
@@ -264,7 +258,6 @@ def bake(args):
     dest_node.select = True
     nodes.active = dest_node
 
-    # Active UV for baking = destination UV
     uv_layers.active = uv_layers[dest_uv]
 
     bpy.ops.object.select_all(action='DESELECT')
@@ -296,7 +289,6 @@ def bake(args):
     bpy.ops.object.bake(type='EMIT')
     log("Bake operator finished, writing output file...")
 
-    # Save output, matching source file format where possible
     out_ext = os.path.splitext(output_path)[1].lower()
     file_format = EXT_TO_FORMAT.get(out_ext, "PNG")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -305,7 +297,6 @@ def bake(args):
     dest_img.save()
     log(f"Saved: {output_path}")
 
-    # Cleanup temp nodes, restore original output link
     for n in (src_node, uv_node, emit_node, dest_node):
         nodes.remove(n)
     if orig_socket:

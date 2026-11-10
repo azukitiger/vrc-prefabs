@@ -5,7 +5,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // Instance values stored on the component when the data lives in an asset.
     internal static class ExpressionsOverrides
     {
         internal static readonly Color Bar = new Color(0.004f, 0.6f, 0.85f);
@@ -37,10 +36,8 @@ namespace VAP.Editor
             Changed(c);
         }
 
-        // The same component in the prefab this one comes from, if any.
         static VAPExpressions Source(VAPExpressions c) => PrefabUtility.GetCorrespondingObjectFromSource(c);
 
-        // Changed here, compared to the prefab this comes from (or to the asset when there is none).
         internal static bool DefaultChanged(VAPExpressions c, string name)
         {
             var mine = c.FindDefault(name);

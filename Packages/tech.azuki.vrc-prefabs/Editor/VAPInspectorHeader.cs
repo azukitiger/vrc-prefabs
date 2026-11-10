@@ -32,7 +32,6 @@ namespace VAP.Editor
             }
         }
 
-        // Our draw handler for each title bar, to tell whether Unity has replaced it.
         static readonly ConditionalWeakTable<IMGUIContainer, System.Action> Wrapped = new ConditionalWeakTable<IMGUIContainer, System.Action>();
 
         public static void Attach(VisualElement inspectorRoot, string title)
@@ -46,7 +45,6 @@ namespace VAP.Editor
             IVisualElementScheduledItem watch = null;
             inspectorRoot.RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                // Wait a frame so Unity has built the title bar.
                 inspectorRoot.schedule.Execute(() =>
                 {
                     if (!WrapTitlebar(inspectorRoot, title))
@@ -58,7 +56,6 @@ namespace VAP.Editor
             inspectorRoot.RegisterCallback<DetachFromPanelEvent>(_ => watch?.Pause());
         }
 
-        // Finds Unity's title bar for this inspector and draws over its title text.
         static bool WrapTitlebar(VisualElement root, string title)
         {
             VisualElement editorElement = root;
@@ -92,7 +89,6 @@ namespace VAP.Editor
                 if (Event.current.type != EventType.Repaint)
                     return;
                 var r = titlebar.contentRect;
-                // Cover the icon and name, leave the foldout arrow and the right-side buttons.
                 var area = new Rect(18, 0, Mathf.Max(0, r.width - 18 - 64), r.height);
                 EditorGUI.DrawRect(area, EditorGUIUtility.isProSkin ? new Color32(62, 62, 62, 255) : new Color32(203, 203, 203, 255));
                 Draw(area, title);
@@ -103,7 +99,6 @@ namespace VAP.Editor
             return true;
         }
 
-        // Used if Unity's title bar can't be found: draw the bar at the top of the inspector.
         static void AddFallback(VisualElement root, string title)
         {
             if (root.Q<IMGUIContainer>("VAPHeaderFallback") != null)

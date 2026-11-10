@@ -8,7 +8,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // Creates "<Prefab> Menu" and "<Prefab> Parameters" inside a prefab file.
     internal static class ExpressionsAssets
     {
         internal const string AssetsMenu = "Assets/VAP/Create Menu && Parameters";
@@ -61,7 +60,6 @@ namespace VAP.Editor
             Debug.Log($"[VAP] Created {string.Join(" and ", created)} in {Path.GetFileName(prefabPath)}.");
         }
 
-        // When a prefab is renamed, its menu and parameters assets named after it follow.
         class RenameWatcher : AssetPostprocessor
         {
             static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)

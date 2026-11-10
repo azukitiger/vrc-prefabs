@@ -6,8 +6,6 @@ using UnityEditor;
 
 namespace VAP.Editor
 {
-    // Unity only greys out menu items that don't apply. This takes the VAP asset items out of the
-    // menu while they don't apply to the selection, and puts them back when they do.
     [InitializeOnLoad]
     internal static class AssetMenus
     {
@@ -75,7 +73,6 @@ namespace VAP.Editor
                 }
                 catch
                 {
-                    // The menu API changed; leave the menu as Unity built it.
                     return;
                 }
             }

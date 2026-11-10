@@ -8,7 +8,6 @@ using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace VAP.Editor
 {
-    // Draws PhysBone chains in the Scene view even when they aren't selected.
     [InitializeOnLoad]
     public static class PhysBoneGizmos
     {
@@ -175,7 +174,6 @@ namespace VAP.Editor
             return s;
         }
 
-        // Pins are saved by scene, hierarchy path and component index, so they survive reloads.
         static string Id(VRCPhysBone pb)
         {
             int index = System.Array.IndexOf(pb.GetComponents<VRCPhysBone>(), pb);
@@ -201,7 +199,6 @@ namespace VAP.Editor
 
         static void RefreshCache()
         {
-            // Prefab Mode objects live in their own stage, which FindObjectsByType doesn't search.
             var stage = PrefabStageUtility.GetCurrentPrefabStage();
             cache = stage != null && stage.prefabContentsRoot != null
                 ? stage.prefabContentsRoot.GetComponentsInChildren<VRCPhysBone>(true)
@@ -228,7 +225,6 @@ namespace VAP.Editor
                     continue;
                 if (mode == Mode.Pinned && !pinnedCache.Contains(pb))
                     continue;
-                // VRChat's own gizmo already shows the selected one.
                 if (!drawWhenSelected && Selection.Contains(pb.gameObject))
                     continue;
                 Draw(pb, camForward);
@@ -241,7 +237,6 @@ namespace VAP.Editor
 
         static bool HasEndpoint(VRCPhysBone pb) => pb.endpointPosition != Vector3.zero;
 
-        // Fills nodes with the chain and returns its depth, counting the endpoint.
         static int CollectChain(VRCPhysBone pb)
         {
             nodes.Clear();
@@ -291,7 +286,6 @@ namespace VAP.Editor
             return max;
         }
 
-        // Close to VRChat's own gizmo: radius * curve * bone scale.
         static float Radius(VRCPhysBone pb, int depth, int maxDepth, float scale)
         {
             float r = pb.radius;
@@ -302,7 +296,6 @@ namespace VAP.Editor
 
         static void DrawJoint(Vector3 pos, float radius, Vector3 camForward)
         {
-            // The dot shows the joint even when its radius is zero.
             Handles.color = RadiusColor;
             float size = HandleUtility.GetHandleSize(pos) * 0.025f;
             Handles.DotHandleCap(0, pos, Quaternion.LookRotation(camForward), size, EventType.Repaint);

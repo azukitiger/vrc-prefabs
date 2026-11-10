@@ -9,7 +9,6 @@ using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
-    // Shared parts of the VAP components that wrap a VRCFury component (see IVRCFuryWrapper).
     internal static class VRCFuryWrap
     {
         internal const string VRCFuryType = "VF.Model.VRCFury";
@@ -27,7 +26,6 @@ namespace VAP.Editor
                    content.managedReferenceFullTypename.EndsWith(featureType);
         }
 
-        // Makes sure the wrapper has its own VRCFury component with the given feature on the same object, and hides it.
         internal static Component Ensure(MonoBehaviour owner, string featureType)
         {
             var wrapper = (IVRCFuryWrapper)owner;
@@ -67,7 +65,6 @@ namespace VAP.Editor
                 EditorApplication.delayCall += () => ActiveEditorTracker.sharedTracker.ForceRebuild();
         }
 
-        // Call from the wrapper's editor OnDisable: when the wrapper was removed, the wrapped component goes too.
         internal static void ScheduleRemoval(Object owner, Component wrapped)
         {
             if (wrapped == null)
@@ -95,7 +92,6 @@ namespace VAP.Editor
                 MessageType.Error));
     }
 
-    // A collapsed box holding VRCFury's own inspector for the wrapped component.
     internal class WrappedSection : IDisposable
     {
         const float HeaderHeight = 26f;
@@ -107,7 +103,6 @@ namespace VAP.Editor
 
         internal VisualElement Root { get; } = new VisualElement();
 
-        // drawInfo draws what the collapsed bar shows, in the space after the arrow.
         internal WrappedSection(Component wrapped, string key, Action<Rect> drawInfo)
         {
             this.wrapped = wrapped;

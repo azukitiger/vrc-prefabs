@@ -7,7 +7,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // Copies parameters from one Expression Parameters asset into another.
     internal class AddParametersWindow : EditorWindow
     {
         internal const string AssetsMenu = "Assets/VAP/Add Parameters From...";

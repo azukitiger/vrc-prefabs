@@ -5,8 +5,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP
 {
-    // Menu & Parameters for the avatar's own Expressions Menu and Parameters, read from the Avatar Descriptor.
-    // Only one is allowed per avatar.
     [AddComponentMenu("VAP/VRC Avatar Descriptor Expressions")]
     [DisallowMultipleComponent]
     [Icon(VAPFaceTrackingDebug.IconPath)]
@@ -14,7 +12,6 @@ namespace VAP
     {
         public VRCAvatarDescriptor Descriptor => GetComponentInParent<VRCAvatarDescriptor>(true);
 
-        // Another one on the same avatar, if any. Only the first one found is used.
         public VAPDescriptorExpressions Other()
         {
             var descriptor = Descriptor;

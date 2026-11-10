@@ -151,7 +151,6 @@ namespace VAP.Editor
             var result = new Result { missing = new List<string>(), warnings = new List<string>() };
             var so = new SerializedObject(descriptor);
 
-            // Face tracking meshes
             var meshList = so.FindProperty("faceTrackingMeshes");
             var allMeshes = new List<SkinnedMeshRenderer>();
             if (meshList != null)
@@ -187,7 +186,6 @@ namespace VAP.Editor
                 return result;
             }
 
-            // Replace the set with the same name, or add it at the end.
             string setName = template.setName ?? "";
             SerializedProperty set = null;
             for (int i = 0; i < sets.arraySize; i++)
@@ -199,7 +197,6 @@ namespace VAP.Editor
                     break;
                 }
             }
-            // Copy, so the build never shares data with the scene component.
             var copy = JsonUtility.FromJson<VRCAvatarDescriptor.FaceTrackingBlendshapesSet>(JsonUtility.ToJson(template));
             if (set == null)
             {

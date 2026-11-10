@@ -6,7 +6,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // Shared drawing for the editors of components built on VAPExpressions.
     public abstract class VAPExpressionsEditor : UnityEditor.Editor
     {
         static readonly GUIContent MenuHeader = new GUIContent("Menu");
@@ -27,7 +26,6 @@ namespace VAP.Editor
             return $"{cost} synced bits";
         }
 
-        // Synced bits and the menu, for any component built on VAPExpressions.
         protected void DrawContents(VAPExpressions component)
         {
             subMenusSection ??= new SubMenusSection(component);

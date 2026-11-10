@@ -24,7 +24,6 @@ namespace VAP.Editor
                 return null;
 
             var descriptor = avatarRoot.GetComponent<VRCAvatarDescriptor>();
-            // Names must be unique on this avatar; checked before any set is added.
             var conflicts = components.Select(c => BlendshapeSetNameCheck.Conflict(c, descriptor))
                 .Where(m => m != null).Distinct().ToList();
             if (conflicts.Count > 0)
@@ -68,7 +67,6 @@ namespace VAP.Editor
             var listed = (c.meshes ?? new SkinnedMeshRenderer[0]).Where(m => m != null).ToList();
             if (listed.Count > 0)
                 return listed;
-            // Blendshapes this set already maps, so meshes are found even without an auto-fill format.
             var used = new HashSet<string>();
             if (c.blendshapesSet?.faceTrackingBlendshapeNames != null)
                 used.UnionWith(c.blendshapesSet.faceTrackingBlendshapeNames.Where(n => !string.IsNullOrEmpty(n)));
@@ -101,7 +99,7 @@ namespace VAP.Editor
                 {
                     string error = FaceTrackingDebugBuild.Process(ctx.AvatarRootObject);
                     if (error != null)
-                        throw new System.InvalidOperationException(error);   // stops the build; NDMF shows the message
+                        throw new System.InvalidOperationException(error);
                 });
         }
     }

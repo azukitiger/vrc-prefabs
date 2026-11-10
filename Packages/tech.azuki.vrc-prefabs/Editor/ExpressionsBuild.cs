@@ -22,7 +22,6 @@ namespace VAP.Editor
 
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
-            // Each component's asset is replaced by a copy with this instance's values.
             var swaps = new List<(Component owner, Object original, Object copy)>();
             var components = avatarRoot.GetComponentsInChildren<VAPExpressions>(true);
             var parameterCopies = new Dictionary<VAPExpressions, List<VRCExpressionParameters>>();
@@ -67,7 +66,6 @@ namespace VAP.Editor
                 }
             }
 
-            // Menu copies point at the other copies (sub menus, their parameters).
             var copyOf = new Dictionary<Object, Object>();
             foreach (var (_, original, copy) in swaps)
                 if (!copyOf.ContainsKey(original))
@@ -75,7 +73,6 @@ namespace VAP.Editor
             foreach (var (owner, _, copy) in swaps)
                 if (copy is VRCExpressionsMenu m)
                 {
-                    // A menu's own parameters, or the component's only parameters file when that isn't one of them.
                     if (m.Parameters != null && copyOf.TryGetValue(m.Parameters, out var p))
                         m.Parameters = (VRCExpressionParameters)p;
                     else if (parameterCopies.TryGetValue((VAPExpressions)owner, out var own) && own.Count == 1)
@@ -88,8 +85,6 @@ namespace VAP.Editor
             foreach (var (owner, original, copy) in swaps)
             {
                 saveAsset?.Invoke(copy);
-                // References under this component's object first; if there are none, the whole avatar.
-                // The descriptor's own menu is used by the whole avatar.
                 int replaced = owner is VAPDescriptorExpressions ? 0 : Replace(owner.gameObject, original, copy, owner);
                 if (replaced == 0)
                     replaced = Replace(avatarRoot, original, copy, owner);
@@ -122,7 +117,6 @@ namespace VAP.Editor
                 bool changed = false;
                 while (it.Next(enter))
                 {
-                    // Don't walk into arrays of plain values (e.g. mesh or curve data); they hold no references.
                     enter = !(it.isArray && it.propertyType == SerializedPropertyType.Generic && PlainTypes.Contains(it.arrayElementType))
                             && it.propertyType != SerializedPropertyType.String;
                     if (it.propertyType == SerializedPropertyType.ObjectReference && it.objectReferenceValue == from)

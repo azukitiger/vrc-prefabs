@@ -142,7 +142,6 @@ namespace VAP.Editor
             var row = EditorStyles.helpBox.padding.Remove(header);
             row.height = Line;
 
-            // Unchecked correctives are not created (their names are kept in disabledCorrectives).
             bool enabled = !Disabled(shape);
             EditorGUI.BeginChangeCheck();
             bool next = EditorGUI.Toggle(new Rect(row.x, row.y, 16f, Line),

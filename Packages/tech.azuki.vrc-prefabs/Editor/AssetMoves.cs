@@ -9,8 +9,6 @@ using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
-    // Moves assets into a prefab file as sub-assets, and back out into their own files.
-    // References inside the prefab file are pointed at the moved copies.
     internal static class AssetMoves
     {
         internal const string InsertMenu = "Assets/VAP/Insert Into Prefab";
@@ -36,8 +34,6 @@ namespace VAP.Editor
             return NativeExtensions.Contains(Path.GetExtension(path));
         }
 
-        // The object plus the hidden objects in its file it uses, like an Animator Controller's states.
-        // A main asset brings everything in its file.
         static List<Object> Bundle(Object o)
         {
             string path = AssetDatabase.GetAssetPath(o);
@@ -273,7 +269,6 @@ namespace VAP.Editor
 
         internal const string HidePartsMenu = "Assets/VAP/Hide Animator Parts";
 
-        // States, transitions and blend trees are normally hidden inside the file that holds them.
         static bool IsAnimatorPart(Object o) =>
             o is UnityEditor.Animations.AnimatorState || o is UnityEditor.Animations.AnimatorStateMachine ||
             o is UnityEditor.Animations.AnimatorTransitionBase || o is UnityEditor.Animations.BlendTree || o is StateMachineBehaviour;
@@ -282,7 +277,6 @@ namespace VAP.Editor
             AssetDatabase.LoadAllAssetsAtPath(path)
                 .Any(o => o != null && !AssetDatabase.IsMainAsset(o) && IsAnimatorPart(o) && (o.hideFlags & HideFlags.HideInHierarchy) != 0);
 
-        // Runs a change that saves the file, then hides its animator parts again if they were hidden before.
         internal static void KeepPartsHidden(string path, System.Action write)
         {
             bool hidden = HasHiddenParts(path);
@@ -317,7 +311,6 @@ namespace VAP.Editor
             EditorApplication.RepaintProjectWindow();
         }
 
-        // Unity doesn't keep hide flags set from code on objects inside prefab files, so they're set in the file.
         // AnimatorState, AnimatorStateMachine, BlendTree, AnimatorStateTransition, AnimatorTransition.
         static readonly HashSet<string> PartClassIds = new HashSet<string> { "1102", "1107", "206", "1101", "1109" };
         static readonly Regex ObjectHeader = new Regex(@"^--- !u!(\d+) &(-?\d+)", RegexOptions.Compiled);
@@ -325,8 +318,6 @@ namespace VAP.Editor
         static readonly Regex FileId = new Regex(@"fileID: (-?\d+)", RegexOptions.Compiled);
         static readonly Regex VisibleFlag = new Regex(@"(?m)^(  m_ObjectHideFlags: )0(\r?)$", RegexOptions.Compiled);
 
-        // Prefabs whose animator parts VAP keeps hidden: ones it moved a controller into, or ones
-        // Hide Animator Parts was used on. Stored per project in UserSettings.
         const string WatchedKey = "VAP.HiddenAnimatorParts";
 
         static HashSet<string> Watched() =>
@@ -342,7 +333,6 @@ namespace VAP.Editor
                 EditorUserSettings.SetConfigValue(WatchedKey, string.Join(";", set));
         }
 
-        // Saving doesn't always reimport, so watched prefabs are also checked after each save.
         class SaveWatcher : AssetModificationProcessor
         {
             static string[] OnWillSaveAssets(string[] paths)
@@ -360,12 +350,18 @@ namespace VAP.Editor
             }
         }
 
-        // Unity writes these flags back as visible whenever it saves a prefab, so watched prefabs are checked after each import.
         class PartsWatcher : AssetPostprocessor
         {
             static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
             {
                 var watched = Watched();
+                foreach (var p in imported)
+                    if (p.EndsWith(".prefab", System.StringComparison.OrdinalIgnoreCase) &&
+                        !watched.Contains(AssetDatabase.AssetPathToGUID(p)) && HasHiddenParts(p))
+                    {
+                        Watch(p);
+                        watched.Add(AssetDatabase.AssetPathToGUID(p));
+                    }
                 if (watched.Count == 0)
                     return;
                 var prefabs = imported.Where(p => watched.Contains(AssetDatabase.AssetPathToGUID(p))).ToList();
@@ -388,7 +384,6 @@ namespace VAP.Editor
             if (!text.StartsWith("%YAML"))
                 return;
             var parts = Regex.Split(text, @"(?m)^(?=--- !u!)");
-            // Behaviours on states and state machines (like Parameter Drivers) are hidden too.
             var behaviours = new HashSet<string>();
             foreach (Match list in BehaviourList.Matches(text))
                 foreach (Match id in FileId.Matches(list.Groups[1].Value))

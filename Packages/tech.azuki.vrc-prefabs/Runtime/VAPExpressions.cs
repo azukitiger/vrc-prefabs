@@ -8,7 +8,6 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    // Base of the VRCFury Full Controller and VRC Avatar Descriptor Expressions components.
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public abstract class VAPExpressions : MonoBehaviour, IEditorOnly
     {
@@ -19,7 +18,6 @@ namespace VAP
         [Tooltip("The Expression Parameters asset. It is never changed; values set here are applied to a copy at build time.")]
         public VRCExpressionParameters parametersAsset;
 
-        // Values set on this component, applied over the assets at build time.
         public List<DefaultOverride> defaultOverrides = new List<DefaultOverride>();
         public List<ControlOverride> controlOverrides = new List<ControlOverride>();
 
@@ -41,14 +39,12 @@ namespace VAP
             public bool IsEmpty => !removed;
         }
 
-        // The menus and parameter files this component reads.
         public virtual List<VRCExpressionsMenu> RootMenus() =>
             menuAsset != null ? new List<VRCExpressionsMenu> { menuAsset } : new List<VRCExpressionsMenu>();
 
         public virtual List<VRCExpressionParameters> ParameterAssets() =>
             parametersAsset != null ? new List<VRCExpressionParameters> { parametersAsset } : new List<VRCExpressionParameters>();
 
-        // Where a root menu shows up in the avatar's menu, or null when it is the main menu.
         public virtual string RootPath(VRCExpressionsMenu root) => null;
 
         public VRCExpressionParameters.Parameter FindParameter(string name)
@@ -63,7 +59,6 @@ namespace VAP
             return null;
         }
 
-        // Every menu reachable through Sub Menu controls, each once, in menu order. Root menus are not included.
         public List<VRCExpressionsMenu> SubMenus()
         {
             var result = new List<VRCExpressionsMenu>();
@@ -90,7 +85,6 @@ namespace VAP
 
         public bool IsRemoved(VRCExpressionsMenu menu, int control) => FindControl(menu, control, -1)?.removed ?? false;
 
-        // Parameter names used by menu items, with or without the removed ones.
         HashSet<string> UsedParameters(bool skipRemoved)
         {
             var result = new HashSet<string>();
@@ -119,7 +113,6 @@ namespace VAP
             return result;
         }
 
-        // Parameters only removed menu items used, which are left out at build time.
         public HashSet<string> DroppedParameters()
         {
             var before = UsedParameters(false);
@@ -151,7 +144,6 @@ namespace VAP
             }).ToArray();
         }
 
-        // Copies every field, including bit width, representation and lerp settings.
         public static VRCExpressionParameters.Parameter Copy(VRCExpressionParameters.Parameter p) =>
             JsonUtility.FromJson<VRCExpressionParameters.Parameter>(JsonUtility.ToJson(p));
 
@@ -161,7 +153,6 @@ namespace VAP
         public static bool IsSigned(VRCExpressionParameters.Parameter p) =>
             p.GetRepresentationByType() == VRCExpressionParameters.Parameter.ValueRepresentation.Signed;
 
-        // Values the parameter can hold, from its type, bit width and representation.
         public static void Range(VRCExpressionParameters.Parameter p, out float min, out float max)
         {
             bool signed = IsSigned(p);

@@ -15,7 +15,6 @@ namespace VAP.Editor
         internal static readonly string[] Keys = Enumerable.Range(0, (int)VRCAvatarDescriptor.FaceTrackingKey.Max)
             .Select(i => ((VRCAvatarDescriptor.FaceTrackingKey)i).ToString()).ToArray();
 
-        // Groups that the name rules can't find: the mouth moving sideways.
         static readonly (string group, string[] keys)[] CustomGroups =
         {
             ("MouthRight", new[] { "MouthUpperRight", "MouthLowerRight" }),
@@ -81,7 +80,6 @@ namespace VAP.Editor
                     members[customName] = indices;
             }
 
-            // Menu: Lip / LipFunnel / groups (broadest first), then the single keys.
             var items = members.Select(m => (name: m.Key, keys: m.Value, group: m.Value.Length > 1)).ToList();
             var bucketSize = items.GroupBy(m => Bucket(m.name)).ToDictionary(g => g.Key, g => g.Count());
             string Folder(string name)
@@ -134,7 +132,6 @@ namespace VAP.Editor
                 var root = new AdvancedDropdownItem("Tracking Key");
                 var folders = new Dictionary<string, AdvancedDropdownItem>();
                 int id = 1;
-                // No separators: search lists them as blank lines.
                 foreach (var (path, name, group) in menu)
                 {
                     var parts = path.Split('/');

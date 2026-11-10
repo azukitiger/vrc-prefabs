@@ -82,7 +82,6 @@ namespace VAP.Editor
         static bool Leads(VRCExpressionsMenu.Control c, HashSet<VRCExpressionsMenu> full) =>
             c.subMenu != null && full.Contains(c.subMenu);
 
-        // Every menu reachable from the root, each once.
         static List<VRCExpressionsMenu> Reachable(VRCExpressionsMenu root)
         {
             var seen = new HashSet<VRCExpressionsMenu> { root };
@@ -94,8 +93,6 @@ namespace VAP.Editor
             return list;
         }
 
-        // Menus that lead to at least one item that isn't a sub menu. Menus that only
-        // link to each other never get in, so loops count as empty.
         static HashSet<VRCExpressionsMenu> Full(List<VRCExpressionsMenu> menus)
         {
             var full = new HashSet<VRCExpressionsMenu>();
@@ -124,7 +121,6 @@ namespace VAP.Editor
         public override string QualifiedName => "tech.azuki.vrc-prefabs.remove-empty-sub-menus";
         public override string DisplayName => "VAP Remove Empty Sub Menus";
 
-        // Optimizing runs after VRCFury, so its menus are included.
         protected override void Configure()
         {
             InPhase(BuildPhase.Optimizing)

@@ -50,7 +50,7 @@ namespace VAP.Editor
 
             Transform hips = null;
             try { hips = animator.GetBoneTransform(HumanBodyBones.Hips); }
-            catch (Exception) { /* thrown when the Avatar is broken */ }
+            catch (Exception) { }
             var armature = hips != null ? hips.parent : null;
             if (armature == null || armature == root)
             {
@@ -68,13 +68,12 @@ namespace VAP.Editor
             if (descriptor != null)
                 descriptor.ViewPosition.y += height;
 
-            // The humanoid Avatar stores the rig's rest positions, so rebuild it with the new armature height.
             var oldAvatar = animator.avatar;
             var human = oldAvatar.humanDescription;
             var skeleton = human.skeleton;
             if (skeleton != null && skeleton.Length > 0)
             {
-                skeleton[0].name = avatarRoot.name; // the build copy may be renamed, e.g. "(Clone)"
+                skeleton[0].name = avatarRoot.name;
                 for (int i = 0; i < skeleton.Length; i++)
                 {
                     if (skeleton[i].name == armature.name)
@@ -94,7 +93,6 @@ namespace VAP.Editor
             rebuilt.name = oldAvatar.name + " (Floor Adjusted)";
             saveAsset?.Invoke(rebuilt);
             animator.avatar = rebuilt;
-            // Rebinding the Avatar can reset the pose, so set the armature again.
             armature.localPosition = armaturePosition;
 
             Debug.Log(Log + $"Moved the armature {(height > 0 ? "up" : "down")} {Mathf.Abs(height) * 100f:0.0} cm and rebuilt the rig as \"{rebuilt.name}\".", avatarRoot);
@@ -104,10 +102,9 @@ namespace VAP.Editor
         {
             problem = null;
             var temp = new GameObject(root.name) { hideFlags = HideFlags.HideAndDontSave };
-            temp.SetActive(false);   // the copied components (PhysBones etc.) never wake up
+            temp.SetActive(false);
             try
             {
-                // Same path from the root as on the avatar (the armature may sit deeper than one level).
                 Transform parent = temp.transform;
                 string path = UnityEditor.AnimationUtility.CalculateTransformPath(armature.parent, root);
                 if (!string.IsNullOrEmpty(path))
@@ -123,7 +120,6 @@ namespace VAP.Editor
                 copy.transform.localRotation = armature.localRotation;
                 copy.transform.localScale = armature.localScale;
 
-                // Only skeleton entries that exist in the copy; the root entry is the copy's root.
                 var names = new System.Collections.Generic.HashSet<string> { temp.name };
                 foreach (var t in temp.GetComponentsInChildren<Transform>(true))
                     names.Add(t.name);

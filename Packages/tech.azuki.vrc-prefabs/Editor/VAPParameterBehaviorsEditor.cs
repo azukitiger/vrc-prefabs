@@ -38,7 +38,6 @@ namespace VAP.Editor
             set => SessionState.SetInt(TabKey, value);
         }
 
-        // VRChat's target modes, in the order of its popup.
         const int ModeForward = 0, ModeBlendSet = 1, ModeApply = 2, ModeLimitMax = 3, ModeLimitMin = 4;
         static readonly int[] BlendshapeModes = { ModeApply, ModeLimitMax, ModeLimitMin };
         static readonly GUIContent[] BlendshapeModeNames =
@@ -50,7 +49,7 @@ namespace VAP.Editor
         static int ModeOf(SerializedProperty element) => element.FindPropertyRelative("targetMode").intValue;
 
         ReorderableList reorderable, trackingList;
-        readonly List<int> shown = new List<int>();   // array indices shown in the current tab
+        readonly List<int> shown = new List<int>();
         int[] shownSnapshot = new int[0];
 
         public override VisualElement CreateInspectorGUI()
@@ -130,7 +129,6 @@ namespace VAP.Editor
             }
         }
 
-        // One list shows the entries of the open tab; its rows map to indices in the real array.
         ReorderableList GetList(SerializedProperty list)
         {
             if (reorderable != null && reorderable.serializedProperty == null && listOwner == serializedObject)
@@ -148,7 +146,7 @@ namespace VAP.Editor
                     if (i >= shownSnapshot.Length)
                         return EditorGUIUtility.singleLineHeight;
                     var element = listArray.GetArrayElementAtIndex(shownSnapshot[i]);
-                    element.isExpanded = true;   // height must match the open entry drawn
+                    element.isExpanded = true;
                     return ElementHeight(element, 0f) + 4f;
                 },
                 drawElementCallback = (rect, i, active, focused) =>
@@ -166,7 +164,6 @@ namespace VAP.Editor
                     listArray.arraySize++;
                     var element = listArray.GetArrayElementAtIndex(listArray.arraySize - 1);
                     element.boxedValue = new VRCAvatarDescriptor.FaceTrackingParameterBehavior();
-                    // A new entry is the type of the open tab.
                     element.FindPropertyRelative("targetMode").intValue =
                         Tab == TabAnimator ? ModeForward : Tab == TabBlendSet ? ModeBlendSet : ModeApply;
                     element.isExpanded = true;
@@ -203,12 +200,11 @@ namespace VAP.Editor
             int tab = TabOfMode(ModeOf(element));
             float stripEnd = g.targetXMax;
             if (!element.isExpanded)
-                element.isExpanded = true;   // entries are always open; no fold arrow
+                element.isExpanded = true;
 
             DrawSdk(rect, element, rect.width, headerWidth, g.row.x, stripEnd, 0f, null, array, () => DrawBehaviorStrip(g, element, tab, stripEnd));
         }
 
-        // The build copy of one behavior (shared set applied), for Copy and Copy All.
         VRCAvatarDescriptor.FaceTrackingParameterBehavior BuildCopy(int index)
         {
             var c = (VAPParameterBehaviors)target;
@@ -259,7 +255,6 @@ namespace VAP.Editor
 
         bool PerBehavior => serializedObject.FindProperty("perBehaviorSet").boolValue;
 
-        // The shared set name when it applies, otherwise null (each behavior uses its own).
         string SharedSet
         {
             get
@@ -330,7 +325,6 @@ namespace VAP.Editor
         static readonly GUIContent DeleteContent = new GUIContent("Delete");
         static readonly GUIContent CopyContent = new GUIContent("Copy Behavior");
 
-        // Right-click an item: select it, then Copy (VRChat behaviors) or Delete.
         bool ContextMenu(Rect rect, ReorderableList list, int listIndex, SerializedProperty array, int arrayIndex, bool canCopy)
         {
             var e = Event.current;
@@ -374,7 +368,6 @@ namespace VAP.Editor
 
         void DrawBehaviorStrip(Header g, SerializedProperty element, int tab, float stripEnd)
         {
-            // Label and field line up with the Expression row below.
             float itemX = g.row.x - EditorStyles.helpBox.padding.left;
             float fieldX = itemX + ItemLabelWidth;
             if (tab == TabAnimator || tab == TabBlendSet)
@@ -409,7 +402,6 @@ namespace VAP.Editor
                 if (next != at)
                     mode.intValue = BlendshapeModes[next];
 
-                // Target blendshape: typed, with a search button beside it.
                 const float searchWidth = 22f;
                 var nameProp = element.FindPropertyRelative("targetBlendshapeName");
                 var field = new Rect(g.mode.xMax + 4f, g.mode.y, stripEnd - g.mode.xMax - 6f - searchWidth, Line);
@@ -425,14 +417,12 @@ namespace VAP.Editor
             EditorGUIUtility.IconContent(EditorGUIUtility.isProSkin ? "d_Search Icon" : "Search Icon").image,
             "Search the blendshapes on this avatar's meshes.");
         static GUIStyle searchStyle;
-        // Little padding, so the icon is drawn at full size.
         static GUIStyle SearchStyle => searchStyle ??= new GUIStyle(EditorStyles.miniButton)
         {
             padding = new RectOffset(3, 3, 1, 1),
             imagePosition = ImagePosition.ImageOnly,
         };
 
-        // Blendshape names per mesh on this avatar (under its VRC Avatar Descriptor only).
         List<(string mesh, string[] names)> AvatarBlendshapes()
         {
             var result = new List<(string, string[])>();
@@ -474,7 +464,6 @@ namespace VAP.Editor
                     root.AddChild(new UnityEditor.IMGUI.Controls.AdvancedDropdownItem("No blendshapes on this avatar") { id = id++, enabled = false });
                 foreach (var (mesh, names) in meshes)
                 {
-                    // A single mesh lists its blendshapes directly.
                     var parent = meshes.Count == 1 ? root : new UnityEditor.IMGUI.Controls.AdvancedDropdownItem(mesh) { id = id++ };
                     if (parent != root)
                         root.AddChild(parent);
@@ -535,7 +524,6 @@ namespace VAP.Editor
             return trackingList;
         }
 
-        // Rows under the header: Blendshapes Set (Per Behavior only) and the preview line.
         float InsertHeightFor(SerializedProperty entry) => (PerBehavior ? Step : 0f) + Step;
 
         static readonly GUIContent SetLabel = new GUIContent("Blendshapes Set",
@@ -556,7 +544,7 @@ namespace VAP.Editor
             var full = g;
 
             if (!behavior.isExpanded)
-                behavior.isExpanded = true;   // entries are always open; no fold arrow
+                behavior.isExpanded = true;
             float insertH = InsertHeightFor(entry);
             var insert = new Rect(rect.x, rect.y + HeaderHeight, sdkWidth, insertH);
             DrawSdk(rect, behavior, sdkWidth, sdkWidth, g.row.x, g.targetXMax, insertH, insert, null, () =>
@@ -591,7 +579,6 @@ namespace VAP.Editor
 
             if (insert.height > 0f)
             {
-                // With a shared set the row is hidden; the entry's own value is kept.
                 bool per = PerBehavior;
                 float previewY = insert.y + 2f;
                 if (per)
@@ -663,7 +650,6 @@ namespace VAP.Editor
             return field;
         }
 
-        // A plain text field (no picker), so nothing is written unless the name is typed.
         static void DrawSetField(Rect rect, SerializedProperty prop)
         {
             EditorGUI.BeginChangeCheck();
@@ -678,7 +664,7 @@ namespace VAP.Editor
         {
             get
             {
-                float longest = EditorStyles.label.CalcSize(WeightSetLabel).x;   // "Blendshapes Set"
+                float longest = EditorStyles.label.CalcSize(WeightSetLabel).x;
                 float unity = EditorGUIUtility.labelWidth;
                 return Mathf.Max(15f + longest + 4f, 15f + longest + (unity - 15f - longest) * 0.5f);
             }
@@ -688,12 +674,11 @@ namespace VAP.Editor
 
         struct Header
         {
-            public Rect row;      // inside the header box
-            public Rect mode;     // VRChat's target mode popup
-            public float targetXMax;   // end of VRChat's target field
+            public Rect row;
+            public Rect mode;
+            public float targetXMax;
         }
 
-        // Mirrors the header layout of VRChat's FaceTrackingParameterBehaviorDrawer (embedded).
         static Header HeaderGeometry(Rect rect, float width, float controls)
         {
             var header = new Rect(rect.x, rect.y, width, HeaderHeight);
@@ -711,7 +696,6 @@ namespace VAP.Editor
             float headerH = HeaderHeight;
             bool custom = HasCustomExpression(sdk);
             float bodyEnd = custom ? sdkH - 5f - Step : sdkH;
-            // Where VRChat's header box would end; past it, our box piece finishes the header.
             float rightEnd = headerWidth > rect.width ? rect.xMax - EditorStyles.helpBox.padding.right : rect.xMax;
 
             var stripBox = new Rect(strip0, rect.y, strip1 - strip0, headerH);
@@ -719,27 +703,23 @@ namespace VAP.Editor
             var e = Event.current;
             if (e.type == EventType.Repaint)
             {
-                BoxPiece(stripBox, rect, headerH);   // the header box behind our controls
+                BoxPiece(stripBox, rect, headerH);
                 BoxPiece(rightBox, rect, headerH);
             }
 
-            // Our controls first, so they get the clicks.
             drawOwn();
 
-            // Rows are found from the bottom: [input warning] [weight row] [inputs] 5px.
             int targetMode = sdk.FindPropertyRelative("targetMode").intValue;
             bool blendshapeMode = targetMode == ModeApply || targetMode == ModeLimitMax || targetMode == ModeLimitMin;
             int count = sdk.FindPropertyRelative("inputTrackingKeys").arraySize;
             float inputsH = custom ? Step : Step * (count + 2) + (count == 32 ? 40f : 0f);
             float inputsTop = sdkH - 5f - inputsH;
 
-            // VRChat's input warning ("Add at least one input...") is drawn at the very bottom instead.
             string warnText = sdk.isExpanded ? InputWarning(sdk, custom, count) : null;
             float warnH = WarningHeight(warnText, sdkWidth);
             float warnTop = inputsTop - (blendshapeMode ? Step : 0f) - warnH;
             float extra = custom ? ExpressionHeight(sdk) - Line : 0f;
             float targetH = sdk.isExpanded ? Mathf.Max(0f, warnTop - headerH) : 0f;
-            // With a shared Blendshapes Set (Per Behavior off) the weight row is hidden; its value is kept.
             bool hideWeight = sdk.isExpanded && blendshapeMode && !PerBehavior;
             float hiddenH = hideWeight ? Step : 0f;
             float Shift(float y) => y - (targetH > 0f && y >= warnTop ? targetH : 0f)
@@ -749,7 +729,6 @@ namespace VAP.Editor
                 sdkWidth, warnH - EditorGUIUtility.standardVerticalSpacing);
             lastWidth = sdkWidth;
 
-            // VRChat's "Bendshapes Set (Optional)" row (blendshape modes) is replaced by ours.
             Rect weightRow = default;
             float weightTop = -1f;
             if (sdk.isExpanded && blendshapeMode)
@@ -762,7 +741,6 @@ namespace VAP.Editor
                 }
             }
 
-            // Custom expressions get a word-wrapped box instead of VRChat's single line.
             Rect expressionRow = default;
             if (custom)
             {
@@ -770,7 +748,6 @@ namespace VAP.Editor
                 DrawExpression(expressionRow, sdk);
             }
 
-            // Clicks on our areas never reach VRChat's hidden controls underneath.
             var owned = new List<Rect> { stripBox, rightBox };
             if (insertRect.HasValue && insertRect.Value.height > 0f)
                 owned.Add(insertRect.Value);
@@ -804,7 +781,7 @@ namespace VAP.Editor
             if (sdk.isExpanded && bodyEnd > headerH)
             {
                 float top = rect.y + insertH;
-                var cuts = new List<(float a, float b)>();   // VRChat's own y ranges we leave out
+                var cuts = new List<(float a, float b)>();
                 if (weightTop > headerH)
                     cuts.Add((weightTop, weightTop + Step));
                 if (warnH > 0f)
@@ -813,13 +790,13 @@ namespace VAP.Editor
                     cuts.Add((headerH, warnTop));
                 cuts.Sort((x, y) => x.a.CompareTo(y.a));
                 float from = headerH;
-                cuts.Add((bodyEnd, bodyEnd));   // end of the body
+                cuts.Add((bodyEnd, bodyEnd));
                 foreach (var cut in cuts)
                 {
                     float to = Mathf.Min(cut.a, bodyEnd);
                     if (to > from)
                     {
-                        float shift = Shift(from) - from;   // 0 above the warning, -warnH below it
+                        float shift = Shift(from) - from;
                         Piece(new Rect(rect.x, top + from + shift, sdkWidth, to - from),
                             new Vector2(rect.x, top + shift), sdk, sdkWidth, sdkH);
                         if (Changed())
@@ -848,7 +825,6 @@ namespace VAP.Editor
                 e.mousePosition = saved;
         }
 
-        // VRChat's input warning text, from its own validator (internal, so found by reflection).
         static System.Reflection.MethodInfo inputWarningMethod;
         static bool inputWarningLooked;
 
@@ -864,7 +840,7 @@ namespace VAP.Editor
                     null, new[] { typeof(bool), typeof(string), typeof(int) }, null);
             }
             if (inputWarningMethod == null)
-                return null;   // not found: VRChat's warning stays where it is
+                return null;
             try
             {
                 return inputWarningMethod.Invoke(null, new object[]
@@ -877,7 +853,6 @@ namespace VAP.Editor
             }
         }
 
-        // Same as VRChat's drawer.
         static float WarningHeight(string text, float width) => string.IsNullOrEmpty(text) ? 0f
             : Mathf.Max(38f, EditorStyles.helpBox.CalcHeight(new GUIContent(text), Mathf.Max(100f, width - 35f)))
               + EditorGUIUtility.standardVerticalSpacing;
@@ -920,7 +895,6 @@ namespace VAP.Editor
                 height += ExpressionHeight(sdk) - Line;
             if (sdk.isExpanded)
             {
-                // Less VRChat's target warning, which isn't drawn (see DrawSdk).
                 int mode = sdk.FindPropertyRelative("targetMode").intValue;
                 bool blendshapeMode = mode == ModeApply || mode == ModeLimitMax || mode == ModeLimitMin;
                 int count = sdk.FindPropertyRelative("inputTrackingKeys").arraySize;
@@ -929,7 +903,7 @@ namespace VAP.Editor
                 float warnH = WarningHeight(InputWarning(sdk, custom, count), width);
                 height -= Mathf.Max(0f, sdkH - 5f - inputsH - (blendshapeMode ? Step : 0f) - warnH - HeaderHeight);
                 if (blendshapeMode && !PerBehavior)
-                    height -= Step;   // hidden weight row (shared Blendshapes Set)
+                    height -= Step;
             }
             return height;
         }

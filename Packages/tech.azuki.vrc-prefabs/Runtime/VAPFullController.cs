@@ -10,10 +10,8 @@ namespace VAP
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPFullController : VAPExpressions, IVRCFuryWrapper
     {
-        // The VRCFury Full Controller this wraps. It lives on the same object, hidden from the inspector.
         [HideInInspector] public Component wrapped;
 
-        // Read from the wrapped Full Controller by the editor; not saved.
         [NonSerialized] public List<VRCExpressionsMenu> menus = new List<VRCExpressionsMenu>();
         [NonSerialized] public List<string> menuPrefixes = new List<string>();
         [NonSerialized] public List<VRCExpressionParameters> parameterFiles = new List<VRCExpressionParameters>();

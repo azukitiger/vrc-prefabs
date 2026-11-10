@@ -4,7 +4,6 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP.Editor
 {
-    // Reads the menus and parameter files of the VRCFury Full Controller a VAPFullController wraps.
     internal static class FullControllerSource
     {
         internal const string FeatureType = "VF.Model.Feature.FullController";

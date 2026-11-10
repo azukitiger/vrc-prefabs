@@ -16,7 +16,6 @@ namespace VAP.Editor
 {
     internal static class ParameterBehaviorsBuild
     {
-        // Same limit the SDK's inspector uses.
         const int MaxParameterBehaviors = 128;
         const string Log = "[VAP Parameter Behaviors] ";
 
@@ -57,7 +56,7 @@ namespace VAP.Editor
                     if (c.parameterBehaviors != null)
                         foreach (var behavior in c.parameterBehaviors)
                             if (behavior != null)
-                                Add(WithSharedSet(Copy(behavior), c));   // never share data with the scene component
+                                Add(WithSharedSet(Copy(behavior), c));
 
                     if (c.trackingKeyBehaviors != null)
                         foreach (var entry in c.trackingKeyBehaviors)
@@ -161,7 +160,6 @@ namespace VAP.Editor
             return result;
         }
 
-        // AB + "Corrective" or "Morph"; a Morph may drop the start B shares with A (TongueDown + TongueLeft = TongueDownLeftMorph).
         static IEnumerable<string> CorrectiveNames(string a, string b)
         {
             yield return a + b + "Corrective";
@@ -240,9 +238,9 @@ namespace VAP.Editor
             foreach (var (shape, expression) in FindCorrectives(setNames, shapes))
             {
                 if (applied.Contains(shape))
-                    continue;   // already driven by another behavior
+                    continue;
                 if (c.disabledCorrectives != null && c.disabledCorrectives.Contains(shape))
-                    continue;   // unchecked in the list
+                    continue;
                 applied.Add(shape);
                 var b = new VRCAvatarDescriptor.FaceTrackingParameterBehavior();
                 JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(new CorrectivePatch
@@ -255,7 +253,6 @@ namespace VAP.Editor
             }
         }
 
-        // Blendshape behaviors use the component's shared Blendshapes Set as their weight set.
         internal static VRCAvatarDescriptor.FaceTrackingParameterBehavior WithSharedSet(
             VRCAvatarDescriptor.FaceTrackingParameterBehavior b, VAPParameterBehaviors c)
         {
@@ -342,7 +339,6 @@ namespace VAP.Editor
             foreach (string shape in shapes)
             {
                 var b = Copy(entry.behavior);
-                // Patched through JSON so it works whatever the SDK's field access is.
                 JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(new TargetPatch
                 {
                     targetMode = (int)mode,
@@ -362,7 +358,6 @@ namespace VAP.Editor
 
         protected override void Configure()
         {
-            // Tracking Key behaviors read the Blendshapes Sets, so the VAP sets and hooks go first.
             InPhase(BuildPhase.Transforming)
                 .AfterPlugin("tech.azuki.vrc-prefabs.face-tracking-debug")
                 .AfterPlugin("tech.azuki.vrc-prefabs.blendshape-set-hook")

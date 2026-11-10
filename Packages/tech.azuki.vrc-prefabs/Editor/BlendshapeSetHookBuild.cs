@@ -118,7 +118,6 @@ namespace VAP.Editor
                 }
             }
 
-            // A blendshape mapped to a target name wins over stripping its affix.
             foreach (var src in strips.Keys.Where(renames.ContainsKey).ToList())
                 strips.Remove(src);
             int stripCount = strips.Count;
@@ -179,7 +178,6 @@ namespace VAP.Editor
             for (int i = 0; i < shapeCount; i++)
                 names[i] = mesh.GetBlendShapeName(i);
 
-            // New name -> the hooked blendshapes (indices) that become it.
             var groups = new Dictionary<string, List<int>>(StringComparer.Ordinal);
             for (int i = 0; i < shapeCount; i++)
             {
@@ -189,7 +187,6 @@ namespace VAP.Editor
                     groups[dst] = list = new List<int>();
                 list.Add(i);
             }
-            // Blendshapes that keep their name block a group from taking it.
             var kept = new HashSet<string>(StringComparer.Ordinal);
             for (int i = 0; i < shapeCount; i++)
                 if (!renames.ContainsKey(names[i]))
@@ -232,7 +229,7 @@ namespace VAP.Editor
                 }
                 var members = groups[dst];
                 if (members[0] != i)
-                    continue; // already merged into the first one
+                    continue;
                 if (members.Count == 1)
                     CopyFrames(mesh, i, copy, dst, dv, dn, dt);
                 else
