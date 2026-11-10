@@ -9,16 +9,16 @@ BlendTree:
   m_Name: Rotate Blendshapes
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -8432342123678691441}
-    m_Threshold: 0.8
+    m_Motion: {fileID: -5546527341647576260}
+    m_Threshold: 0.75
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -5546527341647576260}
-    m_Threshold: 0.75
+    m_Motion: {fileID: -8432342123678691441}
+    m_Threshold: 0.8
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -151,7 +151,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   m_BlendParameter: VAP/EyeRightX
-  m_BlendParameterY: VAP/EyeY
+  m_BlendParameterY: VAP/EyeRightY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -275,7 +275,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FT/EyeTrackingActive
     m_Mirror: 0
-  m_BlendParameter: VAP/EyeY
+  m_BlendParameter: VAP/EyeRightY
   m_BlendParameterY: VAP/FT/v2/EyeRightX
   m_MinThreshold: -1
   m_MaxThreshold: 1
@@ -345,7 +345,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FT/EyeTrackingActive
     m_Mirror: 0
-  m_BlendParameter: VAP/EyeY
+  m_BlendParameter: VAP/EyeLeftY
   m_BlendParameterY: VAP/FT/v2/EyeLeftX
   m_MinThreshold: -1
   m_MaxThreshold: 1
@@ -433,7 +433,7 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   m_BlendParameter: VAP/EyeLeftX
-  m_BlendParameterY: VAP/EyeY
+  m_BlendParameterY: VAP/EyeLeftY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -736,12 +736,6 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: VAP/EyeY
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
   - m_Name: UserEyeTracking
     m_Type: 1
     m_DefaultFloat: 0
@@ -951,7 +945,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: FXWeight
+  m_BlendParameter: VAP/EyeLook/RightEaseOut
   m_BlendParameterY: FXWeight
   m_MinThreshold: 0
   m_MaxThreshold: 1
