@@ -27,17 +27,12 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 <details>
 <summary><h2>Better Blink Prefab</h2></summary>
 
-Adds a **smooth blink animation** driven by VRChat's eyelid data, with an occasional **double blink**, with the ability to **override the blink state** or **disable blinking entirely**.
-
-The eyelids come from VRChat's gaze system through **Face Tracking Parameter Behaviors** (`EyeLidLeft` and `EyeLidRight`), so the prefab works the same way with or without eye tracking hardware:
-- **Without eye tracking**: VRChat's built-in blinks close the eyelids, and the prefab replaces each one with its own smooth blink animation.
-- **With eye tracking** (`UserEyeTracking` is on): the tracked eyelids drive `VAP/BlinkLeft` and `VAP/BlinkRight` directly, with no blink animation or smoothing.
+Adds a **smooth blink animation** driven by VRChat's eyelid data.
 
 ### Features
-- Without eye tracking, a blink plays whenever both eyelids close past halfway (`EyeLidLeft` and `EyeLidRight` below `0.5`).
-- Each blink has a **25% chance** to be followed by a second blink.
-- With eye tracking, the user's own eyelids are used as-is, so winks and squints come through.
-- Includes **Face Tracking Parameter Behaviors** that output `EyeLidLeft` and `EyeLidRight`, so no setup is needed on the avatar descriptor.
+- Reads the eyelids from VRChat's gaze system through included **Face Tracking Parameter Behaviors** (`EyeLidLeft` and `EyeLidRight`), so no setup is needed on the avatar descriptor.
+- **Without eye tracking**: replaces VRChat's built-in blinks with a smooth blink animation, played whenever both eyelids close past halfway (below `0.5`). Each blink has a **25% chance** to be followed by a second blink.
+- **With eye tracking** (`UserEyeTracking` is on): the tracked eyelids drive `VAP/BlinkLeft` and `VAP/BlinkRight` directly, with no blink animation or smoothing, so winks and squints come through.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
@@ -66,7 +61,7 @@ The eyelids come from VRChat's gaze system through **Face Tracking Parameter Beh
 |-|-|-|
 | VAP/BlinkLeftOverride | Float | Override value applied to `VAP/BlinkLeft` when not blinking |
 | VAP/BlinkRightOverride | Float | Override value applied to `VAP/BlinkRight` when not blinking |
-| UserEyeTracking | Bool | Built-in VRChat parameter. When on, the tracked eyelids are used directly instead of the blink animation |
+| UserEyeTracking | Bool | Built-in VRChat parameter |
 
 </details>
 
@@ -99,8 +94,10 @@ Adds occasional **ear twitches** that trigger at random intervals.
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/Ear/Left_Twitch | Float | Output value used to drive the **left ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
-| VAP/Ear/Right_Twitch | Float | Output value used to drive the **right ear twitch** animation. This value is set to `100` to override other animations through a direct blend tree |
+| VAP/Ear/Left_Twitch | Float | Drives the **left ear twitch** animation |
+| VAP/Ear/Right_Twitch | Float | Drives the **right ear twitch** animation |
+
+Both are set to `10` during a twitch, to override other animations through a direct blend tree.
 
 </details>
 
@@ -111,7 +108,7 @@ Adds occasional **ear twitches** that trigger at random intervals.
 
 > Requires the **Frame Time Prefab**.
 
-Adds **blend tree–driven gesture detection** with smoothing and optional menu-based overrides. Create your gesture blend tree using the available Parameters.
+Adds **smoothed gesture values** for driving gestures from a blend tree.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
@@ -137,23 +134,10 @@ Adds **blend tree–driven gesture detection** with smoothing and optional menu-
 |-|-|-|
 | VAP/GestureLeft | Float | Output value representing the current left gesture |
 | VAP/GestureRight | Float | Output value representing the current right gesture |
-| VAP/GestureLeft/Weight | Float | Smoothed output value representing the left gesture weight |
-| VAP/GestureRight/Weight | Float | Smoothed output value representing the right gesture weight |
-| VAP/GestureLeft/Idle | Float | Smoothed output value when the left gesture is **Idle** |
-| VAP/GestureLeft/Fist | Float | Smoothed output value when the left gesture is **Fist** |
-| VAP/GestureLeft/Open | Float | Smoothed output value when the left gesture is **Open** |
-| VAP/GestureLeft/Point | Float | Smoothed output value when the left gesture is **Point** |
-| VAP/GestureLeft/Victory | Float | Smoothed output value when the left gesture is **Victory** |
-| VAP/GestureLeft/Rock&Roll | Float | Smoothed output value when the left gesture is **Rock & Roll** |
-| VAP/GestureLeft/Gun | Float | Smoothed output value when the left gesture is **Gun** |
-| VAP/GestureLeft/ThumbsUp | Float | Smoothed output value when the left gesture is **Thumbs Up** |
-| VAP/GestureRight/Fist | Float | Smoothed output value when the right gesture is **Fist** |
-| VAP/GestureRight/Open | Float | Smoothed output value when the right gesture is **Open** |
-| VAP/GestureRight/Point | Float | Smoothed output value when the right gesture is **Point** |
-| VAP/GestureRight/Victory | Float | Smoothed output value when the right gesture is **Victory** |
-| VAP/GestureRight/Rock&Roll | Float | Smoothed output value when the right gesture is **Rock & Roll** |
-| VAP/GestureRight/Gun | Float | Smoothed output value when the right gesture is **Gun** |
-| VAP/GestureRight/ThumbsUp | Float | Smoothed output value when the right gesture is **Thumbs Up** |
+| VAP/GestureLeft/Weight | Float | Smoothed left gesture weight |
+| VAP/GestureRight/Weight | Float | Smoothed right gesture weight |
+| VAP/GestureLeft/[Gesture] | Float | Smoothed value for each left gesture: `Idle`, `Fist`, `Open`, `Point`, `Victory`, `Rock&Roll`, `Gun` and `ThumbsUp` |
+| VAP/GestureRight/[Gesture] | Float | Smoothed value for each right gesture: `Fist`, `Open`, `Point`, `Victory`, `Rock&Roll`, `Gun` and `ThumbsUp` |
 
 </details>
 
@@ -185,12 +169,13 @@ Adds **smooth ear grab interactions** for face stretching.
 <details>
 <summary><h2>Tail Wag Speed Prefab</h2></summary>
 
-Controls **tail wag speed** through a menu value or animator override. Wagging automatically stops when the tail is grabbed or when a pose is active. Use the parameter `Tail` for the tail PhysBone.
+Controls **tail wag speed**. Wagging automatically stops when the tail is grabbed or when a pose is active.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Use the animator parameter `VAP/Tail/WagSpeed` as the multiplier for the tail wag animation.
-3. Optionally, use the animator parameter `VAP/Override/Tail/WagSpeed` to additively increase the speed.
+2. Set the parameter `Tail` for the tail PhysBone.
+3. Use the animator parameter `VAP/Tail/WagSpeed` as the multiplier for the tail wag animation.
+4. Optionally, use the animator parameter `VAP/Override/Tail/WagSpeed` to additively increase the speed.
 
 ### Optional Expression Parameters
 
@@ -354,7 +339,7 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 
 > Requires the **Frame Time Prefab**. Works with the **Better Blink Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
 
-VRChat now drives the **Unified Expressions** blendshapes and smooths them through the avatar descriptor's **Blendshapes Sets**, so this prefab no longer animates those blendshapes or applies smoothing. It handles what VRChat doesn't: the menu toggles, emulation, combined expression values, mouth corrections and the eye tracking sensitivity setting.
+VRChat now drives and smooths the **Unified Expressions** blendshapes through the avatar descriptor's **Blendshapes Sets**, so this prefab only handles what VRChat doesn't.
 
 ### Features
 - Uses `11 synced bits`.
@@ -364,8 +349,8 @@ VRChat now drives the **Unified Expressions** blendshapes and smooths them throu
 - **Pupil dilation**: uses tracked dilation when **Dilation Tracking** is on. **Pupil Dilation Emulation** (on by default) emulates the pupils from expressions (smile dilates, anger constricts) and from the **Pupil Focus System Prefab** if it is installed. Both can be on at the same time to combine tracked and emulated dilation.
 - **Eye Sensitivity** (radial, default `0.6`): scales eye look from **1×** to **2×**, only while the user's own eye tracking is active (`UserEyeTracking`). Used by the **Eye Rotation Prefab**.
 - **Mouth corrections** applied to your `FaceTracking` Blendshapes Set.
-- **Corrective blendshapes are triggered automatically**: any blendshape named after two blendshapes of your `FaceTracking` set followed by `Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`) gets an **Apply to Blendshape** behavior at build time, with the expression `KeyA * KeyB`. When several tracking keys use the same blendshape, the strongest pair wins (`max(LipPuckerUpperLeft * MouthClosed, ...)`). Add the **Face Tracking Corrective Behaviors** component and pick the set: it lists them live, and any can be unchecked.
-- Includes **Face Tracking Parameter Behaviors** for every input parameter, so no setup is needed for them on the avatar descriptor.
+- **Corrective blendshapes are triggered automatically**: any blendshape named after two blendshapes of your `FaceTracking` set followed by `Corrective` gets an **Apply to Blendshape** behavior at build time, with the expression `KeyA * KeyB`. When several tracking keys use the same blendshape, the strongest pair wins (`max(LipPuckerUpperLeft * MouthClosed, ...)`).
+- Includes **Face Tracking Parameter Behaviors** for its `VAP/FT/*Forward` input parameters, so no setup is needed for them on the avatar descriptor.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
@@ -375,7 +360,7 @@ VRChat now drives the **Unified Expressions** blendshapes and smooths them throu
    - **Eye Look**: enabled, with **Eye Gaze Mode** set to `Face Tracking` and **Eyelid Type** set to `None`
    - **Face Tracking**: enabled, with **Use All Tracking Keys** on, your face mesh in **Face Tracking Mesh**, **Viseme Dampen** set to `Dampen Tracking` and **Dampen Amount** set to `0.6`
 4. Create a **Blendshapes Set** on the **VRC Avatar Descriptor** (under **Face Tracking**) named exactly `FaceTracking`, and map your face blendshapes in it. The prefab doesn't include one, and its Parameter Behaviors only work on a set with this name.
-5. Optionally, add corrective blendshapes to your face mesh named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosedLipPuckerCorrective`). They're picked up automatically by the **Face Tracking Corrective Behaviors** component.
+5. Optionally, add corrective blendshapes to your face mesh named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). Add the **Face Tracking Corrective Behaviors** component and pick the set: it lists them live, and any can be unchecked.
 6. Optionally, the animator parameters `VAP/FT/*` can be used to animate additional blendshapes or bones (ex. ears) from a separate FX controller.
 
 ### Included Expression Parameters
@@ -384,17 +369,15 @@ VRChat now drives the **Unified Expressions** blendshapes and smooths them throu
 |-|-|-|-|-|
 | EyeTrackingActive | Float | Boolean | ✔ | Toggle for enabling eye tracking |
 | LipTrackingActive | Float | Boolean | ✔ | Toggle for enabling lip tracking |
-| FT/EyeDilationEnabled | Float | Boolean | ✔ | Toggle for using tracked pupil dilation instead of emulated dilation |
+| FT/EyeDilationEnabled | Float | Boolean | ✔ | Toggle for tracked pupil dilation |
 | FT/FacialExpressionsDisabled | Float | Boolean | ✔ | Toggle for disabling gesture based expressions |
 | FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for brow & squint emulation. On by default |
-| FT/EyeDilationEmulation | Float | Boolean | ✔ | Toggle for emulated pupil dilation. Can be combined with `FT/EyeDilationEnabled`. On by default |
-| UserEyeTrackingSensitivity | Float | Float | ✔ | Eye look sensitivity while the user's eye tracking is active |
+| FT/EyeDilationEmulation | Float | Boolean | ✔ | Toggle for emulated pupil dilation. On by default |
+| UserEyeTrackingSensitivity | Float | Float | ✔ | **Eye Sensitivity** menu value. `0` is 1× and `1` is 2× |
 | FT/State/TrackingActive | Float | Boolean | ✖ | Remembers whether tracking was on, so gestures are only switched when tracking is turned on or off |
 
 <a name="vrcft-input"></a>
 ### Input Animator Parameters
-
-Set by the prefab's **Face Tracking Parameter Behaviors**.
 
 | Property | Animator Type | Expression |
 |-|-|-|
@@ -405,16 +388,16 @@ Set by the prefab's **Face Tracking Parameter Behaviors**.
 | VAP/FT/PupilDilationForward | Float | `(EyeDilationLeft + EyeDilationRight - EyeConstrictLeft - EyeConstrictRight) / 4 + 0.5` |
 | EyeLidLeft | Float | From the **Better Blink Prefab** |
 | EyeLidRight | Float | From the **Better Blink Prefab** |
-| VAP/BlinkLeft | Float | From the **Better Blink Prefab**. Used for the eyelids when eye tracking is off |
-| VAP/BlinkRight | Float | From the **Better Blink Prefab**. Used for the eyelids when eye tracking is off |
-| Touch/PupilFocus | Float | Optional. Set by the **Pupil Focus System Prefab** |
+| VAP/BlinkLeft | Float | From the **Better Blink Prefab** |
+| VAP/BlinkRight | Float | From the **Better Blink Prefab** |
+| Touch/PupilFocus | Float | From the **Pupil Focus System Prefab** |
 
 ### Output Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/FT/EyeLidLeft | Float | Left eyelid, tracked or from blinking. `0` is closed, `0.75` is open and `1` is wide |
-| VAP/FT/EyeLidRight | Float | Right eyelid, tracked or from blinking. `0` is closed, `0.75` is open and `1` is wide |
+| VAP/FT/EyeLidLeft | Float | Left eyelid. `0` is closed, `0.75` is open and `1` is wide |
+| VAP/FT/EyeLidRight | Float | Right eyelid. `0` is closed, `0.75` is open and `1` is wide |
 | VAP/FT/EyeSquintLeft | Float | Left squint, tracked or emulated |
 | VAP/FT/EyeSquintRight | Float | Right squint, tracked or emulated |
 | VAP/FT/BrowExpressionLeft | Float | Left brow, tracked or emulated. `1` is raised and `-1` is lowered |
@@ -448,7 +431,6 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 
 ### Features
 - Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so no setup is needed on the avatar descriptor.
-- Applies the **Eye Sensitivity** from the Face Tracking prefab: from **1×** up to **2×**, only while the user's own eye tracking is active (`UserEyeTracking`).
 - **Eye bones**: drives the humanoid eye muscles through the **Additive** controller while eye tracking is on.
 - **Eye blendshapes**: drives the `EyeLook*` blendshapes and the `EyeLook*Rotate` blendshapes on the `Body` mesh from the FX controller.
 
@@ -464,8 +446,8 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 | EyeLeftX | Float | Set by the prefab: `EyeLookInLeft - EyeLookOutLeft` |
 | EyeRightX | Float | Set by the prefab: `EyeLookOutRight - EyeLookInRight` |
 | EyeY | Float | Set by the prefab: `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
-| UserEyeTracking | Float | `1` while the user's own eye tracking is active. Sensitivity only applies when this is on |
-| UserEyeTrackingSensitivity | Float | Set by the **Face Tracking Prefab** menu. `0` is 1× and `1` is 2× |
+| UserEyeTracking | Float | `1` while the user's own eye tracking is active. **Eye Sensitivity** only applies when this is on |
+| UserEyeTrackingSensitivity | Float | **Eye Sensitivity** from the **Face Tracking Prefab** menu. `0` is 1× and `1` is 2× |
 | VAP/EyeLook/EaseOut | Float | Optional. `1` turns off all the `EyeLook*` blendshapes |
 | VAP/EyeLook/LeftVerticalEaseOut | Float | Optional. `1` turns off the left eye's up/down `EyeLook*` blendshapes |
 | VAP/EyeLook/RightVerticalEaseOut | Float | Optional. `1` turns off the right eye's up/down `EyeLook*` blendshapes |
@@ -513,19 +495,17 @@ Combines **pupil dilation** from three sources into one value per eye:
 - **Input dilation**: dilation from an input (ex. **gestures** or **face tracking**).
 - **Closed eye dilation**: additional dilation that builds up while an eye is closed.
 
-The prefab doesn't set any inputs itself: feed them from your own animator, menu or Face Tracking Parameter Behaviors.
-
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Feed the input parameters below, and optionally the user dilation parameters.
+2. Feed the input parameters below, and optionally the user dilation parameters, from your own animator, menu or Face Tracking Parameter Behaviors. The prefab doesn't set them itself.
 3. Use the animator parameters `VAP/Pupil/LeftDilation` and `VAP/Pupil/RightDilation` to animate the pupils.
 
 ### Optional Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
-| LeftDilationSet | Float | Float | Optional | User dilation for the left eye: `0` is small (default), `0.25` is default and `1` is high |
-| RightDilationSet | Float | Float | Optional | User dilation for the right eye: `0` is small (default), `0.25` is default and `1` is high |
+| LeftDilationSet | Float | Float | Optional | User dilation for the left eye: `0` is small, `0.25` is default and `1` is high |
+| RightDilationSet | Float | Float | Optional | User dilation for the right eye: `0` is small, `0.25` is default and `1` is high |
 
 ### Output Animator Parameters
 
@@ -538,7 +518,7 @@ The prefab doesn't set any inputs itself: feed them from your own animator, menu
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/Pupil/DilationSmoothedInput | Float | Input dilation (ex. from gestures or face tracking) |
+| VAP/Pupil/DilationSmoothedInput | Float | Input dilation |
 | VAP/Pupil/LeftEyeClosedInput | Float | Left eye closed amount. Above `0.9` adds closed eye dilation |
 | VAP/Pupil/RightEyeClosedInput | Float | Right eye closed amount. Above `0.9` adds closed eye dilation |
 
