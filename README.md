@@ -351,12 +351,12 @@ Provides **customized GoGo Loco controllers and menus** with simplified menu opt
 VRChat now drives the **Unified Expressions** blendshapes and smooths them through the avatar descriptor's **Blendshapes Sets**, so this prefab no longer animates those blendshapes or applies smoothing. It handles what VRChat doesn't: the menu toggles, emulation, combined expression values, mouth corrections and the eye tracking sensitivity setting.
 
 ### Features
-- Uses `13 synced bits`.
-- **Menu** under `Body Controls/Face Tracking` to toggle eye tracking, lip tracking, dilation tracking and **Disable Gestures**, with a **Settings** submenu for **Eye Sensitivity** and **Brow & Squint Emulation**.
+- Uses `11 synced bits`.
+- **Menu** under `Body Controls/Face Tracking` to toggle eye tracking, lip tracking, dilation tracking and **Disable Gestures**, with a **Settings** submenu for **Eye Sensitivity**, **Brow & Squint Emulation** and **Pupil Dilation Emulation**.
 - **Brow & Squint Emulation** for headsets that don't track brows or squint: brows follow nose sneer, the lower lip raiser and smile/frown, and squint follows smile and eyelid.
 - **Eyelids**: with eye tracking on, `VAP/FT/EyeLidLeft` and `VAP/FT/EyeLidRight` follow the tracked eyelids. With it off, they follow the **Blink System Prefab**.
-- **Pupil dilation**: uses tracked dilation when **Dilation Tracking** is on. Otherwise the pupils are emulated from expressions (smile dilates, anger constricts) and from the **Pupil Focus System Prefab** if it is installed.
-- **Eye Sensitivity** (radial, default `0.6`): while eye tracking is on, eye look can be scaled from **1×** to **2×**. Used by the **Eye Rotation Prefab**.
+- **Pupil dilation**: uses tracked dilation when **Dilation Tracking** is on. **Pupil Dilation Emulation** (on by default) emulates the pupils from expressions (smile dilates, anger constricts) and from the **Pupil Focus System Prefab** if it is installed. Both can be on at the same time to combine tracked and emulated dilation.
+- **Eye Sensitivity** (radial, default `0.6`): scales eye look from **1×** to **2×**, only while the user's own eye tracking is active (`UserEyeTracking`). Used by the **Eye Rotation Prefab**.
 - **Mouth corrections** applied to your `FaceTracking` Blendshapes Set.
 - **Corrective blendshapes are triggered automatically**: any blendshape named after two blendshapes of your `FaceTracking` set followed by `Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`) gets an **Apply to Blendshape** behavior at build time, with the expression `KeyA * KeyB`. When several tracking keys use the same blendshape, the strongest pair wins (`max(LipPuckerUpperLeft * MouthClosed, ...)`). Add the **Face Tracking Corrective Behaviors** component and pick the set: it lists them live, and any can be unchecked.
 - Includes **Face Tracking Parameter Behaviors** for every input parameter, so no setup is needed for them on the avatar descriptor.
@@ -381,7 +381,8 @@ VRChat now drives the **Unified Expressions** blendshapes and smooths them throu
 | FT/EyeDilationEnabled | Float | Boolean | ✔ | Toggle for using tracked pupil dilation instead of emulated dilation |
 | FT/FacialExpressionsDisabled | Float | Boolean | ✔ | Toggle for disabling gesture based expressions |
 | FT/FaceTrackingEmulation | Float | Boolean | ✔ | Toggle for brow & squint emulation. On by default |
-| FT/EyeSensitivity | Float | Float | ✔ | Eye look sensitivity while eye tracking is on |
+| FT/EyeDilationEmulation | Float | Boolean | ✔ | Toggle for emulated pupil dilation. Can be combined with `FT/EyeDilationEnabled`. On by default |
+| UserEyeTrackingSensitivity | Float | Float | ✔ | Eye look sensitivity while the user's eye tracking is active |
 | FT/State/TrackingActive | Float | Boolean | ✖ | Remembers whether tracking was on, so gestures are only switched when tracking is turned on or off |
 
 <a name="vrcft-input"></a>
@@ -427,7 +428,6 @@ Set by the prefab's **Face Tracking Parameter Behaviors**.
 | VAP/FT/TongueX | Float | `TongueRight - TongueLeft`, limited to `±(0.5 + TongueOut * 0.5)` |
 | VAP/FT/TongueY | Float | `TongueUp - TongueDown`, limited by how far the tongue is out |
 | VAP/FT/TongueTwist | Float | `TongueTwistRight - TongueTwistLeft` |
-| VAP/EyeSensitivityInput | Float | Eye look sensitivity for the **Eye Rotation Prefab**. `0` while eye tracking is off |
 
 </details>
 
@@ -442,7 +442,7 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 
 ### Features
 - Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so no setup is needed on the avatar descriptor.
-- Applies the **Eye Sensitivity** from the VRCFT prefab: from **1×** up to **2×** while eye tracking is on.
+- Applies the **Eye Sensitivity** from the Face Tracking prefab: from **1×** up to **2×**, only while the user's own eye tracking is active (`UserEyeTracking`).
 - **Eye bones**: drives the humanoid eye muscles through the **Additive** controller while eye tracking is on.
 - **Eye blendshapes**: drives the `EyeLook*` blendshapes and the `EyeLook*Rotate` blendshapes on the `Body` mesh from the FX controller.
 
@@ -458,7 +458,8 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 | EyeLeftX | Float | Set by the prefab: `EyeLookInLeft - EyeLookOutLeft` |
 | EyeRightX | Float | Set by the prefab: `EyeLookOutRight - EyeLookInRight` |
 | EyeY | Float | Set by the prefab: `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
-| VAP/EyeSensitivityInput | Float | Set by the **VRCFT** prefab. `0` is 1× and `1` is 2× |
+| UserEyeTracking | Float | `1` while the user's own eye tracking is active. Sensitivity only applies when this is on |
+| UserEyeTrackingSensitivity | Float | Set by the **Face Tracking Prefab** menu. `0` is 1× and `1` is 2× |
 | VAP/EyeLook/EaseOut | Float | Optional. `1` turns off all the `EyeLook*` blendshapes |
 | VAP/EyeLook/LeftVerticalEaseOut | Float | Optional. `1` turns off the left eye's up/down `EyeLook*` blendshapes |
 | VAP/EyeLook/RightVerticalEaseOut | Float | Optional. `1` turns off the right eye's up/down `EyeLook*` blendshapes |

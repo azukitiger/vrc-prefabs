@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AAP VAP_EyeSensitivity 1
+  m_Name: VAP PupilDilationEmulatedPass+1
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -26,14 +26,14 @@ AnimationClip:
         value: 1
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 136
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/EyeSensitivityInput
+    attribute: Proxy/FT/PupilDilationEmulatedPass
     path: 
     classID: 95
     script: {fileID: 0}
@@ -48,7 +48,7 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 0
-      attribute: 4212060600
+      attribute: 2923775503
       script: {fileID: 0}
       typeID: 95
       customType: 0
@@ -86,14 +86,14 @@ AnimationClip:
         value: 1
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 136
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: VAP/EyeSensitivityInput
+    attribute: Proxy/FT/PupilDilationEmulatedPass
     path: 
     classID: 95
     script: {fileID: 0}

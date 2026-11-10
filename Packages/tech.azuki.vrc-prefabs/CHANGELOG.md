@@ -1,3 +1,8 @@
+## Version 3.0.7
+- Fixed Eye Rotation Sensitivity not working for Additive Controller.
+- Eye Rotation Sensitivity changed to only effect User Eye Tracking.
+- Added new toggle for Pupil Dilation Emulation (enabled by default), can be combined with Dilation Tracking.
+
 ## Version 3.0.6
 - Remove GogoLoco as dependency.
 

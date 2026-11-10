@@ -591,20 +591,36 @@ BlendTree:
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -8867034065404349124}
-    m_Threshold: 1
+    m_Motion: {fileID: 6549067653277318246}
+    m_Threshold: 0
     m_Position: {x: 1, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: FXWeight
     m_Mirror: 0
-  m_BlendParameter: VAP/EyeSensitivityInput
-  m_BlendParameterY: FXWeight
+  - serializedVersion: 2
+    m_Motion: {fileID: 6549067653277318246}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 1}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -8867034065404349124}
+    m_Threshold: 1
+    m_Position: {x: 1, y: 1}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: FXWeight
+    m_Mirror: 0
+  m_BlendParameter: UserEyeTrackingSensitivity
+  m_BlendParameterY: UserEyeTracking
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 3
 --- !u!206 &-955640428911010254
 BlendTree:
   m_ObjectHideFlags: 1
@@ -726,9 +742,15 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: VAP/EyeSensitivityInput
+  - m_Name: UserEyeTracking
     m_Type: 1
     m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: UserEyeTrackingSensitivity
+    m_Type: 1
+    m_DefaultFloat: 0.6
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
@@ -1000,11 +1022,11 @@ BlendTree:
   m_BlendType: 0
 --- !u!206 &6549067653277318246
 BlendTree:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: None
+  m_Name: None Eye Rotation Sensitivity
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: -6046174512071210411}
