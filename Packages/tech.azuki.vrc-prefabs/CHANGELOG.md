@@ -1,4 +1,4 @@
-## Version 3.0.2
+## Version 3.0.4
 - VRChat Face Tracking implementation!
 - Improved Ear Twitch logic.
 - Custom eye blink no longer uses a bit parameter.
