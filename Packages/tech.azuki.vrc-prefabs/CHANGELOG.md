@@ -1,3 +1,6 @@
+## Version 3.0.2
+- Fix Pupil Dilation.
+
 ## Version 3.0.1
 - Improved Ear Twitch logic.
 
