@@ -19,33 +19,61 @@ MonoBehaviour:
     saved: 1
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: LipTrackingActive
     valueType: 2
     saved: 1
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: FT/EyeDilationEnabled
     valueType: 2
     saved: 1
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: FT/FacialExpressionsDisabled
     valueType: 2
     saved: 1
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: FT/FaceTrackingEmulation
     valueType: 2
     saved: 1
     defaultValue: 1
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: FT/State/TrackingActive
     valueType: 2
     saved: 1
     defaultValue: 0
     networkSynced: 0
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: FT/EyeSensitivity
     valueType: 1
     saved: 1
     defaultValue: 0.6
     networkSynced: 1
+    bitWidth: 5
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 1

@@ -19,23 +19,43 @@ MonoBehaviour:
     saved: 1
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 8
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: Heartbeat/Speed
     valueType: 1
     saved: 1
     defaultValue: 0.25
     networkSynced: 0
+    bitWidth: 8
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: Heartbeat/Adjust
     valueType: 2
     saved: 0
     defaultValue: 0
     networkSynced: 0
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: Heartbeat/Listen
     valueType: 1
     saved: 1
     defaultValue: 0
     networkSynced: 0
+    bitWidth: 8
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: HR
     valueType: 0
     saved: 0
     defaultValue: 0
     networkSynced: 0
+    bitWidth: 8
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0

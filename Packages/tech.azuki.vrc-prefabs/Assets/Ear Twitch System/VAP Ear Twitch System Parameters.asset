@@ -19,8 +19,16 @@ MonoBehaviour:
     saved: 0
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
   - name: EarTwitchRight
     valueType: 2
     saved: 0
     defaultValue: 0
     networkSynced: 1
+    bitWidth: 1
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0
