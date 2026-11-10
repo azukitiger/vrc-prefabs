@@ -11,7 +11,6 @@
     "bannerUrl": "banner.png",
     "githubRepos": [
         "azukitiger/vrc-avatar-system",
-        "bdunderscore/ndmf",
-        "Spokeek/goloco"
+        "bdunderscore/ndmf"
     ]
 }
