@@ -43,8 +43,7 @@ namespace VAP.Editor
                 ? Enumerable.Empty<VRCExpressionParameters.Parameter>()
                 : asset.parameters.Where(p => p != null && !string.IsNullOrEmpty(p.name));
 
-        static int Cost(VRCExpressionParameters.Parameter p) =>
-            !p.networkSynced ? 0 : p.valueType == VRCExpressionParameters.ValueType.Bool ? 1 : 8;
+        static int Cost(VRCExpressionParameters.Parameter p) => VAPExpressions.SyncedBits(p);
 
         void OnGUI()
         {
@@ -123,17 +122,10 @@ namespace VAP.Editor
             Undo.RecordObject(target, "Add Parameters");
             var list = (target.parameters ?? new VRCExpressionParameters.Parameter[0]).ToList();
             foreach (var p in adding)
-                list.Add(new VRCExpressionParameters.Parameter
-                {
-                    name = p.name,
-                    valueType = p.valueType,
-                    defaultValue = p.defaultValue,
-                    saved = p.saved,
-                    networkSynced = p.networkSynced,
-                });
+                list.Add(VAPExpressions.Copy(p));
             target.parameters = list.ToArray();
             EditorUtility.SetDirty(target);
-            AssetDatabase.SaveAssetIfDirty(target);
+            AssetMoves.KeepPartsHidden(AssetDatabase.GetAssetPath(target), () => AssetDatabase.SaveAssetIfDirty(target));
         }
     }
 }

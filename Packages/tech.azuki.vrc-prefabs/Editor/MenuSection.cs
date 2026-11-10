@@ -256,12 +256,13 @@ namespace VAP.Editor
             float current = owner.FindDefault(p.name)?.value ?? p.defaultValue;
             EditorGUI.BeginChangeCheck();
             float v;
+            VAPExpressions.Range(p, out float min, out float max);
             if (p.valueType == VRCExpressionParameters.ValueType.Int)
-                v = EditorGUI.IntSlider(rect, Mathf.RoundToInt(current), 0, 255);
+                v = EditorGUI.IntSlider(rect, Mathf.RoundToInt(current), (int)min, (int)max);
             else if (p.valueType == VRCExpressionParameters.ValueType.Bool)
                 v = EditorGUI.Toggle(rect, current != 0f) ? 1f : 0f;
             else
-                v = EditorGUI.Slider(rect, current, radial ? 0f : -1f, 1f);
+                v = EditorGUI.Slider(rect, current, radial ? Mathf.Max(min, 0f) : min, max);
             if (EditorGUI.EndChangeCheck())
                 ExpressionsOverrides.SetDefault(owner, p.name, v, p.defaultValue);
         }

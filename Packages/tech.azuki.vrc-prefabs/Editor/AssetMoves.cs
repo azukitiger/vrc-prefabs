@@ -191,12 +191,16 @@ namespace VAP.Editor
                         moved.Add(x);
                     }
                 }
+                bool hidden = HasHiddenParts(prefabPath) || Watched().Contains(AssetDatabase.AssetPathToGUID(prefabPath));
                 Repoint(AssetDatabase.LoadAllAssetsAtPath(prefabPath).Concat(map.Values), map);
                 RemoveOriginals(moved);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.ImportAsset(prefabPath);
-                if (Watched().Contains(AssetDatabase.AssetPathToGUID(prefabPath)))
+                if (hidden)
+                {
+                    Watch(prefabPath);
                     HidePartsInFile(prefabPath);
+                }
             }
             foreach (var path in created.Select(AssetDatabase.GetAssetPath).Distinct().ToList())
                 HidePartsInFile(path);
@@ -274,6 +278,21 @@ namespace VAP.Editor
             o is UnityEditor.Animations.AnimatorState || o is UnityEditor.Animations.AnimatorStateMachine ||
             o is UnityEditor.Animations.AnimatorTransitionBase || o is UnityEditor.Animations.BlendTree || o is StateMachineBehaviour;
 
+        static bool HasHiddenParts(string path) =>
+            AssetDatabase.LoadAllAssetsAtPath(path)
+                .Any(o => o != null && !AssetDatabase.IsMainAsset(o) && IsAnimatorPart(o) && (o.hideFlags & HideFlags.HideInHierarchy) != 0);
+
+        // Runs a change that saves the file, then hides its animator parts again if they were hidden before.
+        internal static void KeepPartsHidden(string path, System.Action write)
+        {
+            bool hidden = HasHiddenParts(path);
+            if (hidden)
+                Watch(path);
+            write();
+            if (hidden)
+                HidePartsInFile(path);
+        }
+
         static List<Object> VisibleParts(string path) =>
             AssetDatabase.LoadAllAssetsAtPath(path)
                 .Where(o => o != null && !AssetDatabase.IsMainAsset(o) && IsAnimatorPart(o) && (o.hideFlags & HideFlags.HideInHierarchy) == 0)
@@ -321,6 +340,24 @@ namespace VAP.Editor
             var set = Watched();
             if (set.Add(guid))
                 EditorUserSettings.SetConfigValue(WatchedKey, string.Join(";", set));
+        }
+
+        // Saving doesn't always reimport, so watched prefabs are also checked after each save.
+        class SaveWatcher : AssetModificationProcessor
+        {
+            static string[] OnWillSaveAssets(string[] paths)
+            {
+                var watched = Watched();
+                var prefabs = watched.Count == 0 ? new List<string>()
+                    : paths.Where(p => watched.Contains(AssetDatabase.AssetPathToGUID(p))).ToList();
+                if (prefabs.Count > 0)
+                    EditorApplication.delayCall += () =>
+                    {
+                        foreach (var path in prefabs)
+                            HidePartsInFile(path);
+                    };
+                return paths;
+            }
         }
 
         // Unity writes these flags back as visible whenever it saves a prefab, so watched prefabs are checked after each import.

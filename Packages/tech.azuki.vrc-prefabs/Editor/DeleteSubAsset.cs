@@ -19,12 +19,16 @@ namespace VAP.Editor
             string names = string.Join("\n", targets.Select(t => t.name));
             if (!EditorUtility.DisplayDialog("Delete Sub-Asset", $"Delete these from their files? This can't be undone.\n\n{names}", "Delete", "Cancel"))
                 return;
-            foreach (var t in targets)
-            {
-                AssetDatabase.RemoveObjectFromAsset(t);
-                Object.DestroyImmediate(t, true);
-            }
-            AssetDatabase.SaveAssets();
+            foreach (var group in targets.GroupBy(AssetDatabase.GetAssetPath).ToList())
+                AssetMoves.KeepPartsHidden(group.Key, () =>
+                {
+                    foreach (var t in group)
+                    {
+                        AssetDatabase.RemoveObjectFromAsset(t);
+                        Object.DestroyImmediate(t, true);
+                    }
+                    AssetDatabase.SaveAssets();
+                });
         }
 
         internal static bool IsSubAsset(Object o) =>

@@ -23,7 +23,7 @@ namespace VAP.Editor
                 if (asset.parameters != null)
                     foreach (var p in asset.parameters)
                         if (p != null && p.networkSynced && !dropped.Contains(p.name) && counted.Add(p.name))
-                            cost += p.valueType == VRCExpressionParameters.ValueType.Bool ? 1 : 8;
+                            cost += VAPExpressions.SyncedBits(p);
             return $"{cost} synced bits";
         }
 

@@ -138,14 +138,49 @@ namespace VAP
             var source = asset != null && asset.parameters != null
                 ? asset.parameters : new VRCExpressionParameters.Parameter[0];
             var dropped = DroppedParameters();
-            return source.Where(p => p != null && !dropped.Contains(p.name)).Select(p => new VRCExpressionParameters.Parameter
+            return source.Where(p => p != null && !dropped.Contains(p.name)).Select(p =>
             {
-                name = p.name,
-                valueType = p.valueType,
-                defaultValue = FindDefault(p.name)?.value ?? p.defaultValue,
-                saved = p.saved,
-                networkSynced = p.networkSynced,
+                var copy = Copy(p);
+                var o = FindDefault(p.name);
+                if (o != null)
+                {
+                    Range(p, out float min, out float max);
+                    copy.defaultValue = Mathf.Clamp(o.value, min, max);
+                }
+                return copy;
             }).ToArray();
+        }
+
+        // Copies every field, including bit width, representation and lerp settings.
+        public static VRCExpressionParameters.Parameter Copy(VRCExpressionParameters.Parameter p) =>
+            JsonUtility.FromJson<VRCExpressionParameters.Parameter>(JsonUtility.ToJson(p));
+
+        public static int SyncedBits(VRCExpressionParameters.Parameter p) =>
+            p != null && p.networkSynced ? p.GetBitWidthByType() : 0;
+
+        public static bool IsSigned(VRCExpressionParameters.Parameter p) =>
+            p.GetRepresentationByType() == VRCExpressionParameters.Parameter.ValueRepresentation.Signed;
+
+        // Values the parameter can hold, from its type, bit width and representation.
+        public static void Range(VRCExpressionParameters.Parameter p, out float min, out float max)
+        {
+            bool signed = IsSigned(p);
+            switch (p.valueType)
+            {
+                case VRCExpressionParameters.ValueType.Bool:
+                    min = 0f;
+                    max = 1f;
+                    break;
+                case VRCExpressionParameters.ValueType.Int:
+                    int bits = p.GetBitWidthByType();
+                    min = signed ? -(1 << (bits - 1)) : 0;
+                    max = signed ? (1 << (bits - 1)) - 1 : (1 << bits) - 1;
+                    break;
+                default:
+                    min = signed ? -1f : 0f;
+                    max = 1f;
+                    break;
+            }
         }
 
         public List<VRCExpressionsMenu.Control> BuildControls(VRCExpressionsMenu menu)

@@ -20,7 +20,10 @@ namespace VAP.Editor
         internal static void CreateFromAssets()
         {
             foreach (var o in Selection.objects.Where(IsPrefab).ToList())
-                Create(AssetDatabase.GetAssetPath(o));
+            {
+                string path = AssetDatabase.GetAssetPath(o);
+                AssetMoves.KeepPartsHidden(path, () => Create(path));
+            }
         }
 
         static bool IsPrefab(Object o) =>
@@ -72,7 +75,7 @@ namespace VAP.Editor
                     if (oldName != newName)
                     {
                         string path = moved[i];
-                        EditorApplication.delayCall += () => RenameAssets(path, oldName, newName);
+                        EditorApplication.delayCall += () => AssetMoves.KeepPartsHidden(path, () => RenameAssets(path, oldName, newName));
                     }
                 }
             }
