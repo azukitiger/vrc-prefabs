@@ -1,3 +1,6 @@
+## Version 3.0.6
+- Remove GogoLoco as dependency.
+
 ## Version 3.0.5
 - Fixed compilation errors.
 
