@@ -1,4 +1,4 @@
-#if UNITY_EDITOR && VRC_SDK_VRCSDK3
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;

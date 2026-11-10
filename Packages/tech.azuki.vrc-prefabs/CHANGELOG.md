@@ -1,3 +1,6 @@
+## Version 3.0.5
+- Fixed compilation errors.
+
 ## Version 3.0.4
 - VRChat Face Tracking implementation!
 - Improved Ear Twitch logic.

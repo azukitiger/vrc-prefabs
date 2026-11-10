@@ -1,4 +1,4 @@
-#if UNITY_EDITOR && VRC_SDK_VRCSDK3
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,6 +42,7 @@ namespace VAP.Editor
                 parameters.name = ParametersName(prefabPath);
                 parameters.parameters = new VRCExpressionParameters.Parameter[0];
                 AssetDatabase.AddObjectToAsset(parameters, prefabPath);
+                AssetDatabase.SaveAssets();
                 created.Add(parameters.name);
             }
             var menu = existing.OfType<VRCExpressionsMenu>().FirstOrDefault(a => a.name == MenuName(prefabPath));
@@ -50,8 +51,10 @@ namespace VAP.Editor
                 menu = ScriptableObject.CreateInstance<VRCExpressionsMenu>();
                 menu.name = MenuName(prefabPath);
                 menu.controls = new List<VRCExpressionsMenu.Control>();
-                menu.Parameters = parameters;
                 AssetDatabase.AddObjectToAsset(menu, prefabPath);
+                AssetDatabase.SaveAssets();
+                menu.Parameters = parameters;
+                EditorUtility.SetDirty(menu);
                 created.Add(menu.name);
             }
             if (created.Count == 0)

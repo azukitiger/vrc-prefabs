@@ -1,4 +1,4 @@
-#if UNITY_EDITOR && VRC_SDK_VRCSDK3
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.ScriptableObjects;
