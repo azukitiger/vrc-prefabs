@@ -1,11 +1,7 @@
 ## Version 3.0.2
-- Fix Pupil Dilation.
-
-## Version 3.0.1
-- Improved Ear Twitch logic.
-
-## Version 3.0.0
 - VRChat Face Tracking implementation!
+- Improved Ear Twitch logic.
+- Custom eye blink no longer uses a bit parameter.
 
 ## Version 2.0.4
 - Improved sound quality of audio files.
