@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parameters: {fileID: 11400000, guid: 946944f70a5b4bf43a8b5e74680aaf4e, type: 2}
   controls:
-  - name: Settings
+  - name: Tracking Settings
     icon: {fileID: 2800000, guid: db2a8875805c0004c922d00a83d7b6a3, type: 3}
     type: 103
     parameter:
@@ -22,6 +22,17 @@ MonoBehaviour:
     value: 1
     style: 0
     subMenu: {fileID: 11400000, guid: 0c60d6dd9055acf45b72513d1a47a258, type: 2}
+    subParameters:
+    - name: 
+    labels: []
+  - name: Visemes Sensitivity
+    icon: {fileID: 2800000, guid: 02dccda0d4fe04c44bf3055c6cd17321, type: 3}
+    type: 103
+    parameter:
+      name: 
+    value: 1
+    style: 0
+    subMenu: {fileID: 11400000, guid: f35bc62f0e2006c41becbee4ecddbc30, type: 2}
     subParameters:
     - name: 
     labels: []

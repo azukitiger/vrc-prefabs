@@ -86,3 +86,12 @@ MonoBehaviour:
     useCustomLerpDuration: 0
     customLerpDuration: 0
     flippedRepresentation: 1
+  - name: VisemesSensitivity
+    valueType: 0
+    saved: 1
+    defaultValue: 1
+    networkSynced: 1
+    bitWidth: 2
+    useCustomLerpDuration: 0
+    customLerpDuration: 0
+    flippedRepresentation: 0

@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.11
+  vrcfuryVersion: 1.1445.0
   somethingIsBroken: 0
   config:
     features: []
@@ -82,7 +82,7 @@ MonoBehaviour:
             id: abadfcad2d3e23e4a90a02f8e6a7d2d2|Packages/tech.azuki.vrc-prefabs/Assets/Face
               Tracking/Debug/VAP Face Tracking Menu Parameters.asset
             objRef: {fileID: 11400000, guid: abadfcad2d3e23e4a90a02f8e6a7d2d2, type: 2}
-          prefix: Body Controls/Face Tracking/Settings
+          prefix: Body Controls/Face Tracking/Tracking Settings
         prms:
         - parameters:
             version: 1
@@ -345,6 +345,8 @@ MonoBehaviour:
           - 1
           - 1
         faceTrackingParameterBehaviors: []
+        visemeDampenMode: 0
+        visemeDampenAmount: 1
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
         controller:
@@ -897,7 +899,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.11
+  vrcfuryVersion: 1.1445.0
   somethingIsBroken: 0
   config:
     features: []
@@ -1249,7 +1251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.11
+  vrcfuryVersion: 1.1445.0
   somethingIsBroken: 0
   config:
     features: []

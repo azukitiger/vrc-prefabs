@@ -1,7 +1,7 @@
 {
     "name": "VAP (VRChat Azuki Prefabs) Listing",
     "id": "tech.azuki.vrc-prefabs.listing",
-    "url": "https://azukitiger.github.io/vrc-avatar-system/index.json",
+    "url": "https://azukitiger.github.io/vrc-prefabs/index.json",
     "author": {
         "name": "Azuki",
         "url": "https://github.com/azukitiger",
@@ -10,7 +10,7 @@
     "description": "Listing for VAP (VRChat Azuki Prefabs)",
     "bannerUrl": "banner.png",
     "githubRepos": [
-        "azukitiger/vrc-avatar-system",
+        "azukitiger/vrc-prefabs",
         "bdunderscore/ndmf"
     ]
 }
