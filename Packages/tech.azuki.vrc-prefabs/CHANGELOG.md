@@ -1,3 +1,6 @@
+## Version 3.0.8
+- Added Viseme sensitivity control.
+
 ## Version 3.0.7
 - Fixed Eye Rotation Sensitivity not working for Additive Controller.
 - Fixed Eyelid movement.
