@@ -19,7 +19,7 @@ MonoBehaviour:
     type: 102
     parameter:
       name: VisemesSensitivity
-    value: 3
+    value: 0
     style: 0
     subMenu: {fileID: 0}
     subParameters: []
@@ -29,7 +29,7 @@ MonoBehaviour:
     type: 102
     parameter:
       name: VisemesSensitivity
-    value: 2
+    value: 1
     style: 0
     subMenu: {fileID: 0}
     subParameters: []
@@ -39,7 +39,7 @@ MonoBehaviour:
     type: 102
     parameter:
       name: VisemesSensitivity
-    value: 1
+    value: 2
     style: 0
     subMenu: {fileID: 0}
     subParameters: []
@@ -49,7 +49,7 @@ MonoBehaviour:
     type: 102
     parameter:
       name: VisemesSensitivity
-    value: 0
+    value: 3
     style: 0
     subMenu: {fileID: 0}
     subParameters: []
