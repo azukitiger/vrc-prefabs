@@ -22,8 +22,7 @@ namespace VAP.Editor
         internal static void Process(GameObject avatarRoot)
         {
             var components = avatarRoot.GetComponentsInChildren<VAPParameterBehaviors>(true);
-            var correctiveComponents = avatarRoot.GetComponentsInChildren<VAPCorrectiveBehaviors>(true);
-            if (components.Length == 0 && correctiveComponents.Length == 0)
+            if (components.Length == 0)
                 return;
 
             var descriptor = avatarRoot.GetComponent<VRCAvatarDescriptor>();
@@ -39,7 +38,7 @@ namespace VAP.Editor
                 var sets = ReadSets(descriptor);
 
                 var ftShapes = FaceTrackingBlendshapes(descriptor);
-                int added = 0, dropped = 0, fromKeys = 0, fromCorrectives = 0;
+                int added = 0, dropped = 0, fromCorrectives = 0;
                 void Add(VRCAvatarDescriptor.FaceTrackingParameterBehavior behavior)
                 {
                     if (target.Count >= MaxParameterBehaviors)
@@ -51,33 +50,24 @@ namespace VAP.Editor
                     added++;
                 }
 
+                var own = new List<(VAPParameterBehaviors c, List<VRCAvatarDescriptor.FaceTrackingParameterBehavior> behaviors)>();
                 foreach (var c in components)
                 {
-                    if (c.parameterBehaviors != null)
-                        foreach (var behavior in c.parameterBehaviors)
-                            if (behavior != null)
-                                Add(WithSharedSet(Copy(behavior), c));
-
-                    if (c.trackingKeyBehaviors != null)
-                        foreach (var entry in c.trackingKeyBehaviors)
-                        {
-                            foreach (var behavior in Expand(entry, sets, c))
-                            {
-                                Add(behavior);
-                                fromKeys++;
-                            }
-                        }
+                    var behaviors = Behaviors(c, sets, true);
+                    own.Add((c, behaviors));
+                    foreach (var behavior in behaviors)
+                        Add(behavior);
                 }
 
                 var applied = AppliedBlendshapes(target);
-                foreach (var c in correctiveComponents)
-                    foreach (var behavior in Correctives(c, sets, ftShapes, applied))
+                foreach (var (c, behaviors) in own)
+                    foreach (var behavior in Correctives(c, sets, ftShapes, applied, Limits(behaviors)))
                     {
                         Add(behavior);
                         fromCorrectives++;
                     }
 
-                Debug.Log(Log + $"Added {added} Parameter Behaviors to {avatarRoot.name} ({fromKeys} from Tracking Keys, {fromCorrectives} correctives, {target.Count} total).", avatarRoot);
+                Debug.Log(Log + $"Added {added} Parameter Behaviors to {avatarRoot.name} ({fromCorrectives} correctives, {target.Count} total).", avatarRoot);
                 if (dropped > 0)
                     Debug.LogWarning(Log + $"The descriptor is limited to {MaxParameterBehaviors} Parameter Behaviors; {dropped} were not added.", avatarRoot);
                 if (!descriptor.enableFaceTracking)
@@ -85,8 +75,6 @@ namespace VAP.Editor
             }
 
             foreach (var c in components)
-                Object.DestroyImmediate(c);
-            foreach (var c in correctiveComponents)
                 Object.DestroyImmediate(c);
         }
 
@@ -116,14 +104,14 @@ namespace VAP.Editor
                     if (mesh == null)
                         continue;
                     result ??= new HashSet<string>();
-                    for (int k = 0; k < mesh.blendShapeCount; k++)
-                        result.Add(mesh.GetBlendShapeName(k));
+                    result.UnionWith(Blendshapes.Names(mesh));
                 }
             }
             return result;
         }
 
-        internal static List<(string shape, string expression)> FindCorrectives(string[] setNames, HashSet<string> shapes)
+        internal static List<(string shape, string expression)> FindCorrectives(string[] setNames, HashSet<string> shapes,
+            Dictionary<string, List<(bool max, string expression)>> limits = null)
         {
             var result = new List<(string, string)>();
             if (setNames == null || shapes == null)
@@ -154,7 +142,7 @@ namespace VAP.Editor
                     var products = new List<string>();
                     foreach (int ka in keysOf[a])
                         foreach (int kb in keysOf[b])
-                            products.Add($"{TrackingKeyGroups.Keys[ka]} * {TrackingKeyGroups.Keys[kb]}");
+                            products.Add($"{Limited(TrackingKeyGroups.Keys[ka], a, limits)} * {Limited(TrackingKeyGroups.Keys[kb], b, limits)}");
                     result.Add((corrective, MaxOf(products)));
                 }
             return result;
@@ -171,6 +159,83 @@ namespace VAP.Editor
                 n--;
             if (n > 0)
                 yield return a + b.Substring(n) + "Morph";
+        }
+
+        static string Limited(string key, string shape, Dictionary<string, List<(bool max, string expression)>> limits)
+        {
+            if (limits == null || !limits.TryGetValue(shape, out var list))
+                return key;
+            foreach (var (max, expression) in list)
+                key = $"{(max ? "min" : "max")}({key}, {expression})";
+            return key;
+        }
+
+        internal static Dictionary<string, List<(bool max, string expression)>> Limits(
+            IEnumerable<VRCAvatarDescriptor.FaceTrackingParameterBehavior> behaviors)
+        {
+            var result = new Dictionary<string, List<(bool, string)>>();
+            foreach (var b in behaviors)
+            {
+                if (b == null)
+                    continue;
+                var probe = JsonUtility.FromJson<TargetProbe>(JsonUtility.ToJson(b));
+                bool max = probe.targetMode == (int)VRCAvatarDescriptor.ParameterBehaviorTargetMode.LimitBlendshapeMax;
+                if (!max && probe.targetMode != (int)VRCAvatarDescriptor.ParameterBehaviorTargetMode.LimitBlendshapeMin)
+                    continue;
+                string expression = InputExpression(probe);
+                if (string.IsNullOrEmpty(probe.targetBlendshapeName) || string.IsNullOrWhiteSpace(expression))
+                    continue;
+                if (!result.TryGetValue(probe.targetBlendshapeName, out var list))
+                    result[probe.targetBlendshapeName] = list = new List<(bool, string)>();
+                list.Add((max, expression.Trim()));
+            }
+            return result;
+        }
+
+        internal static List<VRCAvatarDescriptor.FaceTrackingParameterBehavior> Behaviors(
+            VAPParameterBehaviors c, Dictionary<string, string[]> sets, bool log)
+        {
+            var result = new List<VRCAvatarDescriptor.FaceTrackingParameterBehavior>();
+            if (c.parameterBehaviors != null)
+                foreach (var behavior in c.parameterBehaviors)
+                    if (behavior != null)
+                        result.Add(WithSharedSet(Copy(behavior), c));
+            if (c.trackingKeyBehaviors != null)
+                foreach (var entry in c.trackingKeyBehaviors)
+                    result.AddRange(Expand(entry, sets, c, log));
+            return result;
+        }
+
+        static string InputExpression(TargetProbe b)
+        {
+            var mode = (VRCAvatarDescriptor.ParameterBehaviorCombineMode)b.combineMode;
+            if (mode == VRCAvatarDescriptor.ParameterBehaviorCombineMode.Custom)
+                return b.customExpression;
+            var inputs = new List<string>();
+            if (b.inputTrackingKeyNames != null)
+                for (int i = 0; i < b.inputTrackingKeyNames.Length; i++)
+                {
+                    string key = b.inputTrackingKeyNames[i];
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+                    bool inverted = b.inputInverted != null && i < b.inputInverted.Length && b.inputInverted[i];
+                    inputs.Add(inverted ? $"(1 - {key})" : key);
+                }
+            if (inputs.Count == 0)
+                return null;
+            switch (mode)
+            {
+                case VRCAvatarDescriptor.ParameterBehaviorCombineMode.Add:
+                    return string.Join(" + ", inputs);
+                case VRCAvatarDescriptor.ParameterBehaviorCombineMode.Multiply:
+                    return string.Join(" * ", inputs);
+                default:
+                    string fn = mode == VRCAvatarDescriptor.ParameterBehaviorCombineMode.Min ? "min" : "max";
+                    string expression = inputs[0];
+                    for (int i = 1; i < inputs.Count; i++)
+                        expression = $"{fn}({expression}, {inputs[i]})";
+                    return expression;
+            }
         }
 
         static string MaxOf(List<string> terms)
@@ -209,6 +274,10 @@ namespace VAP.Editor
         {
             public int targetMode;
             public string targetBlendshapeName;
+            public int combineMode;
+            public string customExpression;
+            public string[] inputTrackingKeyNames;
+            public bool[] inputInverted;
         }
 
         [System.Serializable]
@@ -222,20 +291,20 @@ namespace VAP.Editor
         }
 
         static IEnumerable<VRCAvatarDescriptor.FaceTrackingParameterBehavior> Correctives(
-            VAPCorrectiveBehaviors c, Dictionary<string, string[]> sets, HashSet<string> shapes, HashSet<string> applied)
+            VAPParameterBehaviors c, Dictionary<string, string[]> sets, HashSet<string> shapes, HashSet<string> applied,
+            Dictionary<string, List<(bool max, string expression)>> limits)
         {
-            string set = c.blendshapesSet;
+            string set = c.CorrectivesSet;
             if (string.IsNullOrEmpty(set))
             {
-                Debug.LogWarning(Log + $"{c.name}: Auto Corrective Behaviors has no Blendshapes Set; skipped.", c);
                 yield break;
             }
             if (!sets.TryGetValue(set, out var setNames))
             {
-                Debug.LogWarning(Log + $"{c.name}: Auto Corrective Behaviors: the avatar has no Blendshapes Set named \"{set}\"; skipped.", c);
+                Debug.LogWarning(Log + $"{c.name}: Auto Correctives: the avatar has no Blendshapes Set named \"{set}\"; skipped.", c);
                 yield break;
             }
-            foreach (var (shape, expression) in FindCorrectives(setNames, shapes))
+            foreach (var (shape, expression) in FindCorrectives(setNames, shapes, limits))
             {
                 if (applied.Contains(shape))
                     continue;
@@ -314,7 +383,7 @@ namespace VAP.Editor
         }
 
         static IEnumerable<VRCAvatarDescriptor.FaceTrackingParameterBehavior> Expand(
-            VAPParameterBehaviors.TrackingKeyBehavior entry, Dictionary<string, string[]> sets, Object context)
+            VAPParameterBehaviors.TrackingKeyBehavior entry, Dictionary<string, string[]> sets, Object context, bool log = true)
         {
             if (entry == null || entry.behavior == null)
                 yield break;
@@ -322,16 +391,18 @@ namespace VAP.Editor
             var keys = TrackingKeyGroups.Resolve(entry.trackingKey);
             if (keys == null)
             {
-                Debug.LogWarning(Log + $"Tracking Key behavior has an unknown tracking key \"{entry.trackingKey}\"; skipped.", context);
+                if (log)
+                    Debug.LogWarning(Log + $"Tracking Key behavior has an unknown tracking key \"{entry.trackingKey}\"; skipped.", context);
                 yield break;
             }
             if (!sets.TryGetValue(setName ?? "", out var setNames))
             {
-                Debug.LogWarning(Log + $"Tracking Key behavior {entry.trackingKey}: the avatar has no Blendshapes Set named \"{setName}\"; skipped.", context);
+                if (log)
+                    Debug.LogWarning(Log + $"Tracking Key behavior {entry.trackingKey}: the avatar has no Blendshapes Set named \"{setName}\"; skipped.", context);
                 yield break;
             }
             var shapes = BlendshapesFor(setNames, keys);
-            if (shapes.Count == 0)
+            if (shapes.Count == 0 && log)
                 Debug.LogWarning(Log + $"Tracking Key behavior {entry.trackingKey}: \"{setName}\" has no blendshapes for these keys; skipped.", context);
             var mode = entry.mode == VRCAvatarDescriptor.ParameterBehaviorTargetMode.LimitBlendshapeMin
                 ? VRCAvatarDescriptor.ParameterBehaviorTargetMode.LimitBlendshapeMin

@@ -34,6 +34,14 @@ namespace VAP.Editor
 
         static readonly ConditionalWeakTable<IMGUIContainer, System.Action> Wrapped = new ConditionalWeakTable<IMGUIContainer, System.Action>();
 
+        public static VisualElement Create(string title, System.Action onGUI)
+        {
+            var root = new VisualElement();
+            root.Add(new IMGUIContainer(onGUI));
+            Attach(root, title);
+            return root;
+        }
+
         public static void Attach(VisualElement inspectorRoot, string title)
         {
 #if !VAP_NDMF

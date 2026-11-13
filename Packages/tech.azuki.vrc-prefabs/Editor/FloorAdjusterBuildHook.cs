@@ -17,12 +17,6 @@ namespace VAP.Editor
     {
         const string Log = "[VAP Floor Adjuster] ";
 
-        internal static Transform FindAvatarRoot(Transform t)
-        {
-            var descriptor = t.GetComponentInParent<VRCAvatarDescriptor>(true);
-            return descriptor != null ? descriptor.transform : null;
-        }
-
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
             var all = avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(true);

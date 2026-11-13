@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2160260361826797620}
   - component: {fileID: 893825668527365861}
   - component: {fileID: 67991107304017948}
-  - component: {fileID: 9186226835122448967}
   - component: {fileID: 5527116933560190243}
   - component: {fileID: 4625575595106969738}
   m_Layer: 0
@@ -285,19 +284,63 @@ MonoBehaviour:
       inputInverted: 
       combineMode: 4
       customExpression: 2 - JawOpen * 5
---- !u!114 &9186226835122448967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9058907458269832273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74476a0dd6924c69b6b4387ccdf38f71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blendshapesSet: FaceTracking
+  - trackingKey: TongueLeft
+    mode: 3
+    blendshapesSet: 
+    behavior:
+      targetMode: 0
+      outputParameterName: 
+      targetBlendSetName: 
+      targetBlendshapeName: 
+      weightBlendSetName: 
+      inputTrackingKeys: 
+      inputTrackingKeyNames: []
+      inputInverted: 
+      combineMode: 4
+      customExpression: min(TongueLeft, (1 + TongueOut) / 2)
+  - trackingKey: TongueRight
+    mode: 3
+    blendshapesSet: 
+    behavior:
+      targetMode: 0
+      outputParameterName: 
+      targetBlendSetName: 
+      targetBlendshapeName: 
+      weightBlendSetName: 
+      inputTrackingKeys: 
+      inputTrackingKeyNames: []
+      inputInverted: 
+      combineMode: 4
+      customExpression: min(TongueRight, (1 + TongueOut) / 2)
+  - trackingKey: TongueUp
+    mode: 3
+    blendshapesSet: 
+    behavior:
+      targetMode: 0
+      outputParameterName: 
+      targetBlendSetName: 
+      targetBlendshapeName: 
+      weightBlendSetName: 
+      inputTrackingKeys: 
+      inputTrackingKeyNames: []
+      inputInverted: 
+      combineMode: 4
+      customExpression: min(TongueUp, (1 + TongueOut) / 2)
+  - trackingKey: TongueDown
+    mode: 3
+    blendshapesSet: 
+    behavior:
+      targetMode: 0
+      outputParameterName: 
+      targetBlendSetName: 
+      targetBlendshapeName: 
+      weightBlendSetName: 
+      inputTrackingKeys: 
+      inputTrackingKeyNames: []
+      inputInverted: 
+      combineMode: 4
+      customExpression: min(TongueDown, max(TongueOut * 2 - 1, 0))
+  correctivesSet: 
   disabledCorrectives: []
 --- !u!114 &5527116933560190243
 MonoBehaviour:
@@ -313,7 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.13
+  vrcfuryVersion: 1.1460.1-beta.2
   somethingIsBroken: 0
   config:
     features: []
@@ -368,6 +411,8 @@ MonoBehaviour:
         faceTrackingMeshes: []
         faceTrackingBlendshapeSets: []
         faceTrackingParameterBehaviors: []
+        visemeDampenMode: 0
+        visemeDampenAmount: 1
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
         controller:
@@ -406,7 +451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.13
+  vrcfuryVersion: 1.1460.1-beta.2
   somethingIsBroken: 0
   config:
     features: []

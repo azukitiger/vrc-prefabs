@@ -19,17 +19,6 @@ namespace VAP.Editor
     {
         const string Log = "[VAP Remove Empty Sub Menus] ";
 
-        internal static VAPRemoveEmptySubMenus Other(VAPRemoveEmptySubMenus c)
-        {
-            var descriptor = c.GetComponentInParent<VRCAvatarDescriptor>(true);
-            if (descriptor == null)
-                return null;
-            foreach (var o in descriptor.GetComponentsInChildren<VAPRemoveEmptySubMenus>(true))
-                if (o != c)
-                    return o;
-            return null;
-        }
-
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
             var all = avatarRoot.GetComponentsInChildren<VAPRemoveEmptySubMenus>(true);

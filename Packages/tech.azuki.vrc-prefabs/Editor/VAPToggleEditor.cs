@@ -10,43 +10,31 @@ namespace VAP.Editor
     {
         internal const string FeatureType = "VF.Model.Feature.Toggle";
         const float IconSize = 24f, IconPad = 4f;
-        static GUIStyle pathStyle, paramStyle;
+        readonly WrappedEditor wrap = new WrappedEditor(FeatureType, "VRCFury Toggle", "VAP.Toggle.Open.");
 
-        VAPToggle owner;
-        Component wrapped;
-        WrappedSection section;
+        VAPToggle Owner => (VAPToggle)wrap.Owner;
+        Component Wrapped => wrap.Wrapped;
 
-        void OnEnable()
-        {
-            owner = target as VAPToggle;
-            if (owner == null || targets.Length > 1)
-                return;
-            wrapped = VRCFuryWrap.Ensure(owner, FeatureType);
-            WrappedToggles.HideShownEditors();
-        }
+        void OnEnable() => wrap.Enable(this);
 
-        void OnDisable()
-        {
-            section?.Dispose();
-            VRCFuryWrap.ScheduleRemoval(owner, wrapped);
-        }
+        void OnDisable() => wrap.Disable();
 
         static readonly GUIContent DefaultLabel = new GUIContent("Default",
             "Replaces the VRCFury Toggle's default when the avatar is built. Can be changed on prefab instances too.");
 
         void DrawDefault()
         {
-            if (owner == null || wrapped == null)
+            if (Owner == null || Wrapped == null)
                 return;
-            var (slider, ownOn, ownValue) = VRCFuryToggleDefaults.GetDefault(wrapped);
-            bool on = owner.overrideDefault ? owner.defaultOn : ownOn;
-            float value = owner.overrideDefault ? owner.defaultValue : ownValue;
+            var (slider, ownOn, ownValue) = VRCFuryToggleDefaults.GetDefault(Wrapped);
+            bool on = Owner.overrideDefault ? Owner.defaultOn : ownOn;
+            float value = Owner.overrideDefault ? Owner.defaultValue : ownValue;
 
-            var source = PrefabUtility.GetCorrespondingObjectFromSource(owner);
+            var source = PrefabUtility.GetCorrespondingObjectFromSource(Owner);
             bool changed = source == null
-                ? owner.overrideDefault
-                : owner.overrideDefault != source.overrideDefault ||
-                  (owner.overrideDefault && (owner.defaultOn != source.defaultOn || !Mathf.Approximately(owner.defaultValue, source.defaultValue)));
+                ? Owner.overrideDefault
+                : Owner.overrideDefault != source.overrideDefault ||
+                  (Owner.overrideDefault && (Owner.defaultOn != source.defaultOn || !Mathf.Approximately(Owner.defaultValue, source.defaultValue)));
 
             EditorGUILayout.Space(2f);
             var rect = EditorGUILayout.GetControlRect();
@@ -73,20 +61,17 @@ namespace VAP.Editor
 
         void SetOverride(bool enabled, bool on, float value)
         {
-            Undo.RecordObject(owner, enabled ? "Change Default" : "Revert Default");
-            owner.overrideDefault = enabled;
-            owner.defaultOn = on;
-            owner.defaultValue = Mathf.Clamp01(value);
-            EditorUtility.SetDirty(owner);
-            PrefabUtility.RecordPrefabInstancePropertyModifications(owner);
+            Undo.RecordObject(Owner, enabled ? "Change Default" : "Revert Default");
+            Owner.overrideDefault = enabled;
+            Owner.defaultOn = on;
+            Owner.defaultValue = Mathf.Clamp01(value);
+            EditorUtility.SetDirty(Owner);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(Owner);
         }
 
         void DrawInfo(Rect rect)
         {
-            pathStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft, clipping = TextClipping.Clip, padding = new RectOffset(0, 0, 0, 0) };
-            paramStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, clipping = TextClipping.Clip };
-
-            using var so = new SerializedObject(wrapped);
+            using var so = new SerializedObject(Wrapped);
             var content = so.FindProperty("content");
             string path = content?.FindPropertyRelative("name")?.stringValue ?? "";
             var icon = (content?.FindPropertyRelative("enableIcon")?.boolValue ?? false)
@@ -100,31 +85,12 @@ namespace VAP.Editor
                 GUI.DrawTexture(new Rect(x, rect.y + (rect.height - IconSize) * 0.5f, IconSize, IconSize), icon, ScaleMode.ScaleToFit);
                 x += IconSize + IconPad;
             }
-            float paramWidth = string.IsNullOrEmpty(param) ? 0f : Mathf.Min(paramStyle.CalcSize(new GUIContent(param)).x, rect.width * 0.35f);
-            GUI.Label(new Rect(x, rect.y, rect.xMax - x - paramWidth - 8f, rect.height), string.IsNullOrEmpty(path) ? "No menu path" : path, pathStyle);
-            if (paramWidth > 0f)
-                GUI.Label(new Rect(rect.xMax - paramWidth, rect.y, paramWidth, rect.height), param, paramStyle);
+            VRCFuryWrap.BarLabels(rect, x, string.IsNullOrEmpty(path) ? "No menu path" : path, param, 0.35f);
         }
 
         internal static bool IsWrappable(Component c) => VRCFuryWrap.HasFeature(c, FeatureType);
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            if (targets.Length > 1)
-                root.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox("Editing several of these at once isn't supported.", MessageType.Info)));
-            else if (wrapped == null)
-                root.Add(VRCFuryWrap.MissingMessage("VRCFury Toggle"));
-            else
-            {
-                root.Add(new IMGUIContainer(DrawDefault));
-                section?.Dispose();
-                section = new WrappedSection(wrapped, "VAP.Toggle.Open.", DrawInfo);
-                root.Add(section.Root);
-            }
-            VAPInspectorHeader.Attach(root, "VRCFury Toggle");
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => wrap.Build(this, DrawDefault, DrawInfo);
     }
 }
 #endif

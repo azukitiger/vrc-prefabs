@@ -16,13 +16,7 @@ namespace VAP.Editor
 
         void OnEnable() => height = serializedObject.FindProperty(nameof(VAPFloorAdjuster.height));
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            root.Add(new IMGUIContainer(DrawFields));
-            VAPInspectorHeader.Attach(root, "Floor Adjuster");
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Floor Adjuster", DrawFields);
 
         void DrawFields()
         {
@@ -32,8 +26,8 @@ namespace VAP.Editor
             serializedObject.Update();
 
             var adjuster = (VAPFloorAdjuster)target;
-            if (FloorAdjusterBuild.FindAvatarRoot(adjuster.transform) == null)
-                EditorGUILayout.HelpBox("Put this inside an avatar (under its VRC Avatar Descriptor).", MessageType.Warning);
+            if (VAPAvatar.Descriptor(adjuster) == null)
+                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
 
             using (new EditorGUI.DisabledScope(locked))
             {

@@ -90,6 +90,67 @@ namespace VAP.Editor
             new IMGUIContainer(() => EditorGUILayout.HelpBox(
                 FindType(VRCFuryType) == null ? "VRCFury is not installed." : $"The wrapped {what} is missing. Open the prefab to fix it.",
                 MessageType.Error));
+
+        static GUIStyle barLeftStyle, barRightStyle;
+
+        internal static void BarLabels(Rect rect, float x, string left, string right, float rightMaxFraction)
+        {
+            barLeftStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft, clipping = TextClipping.Clip, padding = new RectOffset(0, 0, 0, 0) };
+            barRightStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, clipping = TextClipping.Clip };
+            float rightWidth = string.IsNullOrEmpty(right) ? 0f : Mathf.Min(barRightStyle.CalcSize(new GUIContent(right)).x, rect.width * rightMaxFraction);
+            GUI.Label(new Rect(x, rect.y, rect.xMax - x - rightWidth - 8f, rect.height), left, barLeftStyle);
+            if (rightWidth > 0f)
+                GUI.Label(new Rect(rect.xMax - rightWidth, rect.y, rightWidth, rect.height), right, barRightStyle);
+        }
+    }
+
+    internal class WrappedEditor
+    {
+        readonly string featureType, title, key;
+        WrappedSection section;
+
+        internal MonoBehaviour Owner { get; private set; }
+        internal Component Wrapped { get; private set; }
+
+        internal WrappedEditor(string featureType, string title, string key)
+        {
+            this.featureType = featureType;
+            this.title = title;
+            this.key = key;
+        }
+
+        internal void Enable(UnityEditor.Editor editor)
+        {
+            Owner = editor.target as MonoBehaviour;
+            if (Owner == null || editor.targets.Length > 1)
+                return;
+            Wrapped = VRCFuryWrap.Ensure(Owner, featureType);
+            WrappedToggles.HideShownEditors();
+        }
+
+        internal void Disable()
+        {
+            section?.Dispose();
+            VRCFuryWrap.ScheduleRemoval(Owner, Wrapped);
+        }
+
+        internal VisualElement Build(UnityEditor.Editor editor, Action drawTop, Action<Rect> drawInfo)
+        {
+            var root = new VisualElement();
+            if (editor.targets.Length > 1)
+                root.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox("Editing several of these at once isn't supported.", MessageType.Info)));
+            else if (Wrapped == null)
+                root.Add(VRCFuryWrap.MissingMessage(title));
+            else
+            {
+                root.Add(new IMGUIContainer(drawTop));
+                section?.Dispose();
+                section = new WrappedSection(Wrapped, key, drawInfo);
+                root.Add(section.Root);
+            }
+            VAPInspectorHeader.Attach(root, title);
+            return root;
+        }
     }
 
     internal class WrappedSection : IDisposable

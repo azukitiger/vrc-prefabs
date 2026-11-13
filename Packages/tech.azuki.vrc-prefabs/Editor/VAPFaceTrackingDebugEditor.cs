@@ -13,21 +13,19 @@ namespace VAP.Editor
     [CanEditMultipleObjects]
     public class VAPFaceTrackingDebugEditor : VAPBlendshapeSetEditorBase
     {
-        string conflict;
-        double conflictTime = -10;
+        Cached<string> conflict;
 
         protected override void DrawNotices()
         {
             if (targets.Length != 1)
                 return;
-            if (EditorApplication.timeSinceStartup - conflictTime > 1.0)
+            conflict ??= new Cached<string>(1.0, () =>
             {
-                conflictTime = EditorApplication.timeSinceStartup;
                 var c = (VAPFaceTrackingDebug)target;
-                conflict = BlendshapeSetNameCheck.Conflict(c, c.GetComponentInParent<VRCAvatarDescriptor>(true));
-            }
-            if (conflict != null)
-                EditorGUILayout.HelpBox(conflict + " Use a different name. The avatar won't build until this is fixed.", MessageType.Error);
+                return BlendshapeSetNameCheck.Conflict(c, VAPAvatar.Descriptor(c));
+            });
+            if (conflict.Value is string text)
+                EditorGUILayout.HelpBox(text + " Use a different name. The avatar won't build until this is fixed.", MessageType.Error);
         }
     }
 
@@ -44,7 +42,7 @@ namespace VAP.Editor
         protected virtual void DrawNotices() { }
 
         const float Padding = 10f;
-        protected static float Line => EditorGUIUtility.singleLineHeight;
+        protected static float Line => VAPEditorGUI.Line;
         protected static float Step => Line + EditorGUIUtility.standardVerticalSpacing;
         static float HiddenTop => Step * 4f + 10f;
 
@@ -64,13 +62,7 @@ namespace VAP.Editor
         static readonly System.Reflection.FieldInfo StatesField = typeof(FaceTrackingBlendshapesSetDrawer).GetField(
             "_states", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            root.Add(new IMGUIContainer(SafeDrawFields));
-            VAPInspectorHeader.Attach(root, Title);
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create(Title, SafeDrawFields);
 
         string lastError;
 
@@ -213,13 +205,7 @@ namespace VAP.Editor
             searchField.SetValue(state, EditorGUI.TextField(search, (string)searchField.GetValue(state) ?? "",
                 GUI.skin.FindStyle("ToolbarSearchTextField") ?? EditorStyles.toolbarTextField));
 
-            var scrollField = type.GetField("scroll");
-            var heightField = type.GetField("contentHeight");
-            if (scrollField == null || heightField == null)
-                return;
-            float content = (float)heightField.GetValue(state);
-            float view = Mathf.Min(280f, content);
-            if (content <= view)
+            if (!Scrollable(state, out var scrollField, out float content, out float view))
                 return;
             float barWidth = GUI.skin.verticalScrollbar.fixedWidth;
             var bar = new Rect(area.xMax - barWidth, area.y + Step * 4f, barWidth, view);
@@ -234,23 +220,24 @@ namespace VAP.Editor
             if (e.type != EventType.ScrollWheel)
                 return;
             object state = ViewState();
-            if (state == null)
+            if (!Scrollable(state, out var scrollField, out float content, out float view))
                 return;
-            var type = state.GetType();
-            var scrollField = type.GetField("scroll");
-            var heightField = type.GetField("contentHeight");
-            if (scrollField == null || heightField == null)
-                return;
-
-            float content = (float)heightField.GetValue(state);
-            float view = Mathf.Min(280f, content);
             var viewport = new Rect(clip.x, clip.y + Step * 4f, clip.width, view);
-            if (content <= view || !viewport.Contains(e.mousePosition))
+            if (!viewport.Contains(e.mousePosition))
                 return;
             var scroll = (Vector2)scrollField.GetValue(state);
             scroll.y = Mathf.Clamp(scroll.y + e.delta.y * 20f, 0f, content - view);
             scrollField.SetValue(state, scroll);
             e.Use();
+        }
+
+        static bool Scrollable(object state, out System.Reflection.FieldInfo scrollField, out float content, out float view)
+        {
+            scrollField = state?.GetType().GetField("scroll");
+            var heightField = state?.GetType().GetField("contentHeight");
+            content = heightField != null ? (float)heightField.GetValue(state) : 0f;
+            view = Mathf.Min(280f, content);
+            return scrollField != null && heightField != null && content > view;
         }
 
         protected static Rect TakeLine(ref Rect position)
@@ -263,7 +250,7 @@ namespace VAP.Editor
         void UpdateCatalog(VAPBlendshapeSetBase component, SerializedProperty set)
         {
             var list = new List<SkinnedMeshRenderer>();
-            var descriptor = component.GetComponentInParent<VRCAvatarDescriptor>(true);
+            var descriptor = VAPAvatar.Descriptor(component);
             if (IncludeAvatarMeshes && descriptor != null && descriptor.faceTrackingMeshes != null)
                 list.AddRange(descriptor.faceTrackingMeshes.Where(m => m != null));
             string format = FaceTrackingDebugSetFiller.Normalize(component.nameFormat);

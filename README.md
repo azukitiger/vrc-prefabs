@@ -350,7 +350,7 @@ VRChat now drives and smooths the **Unified Expressions** blendshapes through th
 - **Visemes Sensitivity**: scales the weight of your `Visemes` Blendshapes Set. **Expressive** is full, **Lively** is 2/3 (default), **Subtle** is 1/3 and **Still** is 0.
 - **Eye Sensitivity** (radial, default `0.6`): scales eye look from **1×** to **2×**, only while the user's own eye tracking is active (`UserEyeTracking`). Used by the **Eye Rotation Prefab**.
 - **Mouth corrections** applied to your `FaceTracking` Blendshapes Set.
-- **Corrective blendshapes are triggered automatically**: any blendshape named after two blendshapes of your `FaceTracking` set followed by `Corrective` gets an **Apply to Blendshape** behavior at build time, with the expression `KeyA * KeyB`. When several tracking keys use the same blendshape, the strongest pair wins (`max(LipPuckerUpperLeft * MouthClosed, ...)`).
+- **Corrective blendshapes are triggered automatically**: any blendshape named after two blendshapes of your `FaceTracking` set followed by `Corrective` gets an **Apply to Blendshape** behavior at build time, with the expression `KeyA * KeyB`. When several tracking keys use the same blendshape, the strongest pair wins (`max(LipPuckerUpperLeft * MouthClosed, ...)`). A key limited by a Tracking Key or Limit Blendshape behavior on the same component is limited in the corrective too.
 - Includes **Face Tracking Parameter Behaviors** for its `VAP/FT/*Forward` input parameters, so no setup is needed for them on the avatar descriptor.
 
 ### Instructions
@@ -362,7 +362,7 @@ VRChat now drives and smooths the **Unified Expressions** blendshapes through th
    - **Face Tracking**: enabled, with **Use All Tracking Keys** on, your face mesh in **Face Tracking Mesh**, **Viseme Dampen** set to `Dampen Tracking` and **Dampen Amount** set to `0.6`
 4. Create a **Blendshapes Set** on the **VRC Avatar Descriptor** (under **Face Tracking**) named exactly `FaceTracking`, and map your face blendshapes in it. The prefab doesn't include one, and its Parameter Behaviors only work on a set with this name.
 5. Create a second **Blendshapes Set** named exactly `Visemes`, and map your viseme blendshapes in it. **Visemes Sensitivity** controls this set's weight.
-6. Optionally, add corrective blendshapes to your face mesh named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). Their behaviors are generated at build time by the prefab's **Face Tracking Auto Corrective Behaviors** component, which lists them and lets you uncheck any you don't want.
+6. Optionally, add corrective blendshapes to your face mesh named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). Their behaviors are generated at build time by the **Correctives** tab of the prefab's **Face Tracking Parameter Behaviors** component, which lists them and lets you uncheck any you don't want.
 7. Optionally, the animator parameters `VAP/FT/*` can be used to animate additional blendshapes or bones (ex. ears) from a separate FX controller.
 
 ### Included Expression Parameters

@@ -10,18 +10,9 @@ namespace VAP
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPDescriptorExpressions : VAPExpressions
     {
-        public VRCAvatarDescriptor Descriptor => GetComponentInParent<VRCAvatarDescriptor>(true);
+        public VRCAvatarDescriptor Descriptor => VAPAvatar.Descriptor(this);
 
-        public VAPDescriptorExpressions Other()
-        {
-            var descriptor = Descriptor;
-            if (descriptor == null)
-                return null;
-            foreach (var c in descriptor.GetComponentsInChildren<VAPDescriptorExpressions>(true))
-                if (c != this)
-                    return c;
-            return null;
-        }
+        public VAPDescriptorExpressions Other() => VAPAvatar.Other(this);
 
         public override List<VRCExpressionsMenu> RootMenus()
         {

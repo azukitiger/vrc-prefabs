@@ -20,7 +20,7 @@ namespace VAP.Editor
             ".asset", ".mat", ".anim", ".mask", ".overrideController", ".physicMaterial", ".physicsMaterial2D", ".flare", ".controller",
         };
 
-        static bool IsPrefab(Object o) =>
+        internal static bool IsPrefab(Object o) =>
             o is GameObject && AssetDatabase.IsMainAsset(o) &&
             AssetDatabase.GetAssetPath(o).EndsWith(".prefab", System.StringComparison.OrdinalIgnoreCase);
 

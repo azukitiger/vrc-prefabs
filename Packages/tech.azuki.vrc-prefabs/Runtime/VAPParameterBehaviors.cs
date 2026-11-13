@@ -28,6 +28,14 @@ namespace VAP
                  "Turned into Limit Blendshape behaviors at build time.")]
         public List<TrackingKeyBehavior> trackingKeyBehaviors = new List<TrackingKeyBehavior>();
 
+        [Tooltip("The Blendshapes Set the correctives combine when Per Behavior is on.")]
+        public string correctivesSet = "";
+
+        [Tooltip("Corrective blendshapes left out (unchecked in the list), by blendshape name.")]
+        public List<string> disabledCorrectives = new List<string>();
+
+        public string CorrectivesSet => SetFor(correctivesSet);
+
         [Serializable]
         public class TrackingKeyBehavior
         {

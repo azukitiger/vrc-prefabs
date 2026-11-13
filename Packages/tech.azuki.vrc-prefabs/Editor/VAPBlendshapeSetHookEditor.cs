@@ -22,15 +22,8 @@ namespace VAP.Editor
         static readonly GUIContent MeshesLabel = new GUIContent("Face Tracking Meshes",
             "Meshes whose blendshapes are hooked. The ones with blendshapes renamed to the target set are added to the " +
             "avatar's Face Tracking Meshes at build time.");
-        static readonly GUIContent PickContent = new GUIContent("", "Pick a Blendshapes Set from this avatar.");
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            root.Add(new IMGUIContainer(DrawFields));
-            VAPInspectorHeader.Attach(root, "Face Tracking BlendShape Set Hook");
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Face Tracking BlendShape Set Hook", DrawFields);
 
         void DrawFields()
         {
@@ -43,67 +36,31 @@ namespace VAP.Editor
             using (new EditorGUI.DisabledScope(locked))
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("meshes"), MeshesLabel, true);
-                DrawTarget(nameProp);
-                EditorGUI.BeginChangeCheck();
-                string format = EditorGUILayout.TextField(FormatLabel, formatProp.stringValue);
-                if (EditorGUI.EndChangeCheck())
-                    formatProp.stringValue = format;
+                VAPEditorGUI.SetFieldWithPicker(nameProp, TargetLabel, () => VAPEditorGUI.AvatarSets(Descriptor).Keys);
+                VAPEditorGUI.StringField(formatProp, FormatLabel);
             }
             serializedObject.ApplyModifiedProperties();
 
             if (targets.Length == 1)
             {
-                var (text, type) = Status();
+                status ??= new Cached<(string, MessageType)>(0.5, MakeStatus);
+                var (text, type) = status.Value;
                 EditorGUILayout.HelpBox(text, type);
             }
         }
 
-        void DrawTarget(SerializedProperty nameProp)
-        {
-            const float pickWidth = 20f;
-            var rect = EditorGUILayout.GetControlRect();
-            EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width - pickWidth - 2f, rect.height), nameProp, TargetLabel);
-            var pick = new Rect(rect.xMax - pickWidth, rect.y, pickWidth, rect.height);
-            if (!EditorGUI.DropdownButton(pick, PickContent, FocusType.Passive))
-                return;
-            var names = AvailableSets(Descriptor).Keys.OrderBy(n => n).ToList();
-            var menu = new GenericMenu();
-            if (names.Count == 0)
-                menu.AddDisabledItem(new GUIContent("No Blendshapes Sets on this avatar"));
-            foreach (var n in names)
-            {
-                string name = n;
-                menu.AddItem(new GUIContent(name.Replace("/", "\u2215")), nameProp.stringValue == name, () =>
-                {
-                    nameProp.serializedObject.Update();
-                    nameProp.stringValue = name;
-                    nameProp.serializedObject.ApplyModifiedProperties();
-                });
-            }
-            menu.DropDown(pick);
-        }
+        VRCAvatarDescriptor Descriptor => VAPAvatar.Descriptor(target as Component);
 
-        VRCAvatarDescriptor Descriptor => ((Component)target).GetComponentInParent<VRCAvatarDescriptor>(true);
-
-        (string, MessageType) status;
-        double statusTime = -10;
-
-        (string text, MessageType type) Status()
-        {
-            if (EditorApplication.timeSinceStartup - statusTime < 0.5)
-                return status;
-            statusTime = EditorApplication.timeSinceStartup;
-            return status = MakeStatus();
-        }
+        Cached<(string, MessageType)> status;
 
         (string, MessageType) MakeStatus()
         {
             var hook = (VAPBlendshapeSetHook)target;
             var descriptor = Descriptor;
             if (descriptor == null)
-                return ("Put this inside an avatar (under its VRC Avatar Descriptor).", MessageType.Warning);
+                return (VAPEditorGUI.NotInAvatar, MessageType.Warning);
             string targetName = hook.blendshapesSet?.setName ?? "";
-            var sets = AvailableSets(descriptor);
+            var sets = VAPEditorGUI.AvatarSets(descriptor);
             if (string.IsNullOrEmpty(targetName))
                 return ("Pick the Blendshapes Set to hook onto.", MessageType.Info);
             if (!sets.TryGetValue(targetName, out var targetNames))
@@ -144,21 +101,6 @@ namespace VAP.Editor
             if (format != (hook.nameFormat ?? "").Trim())
                 text += $"\nRead as {format}.";
             return (text + unknownText, unknown.Count > 0 ? MessageType.Warning : MessageType.Info);
-        }
-
-        static Dictionary<string, string[]> AvailableSets(VRCAvatarDescriptor descriptor)
-        {
-            if (descriptor == null)
-                return new Dictionary<string, string[]>();
-            var sets = ParameterBehaviorsBuild.ReadSets(descriptor);
-            foreach (var c in descriptor.GetComponentsInChildren<VAPFaceTrackingDebug>(true))
-                using (var so = new SerializedObject(c))
-                {
-                    var set = so.FindProperty("blendshapesSet");
-                    if (set != null)
-                        ParameterBehaviorsBuild.AddSet(sets, set);
-                }
-            return sets;
         }
     }
 }

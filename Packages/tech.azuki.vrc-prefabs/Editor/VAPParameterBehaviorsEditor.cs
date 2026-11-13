@@ -22,12 +22,13 @@ namespace VAP.Editor
         static readonly GUIContent CopyAll = new GUIContent("Copy All", "Copy every behavior here, to paste into the avatar descriptor or another component. Tracking Key entries are not included.");
         static readonly GUIContent Paste = new GUIContent("Paste", "Add behaviors copied from the avatar descriptor (Copy All) or another component.");
 
-        const int TabAnimator = 0, TabTrackingKey = 1, TabBlendshape = 2, TabBlendSet = 3;
-        static readonly string[] TabNames = { "Animator", "Tracking Key", "Blendshape", "Blend Set" };
+        const int TabAnimator = 0, TabTrackingKey = 1, TabCorrectives = 2, TabBlendshape = 3, TabBlendSet = 4;
+        static readonly string[] TabNames = { "Animator", "Tracking Key", "Correctives", "Blendshape", "Blend Set" };
         static readonly string[] TabTips =
         {
             "Forward to Animator: sends a value to an animator parameter.",
             "Limits the blendshapes a Blendshapes Set uses for a tracking key or group (LipFunnel, LipFunnelUpper, ...).",
+            "Apply to Blendshape behaviors made at build time for corrective blendshapes, limited by the limits here.",
             "Apply to Blendshape, Limit Blendshape (Max) and Limit Blendshape (Min).",
             "Apply Blend Set Weight: drives a Blendshapes Set's weight.",
         };
@@ -52,13 +53,7 @@ namespace VAP.Editor
         readonly List<int> shown = new List<int>();
         int[] shownSnapshot = new int[0];
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            root.Add(new IMGUIContainer(DrawFields));
-            VAPInspectorHeader.Attach(root, "Face Tracking Parameter Behaviors");
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Face Tracking Parameter Behaviors", DrawFields);
 
         void DrawFields()
         {
@@ -90,10 +85,14 @@ namespace VAP.Editor
                 using (new EditorGUI.DisabledScope(locked))
                     DrawSharedSet();
                 DrawTabs(list, keyList);
-                using var disabled = new EditorGUI.DisabledScope(locked);
-                if (Tab == TabTrackingKey)
+                if (Tab == TabCorrectives)
                 {
-                    GetTrackingList(keyList).DoLayoutList();
+                    correctives.Draw(locked);
+                }
+                else if (Tab == TabTrackingKey)
+                {
+                    using (new EditorGUI.DisabledScope(locked))
+                        GetTrackingList(keyList).DoLayoutList();
                 }
                 else
                 {
@@ -115,6 +114,7 @@ namespace VAP.Editor
             for (int i = 0; i < list.arraySize; i++)
                 counts[TabOfMode(ModeOf(list.GetArrayElementAtIndex(i)))]++;
             counts[TabTrackingKey] = keyList?.arraySize ?? 0;
+            counts[TabCorrectives] = correctives.Count;
             var labels = new GUIContent[TabNames.Length];
             for (int i = 0; i < labels.Length; i++)
                 labels[i] = new GUIContent($"{TabNames[i]} ({counts[i]})", TabTips[i]);
@@ -215,18 +215,11 @@ namespace VAP.Editor
         {
             if (!GUI.Button(search, SearchContent, SearchStyle))
                 return;
-            var so = nameProp.serializedObject;
-            string path = nameProp.propertyPath;
-            new BlendshapeSearch(AvatarBlendshapes(), picked =>
-            {
-                so.Update();
-                so.FindProperty(path).stringValue = picked;
-                so.ApplyModifiedProperties();
-            }).Show(search);
+            new BlendshapeSearch(AvatarBlendshapes(), VAPEditorGUI.Setter(nameProp)).Show(search);
         }
 
         static readonly GUIContent SharedSetLabel = new GUIContent("Blendshapes Set",
-            "Used by every Tracking Key and Blendshape behavior here. If empty, each behavior's own set is used.");
+            "Used by every Tracking Key and Blendshape behavior here and by the correctives. If empty, each behavior's own set is used.");
         static readonly GUIContent PerBehaviorLabel = new GUIContent("Per Behavior",
             "Give each behavior its own Blendshapes Set instead of this one.");
 
@@ -242,9 +235,9 @@ namespace VAP.Editor
             EditorGUI.LabelField(labelRect, SharedSetLabel);
             using (new EditorGUI.DisabledScope(perProp.boolValue))
             {
-                DrawSetField(field, setProp);
-                if (!perProp.boolValue && !string.IsNullOrEmpty(setProp.stringValue) && SetProblem(setProp.stringValue) is string problem)
-                    WarningIcon(field, problem);
+                VAPEditorGUI.StringField(field, setProp);
+                if (!perProp.boolValue && !string.IsNullOrEmpty(setProp.stringValue))
+                    SetIcon(field, setProp.stringValue);
             }
             EditorGUI.BeginChangeCheck();
             bool per = EditorGUI.ToggleLeft(toggleRect, PerBehaviorLabel, perProp.boolValue);
@@ -266,20 +259,21 @@ namespace VAP.Editor
             }
         }
 
-        static GUIContent warnIcon;
-
-        static void WarningIcon(Rect field, string tooltip)
+        void SetIcon(Rect field, string name)
         {
-            warnIcon ??= new GUIContent(EditorGUIUtility.IconContent("console.warnicon.sml").image);
-            warnIcon.tooltip = tooltip;
-            GUI.Label(new Rect(field.xMax - 18f, field.y + (field.height - 16f) / 2f, 16f, 16f), warnIcon, GUIStyle.none);
+            if (SetProblem(name) is string problem)
+                VAPEditorGUI.WarningIcon(field, problem);
+            else if (Descriptor != null)
+                VAPEditorGUI.FoundIcon(field, $"Found \"{name}\" on this avatar.");
         }
+
+        VRCAvatarDescriptor Descriptor => VAPAvatar.Descriptor(target as Component);
 
         string BlendshapeProblem(string name)
         {
             if (string.IsNullOrEmpty(name))
                 return "No blendshape selected: this behavior has no effect without one.";
-            var shapes = FaceTrackingBlendshapes();
+            var shapes = ftShapes.Value;
             if (shapes != null && !shapes.Contains(name))
                 return "Not found on any Face Tracking Mesh. It still applies at runtime if the blendshape is added (e.g. by a build-time tool).";
             return null;
@@ -289,7 +283,9 @@ namespace VAP.Editor
         {
             if (string.IsNullOrEmpty(name))
                 return "No Blendshapes Set selected.";
-            return SetSources().ContainsKey(name) ? null : "No Blendshapes Set with this name on this avatar.";
+            if (Descriptor == null)
+                return null;
+            return sets.Value.ContainsKey(name) ? null : "No Blendshapes Set with this name on this avatar.";
         }
 
         void DrawTabNote(SerializedProperty list)
@@ -307,19 +303,16 @@ namespace VAP.Editor
                 EditorGUILayout.HelpBox("Some entries have a problem. Hover the warning icon in the field for details.", MessageType.Warning);
         }
 
-        HashSet<string> ftShapes;
-        double ftShapesTime = -10;
+        Cached<HashSet<string>> ftShapes;
+        Cached<Dictionary<string, string[]>> sets;
+        CorrectivesSection correctives;
 
-        HashSet<string> FaceTrackingBlendshapes()
+        void OnEnable()
         {
-            if (EditorApplication.timeSinceStartup - ftShapesTime < 1.0)
-                return ftShapes;
-            ftShapesTime = EditorApplication.timeSinceStartup;
-            ftShapes = null;
-            var descriptor = ((Component)target).GetComponentInParent<VRCAvatarDescriptor>(true);
-            if (descriptor != null)
-                ftShapes = ParameterBehaviorsBuild.FaceTrackingBlendshapes(descriptor);
-            return ftShapes;
+            ftShapes = new Cached<HashSet<string>>(1.0, () =>
+                Descriptor is VRCAvatarDescriptor d ? ParameterBehaviorsBuild.FaceTrackingBlendshapes(d) : null);
+            sets = new Cached<Dictionary<string, string[]>>(1.0, () => VAPEditorGUI.AvatarSets(Descriptor));
+            correctives = new CorrectivesSection(serializedObject, () => Descriptor, sets);
         }
 
         static readonly GUIContent DeleteContent = new GUIContent("Delete");
@@ -327,9 +320,7 @@ namespace VAP.Editor
 
         bool ContextMenu(Rect rect, ReorderableList list, int listIndex, SerializedProperty array, int arrayIndex, bool canCopy)
         {
-            var e = Event.current;
-            bool right = e.type == EventType.ContextClick || (e.type == EventType.MouseDown && e.button == 1);
-            if (!right || !rect.Contains(e.mousePosition))
+            if (!ExpressionsOverrides.ContextClick(rect))
                 return false;
             list.index = listIndex;
             var so = array.serializedObject;
@@ -352,7 +343,7 @@ namespace VAP.Editor
                 list.index = -1;
             });
             menu.ShowAsContext();
-            e.Use();
+            Event.current.Use();
             return true;
         }
 
@@ -361,6 +352,7 @@ namespace VAP.Editor
         static readonly GUIContent[] ListLabels =
         {
             new GUIContent("Animator Parameters", "Forward to Animator behaviors, added to the avatar descriptor at build time."),
+            null,
             null,
             new GUIContent("Blendshape Behaviors", "Apply to Blendshape and Limit Blendshape behaviors, added to the avatar descriptor at build time."),
             new GUIContent("Blend Set Behaviors", "Apply Blend Set Weight behaviors, added to the avatar descriptor at build time."),
@@ -389,9 +381,9 @@ namespace VAP.Editor
             {
                 var r = new Rect(fieldX, g.mode.y, stripEnd - fieldX, Line);
                 var setName = element.FindPropertyRelative("targetBlendSetName");
-                DrawSetField(r, setName);
+                VAPEditorGUI.StringField(r, setName);
                 if (SetProblem(setName.stringValue) is string problem)
-                    WarningIcon(r, problem);
+                    VAPEditorGUI.WarningIcon(r, problem);
             }
             else
             {
@@ -405,9 +397,9 @@ namespace VAP.Editor
                 const float searchWidth = 22f;
                 var nameProp = element.FindPropertyRelative("targetBlendshapeName");
                 var field = new Rect(g.mode.xMax + 4f, g.mode.y, stripEnd - g.mode.xMax - 6f - searchWidth, Line);
-                DrawSetField(field, nameProp);
+                VAPEditorGUI.StringField(field, nameProp);
                 if (BlendshapeProblem(nameProp.stringValue) is string problem)
-                    WarningIcon(field, problem);
+                    VAPEditorGUI.WarningIcon(field, problem);
                 SearchButton(new Rect(field.xMax + 2f, g.mode.y, searchWidth, Line), nameProp);
             }
         }
@@ -426,18 +418,14 @@ namespace VAP.Editor
         List<(string mesh, string[] names)> AvatarBlendshapes()
         {
             var result = new List<(string, string[])>();
-            var descriptor = ((Component)target).GetComponentInParent<VRCAvatarDescriptor>(true);
+            var descriptor = Descriptor;
             if (descriptor == null)
                 return result;
             foreach (var smr in descriptor.GetComponentsInChildren<SkinnedMeshRenderer>(true))
             {
-                var mesh = smr.sharedMesh;
-                if (mesh == null || mesh.blendShapeCount == 0)
-                    continue;
-                var names = new string[mesh.blendShapeCount];
-                for (int i = 0; i < names.Length; i++)
-                    names[i] = mesh.GetBlendShapeName(i);
-                result.Add((smr.name, names));
+                var names = Blendshapes.Names(smr.sharedMesh);
+                if (names.Length > 0)
+                    result.Add((smr.name, names));
             }
             return result;
         }
@@ -515,16 +503,23 @@ namespace VAP.Editor
                     p.arraySize++;
                     var element = p.GetArrayElementAtIndex(p.arraySize - 1);
                     element.boxedValue = new VAPParameterBehaviors.TrackingKeyBehavior();
-                    var sets = SetSources();
-                    if (SharedSet == null && sets.Count == 1)
-                        element.FindPropertyRelative("blendshapesSet").stringValue = sets.Keys.First();
+                    var found = sets.Value;
+                    if (SharedSet == null && found.Count == 1)
+                        element.FindPropertyRelative("blendshapesSet").stringValue = found.Keys.First();
                     element.FindPropertyRelative("behavior").isExpanded = true;
                 },
             };
             return trackingList;
         }
 
-        float InsertHeightFor(SerializedProperty entry) => (PerBehavior ? Step : 0f) + Step;
+        float InsertHeightFor(SerializedProperty entry)
+        {
+            string key = entry.FindPropertyRelative("trackingKey").stringValue;
+            string set = ItemSet(entry.FindPropertyRelative("blendshapesSet"));
+            return (PerBehavior ? Step : 0f) + (ItemNote(key, TrackingKeyGroups.Resolve(key), set) != null ? Step : 0f);
+        }
+
+        string ItemSet(SerializedProperty setProp) => PerBehavior ? setProp.stringValue : SharedSet ?? setProp.stringValue;
 
         static readonly GUIContent SetLabel = new GUIContent("Blendshapes Set",
             "Required. The Blendshapes Set whose blendshapes for these tracking keys are limited. " +
@@ -562,19 +557,13 @@ namespace VAP.Editor
 
             var keyRect = new Rect(modeRect.xMax + 4f, modeRect.y, g.targetXMax - modeRect.xMax - 4f, Line);
             var keys = TrackingKeyGroups.Resolve(keyProp.stringValue);
+            string itemSet = ItemSet(setProp);
             var keyLabel = string.IsNullOrEmpty(keyProp.stringValue) ? KeyPrompt
                 : new GUIContent(keys != null && keys.Length > 1 ? $"{keyProp.stringValue}  ({keys.Length} keys)" : keyProp.stringValue,
                     keys == null ? "Unknown tracking key." : string.Join("\n", keys.Select(k => TrackingKeyGroups.Keys[k])));
             if (EditorGUI.DropdownButton(keyRect, keyLabel, FocusType.Keyboard))
             {
-                var keyPath = keyProp.propertyPath;
-                var so = keyProp.serializedObject;
-                TrackingKeyGroups.ShowMenu(keyRect, keyProp.stringValue, picked =>
-                {
-                    so.Update();
-                    so.FindProperty(keyPath).stringValue = picked;
-                    so.ApplyModifiedProperties();
-                });
+                TrackingKeyGroups.ShowMenu(keyRect, keyProp.stringValue, VAPEditorGUI.Setter(keyProp));
             }
 
             if (insert.height > 0f)
@@ -583,82 +572,46 @@ namespace VAP.Editor
                 float previewY = insert.y + 2f;
                 if (per)
                 {
-                    DrawSetRow(insert.x, previewY, insert.width, SetLabel, setProp);
+                    var field = DrawSetRow(insert.x, previewY, insert.width, SetLabel, setProp);
+                    SetIcon(field, setProp.stringValue);
                     previewY += Step;
                 }
-                var preview = Preview(keyProp.stringValue, keys, per ? setProp.stringValue : SharedSet ?? setProp.stringValue);
-                float previewX = insert.x + ItemLabelWidth;
-                var previewRect = new Rect(previewX, previewY, insert.xMax - previewX, Line);
-                EditorGUI.LabelField(previewRect, preview, EditorStyles.miniLabel);
+                if (ItemNote(keyProp.stringValue, keys, itemSet) is string note)
+                {
+                    float previewX = insert.x + ItemLabelWidth;
+                    var previewRect = new Rect(previewX, previewY, insert.xMax - previewX, Line);
+                    EditorGUI.LabelField(previewRect, note, EditorStyles.miniLabel);
+                }
             }
         }
 
-        GUIContent Preview(string key, int[] keys, string setName)
+        string ItemNote(string key, int[] keys, string setName)
         {
             if (string.IsNullOrEmpty(key))
-                return new GUIContent("Select a tracking key.");
+                return "Select a tracking key.";
             if (keys == null)
-                return new GUIContent($"Unknown tracking key \"{key}\".");
-            if (string.IsNullOrEmpty(setName))
-                return new GUIContent("Select the Blendshapes Set to limit.");
-            if (!SetSources().TryGetValue(setName, out var names))
-                return new GUIContent($"No Blendshapes Set named \"{setName}\" on this avatar.");
+                return $"Unknown tracking key \"{key}\".";
+            if (string.IsNullOrEmpty(setName) || !sets.Value.TryGetValue(setName, out var names))
+                return null;
             var shapes = ParameterBehaviorsBuild.BlendshapesFor(names, keys);
             if (shapes.Count == 0)
-                return new GUIContent($"\"{setName}\" has no blendshapes for these keys.");
-            string list = string.Join(", ", shapes);
-            return new GUIContent($"Found \"{setName}\". Creates {shapes.Count} behavior{(shapes.Count == 1 ? "" : "s")}: {list}",
-                "One Limit Blendshape behavior per distinct blendshape:\n" + string.Join("\n", shapes));
-        }
-
-        Dictionary<string, string[]> setCache;
-        double setCacheTime;
-
-        Dictionary<string, string[]> SetSources()
-        {
-            if (setCache != null && EditorApplication.timeSinceStartup - setCacheTime < 1.0)
-                return setCache;
-            setCacheTime = EditorApplication.timeSinceStartup;
-            setCache = new Dictionary<string, string[]>();
-            var descriptor = ((Component)target).GetComponentInParent<VRCAvatarDescriptor>(true);
-            if (descriptor == null)
-                return setCache;
-            setCache = ParameterBehaviorsBuild.ReadSets(descriptor);
-            foreach (var c in descriptor.GetComponentsInChildren<VAPFaceTrackingDebug>(true))
-                using (var so = new SerializedObject(c))
-                {
-                    var set = so.FindProperty("blendshapesSet");
-                    if (set != null)
-                        ParameterBehaviorsBuild.AddSet(setCache, set);
-                }
-            return setCache;
+                return $"\"{setName}\" has no blendshapes for these keys.";
+            return $"Creates {shapes.Count} behavior{(shapes.Count == 1 ? "" : "s")}: {string.Join(", ", shapes)}";
         }
 
         static readonly GUIContent WeightSetLabel = new GUIContent("Blendshapes Set",
             "This Blendshapes Set's weight controls how strongly to apply. Leave empty to always fully apply.");
 
-        static Rect DrawSetRow(float x, float y, float width, GUIContent label, SerializedProperty prop, string shared = null)
+        static Rect DrawSetRow(float x, float y, float width, GUIContent label, SerializedProperty prop)
         {
             float labelWidth = ItemLabelWidth;
             EditorGUI.LabelField(new Rect(x + 15f, y, labelWidth - 15f, Line), label);
             var field = new Rect(x + labelWidth, y, (width - labelWidth) * 0.5f, Line);
-            if (shared != null)
-                using (new EditorGUI.DisabledScope(true))
-                    EditorGUI.TextField(field, shared);
-            else
-                DrawSetField(field, prop);
+            VAPEditorGUI.StringField(field, prop);
             return field;
         }
 
-        static void DrawSetField(Rect rect, SerializedProperty prop)
-        {
-            EditorGUI.BeginChangeCheck();
-            string value = EditorGUI.TextField(rect, prop.stringValue);
-            if (EditorGUI.EndChangeCheck() && value != prop.stringValue)
-                prop.stringValue = value;
-        }
-
-        static float Line => EditorGUIUtility.singleLineHeight;
+        static float Line => VAPEditorGUI.Line;
 
         static float ItemLabelWidth
         {
@@ -670,7 +623,7 @@ namespace VAP.Editor
             }
         }
         static float Step => Line + EditorGUIUtility.standardVerticalSpacing;
-        static float HeaderHeight => Line + EditorStyles.helpBox.padding.vertical;
+        static float HeaderHeight => VAPEditorGUI.BoxHeaderHeight;
 
         struct Header
         {
@@ -709,10 +662,9 @@ namespace VAP.Editor
 
             drawOwn();
 
-            int targetMode = sdk.FindPropertyRelative("targetMode").intValue;
-            bool blendshapeMode = targetMode == ModeApply || targetMode == ModeLimitMax || targetMode == ModeLimitMin;
+            bool blendshapeMode = IsBlendshapeMode(sdk);
             int count = sdk.FindPropertyRelative("inputTrackingKeys").arraySize;
-            float inputsH = custom ? Step : Step * (count + 2) + (count == 32 ? 40f : 0f);
+            float inputsH = InputsHeight(custom, count);
             float inputsTop = sdkH - 5f - inputsH;
 
             string warnText = sdk.isExpanded ? InputWarning(sdk, custom, count) : null;
@@ -874,6 +826,10 @@ namespace VAP.Editor
         static GUIStyle WrapStyle => wrapStyle ??= new GUIStyle(EditorStyles.textArea) { wordWrap = true };
         float fieldWidth;
 
+        static bool IsBlendshapeMode(SerializedProperty sdk) => System.Array.IndexOf(BlendshapeModes, ModeOf(sdk)) >= 0;
+
+        static float InputsHeight(bool custom, int count) => custom ? Step : Step * (count + 2) + (count == 32 ? 40f : 0f);
+
         static bool HasCustomExpression(SerializedProperty sdk) =>
             sdk.isExpanded && sdk.FindPropertyRelative("combineMode").intValue == CustomCombineMode;
 
@@ -895,10 +851,9 @@ namespace VAP.Editor
                 height += ExpressionHeight(sdk) - Line;
             if (sdk.isExpanded)
             {
-                int mode = sdk.FindPropertyRelative("targetMode").intValue;
-                bool blendshapeMode = mode == ModeApply || mode == ModeLimitMax || mode == ModeLimitMin;
+                bool blendshapeMode = IsBlendshapeMode(sdk);
                 int count = sdk.FindPropertyRelative("inputTrackingKeys").arraySize;
-                float inputsH = custom ? Step : Step * (count + 2) + (count == 32 ? 40f : 0f);
+                float inputsH = InputsHeight(custom, count);
                 float width = lastWidth > 50f ? lastWidth : EditorGUIUtility.currentViewWidth - 60f;
                 float warnH = WarningHeight(InputWarning(sdk, custom, count), width);
                 height -= Mathf.Max(0f, sdkH - 5f - inputsH - (blendshapeMode ? Step : 0f) - warnH - HeaderHeight);

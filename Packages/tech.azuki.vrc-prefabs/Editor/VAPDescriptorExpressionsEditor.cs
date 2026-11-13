@@ -25,7 +25,7 @@ namespace VAP.Editor
             var other = c.Other();
             if (other != null)
             {
-                EditorGUILayout.HelpBox($"Only one VRC Avatar Descriptor Expressions is allowed per avatar. \"{other.name}\" has one too.", MessageType.Error);
+                EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne("VRC Avatar Descriptor Expressions", other), MessageType.Error);
                 return;
             }
             if (c.RootMenus().Count == 0 && c.ParameterAssets().Count == 0)
@@ -36,13 +36,7 @@ namespace VAP.Editor
             DrawContents(c);
         }
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            root.Add(new IMGUIContainer(DrawDescriptor));
-            VAPInspectorHeader.Attach(root, "VRC Avatar Descriptor Expressions");
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("VRC Avatar Descriptor Expressions", DrawDescriptor);
     }
 }
 #endif

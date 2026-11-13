@@ -162,21 +162,13 @@ namespace VAP.Editor
             return name.Substring(before.Length, name.Length - before.Length - after.Length);
         }
 
-        static bool HasAny(Mesh mesh, HashSet<string> names)
-        {
-            for (int i = 0; i < mesh.blendShapeCount; i++)
-                if (names.Contains(mesh.GetBlendShapeName(i)))
-                    return true;
-            return false;
-        }
+        static bool HasAny(Mesh mesh, HashSet<string> names) => Blendshapes.Names(mesh).Any(names.Contains);
 
         static int Rename(SkinnedMeshRenderer smr, Dictionary<string, string> renames, List<string> warnings, Action<Object> saveAsset)
         {
             var mesh = smr.sharedMesh;
-            int shapeCount = mesh.blendShapeCount;
-            var names = new string[shapeCount];
-            for (int i = 0; i < shapeCount; i++)
-                names[i] = mesh.GetBlendShapeName(i);
+            var names = Blendshapes.Names(mesh);
+            int shapeCount = names.Length;
 
             var groups = new Dictionary<string, List<int>>(StringComparer.Ordinal);
             for (int i = 0; i < shapeCount; i++)

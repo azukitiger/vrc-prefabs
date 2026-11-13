@@ -413,18 +413,7 @@ namespace Azuki.Tools
                 return;
             }
 
-            string scriptPath = GetScriptPath();
-            string args = $"--background --factory-startup --python \"{scriptPath}\" -- --list-all \"{fbxPath}\"";
-
-            var psi = new ProcessStartInfo
-            {
-                FileName = blenderExePath,
-                Arguments = args,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
+            var psi = BlenderStartInfo($"--list-all \"{fbxPath}\"");
 
             try
             {
@@ -665,20 +654,8 @@ namespace Azuki.Tools
 
             Texture2D capturedSourceTexture = textureAsset;
 
-            string scriptPath = GetScriptPath();
-            string args =
-                $"--background --factory-startup --python \"{scriptPath}\" -- " +
-                $"\"{fbxPath}\" \"{materialName}\" \"{sourceUV}\" \"{destUV}\" \"{texturePath}\" \"{outputPath}\" {marginPx} {deviceArg}";
-
-            var psi = new ProcessStartInfo
-            {
-                FileName = blenderExePath,
-                Arguments = args,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
+            var psi = BlenderStartInfo(
+                $"\"{fbxPath}\" \"{materialName}\" \"{sourceUV}\" \"{destUV}\" \"{texturePath}\" \"{outputPath}\" {marginPx} {deviceArg}");
             psi.EnvironmentVariables["PYTHONUNBUFFERED"] = "1";
 
             bakeStartTime = DateTime.Now;
@@ -711,6 +688,16 @@ namespace Azuki.Tools
                 AppendLogMainThread("ERROR starting Blender: " + ex.Message);
             }
         }
+
+        private ProcessStartInfo BlenderStartInfo(string scriptArgs) => new ProcessStartInfo
+        {
+            FileName = blenderExePath,
+            Arguments = $"--background --factory-startup --python \"{GetScriptPath()}\" -- {scriptArgs}",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
+        };
 
         private void PostProcessOutputTexture(string outputPathAbsolute, Texture2D sourceTexture)
         {

@@ -57,13 +57,8 @@ namespace VAP.Editor
             if (meshes == null)
                 return names;
             foreach (var smr in meshes)
-            {
-                if (smr == null || smr.sharedMesh == null)
-                    continue;
-                var mesh = smr.sharedMesh;
-                for (int b = 0; b < mesh.blendShapeCount; b++)
-                    names.Add(mesh.GetBlendShapeName(b));
-            }
+                if (smr != null)
+                    names.UnionWith(Blendshapes.Names(smr.sharedMesh));
             return names;
         }
 

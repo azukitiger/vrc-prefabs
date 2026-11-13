@@ -2,7 +2,6 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using VRC.SDK3.Avatars.Components;
 
 namespace VAP.Editor
 {
@@ -17,27 +16,21 @@ namespace VAP.Editor
             var c = target as VAPRemoveEmptySubMenus;
             if (c == null)
                 return;
-            if (c.GetComponentInParent<VRCAvatarDescriptor>(true) == null)
+            if (VAPAvatar.Descriptor(c) == null)
             {
-                EditorGUILayout.HelpBox("Put this inside an avatar (under its VRC Avatar Descriptor).", MessageType.Warning);
+                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
                 return;
             }
-            var other = RemoveEmptySubMenusBuild.Other(c);
+            var other = VAPAvatar.Other(c);
             if (other != null)
             {
-                EditorGUILayout.HelpBox($"Only one Remove Empty Sub Menus is allowed per avatar. \"{other.name}\" has one too.", MessageType.Error);
+                EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne("Remove Empty Sub Menus", other), MessageType.Error);
                 return;
             }
             EditorGUILayout.LabelField(Status, EditorStyles.miniLabel);
         }
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            root.Add(new IMGUIContainer(Draw));
-            VAPInspectorHeader.Attach(root, "Remove Empty Sub Menus");
-            return root;
-        }
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Remove Empty Sub Menus", Draw);
     }
 }
 #endif

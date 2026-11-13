@@ -1,3 +1,6 @@
+## Version 3.0.9
+- Updated Face Tracking Parameter Behaviors to handle auto corrective behaviors.
+
 ## Version 3.0.8
 - Added Viseme sensitivity control.
 

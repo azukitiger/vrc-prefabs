@@ -13,20 +13,17 @@ namespace VAP.Editor
         internal const string AssetsMenu = "Assets/VAP/Create Menu && Parameters";
 
         [MenuItem(AssetsMenu, true)]
-        internal static bool ValidateAssets() => Selection.objects.Length > 0 && Selection.objects.All(IsPrefab);
+        internal static bool ValidateAssets() => Selection.objects.Length > 0 && Selection.objects.All(AssetMoves.IsPrefab);
 
         [MenuItem(AssetsMenu, false, 2001)]
         internal static void CreateFromAssets()
         {
-            foreach (var o in Selection.objects.Where(IsPrefab).ToList())
+            foreach (var o in Selection.objects.Where(AssetMoves.IsPrefab).ToList())
             {
                 string path = AssetDatabase.GetAssetPath(o);
                 AssetMoves.KeepPartsHidden(path, () => Create(path));
             }
         }
-
-        static bool IsPrefab(Object o) =>
-            o is GameObject && AssetDatabase.GetAssetPath(o).EndsWith(".prefab");
 
         internal static string MenuName(string prefabPath) => Path.GetFileNameWithoutExtension(prefabPath) + " Menu";
         internal static string ParametersName(string prefabPath) => Path.GetFileNameWithoutExtension(prefabPath) + " Parameters";

@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1445.0
+  vrcfuryVersion: 1.1460.1-beta.2
   somethingIsBroken: 0
   config:
     features: []
@@ -103,247 +103,7 @@ MonoBehaviour:
         allowMissingAssets: 0
         injectParams: []
         faceTrackingMeshes: []
-        faceTrackingBlendshapeSets:
-        - setName: 
-          setWeight: 0
-          faceTrackingBlendshapeNames:
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          faceTrackingBlendshapeMultipliers:
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          visemeBlendshapeNames:
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          - 
-          visemeBlendshapeMultipliers:
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
-          - 1
+        faceTrackingBlendshapeSets: []
         faceTrackingParameterBehaviors: []
         visemeDampenMode: 0
         visemeDampenAmount: 1
@@ -899,7 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1445.0
+  vrcfuryVersion: 1.1460.1-beta.2
   somethingIsBroken: 0
   config:
     features: []
@@ -1251,7 +1011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1445.0
+  vrcfuryVersion: 1.1460.1-beta.2
   somethingIsBroken: 0
   config:
     features: []

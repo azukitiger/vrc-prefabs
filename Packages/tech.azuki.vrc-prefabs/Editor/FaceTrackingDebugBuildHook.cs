@@ -70,19 +70,9 @@ namespace VAP.Editor
             var used = new HashSet<string>();
             if (c.blendshapesSet?.faceTrackingBlendshapeNames != null)
                 used.UnionWith(c.blendshapesSet.faceTrackingBlendshapeNames.Where(n => !string.IsNullOrEmpty(n)));
-            return c.GetComponentsInChildren<SkinnedMeshRenderer>(true).Where(smr =>
-            {
-                var mesh = smr.sharedMesh;
-                if (mesh == null)
-                    return false;
-                for (int i = 0; i < mesh.blendShapeCount; i++)
-                {
-                    string name = mesh.GetBlendShapeName(i);
-                    if (used.Contains(name) || FaceTrackingDebugSetFiller.Matches(format, name))
-                        return true;
-                }
-                return false;
-            }).ToList();
+            return c.GetComponentsInChildren<SkinnedMeshRenderer>(true)
+                .Where(smr => Blendshapes.Names(smr.sharedMesh).Any(name => used.Contains(name) || FaceTrackingDebugSetFiller.Matches(format, name)))
+                .ToList();
         }
     }
 
