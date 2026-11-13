@@ -96,6 +96,7 @@ namespace VAP.Editor
                 }
                 else
                 {
+                    using var disabled = new EditorGUI.DisabledScope(locked);
                     shown.Clear();
                     for (int i = 0; i < list.arraySize; i++)
                         if (TabOfMode(ModeOf(list.GetArrayElementAtIndex(i))) == Tab)
