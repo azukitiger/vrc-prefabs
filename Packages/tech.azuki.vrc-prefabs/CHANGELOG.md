@@ -1,3 +1,6 @@
+## Version 3.0.10
+- Added missing reset for FT parameter.
+
 ## Version 3.0.9
 - Updated Face Tracking Parameter Behaviors to handle auto corrective behaviors.
 
