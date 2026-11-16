@@ -31,7 +31,7 @@ namespace VAP.Editor
                 var names = c.blendShapes.Where(n => !string.IsNullOrEmpty(n)).ToList();
                 foreach (var smr in renderers)
                 {
-                    if (smr == null || smr.sharedMesh == null)
+                    if (smr == null || smr.sharedMesh == null || (c.targetRenderer != null && c.targetRenderer != smr))
                         continue;
                     var has = new HashSet<string>(Blendshapes.Names(smr.sharedMesh));
                     var found = names.Where(has.Contains).ToList();

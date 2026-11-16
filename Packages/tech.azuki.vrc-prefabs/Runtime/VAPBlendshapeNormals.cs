@@ -8,7 +8,10 @@ namespace VAP
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPBlendshapeNormals : MonoBehaviour, IEditorOnly
     {
-        [Tooltip("Blendshapes whose normals and tangents are recalculated at build time the way Blender shades them, on every mesh in the avatar that has them.")]
+        [Tooltip("Mesh to recalculate. Leave empty to use every mesh in the avatar that has the listed blendshapes.")]
+        public SkinnedMeshRenderer targetRenderer;
+
+        [Tooltip("Blendshapes whose normals and tangents are recalculated at build time the way Blender shades them.")]
         public List<string> blendShapes = new List<string>();
     }
 }
