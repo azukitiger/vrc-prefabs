@@ -1,3 +1,6 @@
+## Version 3.0.11
+- Improved Dilation Tracking blending with Emulated Dilation.
+
 ## Version 3.0.10
 - Added missing reset for FT parameter.
 
