@@ -2,7 +2,7 @@
 - Improved Dilation Tracking blending with Emulated Dilation.
 
 ## Version 3.0.10
-- Added missing reset for FT parameter.
+- Fixed issue where dilation could be incorrect for remote users.
 
 ## Version 3.0.9
 - Updated Face Tracking Parameter Behaviors to handle auto corrective behaviors.
