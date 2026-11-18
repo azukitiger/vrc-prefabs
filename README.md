@@ -433,7 +433,7 @@ VRChat now drives and smooths the **Unified Expressions** blendshapes through th
 Rotates the eyes from VRChat's eye look data, through both the **eye bones** and **eye blendshapes**.
 
 ### Features
-- Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so no setup is needed on the avatar descriptor.
+- Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so these parameters need no setup on the avatar descriptor.
 - **Eye bones**: drives the humanoid eye muscles through the **Additive** controller, for both VRChat's built-in gaze and eye tracking.
 - **Eye Sensitivity scaling**: scales the eye look only while the user's own eye tracking is active (`UserEyeTracking`), so VRChat's built-in gaze is not affected. By default, the eyes reach their maximum rotation as the tracked look value goes from `0` to `0.7`.
 - **Eyelids**: drives these blendshapes on the `Body` mesh from the FX controller, so the eyelids follow the eyes:
@@ -445,8 +445,13 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations.
-3. Optionally, use the animator parameters `VAP/EyeLook/EaseOut`, `VAP/EyeLook/LeftVerticalEaseOut` and `VAP/EyeLook/RightVerticalEaseOut` to fade out the `EyeLook*` blendshapes.
+2. On the **VRC Avatar Descriptor**, set:
+   - **Eye Look**: enabled, with:
+     - **Left Eye Bone** and **Right Eye Bone**: `None`, since the prefab rotates the eye bones itself
+     - **Eye Gaze Mode**: `Face Tracking`
+     - **Eyelid Type**: `None`
+   - **Face Tracking**: enabled, with **Use All Tracking Keys** on
+3. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations.
 
 ### Input Animator Parameters
 
