@@ -435,7 +435,13 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 ### Features
 - Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so no setup is needed on the avatar descriptor.
 - **Eye bones**: drives the humanoid eye muscles through the **Additive** controller, for both VRChat's built-in gaze and eye tracking.
-- **Eye blendshapes**: drives the `EyeLook*` blendshapes and the `EyeLook*Rotate` blendshapes on the `Body` mesh from the FX controller.
+- **Eye Sensitivity scaling**: scales the eye look only while the user's own eye tracking is active (`UserEyeTracking`), so VRChat's built-in gaze is not affected. By default, the eyes reach their maximum rotation as the tracked look value goes from `0` to `0.7`.
+- **Eyelids**: drives these blendshapes on the `Body` mesh from the FX controller, so the eyelids follow the eyes:
+  - `EyeLookUpLeft`, `EyeLookDownLeft`, `EyeLookInLeft`, `EyeLookOutLeft`
+  - `EyeLookUpRight`, `EyeLookDownRight`, `EyeLookInRight`, `EyeLookOutRight`
+- **Additional rotate blendshapes**: also drives these blendshapes on the `Body` mesh from the FX controller, blending them for diagonal looks:
+  - `EyeLookUpLeftRotate`, `EyeLookDownLeftRotate`, `EyeLookInLeftRotate`, `EyeLookOutLeftRotate`
+  - `EyeLookUpRightRotate`, `EyeLookDownRightRotate`, `EyeLookInRightRotate`, `EyeLookOutRightRotate`
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
@@ -462,7 +468,10 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 |-|-|-|
 | VAP/EyeLeftX | Float | Horizontal look of the left eye, with sensitivity applied |
 | VAP/EyeRightX | Float | Horizontal look of the right eye, with sensitivity applied |
-| VAP/EyeY | Float | Vertical look shared by both eyes, with sensitivity applied |
+| VAP/EyeLeftY | Float | Vertical look of the left eye, with sensitivity applied |
+| VAP/EyeRightY | Float | Vertical look of the right eye, with sensitivity applied |
+
+> **Warning:** These outputs are not capped to `1`. With **Eye Sensitivity** applied, they can reach up to `2` in either direction (`-2` to `2`). When using these parameters, use **1D or 2D blend trees**, which stop at their outermost motions, and not **Direct blend trees**, which would overdrive the motion by up to 2×.
 
 </details>
 
