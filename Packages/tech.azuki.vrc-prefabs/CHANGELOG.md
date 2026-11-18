@@ -1,3 +1,6 @@
+## Version 3.0.12
+- Added missing derp eye rotations to FX controller.
+
 ## Version 3.0.11
 - Improved Dilation Tracking blending with Emulated Dilation.
 
