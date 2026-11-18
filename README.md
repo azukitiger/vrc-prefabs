@@ -434,7 +434,7 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 
 ### Features
 - Includes **Face Tracking Parameter Behaviors** that output `EyeLeftX`, `EyeRightX` and `EyeY`, so no setup is needed on the avatar descriptor.
-- **Eye bones**: drives the humanoid eye muscles through the **Additive** controller while eye tracking is on.
+- **Eye bones**: drives the humanoid eye muscles through the **Additive** controller, for both VRChat's built-in gaze and eye tracking.
 - **Eye blendshapes**: drives the `EyeLook*` blendshapes and the `EyeLook*Rotate` blendshapes on the `Body` mesh from the FX controller.
 
 ### Instructions
@@ -454,6 +454,7 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
 | VAP/EyeLook/EaseOut | Float | Optional. `1` turns off all the `EyeLook*` blendshapes |
 | VAP/EyeLook/LeftVerticalEaseOut | Float | Optional. `1` turns off the left eye's up/down `EyeLook*` blendshapes |
 | VAP/EyeLook/RightVerticalEaseOut | Float | Optional. `1` turns off the right eye's up/down `EyeLook*` blendshapes |
+| Derp | Float | Optional. `1` makes the eyes silly, for both VRChat's built-in gaze and eye tracking: both eyes turn outward, with the left eye looking up and the right eye looking down. **Eye Sensitivity** does not apply at `1` |
 
 ### Output Animator Parameters
 
