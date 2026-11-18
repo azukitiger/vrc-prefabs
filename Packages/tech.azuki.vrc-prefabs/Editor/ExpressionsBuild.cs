@@ -104,7 +104,7 @@ namespace VAP.Editor
             "Vector2", "Vector3", "Vector4", "Quaternion", "Color", "Matrix4x4", "BoneWeight",
         };
 
-        static int Replace(GameObject root, Object from, Object to, Component skip)
+        internal static int Replace(GameObject root, Object from, Object to, Component skip)
         {
             int count = 0;
             foreach (var component in root.GetComponentsInChildren<Component>(true))
