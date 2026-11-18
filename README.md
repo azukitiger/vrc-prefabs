@@ -30,15 +30,18 @@ Adds a **Frame Time system** to the avatar. This prefab is required for most oth
 Adds a **smooth blink animation** driven by VRChat's eyelid data.
 
 ### Features
-- Reads the eyelids from VRChat's gaze system through included **Face Tracking Parameter Behaviors** (`EyeLidLeft` and `EyeLidRight`), so no setup is needed on the avatar descriptor.
+- Reads the eyelids from VRChat's gaze system through included **Face Tracking Parameter Behaviors** (`EyeLidLeft` and `EyeLidRight`), so these parameters need no setup on the avatar descriptor.
 - **Without eye tracking**: replaces VRChat's built-in blinks with a smooth blink animation, played whenever both eyelids close past halfway (below `0.5`). Each blink has a **25% chance** to be followed by a second blink.
 - **With eye tracking** (`UserEyeTracking` is on): the tracked eyelids drive `VAP/BlinkLeft` and `VAP/BlinkRight` directly, with no blink animation or smoothing, so winks and squints come through.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Use the animator parameters `VAP/BlinkLeft` and `VAP/BlinkRight` to drive the blink blendshapes.
-3. Optionally, create an expression parameter and toggle for `BlinkActive` to disable blinking.
-4. Optionally, use the animator parameters `VAP/BlinkLeftOverride` and `VAP/BlinkRightOverride` for interactions such as eye pokes.
+2. On the **VRC Avatar Descriptor**, set:
+   - **Eye Look**: enabled, with **Eyelid Type** set to `None`
+   - **Face Tracking**: enabled, with **Use All Tracking Keys** on
+3. Use the animator parameters `VAP/BlinkLeft` and `VAP/BlinkRight` to drive the blink blendshapes.
+4. Optionally, create an expression parameter and toggle for `BlinkActive` to disable blinking.
+5. Optionally, use the animator parameters `VAP/BlinkLeftOverride` and `VAP/BlinkRightOverride` for interactions such as eye pokes.
 
 ### Optional Expression Parameters
 
@@ -449,7 +452,6 @@ Rotates the eyes from VRChat's eye look data, through both the **eye bones** and
    - **Eye Look**: enabled, with:
      - **Left Eye Bone** and **Right Eye Bone**: `None`, since the prefab rotates the eye bones itself
      - **Eye Gaze Mode**: `Face Tracking`
-     - **Eyelid Type**: `None`
    - **Face Tracking**: enabled, with **Use All Tracking Keys** on
 3. Adjust the avatar's rig under **Muscles & Settings** for `Eye Down-Up` and `Eye In-Out` rotations.
 
