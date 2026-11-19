@@ -1,3 +1,6 @@
+## Version 3.0.13
+- Set PupilDilationFoward value to 0.5 by default in animator.
+
 ## Version 3.0.12
 - Added missing derp eye rotations to FX controller.
 
