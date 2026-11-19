@@ -417,7 +417,11 @@ namespace VAP.Editor
             : o is Material ? ".mat"
             : o is AvatarMask ? ".mask"
             : o is AnimatorOverrideController ? ".overrideController"
+#if UNITY_6000_0_OR_NEWER
+            : o is PhysicsMaterial ? ".physicMaterial"
+#else
             : o is PhysicMaterial ? ".physicMaterial"
+#endif
             : ".asset";
 
         static string Sanitize(string name)
