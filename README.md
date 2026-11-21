@@ -501,7 +501,7 @@ Smooths one parameter of a **VRC Contact Receiver** or a **VRC PhysBone** on the
 | Passes | `Double` smooths through an extra hidden step for a softer curve, `Single` moves straight toward the input |
 | Output Parameter | Receives the smoothed value |
 | Transform Output | Maps the smoothed value (X) and a second parameter (**Y Parameter**) to the output with a 2D blend. Drag the points in the graph or edit them in the list. The default points multiply the two. **Apply Before Smoothing** blends the raw input instead, so the result is what gets smoothed |
-| Timer | Counts, in seconds, how long the input is above `0`, in the **Timer Parameter** (output followed by `Timer` if empty) |
+| Timer | Counts, in seconds, how long the input is above **Start Above Value** (`0` by default), in the **Timer Parameter** (output followed by `Timer` if empty), and resets when it is at or below it. Click the chain icon to set a separate **Reset Below Value**, which can be equal or lower; in between, a timer that has started keeps counting and one that hasn't stays at `0` |
 
 Each input can only be smoothed once, and an output or timer name used by two smoothings stops the build.
 

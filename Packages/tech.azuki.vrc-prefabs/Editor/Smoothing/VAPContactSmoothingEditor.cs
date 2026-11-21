@@ -34,6 +34,10 @@ namespace VAP.Editor
         static readonly GUIContent SpeedLabel = new GUIContent("Speed", "Higher follows faster. Touch is 8, Gesture is 20.");
         static readonly GUIContent TimerLabel = new GUIContent("Timer",
             "Also count, in seconds, how long the input is above 0. Goes back to 0 when it is.");
+        static readonly GUIContent TimerStartLabel = new GUIContent("Start Above Value (>)",
+            "The timer counts while the input is above this value and resets when it is at or below it.");
+        static readonly GUIContent TimerResetLabel = new GUIContent("Reset Below Value (<=)",
+            "The timer resets when the input is at or below this value. In between, a timer that has started keeps counting.");
         static readonly GUIContent TimerParameterLabel = new GUIContent("Timer Parameter",
             "Animator parameter that receives the touch time. If empty, the output parameter followed by Timer.");
 
@@ -86,7 +90,10 @@ namespace VAP.Editor
                         DrawTransform(c);
                 });
                 ToggleBox(nameof(VAPSmoothing.timer), TimerLabel, () =>
-                    Field(nameof(VAPSmoothing.timerParameter), TimerParameterLabel, output == null ? null : output + "Timer"));
+                {
+                    Field(nameof(VAPSmoothing.timerParameter), TimerParameterLabel, output == null ? null : output + "Timer");
+                    DrawTimerValues();
+                });
             }
             serializedObject.ApplyModifiedProperties();
 
@@ -218,12 +225,7 @@ namespace VAP.Editor
             bool custom = !smoothing.hasMultipleDifferentValues && string.IsNullOrEmpty(smoothing.stringValue);
             var rect = EditorGUI.PrefixLabel(EditorGUILayout.GetControlRect(), label);
             if (link != null)
-            {
-                var icon = new Rect(rect.x - 20f, rect.y, 18f, rect.height);
-                bool linked = !link.boolValue || link.hasMultipleDifferentValues;
-                if (GUI.Button(icon, linked ? LinkedIcon : UnlinkedIcon, EditorStyles.iconButton))
-                    link.boolValue = linked;
-            }
+                LinkButton(rect, link);
             var popupRect = rect;
             if (custom)
                 popupRect.width = (rect.width - 4f) * 0.5f;
@@ -241,6 +243,48 @@ namespace VAP.Editor
                 EditorGUI.PropertyField(speedRect, serializedObject.FindProperty(customProperty), new GUIContent("", SpeedLabel.tooltip));
             }
             EditorGUI.indentLevel = indent;
+        }
+
+        static readonly GUIContent TimerLinkedIcon = new GUIContent("", "The timer resets at the start value. Click to reset at a lower value.");
+        static readonly GUIContent TimerUnlinkedIcon = new GUIContent("", "The timer resets at its own value. Click to reset at the start value.");
+
+        static void LinkButton(Rect field, SerializedProperty link, GUIContent linkedTip = null, GUIContent unlinkedTip = null)
+        {
+            var icon = new Rect(field.x - 20f, field.y, 18f, field.height);
+            bool linked = !link.boolValue || link.hasMultipleDifferentValues;
+            var content = linked ? LinkedIcon : UnlinkedIcon;
+            var tip = linked ? linkedTip : unlinkedTip;
+            if (tip != null)
+                content = new GUIContent(content.image, tip.tooltip);
+            if (GUI.Button(icon, content, EditorStyles.iconButton))
+                link.boolValue = linked;
+        }
+
+        void DrawTimerValues()
+        {
+            var split = serializedObject.FindProperty(nameof(VAPSmoothing.splitTimer));
+            bool splitOn = split.boolValue && !split.hasMultipleDifferentValues;
+            var rect = EditorGUI.PrefixLabel(EditorGUILayout.GetControlRect(), TimerStartLabel);
+            LinkButton(rect, split, TimerLinkedIcon, TimerUnlinkedIcon);
+            var start = serializedObject.FindProperty(nameof(VAPSmoothing.timerStart));
+            var reset = serializedObject.FindProperty(nameof(VAPSmoothing.timerReset));
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+            EditorGUI.BeginChangeCheck();
+            EditorGUI.PropertyField(rect, start, GUIContent.none);
+            bool startChanged = EditorGUI.EndChangeCheck();
+            EditorGUI.indentLevel = indent;
+            if (!splitOn)
+                return;
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(reset, TimerResetLabel);
+            bool resetChanged = EditorGUI.EndChangeCheck();
+            if (start.hasMultipleDifferentValues || reset.hasMultipleDifferentValues || reset.floatValue <= start.floatValue)
+                return;
+            if (resetChanged)
+                reset.floatValue = start.floatValue;
+            else if (startChanged)
+                start.floatValue = reset.floatValue;
         }
 
         static string Display(string value)

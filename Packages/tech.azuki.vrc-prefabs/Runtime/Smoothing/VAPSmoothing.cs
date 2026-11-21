@@ -41,6 +41,15 @@ namespace VAP
         [Tooltip("Animator parameter that receives the time. If empty, the output parameter followed by Timer.")]
         public string timerParameter = "";
 
+        [Tooltip("The timer counts while the input is above this value.")]
+        public float timerStart = 0f;
+
+        [Tooltip("Use a separate, lower value the input must drop under for the timer to reset.")]
+        public bool splitTimer = false;
+
+        [Tooltip("The timer resets when the input is at or below this value. Between this and the start value, a timer that has started keeps counting.")]
+        public float timerReset = 0f;
+
         [System.Serializable]
         public struct TransformPoint
         {

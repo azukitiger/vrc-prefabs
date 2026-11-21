@@ -155,6 +155,8 @@ namespace VAP.Editor
                 return "The output parameter can't be the input parameter.";
             if (x.timer != null && (x.timer == x.input || x.timer == x.output))
                 return "The timer parameter must be different from the input and output parameters.";
+            if (x.timer != null && c.splitTimer && c.timerReset > c.timerStart)
+                return "The timer reset value can't be above its start value.";
             return null;
         }
 
@@ -548,8 +550,12 @@ namespace VAP.Editor
             {
                 var timerClip = Clip(x.timer, new[] { x.timer }, 1f, made);
                 var count = Tree(N("Timer Count"), BlendTreeType.Direct, null, made, Child(timerClip, x.timer), Child(timerClip, StepSize));
-                children.Add(Child(Tree(N("Timer"), BlendTreeType.Simple1D, x.input, made,
-                    Child(single, Weight, 0.00001f), Child(count, Weight, 0.00002f)), Weight));
+                float start = c.timerStart;
+                var steps = !c.splitTimer || c.timerReset + 0.00001f >= start
+                    ? new[] { Child(single, Weight, start), Child(count, Weight, start + 0.00001f) }
+                    : TimerSplit(c, start, single, Tree(N("Timer Continue"), BlendTreeType.Simple1D, x.timer, made,
+                        Child(single, Weight, 0f), Child(count, Weight, 0.00001f)), count);
+                children.Add(Child(Tree(N("Timer"), BlendTreeType.Simple1D, x.input, made, steps), Weight));
             }
             if (x.axis != null)
             {
@@ -566,6 +572,14 @@ namespace VAP.Editor
             }
             return children;
         }
+
+        static ChildMotion[] TimerSplit(VAPSmoothing c, float start, Motion reset, Motion between, Motion count) => new[]
+        {
+            Child(reset, Weight, c.timerReset),
+            Child(between, Weight, c.timerReset + 0.00001f),
+            Child(between, Weight, start),
+            Child(count, Weight, start + 0.00001f),
+        };
 
         static AnimationClip SingleFrame(List<Object> made)
         {
