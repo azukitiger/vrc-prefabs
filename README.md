@@ -237,8 +237,13 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
    - **LipSync** > **Mode** to `Viseme Blend Shape Face Tracking`
    - **Eye Look** enabled, with **Eye Gaze Mode** set to `Face Tracking` and **Eyelid Type** set to `None`
    - **Face Tracking** enabled, with **Use All Tracking Keys** on, your face mesh in **Face Tracking Mesh**, and (recommended) **Viseme Dampen** set to `Dampen Visemes` with **Dampen Amount** `1`
-4. Create a **Blendshapes Set** (under **Face Tracking**) named exactly `FaceTracking` and map your face blendshapes. With the **Eye Rotation Prefab**, leave out the `EyeLook*` blendshapes, since it drives them itself.
-5. Create a second set named exactly `Visemes` with your viseme blendshapes. **Visemes Sensitivity** controls its weight.
+4. Create the **Blendshapes Sets** (under **Face Tracking**):
+   - `FaceTracking`: only your mouth-related blendshapes (jaw, mouth, lips, cheeks, tongue).
+   - `EyeTracking`: your eye & brow blendshapes. With the **Eye Rotation Prefab**, leave out the `EyeLook*` blendshapes, since it drives them itself.
+   - `Visemes`: your viseme blendshapes. **Visemes Sensitivity** controls its weight.
+5. The prefab doesn't enable or disable these Blendshapes Sets, so do it yourself from the toggles:
+   - Turn the `EyeTracking` Blendshapes Set on and off with the **Eye Tracking** toggle (the `EyeTrackingActive` parameter).
+   - Turn the `FaceTracking` Blendshapes Set on and off with the **Lip Tracking** toggle (the `LipTrackingActive` parameter).
 6. Optionally, add corrective blendshapes named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). The **Correctives** tab of the prefab's **Face Tracking Parameter Behaviors** lists them and lets you uncheck any.
 7. Optionally, use the **Output Animator Parameters** to drive other animations (ex. ears) from a separate FX controller.
 
