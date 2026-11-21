@@ -37,7 +37,7 @@ namespace VAP.Editor
 
         internal struct Contact
         {
-            internal string input, output, pass, delta, timer;
+            internal string input, output, pass, delta, timer, factor, smoothed;
         }
 
         internal static string Parameter(Component receiver)
@@ -53,7 +53,7 @@ namespace VAP.Editor
         {
             bool physBone = c is VAPPhysBoneSmoothing;
             string type = physBone ? PhysBoneType : ReceiverType;
-            return c.GetComponentsInChildren<Component>(true)
+            return c.GetComponents<Component>()
                 .Where(x => x != null && x.GetType().Name == type)
                 .Select(Parameter)
                 .Where(p => p != null)
@@ -71,17 +71,23 @@ namespace VAP.Editor
         internal static string TimerFor(VAPSmoothing c, string output) =>
             !c.timer ? null : !string.IsNullOrEmpty(c.timerParameter) ? c.timerParameter : output == null ? null : output + "Timer";
 
+        internal static string Factor(VAPSmoothing c, string input) =>
+            !c.multiply ? null : !string.IsNullOrEmpty(c.multiplyParameter) ? c.multiplyParameter : Parameters(c).FirstOrDefault(p => p != input);
+
         internal static Contact Resolve(VAPSmoothing c)
         {
             string input = Input(c);
             string output = Output(c, input);
+            string factor = Factor(c, input);
             return new Contact
             {
                 input = input,
                 output = output,
-                pass = c.passes == VAPSmoothing.PassMode.Double ? output + "/Pass" : null,
-                delta = c.splitSmoothing ? output + "/Delta" : null,
+                pass = c.passes == VAPSmoothing.PassMode.Double && input != null ? input + "/Pass" : null,
+                delta = c.splitSmoothing && input != null ? input + "/Delta" : null,
                 timer = TimerFor(c, output),
+                factor = factor,
+                smoothed = factor != null && input != null && output != null ? input + "/Smoothed" : output,
             };
         }
 
@@ -122,16 +128,22 @@ namespace VAP.Editor
         internal static string Problem(VAPSmoothing c, Contact x)
         {
             if (x.input == null)
-                return $"No {SourceName(c)} with a parameter on this object or its children.";
+                return $"No {SourceName(c)} with a parameter on this object.";
             if (!Parameters(c).Contains(x.input))
-                return $"No {SourceName(c)} on this object or its children gives \"{x.input}\".";
+                return $"No {SourceName(c)} on this object gives \"{x.input}\".";
             foreach (var (smoothing, speed) in Sides(c))
                 if (SideProblem(smoothing, speed, c.splitSmoothing) is string problem)
                     return problem;
             if (c.splitSmoothing && c.smoothing == VAPSmoothing.None && c.decreaseSmoothing == VAPSmoothing.None)
                 return "Both directions are None, so nothing is smoothed.";
-            var reserved = new[] { Weight, x.pass, x.delta }.Where(p => p != null).ToArray();
-            if (new[] { x.input, x.output, x.timer }.Any(p => p != null && reserved.Contains(p)))
+            if (c.multiply && x.factor == null)
+                return $"Multiply needs another {SourceName(c)} parameter on this object.";
+            if (x.factor != null && !Parameters(c).Contains(x.factor))
+                return $"No {SourceName(c)} on this object gives \"{x.factor}\".";
+            if (x.factor != null && (x.factor == x.output || x.factor == x.timer))
+                return "The multiply parameter can't be the output or timer parameter.";
+            var reserved = new[] { Weight, x.pass, x.delta, x.smoothed != x.output ? x.smoothed : null }.Where(p => p != null).ToArray();
+            if (new[] { x.input, x.output, x.timer, x.factor }.Any(p => p != null && reserved.Contains(p)))
                 return string.Join(", ", reserved.Select(p => $"\"{p}\"")) + " are used inside the smoothing and can't be parameter names here.";
             if (x.output == x.input)
                 return "The output parameter can't be the input parameter.";
@@ -139,6 +151,28 @@ namespace VAP.Editor
                 return "The timer parameter must be different from the input and output parameters.";
             return null;
         }
+
+        static bool Builds(VAPSmoothing c) => Problem(c, Resolve(c)) == null && SmoothedBy(c) == null;
+
+        internal static List<(string name, List<VAPSmoothing> by)> Repeats(IEnumerable<VAPSmoothing> all) =>
+            all.Where(Builds)
+                .SelectMany(c => new[] { Resolve(c).output, Resolve(c).timer }.Where(p => p != null).Distinct().Select(p => (p, c)))
+                .GroupBy(x => x.p)
+                .Where(g => g.Count() > 1)
+                .Select(g => (g.Key, g.Select(x => x.c).ToList()))
+                .ToList();
+
+        internal static List<(string name, List<VAPSmoothing> by)> Repeats(VAPSmoothing c)
+        {
+            var root = VAPAvatar.Descriptor(c);
+            return root == null ? new List<(string, List<VAPSmoothing>)>()
+                : Repeats(root.GetComponentsInChildren<VAPSmoothing>(true)).Where(r => r.by.Contains(c)).ToList();
+        }
+
+        internal static string PathOf(Component c) => AnimationUtility.CalculateTransformPath(c.transform, c.transform.root) is string path && path != "" ? path : c.name;
+
+        internal static string RepeatMessage(string name, IEnumerable<VAPSmoothing> by) =>
+            $"\"{name}\" is written by more than one smoothing: {string.Join(", ", by.Select(PathOf))}. The repeats must be removed.";
 
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
@@ -151,11 +185,13 @@ namespace VAP.Editor
             bool needed = fullControllers.Length > 0 || descriptors.Length > 0;
             if (all.Length == 0 && frameTimes.Length == 0 && !needed)
                 return;
+            var repeats = Repeats(all);
+            if (repeats.Count > 0)
+                throw new InvalidOperationException(Log + string.Join("\n", repeats.Select(r => RepeatMessage(r.name, r.by))));
             if (vfType == null || feature == null)
                 Debug.LogWarning(Log + "VRCFury is not installed; smoothing skipped.", avatarRoot);
             else
             {
-                var outputs = new HashSet<string>();
                 var inputs = new Dictionary<string, VAPSmoothing>();
                 var speeds = new Dictionary<string, float>();
                 var contacts = new List<(VAPSmoothing c, Contact x)>();
@@ -174,11 +210,6 @@ namespace VAP.Editor
                         continue;
                     }
                     inputs[contact.input] = c;
-                    if (!outputs.Add(contact.output) || (contact.timer != null && !outputs.Add(contact.timer)))
-                    {
-                        Debug.LogWarning(Log + $"{c.name}: another smoothing already writes \"{contact.output}\" or its timer; skipped.", c);
-                        continue;
-                    }
                     contacts.Add((c, contact));
                     any = true;
                     foreach (var (smoothing, speed) in Sides(c))
@@ -242,6 +273,8 @@ namespace VAP.Editor
                 yield return x.timer;
                 yield return StepSize;
             }
+            if (x.factor != null)
+                yield return x.factor;
         }
 
         internal static IEnumerable<VAPFrameTime.Factor> Defaults()
@@ -408,13 +441,13 @@ namespace VAP.Editor
                 AnimationCurve.Linear(0f, 0f, 10000000f, 10000000f));
             made.Add(time);
 
+            var reset = new List<string> { TimeName, LastTimeName, FrameTime };
+            reset.AddRange(speeds.Keys.Concat(rates.Values).Concat(linear.Keys));
             var children = new List<ChildMotion>
             {
-                Child(Clip("Reset Frame Time Logic AAP", new[] { TimeName, LastTimeName, FrameTime }, 0f, made), Weight),
                 Child(time, Weight),
                 Child(Clip("Frame Time & Last Time", new[] { FrameTime, LastTimeName }, 1f, made), TimeName),
                 Child(Clip("Frame Time -1", new[] { FrameTime }, -1f, made), LastTimeName),
-                Child(Clip("Reset Frame Time Smoothing AAP", speeds.Keys.Concat(rates.Values).Concat(linear.Keys), 0f, made), Weight),
                 Child(Clip("Smoothing Values", groups.Select(g => (rates[g.parameters[0]], g.speed)).Concat(linear.Select(l => (l.Key, l.Value))), made), FrameTime),
             };
             foreach (var (_, parameters) in groups)
@@ -427,8 +460,9 @@ namespace VAP.Editor
                 children.Add(Child(Tree(string.Join(", ", parameters), BlendTreeType.Simple1D, rates[p], made, steps), Weight));
             }
             foreach (var (c, x) in contacts)
-                children.Add(Child(ContactTree(c, x, controller, made), Weight));
-            Layer(controller, "Frame Time", Tree("Frame Time", BlendTreeType.Direct, null, made, children.ToArray()), made);
+                children.AddRange(ContactTree(c, x, controller, reset, made));
+            children.Insert(0, Child(Clip("Reset AAP", reset.Distinct(), 0f, made), Weight));
+            Layer(controller, "VAP Smoothing", Tree("VAP Smoothing", BlendTreeType.Direct, null, made, children.ToArray()), made);
             return controller;
         }
 
@@ -465,11 +499,11 @@ namespace VAP.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        static Motion ContactTree(VAPSmoothing c, Contact x, AnimatorController controller, List<Object> made)
+        static IEnumerable<ChildMotion> ContactTree(VAPSmoothing c, Contact x, AnimatorController controller, List<string> reset, List<Object> made)
         {
             string increase = SpeedParameter(c.smoothing, c.customSpeed);
             string decrease = c.splitSmoothing ? SpeedParameter(c.decreaseSmoothing, c.decreaseCustomSpeed) : null;
-            foreach (string p in new[] { x.input, x.output, x.pass, x.delta, increase, decrease }.Where(p => p != null))
+            foreach (string p in new[] { x.input, x.output, x.pass, x.delta, increase, decrease, x.factor, x.smoothed }.Where(p => p != null).Distinct())
                 AddFloat(controller, p, 0f);
             if (x.timer != null)
             {
@@ -477,9 +511,11 @@ namespace VAP.Editor
                 AddFloat(controller, StepSize, 0f);
             }
 
-            var reset = Clip("Reset Contact Smoothing AAP",
-                new[] { x.output, x.pass, x.delta, x.timer }.Where(p => p != null), 0f, made);
-            var outClip = Clip(x.output, new[] { x.output }, 1f, made);
+            reset.AddRange(new[] { x.output, x.smoothed, x.pass, x.delta, x.timer }.Where(p => p != null));
+            string N(string label) => x.output + " " + label;
+            AnimationClip empty = null;
+            AnimationClip Empty() => empty ??= Clip(N("Single Frame"), Enumerable.Empty<string>(), 0f, made);
+            var outClip = Clip(x.smoothed, new[] { x.smoothed }, 1f, made);
             var passClip = x.pass == null ? null : Clip(x.pass, new[] { x.pass }, 1f, made);
             ChildMotion[] Write(string pass, string output) => passClip == null
                 ? new[] { Child(outClip, output) }
@@ -488,35 +524,47 @@ namespace VAP.Editor
             Motion Follow(string speed, string label)
             {
                 if (speed == null)
-                    return snap ??= Tree("Direct", BlendTreeType.Direct, null, made, Write(x.input, x.input));
-                keep ??= Tree("Output", BlendTreeType.Direct, null, made, Write(x.pass, x.output));
-                step ??= Tree("Input", BlendTreeType.Direct, null, made, Write(x.input, x.pass ?? x.input));
-                return Tree(label, BlendTreeType.Simple1D, speed, made, Child(keep, Weight, 0f), Child(step, Weight, 1f));
+                    return snap ??= Tree(N("Direct"), BlendTreeType.Direct, null, made, Write(x.input, x.input));
+                keep ??= Tree(N("Output"), BlendTreeType.Direct, null, made, Write(x.pass, x.smoothed));
+                step ??= Tree(N("Input"), BlendTreeType.Direct, null, made, Write(x.input, x.pass ?? x.input));
+                return Tree(N(label), BlendTreeType.Simple1D, speed, made, Child(keep, Weight, 0f), Child(step, Weight, 1f));
             }
 
-            var children = new List<ChildMotion> { Child(reset, Weight) };
+            var children = new List<ChildMotion>();
             if (!c.splitSmoothing)
                 children.Add(Child(Follow(increase, "Smooth Setup"), Weight));
             else
             {
-                var delta = Tree("Delta", BlendTreeType.Direct, null, made,
-                    Child(Clip("Delta 1", new[] { x.delta }, 1f, made), x.input),
-                    Child(Clip("Delta -1", new[] { x.delta }, -1f, made), x.output));
-                children.Add(Child(delta, Weight));
-                children.Add(Child(Tree("Direction", BlendTreeType.Simple1D, x.delta, made,
+                children.Add(Child(Clip(N("Delta 1"), new[] { x.delta }, 1f, made), x.input));
+                children.Add(Child(Clip(N("Delta -1"), new[] { x.delta }, -1f, made), x.smoothed));
+                children.Add(Child(Tree(N("Direction"), BlendTreeType.Simple1D, x.delta, made,
                     Child(Follow(decrease, "Decrease Smoothing"), Weight, 0.00001f),
                     Child(Follow(increase, "Increase Smoothing"), Weight, 0.00002f)), Weight));
             }
             if (x.timer != null)
             {
-                var empty = Clip("Single Frame", Enumerable.Empty<string>(), 0f, made);
                 var timerClip = Clip(x.timer, new[] { x.timer }, 1f, made);
-                var count = Tree("Timer Count", BlendTreeType.Direct, null, made, Child(timerClip, x.timer), Child(timerClip, StepSize));
-                children.Add(Child(Tree("Timer", BlendTreeType.Simple1D, x.input, made,
-                    Child(empty, Weight, 0.00001f), Child(count, Weight, 0.00002f)), Weight));
+                var count = Tree(N("Timer Count"), BlendTreeType.Direct, null, made, Child(timerClip, x.timer), Child(timerClip, StepSize));
+                children.Add(Child(Tree(N("Timer"), BlendTreeType.Simple1D, x.input, made,
+                    Child(Empty(), Weight, 0.00001f), Child(count, Weight, 0.00002f)), Weight));
             }
-            return Tree(x.output, BlendTreeType.Direct, null, made, children.ToArray());
+            if (x.factor != null)
+            {
+                var off = Empty();
+                var tree = Tree(N("Multiply Output"), BlendTreeType.FreeformCartesian2D, x.smoothed, made);
+                tree.blendParameterY = x.factor;
+                tree.children = new[]
+                {
+                    Child2D(off, 0f, 0f), Child2D(off, 1f, 0f), Child2D(off, 0f, 1f),
+                    Child2D(Clip(x.output, new[] { x.output }, 1f, made), 1f, 1f),
+                };
+                children.Add(Child(tree, Weight));
+            }
+            return children;
         }
+
+        static ChildMotion Child2D(Motion motion, float x, float y) =>
+            new ChildMotion { motion = motion, position = new Vector2(x, y), timeScale = 1f };
 
         static void AddFloat(AnimatorController controller, string name, float value)
         {

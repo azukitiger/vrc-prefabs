@@ -162,7 +162,7 @@ namespace VAP.Editor
                     root.Add(section.Root);
                 }
             }
-            VAPInspectorHeader.Attach(root, title);
+            VAPInspectorHeader.Attach(root, title, editor);
             return root;
         }
     }

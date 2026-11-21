@@ -17,10 +17,7 @@ namespace VAP.Editor
             if (c == null)
                 return;
             if (VAPAvatar.Descriptor(c) == null)
-            {
-                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
                 return;
-            }
             var other = VAPAvatar.Other(c);
             if (other != null)
             {
@@ -30,7 +27,7 @@ namespace VAP.Editor
             EditorGUILayout.LabelField(Status, EditorStyles.miniLabel);
         }
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Remove Empty Sub Menus", Draw);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Remove Empty Sub Menus", Draw, this);
     }
 }
 #endif

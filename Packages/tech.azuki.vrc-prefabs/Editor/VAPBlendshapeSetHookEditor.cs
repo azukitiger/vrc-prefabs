@@ -23,7 +23,7 @@ namespace VAP.Editor
             "Meshes whose blendshapes are hooked. The ones with blendshapes renamed to the target set are added to the " +
             "avatar's Face Tracking Meshes at build time.");
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Face Tracking BlendShape Set Hook", DrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Face Tracking BlendShape Set Hook", DrawFields, this);
 
         void DrawFields()
         {
@@ -45,7 +45,8 @@ namespace VAP.Editor
             {
                 status ??= new Cached<(string, MessageType)>(0.5, MakeStatus);
                 var (text, type) = status.Value;
-                EditorGUILayout.HelpBox(text, type);
+                if (text != null)
+                    EditorGUILayout.HelpBox(text, type);
             }
         }
 
@@ -58,7 +59,7 @@ namespace VAP.Editor
             var hook = (VAPBlendshapeSetHook)target;
             var descriptor = Descriptor;
             if (descriptor == null)
-                return (VAPEditorGUI.NotInAvatar, MessageType.Warning);
+                return (null, MessageType.None);
             string targetName = hook.blendshapesSet?.setName ?? "";
             var sets = VAPEditorGUI.AvatarSets(descriptor);
             if (string.IsNullOrEmpty(targetName))

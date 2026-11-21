@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -34,15 +35,17 @@ namespace VAP.Editor
 
         static readonly ConditionalWeakTable<IMGUIContainer, System.Action> Wrapped = new ConditionalWeakTable<IMGUIContainer, System.Action>();
 
-        public static VisualElement Create(string title, System.Action onGUI)
+        static readonly Color WarningBorder = new Color32(200, 40, 40, 255);
+
+        public static VisualElement Create(string title, System.Action onGUI, UnityEditor.Editor editor = null)
         {
             var root = new VisualElement();
             root.Add(new IMGUIContainer(onGUI));
-            Attach(root, title);
+            Attach(root, title, editor);
             return root;
         }
 
-        public static void Attach(VisualElement inspectorRoot, string title)
+        public static void Attach(VisualElement inspectorRoot, string title, UnityEditor.Editor editor = null)
         {
 #if !VAP_NDMF
             inspectorRoot.Clear();
@@ -50,6 +53,8 @@ namespace VAP.Editor
                 "NDMF is not installed, so this component does nothing when the avatar is built. " +
                 "Install NDMF (nadena.dev.ndmf) from the VRChat Creator Companion.", MessageType.Error)));
 #endif
+            if (editor != null)
+                inspectorRoot.Add(NotInAvatarWarning(editor));
             IVisualElementScheduledItem watch = null;
             inspectorRoot.RegisterCallback<AttachToPanelEvent>(_ =>
             {
@@ -62,6 +67,26 @@ namespace VAP.Editor
                 watch = inspectorRoot.schedule.Execute(() => WrapTitlebar(inspectorRoot, title)).Every(150);
             });
             inspectorRoot.RegisterCallback<DetachFromPanelEvent>(_ => watch?.Pause());
+        }
+
+        static VisualElement NotInAvatarWarning(UnityEditor.Editor editor)
+        {
+            var box = new VisualElement();
+            var style = box.style;
+            style.marginTop = 8f;
+            style.paddingLeft = style.paddingRight = 6f;
+            style.paddingTop = style.paddingBottom = 4f;
+            style.borderTopWidth = style.borderBottomWidth = style.borderLeftWidth = style.borderRightWidth = 2f;
+            style.borderTopColor = style.borderBottomColor = style.borderLeftColor = style.borderRightColor = WarningBorder;
+            style.borderTopLeftRadius = style.borderTopRightRadius = style.borderBottomLeftRadius = style.borderBottomRightRadius = 4f;
+            var label = new Label(VAPEditorGUI.NotInAvatar);
+            label.style.whiteSpace = WhiteSpace.Normal;
+            box.Add(label);
+            void Refresh() => style.display = editor.targets.Any(t => t is Component c && VAPAvatar.Descriptor(c) == null)
+                ? DisplayStyle.Flex : DisplayStyle.None;
+            Refresh();
+            box.schedule.Execute(Refresh).Every(500);
+            return box;
         }
 
         static bool WrapTitlebar(VisualElement root, string title)

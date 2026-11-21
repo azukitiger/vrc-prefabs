@@ -16,7 +16,7 @@ namespace VAP.Editor
 
         void OnEnable() => height = serializedObject.FindProperty(nameof(VAPFloorAdjuster.height));
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Floor Adjuster", DrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Floor Adjuster", DrawFields, this);
 
         void DrawFields()
         {
@@ -26,9 +26,7 @@ namespace VAP.Editor
             serializedObject.Update();
 
             var adjuster = (VAPFloorAdjuster)target;
-            if (VAPAvatar.Descriptor(adjuster) == null)
-                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
-            else if (targets.Length == 1 && VAPAvatar.Other(adjuster, false) is VAPFloorAdjuster other)
+            if (VAPAvatar.Descriptor(adjuster) != null && targets.Length == 1 && VAPAvatar.Other(adjuster, false) is VAPFloorAdjuster other)
             {
                 EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne("Floor Adjuster", other), MessageType.Error);
                 return;

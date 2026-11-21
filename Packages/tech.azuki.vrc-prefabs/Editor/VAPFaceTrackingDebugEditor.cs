@@ -62,7 +62,7 @@ namespace VAP.Editor
         static readonly System.Reflection.FieldInfo StatesField = typeof(FaceTrackingBlendshapesSetDrawer).GetField(
             "_states", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create(Title, SafeDrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create(Title, SafeDrawFields, this);
 
         string lastError;
 

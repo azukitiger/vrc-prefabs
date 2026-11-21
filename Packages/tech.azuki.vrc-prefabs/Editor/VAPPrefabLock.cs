@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace VAP.Editor
 {
@@ -13,6 +14,32 @@ namespace VAP.Editor
             if (!(target is Component component) || !PrefabUtility.IsPartOfPrefabInstance(component))
                 return false;
             return !PrefabUtility.IsAddedComponentOverride(component);
+        }
+
+        public static VisualElement AddEditButton(VisualElement root, UnityEditor.Editor editor)
+        {
+            var button = new Button(() =>
+            {
+                var target = editor.targets.FirstOrDefault(IsFromPrefab);
+                if (target != null)
+                    Open(target);
+            })
+            {
+                text = "Edit in Prefab",
+                tooltip = "Open the prefab this component comes from, where it can be changed.",
+            };
+            var style = button.style;
+            style.position = Position.Absolute;
+            style.top = 0f;
+            style.right = 0f;
+            style.marginLeft = style.marginRight = style.marginTop = style.marginBottom = 0f;
+            style.paddingLeft = style.paddingRight = 10f;
+            style.paddingTop = style.paddingBottom = 3f;
+            void Refresh() => style.display = editor.targets.Any(IsFromPrefab) ? DisplayStyle.Flex : DisplayStyle.None;
+            Refresh();
+            button.schedule.Execute(Refresh).Every(500);
+            root.Add(button);
+            return root;
         }
 
         public static bool IsLocked(Object target) => false;

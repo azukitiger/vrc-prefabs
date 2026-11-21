@@ -23,7 +23,7 @@ namespace VAP.Editor
             clips = new PlayAudioClipsGUI(serializedObject, nameof(VAPPlayAudioClips.entries));
         }
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("VRC Animator Play Audio Clips", DrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("VRC Animator Play Audio Clips", DrawFields, this);
 
         void DrawFields()
         {
@@ -31,9 +31,7 @@ namespace VAP.Editor
                 return;
             serializedObject.Update();
 
-            EditorGUILayout.HelpBox("Play Audio Clips is now a section of the VRC Avatar Descriptor and VRCFury Full Controller components. Move these clips there.", MessageType.Warning);
-            if (VAPAvatar.Descriptor((Component)target) == null)
-                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
+            EditorGUILayout.HelpBox("Play Audio Clips is now a section of the VRC Avatar Descriptor Enhancements and VRCFury Full Controller components. Move these clips there.", MessageType.Warning);
 
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(controller, ControllerLabel);

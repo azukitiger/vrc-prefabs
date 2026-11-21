@@ -10,7 +10,9 @@ namespace VAP.Editor
 {
     internal static class VAPEditorGUI
     {
-        internal const string NotInAvatar = "Put this inside an avatar (under its VRC Avatar Descriptor).";
+        internal static string MenuName(string name) => name.Replace("/", "\u2215");
+
+        internal const string NotInAvatar = "This VAP component is not inside an avatar, so it won't do anything.";
 
         static readonly GUIContent PickContent = new GUIContent("", "Pick a Blendshapes Set from this avatar.");
         static GUIContent warnIcon, foundIcon;
@@ -60,7 +62,7 @@ namespace VAP.Editor
             foreach (var n in list)
             {
                 string name = n;
-                menu.AddItem(new GUIContent(name.Replace("/", "\u2215")), prop.stringValue == name, () => set(name));
+                menu.AddItem(new GUIContent(VAPEditorGUI.MenuName(name)), prop.stringValue == name, () => set(name));
             }
             menu.DropDown(pick);
         }

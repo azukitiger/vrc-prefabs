@@ -11,7 +11,7 @@ namespace VAP.Editor
     [CustomEditor(typeof(VAPDescriptorExpressions))]
     public class VAPDescriptorExpressionsEditor : VAPExpressionsEditor
     {
-        const string Title = "VRC Avatar Descriptor";
+        const string Title = "VRC Avatar Descriptor Enhancements";
         static readonly GUIContent FoundLabel = new GUIContent("Avatar Descriptor found",
             "The menu, parameters and playable layers come from the avatar's descriptor. The files are never changed; values set below are applied to copies at build time.");
 
@@ -25,10 +25,7 @@ namespace VAP.Editor
             if (c == null)
                 return;
             if (c.Descriptor == null)
-            {
-                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
                 return;
-            }
             if (c.Other() is VAPDescriptorExpressions other)
             {
                 EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne(Title, other), MessageType.Error);
@@ -61,8 +58,8 @@ namespace VAP.Editor
             var menu = new IMGUIContainer(DrawMenu);
             menu.style.marginTop = 2f;
             root.Add(menu);
-            VAPInspectorHeader.Attach(root, Title);
-            return root;
+            VAPInspectorHeader.Attach(root, Title, this);
+            return VAPPrefabLock.AddEditButton(root, this);
         }
     }
 }

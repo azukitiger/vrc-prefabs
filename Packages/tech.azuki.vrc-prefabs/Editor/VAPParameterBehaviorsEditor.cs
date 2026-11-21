@@ -53,7 +53,7 @@ namespace VAP.Editor
         readonly List<int> shown = new List<int>();
         int[] shownSnapshot = new int[0];
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Face Tracking Parameter Behaviors", DrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("Face Tracking Parameter Behaviors", DrawFields, this), this);
 
         void DrawFields()
         {

@@ -40,6 +40,12 @@ namespace VAP
         [Tooltip("Animator parameter that receives the time. If empty, the output parameter followed by Timer.")]
         public string timerParameter = "";
 
+        [Tooltip("Multiply the smoothed output by another parameter, like a PhysBone Stretch that fades in and out with a smoothed IsGrabbed.")]
+        public bool multiply = false;
+
+        [Tooltip("Parameter the smoothed output is multiplied by. It is not smoothed itself. If empty, the first other parameter found is used.")]
+        public string multiplyParameter = "";
+
         public abstract string InputParameter { get; }
     }
 }

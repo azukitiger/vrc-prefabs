@@ -9,7 +9,7 @@ namespace VAP.Editor
     {
         FrameTimeFactorsGUI factors;
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Frame Time", DrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("Frame Time", DrawFields, this), this);
 
         void DrawFields()
         {
@@ -17,9 +17,7 @@ namespace VAP.Editor
                 return;
             serializedObject.Update();
             var f = (VAPFrameTime)target;
-            EditorGUILayout.HelpBox("Frame Time is now a section of the VRC Avatar Descriptor component. Move these factors there.", MessageType.Warning);
-            if (VAPAvatar.Descriptor(f) == null)
-                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
+            EditorGUILayout.HelpBox("Frame Time is now a section of the VRC Avatar Descriptor Enhancements component. Move these factors there.", MessageType.Warning);
             factors ??= new FrameTimeFactorsGUI(serializedObject, nameof(VAPFrameTime.factors));
             factors.Draw(f.factors, VAPPrefabLock.IsFromPrefab(f));
             serializedObject.ApplyModifiedProperties();

@@ -31,7 +31,7 @@ namespace VAP.Editor
                     FullControllerSource.Resolve(f);
                 if (c is VAPDescriptorExpressions d && d.Other() is VAPDescriptorExpressions other)
                 {
-                    Debug.LogError(Log + $"{c.name}: does nothing because \"{other.name}\" already has a VRC Avatar Descriptor; skipped.", c);
+                    Debug.LogError(Log + $"{c.name}: does nothing because \"{other.name}\" already has a VRC Avatar Descriptor Enhancements; skipped.", c);
                     continue;
                 }
                 var roots = c.RootMenus();

@@ -46,8 +46,8 @@ namespace VAP.Editor
             VRCFuryWrap.BarLabels(rect, rect.x, "Full Controller", string.Join(", ", names), 0.6f);
         }
 
-        public override VisualElement CreateInspectorGUI() => wrap.Build(this, DrawFullController, DrawInfo,
-            new ExpressionsSections(this, () => ControllerCopy.FullControllers(Wrapped).ToList()).Build(), true);
+        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(wrap.Build(this, DrawFullController, DrawInfo,
+            new ExpressionsSections(this, () => ControllerCopy.FullControllers(Wrapped).ToList()).Build(), true), this);
     }
 }
 #endif

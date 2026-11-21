@@ -29,7 +29,7 @@ namespace VAP.Editor
             available = new Cached<HashSet<string>>(1.0, Available);
         }
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Blendshape Normals", DrawFields);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Blendshape Normals", DrawFields, this);
 
         HashSet<string> Available()
         {
@@ -50,9 +50,6 @@ namespace VAP.Editor
                 return;
             bool locked = VAPPrefabLock.Draw(targets);
             serializedObject.Update();
-
-            if (VAPAvatar.Descriptor((Component)target) == null)
-                EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
 
             using (new EditorGUI.DisabledScope(locked))
             {
@@ -94,7 +91,7 @@ namespace VAP.Editor
                     foreach (var n in options)
                     {
                         string name = n;
-                        menu.AddItem(new GUIContent(name.Replace("/", "\u2215")), value == name, () => set(name));
+                        menu.AddItem(new GUIContent(VAPEditorGUI.MenuName(name)), value == name, () => set(name));
                     }
                     menu.DropDown(pick);
                 }
