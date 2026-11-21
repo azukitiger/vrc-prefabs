@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1628316526124304053}
   - component: {fileID: 1024708419020514010}
   m_Layer: 0
-  m_Name: VAP Pupil Dilation Smoothing
+  m_Name: VAP Pupil Dilation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

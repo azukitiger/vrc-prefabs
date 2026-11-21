@@ -1,3 +1,8 @@
+## Version 3.0.14
+- Deprecated prefabs that can be replaced by components.
+- Tail wag can no longer be animated if it's off.
+- Added new VAP components for smoothing physbone and contacts parameters.
+
 ## Version 3.0.13
 - Set PupilDilationFoward value to 0.5 by default in animator.
 

@@ -465,8 +465,9 @@ namespace VAP.Editor
                         parameters, SpeedValues[i], made), Weight, SpeedSteps[i]);
                 children.Add(Child(Tree(string.Join(", ", parameters), BlendTreeType.Simple1D, rates[p], made, steps), Weight));
             }
+            var single = SingleFrame(made);
             foreach (var (c, x) in contacts)
-                children.AddRange(ContactTree(c, x, controller, reset, made));
+                children.AddRange(ContactTree(c, x, controller, reset, single, made));
             children.Insert(0, Child(Clip("Reset AAP", reset.Distinct(), 0f, made), Weight));
             Layer(controller, "VAP Smoothing", Tree("VAP Smoothing", BlendTreeType.Direct, null, made, children.ToArray()), made);
             return controller;
@@ -505,7 +506,7 @@ namespace VAP.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        static IEnumerable<ChildMotion> ContactTree(VAPSmoothing c, Contact x, AnimatorController controller, List<string> reset, List<Object> made)
+        static IEnumerable<ChildMotion> ContactTree(VAPSmoothing c, Contact x, AnimatorController controller, List<string> reset, AnimationClip single, List<Object> made)
         {
             string increase = SpeedParameter(c.smoothing, c.customSpeed);
             string decrease = c.splitSmoothing ? SpeedParameter(c.decreaseSmoothing, c.decreaseCustomSpeed) : null;
@@ -519,8 +520,6 @@ namespace VAP.Editor
 
             reset.AddRange(new[] { x.output, x.smoothed, x.pass, x.delta, x.timer, x.source != x.input ? x.source : null }.Where(p => p != null));
             string N(string label) => x.output + " " + label;
-            AnimationClip empty = null;
-            AnimationClip Empty() => empty ??= Clip(N("Single Frame"), Enumerable.Empty<string>(), 0f, made);
             var outClip = Clip(x.smoothed, new[] { x.smoothed }, 1f, made);
             var passClip = x.pass == null ? null : Clip(x.pass, new[] { x.pass }, 1f, made);
             ChildMotion[] Write(string pass, string output) => passClip == null
@@ -552,7 +551,7 @@ namespace VAP.Editor
                 var timerClip = Clip(x.timer, new[] { x.timer }, 1f, made);
                 var count = Tree(N("Timer Count"), BlendTreeType.Direct, null, made, Child(timerClip, x.timer), Child(timerClip, StepSize));
                 children.Add(Child(Tree(N("Timer"), BlendTreeType.Simple1D, x.input, made,
-                    Child(Empty(), Weight, 0.00001f), Child(count, Weight, 0.00002f)), Weight));
+                    Child(single, Weight, 0.00001f), Child(count, Weight, 0.00002f)), Weight));
             }
             if (x.axis != null)
             {
@@ -560,7 +559,7 @@ namespace VAP.Editor
                 string target = before ? x.source : x.output;
                 var clips = new Dictionary<float, Motion>();
                 Motion ValueClip(float value) => clips.TryGetValue(value, out var m) ? m : clips[value] = value == 0f
-                    ? Empty()
+                    ? single
                     : Clip(N(value.ToString("0.###", CultureInfo.InvariantCulture)), new[] { target }, value, made);
                 var tree = Tree(N(before ? "Transform Input" : "Transform Output"), BlendTreeType.FreeformCartesian2D, before ? x.input : x.smoothed, made);
                 tree.blendParameterY = x.axis;
@@ -568,6 +567,15 @@ namespace VAP.Editor
                 children.Add(Child(tree, Weight));
             }
             return children;
+        }
+
+        static AnimationClip SingleFrame(List<Object> made)
+        {
+            var clip = new AnimationClip { name = "Ignore" };
+            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve("_ignored", typeof(GameObject), "m_IsActive"),
+                new AnimationCurve(new Keyframe(0f, 0f)));
+            made.Add(clip);
+            return clip;
         }
 
         static ChildMotion Child2D(Motion motion, float x, float y) =>

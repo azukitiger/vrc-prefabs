@@ -6,10 +6,10 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tail Wag Speed
+  m_Name: Tail Wag Pause
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 2608870656588554731}
+    m_Motion: {fileID: 6322277763716533325}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -236,7 +236,7 @@ BlendTree:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Enabled
+  m_Name: Tail Wag Speed
   m_Childs:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3707a129c84268443a1ed421337b60d7, type: 2}
@@ -350,3 +350,34 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!206 &6322277763716533325
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tail Wag Enabled
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 3707a129c84268443a1ed421337b60d7, type: 2}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: TailWagSpeed
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 2608870656588554731}
+    m_Threshold: 0.00005
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: TailWagSpeed
+    m_Mirror: 0
+  m_BlendParameter: TailWagSpeed
+  m_BlendParameterY: TailWagSpeed
+  m_MinThreshold: 0
+  m_MaxThreshold: 0.00005
+  m_UseAutomaticThresholds: 0
+  m_NormalizedBlendValues: 0
+  m_BlendType: 0
