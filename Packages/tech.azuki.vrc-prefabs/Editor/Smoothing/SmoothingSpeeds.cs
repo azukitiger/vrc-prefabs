@@ -8,7 +8,7 @@ namespace VAP.Editor
 {
     internal static class SmoothingSpeeds
     {
-        const string Path = "Packages/tech.azuki.vrc-prefabs/Editor/SmoothingSpeeds.json";
+        const string Path = "Packages/tech.azuki.vrc-prefabs/Editor/Smoothing/SmoothingSpeeds.json";
 
         [Serializable]
         internal class Entry
