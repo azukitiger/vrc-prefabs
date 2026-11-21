@@ -5,6 +5,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
+    [HelpURL(VAPAvatar.Docs + "#vrc-avatar-descriptor-enhancements")]
     [AddComponentMenu("")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPPlayAudioClips : MonoBehaviour, IEditorOnly

@@ -15,7 +15,7 @@ namespace VAP.Editor
 {
     internal static class FloorAdjusterBuild
     {
-        const string Log = "[VAP Floor Adjuster] ";
+        const string Log = "[VAP Rig Floor Adjuster] ";
 
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
@@ -25,7 +25,7 @@ namespace VAP.Editor
             var used = VAPAvatar.First<VAPFloorAdjuster>(all[0], false);
             foreach (var c in avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(false))
                 if (c != used)
-                    Debug.LogWarning(Log + $"{c.name}: does nothing because \"{used.name}\" already has a Floor Adjuster.", c);
+                    Debug.LogWarning(Log + $"{c.name}: does nothing because \"{used.name}\" game object already has a Rig Floor Adjuster.", c);
             if (used != null)
                 Apply(avatarRoot, used, saveAsset);
 
@@ -151,7 +151,7 @@ namespace VAP.Editor
     public class FloorAdjusterPlugin : Plugin<FloorAdjusterPlugin>
     {
         public override string QualifiedName => "tech.azuki.vrc-prefabs.floor-adjuster";
-        public override string DisplayName => "VAP Floor Adjuster";
+        public override string DisplayName => "VAP Rig Floor Adjuster";
 
         protected override void Configure()
         {

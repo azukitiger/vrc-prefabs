@@ -3,6 +3,35 @@
 # Avatar Prefabs
 Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
 
+## Table of Contents
+
+- [Avatar Prefabs](#avatar-prefabs)
+  - [Better Blink Prefab](#better-blink-prefab)
+  - [Eye Rotation Prefab](#eye-rotation-prefab)
+  - [Logarithmic Gestures Prefab](#logarithmic-gestures-prefab)
+  - [Face Tracking Prefab](#face-tracking-prefab)
+  - [Pupil Dilation Prefab](#pupil-dilation-prefab)
+  - [Pupil Focus System Prefab](#pupil-focus-system-prefab)
+  - [Toe Curl System Prefab](#toe-curl-system-prefab)
+  - [Raycast Floor Physbone Collider Prefab](#raycast-floor-physbone-collider-prefab)
+  - [Raycast Wall Physbone Collider Prefab](#raycast-wall-physbone-collider-prefab)
+  - [GoGo Loco Simplified Prefab](#gogo-loco-simplified-prefab)
+  - [Ear Twitch Prefab](#ear-twitch-prefab)
+- [Asset Prefabs](#asset-prefabs)
+  - [Bell Sound System Prefab](#bell-sound-system-prefab)
+  - [Heartbeat System Prefab](#heartbeat-system-prefab)
+- [Components](#components)
+  - [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements)
+  - [VRCFury Full Controller](#vrcfury-full-controller)
+  - [VRCFury Toggle](#vrcfury-toggle)
+  - [VRC Remove Empty SubMenus](#vrc-remove-empty-submenus)
+  - [VRC Contact Smoothing & VRC PhysBone Smoothing](#vrc-contact-smoothing--vrc-physbone-smoothing)
+  - [VRC Face Tracking BlendShape Set](#vrc-face-tracking-blendshape-set)
+  - [VRC Face Tracking BlendShape Set Hook](#vrc-face-tracking-blendshape-set-hook)
+  - [VRC Face Tracking Parameter Behaviors](#vrc-face-tracking-parameter-behaviors)
+  - [Mesh Blendshape Normals](#mesh-blendshape-normals)
+  - [Rig Floor Adjuster](#rig-floor-adjuster)
+
 ## Better Blink Prefab
 
 Adds a **smooth blink animation** driven by VRChat's eyelid data.
@@ -165,7 +194,7 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 5. The prefab doesn't enable or disable these Blendshapes Sets, so do it yourself from the toggles:
    - Turn the `EyeTracking` Blendshapes Set on and off with the **Eye Tracking** toggle (the `EyeTrackingActive` parameter).
    - Turn the `FaceTracking` Blendshapes Set on and off with the **Lip Tracking** toggle (the `LipTrackingActive` parameter).
-6. Optionally, add corrective blendshapes named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). The **Correctives** tab of the prefab's **Face Tracking Parameter Behaviors** lists them and lets you uncheck any.
+6. Optionally, add corrective blendshapes named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). The **Blendshape** tab of the prefab's **VRC Face Tracking Parameter Behaviors** lists them under **Generate Correctives Based on Tracking Keys** and lets you uncheck any.
 7. Optionally, use the **Output Animator Parameters** to drive other animations (ex. ears) from a separate FX controller.
 
 ### Included Expression Parameters
@@ -235,7 +264,7 @@ Combines **pupil dilation** from three sources into one value per eye:
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Feed the input parameters below, and optionally the user dilation parameters, from your animator, menu or Face Tracking Parameter Behaviors. The prefab doesn't set them.
+2. Feed the input parameters below, and optionally the user dilation parameters, from your animator, menu or VRC Face Tracking Parameter Behaviors. The prefab doesn't set them.
 3. Use the **Output Animator Parameters** to drive animations.
 
 ### Optional Expression Parameters
@@ -338,21 +367,6 @@ Sets the wall PhysBone collider with 2 raycasts aiming left and right.
 
 ---
 
-## Heartbeat System Prefab
-
-Adds a **heartbeat sound and visual display**.
-
-### Features
-- Synced `float (7 bits)` shared by the Expression Menu and OSC.
-- Synced `bool (1 bit)` toggling the heart rate counter.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Place **Heartbeat Sound** at the chest.
-3. Place **Heartbeat Counter** over the **left hand**, or remove its **VRCFury Armature Link** to attach it elsewhere.
-
----
-
 ## GoGo Loco Simplified Prefab
 
 **GoGo Loco controllers and menus**, simplified and improved.
@@ -404,8 +418,6 @@ Both are `10` during a twitch, to override other animations in a direct blend tr
 
 ## Bell Sound System Prefab
 
-> Requires the **Frame Time Prefab**.
-
 Adds **movement-based bell sounds** to an asset.
 
 ### Instructions
@@ -414,3 +426,121 @@ Adds **movement-based bell sounds** to an asset.
 3. The included **PhysBone** is a sample and can be changed or replaced.
 4. The included **Chest Collider** stops the bell clipping into the chest. Remove it if not needed.
 
+---
+
+## Heartbeat System Prefab
+
+Adds a **heartbeat sound and visual display**.
+
+### Features
+- Synced `float (7 bits)` shared by the Expression Menu and OSC.
+- Synced `bool (1 bit)` toggling the heart rate counter.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Place **Heartbeat Sound** at the chest.
+3. Place **Heartbeat Counter** over the **left hand**, or remove its **VRCFury Armature Link** to attach it elsewhere.
+
+---
+
+# Components
+
+Components added from **Add Component** > **VAP**. They are applied when the avatar is built and are removed from the uploaded avatar.
+
+> Requires [NDMF](https://ndmf.nadena.dev) and [VRCFury](https://vrcfury.com).
+
+Components that only work once per avatar can still be added more than once. The one closest to the avatar root is used, and the others say so in their inspector.
+
+On a prefab instance, locked components show an **Edit in Prefab** button. Components outside an avatar show a warning at the bottom of the inspector.
+
+## VRC Avatar Descriptor Enhancements
+
+Adds extra settings for the avatar's own **VRC Avatar Descriptor**. Add it to the avatar root, one per avatar.
+
+### Features
+- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed; a copy is edited at build time. Right-click an item to remove it.
+- **Frame Time**: adds the frame time parameters to the avatar (see [Frame Time](#frame-time)).
+- **Play Audio Clips**: sets the clips of every **VRC Animator Play Audio** behaviour in the descriptor's playable layers, without changing the controllers.
+
+## VRCFury Full Controller
+
+A **VRCFury Full Controller** with the same **Menu**, **Frame Time** and **Play Audio Clips** sections as the [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements), applied to the controllers, menus and parameters of that Full Controller.
+
+### Instructions
+1. Add **VAP** > **VRCFury Full Controller**, or right-click an existing **VRCFury** Full Controller and pick **Wrap with VAP**.
+2. Set it up in the **VRCFury** section like a normal Full Controller.
+3. Use **Unwrap** from the component menu to go back to a plain VRCFury component. Menu overrides are lost.
+
+## VRCFury Toggle
+
+A **VRCFury Toggle** with the ability to override the **Default** value it starts at.
+
+### Instructions
+1. Add **VAP** > **VRCFury Toggle**, or right-click an existing **VRCFury** Toggle and pick **Wrap with VAP**.
+2. Set it up in the **VRCFury** section like a normal Toggle.
+3. **Default** can be changed on prefab instances. Right-click it to revert.
+
+## VRC Remove Empty SubMenus
+
+Removes every sub menu control of the avatar's menu that ends up with nothing inside at build time.
+
+## VRC Contact Smoothing & VRC PhysBone Smoothing
+
+Smooths one parameter of a **VRC Contact Receiver** or a **VRC PhysBone** on the same game object, and writes it to an output parameter. All smoothings are built into one generated **VAP Smoothing** layer that also holds the [Frame Time](#frame-time).
+
+### Instructions
+1. Add **VAP** > **VRC Contact Smoothing** next to a **VRC Contact Receiver**, or **VAP** > **VRC PhysBone Smoothing** next to a **VRC PhysBone**.
+2. Pick the **Contact Parameter** or **PhysBone Parameter** (`_IsGrabbed`, `_IsPosed`, `_Angle`, `_Stretch` or `_Squish`).
+3. Pick the **Smoothing Factor**. Click the chain icon to set separate **Rise Factor** and **Drop Factor**; either can be `None` to follow the input directly.
+4. Use the **Output Parameter**  to drive animations.
+
+### Settings
+| Setting | Description |
+|-|-|
+| Smoothing Factor | `Touch` (8), `Gesture` (20) or `Custom`; higher follows faster |
+| Passes | `Double` smooths through an extra hidden step for a softer curve, `Single` moves straight toward the input |
+| Output Parameter | Receives the smoothed value |
+| Transform Output | Maps the smoothed value (X) and a second parameter (**Y Parameter**) to the output with a 2D blend. Drag the points in the graph or edit them in the list. The default points multiply the two. **Apply Before Smoothing** blends the raw input instead, so the result is what gets smoothed |
+| Timer | Counts, in seconds, how long the input is above `0`, in the **Timer Parameter** (output followed by `Timer` if empty) |
+
+Each input can only be smoothed once, and an output or timer name used by two smoothings stops the build.
+
+### Frame Time
+
+Added when any smoothing exists, or when **Frame Time** is turned on in a [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements) or [VRCFury Full Controller](#vrcfury-full-controller). Animators can use these parameters, and each Full Controller gets the ones its animators use as globals.
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Smooth/Touch | Float | Smoothing factor for touch, speed `8` |
+| VAP/Smooth/Gesture | Float | Smoothing factor for gestures, speed `20` |
+| VAP/Smooth/StepSizeOne | Float | Seconds since the last frame, for counting time |
+
+Custom factors can be added in the **Frame Time** section, named after the parameter your animators use. They don't need to be global. At build time, matching parameters in that component's animators are renamed to `VAP/Smooth/Speed<value>` for **Smoothing** or `VAP/Smooth/Linear<value>` for **Linear**, and made global.
+
+## VRC Face Tracking BlendShape Set
+
+Adds a **Blendshapes Set** to the avatar descriptor's **Face Tracking** at build time, so prefabs can bring their own. It has the same settings as the descriptor's Blendshapes Sets. Its name can't be used by another set on the avatar.
+
+**Auto-Fill Format** fills the set from blendshapes named after the tracking keys. `*` is the key name (`*Debug` maps `JawOpen` to `JawOpenDebug`); leave it empty to turn auto-fill off.
+
+## VRC Face Tracking BlendShape Set Hook
+
+Renames blendshapes named after tracking keys in a format (ex. `JawOpenHook`) on the listed **Face Tracking Meshes** to the blendshape the **Target Blendshapes Set** uses for that key, so they move with it. Keys the target set leaves empty only lose the format (ex. `MouthClosedHook` becomes `MouthClosed`).
+
+## VRC Face Tracking Parameter Behaviors
+
+Adds **Parameter Behaviors** to the avatar descriptor's **Face Tracking** at build time. A shared **Blendshapes Set** is used by every behavior unless **Per Behavior** is on.
+
+### Features
+- **Animator**, **Blend Set** and **Blendshape** tabs hold normal Parameter Behaviors.
+- **Tracking Key** tab limits (Max or Min) every blendshape a Blendshapes Set uses for a tracking key or a group of keys (ex. `LipFunnel`).
+- **Generate Correctives Based on Tracking Keys** (on by default, under the **Blendshape** tab) adds behaviors for blendshapes on the face tracking meshes named after two of the set's blendshapes followed by `Corrective` or `Morph` (ex. `MouthClosedLipPuckerCorrective`), driven by both. Uncheck any to leave it out.
+- **Copy All** and **Paste** copy behaviors between components.
+
+## Mesh Blendshape Normals
+
+Recalculates the normals and tangents of the listed **Blendshapes** at build time, the way Blender shades them. Leave **Mesh** empty to use every mesh in the avatar that has them.
+
+## Rig Floor Adjuster
+
+Moves the armature and the view position up or down by **Armature Height Offset** (in meters) at build time, and rebuilds the humanoid avatar to match. One per avatar.

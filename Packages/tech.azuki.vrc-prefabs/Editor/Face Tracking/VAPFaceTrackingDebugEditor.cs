@@ -31,7 +31,7 @@ namespace VAP.Editor
 
     public abstract class VAPBlendshapeSetEditorBase : UnityEditor.Editor
     {
-        protected virtual string Title => "Face Tracking BlendShape Set";
+        protected virtual string Title => "VRC Face Tracking BlendShape Set";
         protected virtual string LogName => "VAP Face Tracking BlendShape Set";
         protected virtual GUIContent SetNameLabel => NameLabel;
         protected virtual GUIContent MeshesFieldLabel => MeshesLabel;
@@ -62,7 +62,7 @@ namespace VAP.Editor
         static readonly System.Reflection.FieldInfo StatesField = typeof(FaceTrackingBlendshapesSetDrawer).GetField(
             "_states", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create(Title, SafeDrawFields, this);
+        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create(Title, SafeDrawFields, this), this);
 
         string lastError;
 
@@ -92,7 +92,7 @@ namespace VAP.Editor
             if (target == null)
                 return;
             serializedObject.Update();
-            bool locked = VAPPrefabLock.Draw(targets);
+            bool locked = targets.Any(VAPPrefabLock.IsFromPrefab);
             DrawNotices();
 
             if (targets.Length > 1)

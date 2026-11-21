@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace VAP
 {
+    [HelpURL(VAPAvatar.Docs + "#vrc-contact-smoothing--vrc-physbone-smoothing")]
     [AddComponentMenu("VAP/VRC PhysBone Smoothing")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPPhysBoneSmoothing : VAPSmoothing

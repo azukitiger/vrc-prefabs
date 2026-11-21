@@ -22,13 +22,14 @@ namespace VAP.Editor
         static readonly GUIContent CopyAll = new GUIContent("Copy All", "Copy every behavior here, to paste into the avatar descriptor or another component. Tracking Key entries are not included.");
         static readonly GUIContent Paste = new GUIContent("Paste", "Add behaviors copied from the avatar descriptor (Copy All) or another component.");
 
-        const int TabAnimator = 0, TabTrackingKey = 1, TabCorrectives = 2, TabBlendshape = 3, TabBlendSet = 4;
-        static readonly string[] TabNames = { "Animator", "Tracking Key", "Correctives", "Blendshape", "Blend Set" };
+        const int TabAnimator = 0, TabTrackingKey = 1, TabBlendshape = 2, TabBlendSet = 3;
+        static readonly string[] TabNames = { "Animator", "Tracking Key", "Blendshape", "Blend Set" };
+        static readonly GUIContent GenerateLabel = new GUIContent("Generate Correctives Based on Tracking Keys",
+            "Add Apply to Blendshape behaviors at build time for corrective blendshapes, limited by the limits here.");
         static readonly string[] TabTips =
         {
             "Forward to Animator: sends a value to an animator parameter.",
             "Limits the blendshapes a Blendshapes Set uses for a tracking key or group (LipFunnel, LipFunnelUpper, ...).",
-            "Apply to Blendshape behaviors made at build time for corrective blendshapes, limited by the limits here.",
             "Apply to Blendshape, Limit Blendshape (Max) and Limit Blendshape (Min).",
             "Apply Blend Set Weight: drives a Blendshapes Set's weight.",
         };
@@ -53,7 +54,7 @@ namespace VAP.Editor
         readonly List<int> shown = new List<int>();
         int[] shownSnapshot = new int[0];
 
-        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("Face Tracking Parameter Behaviors", DrawFields, this), this);
+        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("VRC Face Tracking Parameter Behaviors", DrawFields, this), this);
 
         void DrawFields()
         {
@@ -85,25 +86,33 @@ namespace VAP.Editor
                 using (new EditorGUI.DisabledScope(locked))
                     DrawSharedSet();
                 DrawTabs(list, keyList);
-                if (Tab == TabCorrectives)
-                {
-                    correctives.Draw(locked);
-                }
-                else if (Tab == TabTrackingKey)
+                if (Tab == TabTrackingKey)
                 {
                     using (new EditorGUI.DisabledScope(locked))
                         GetTrackingList(keyList).DoLayoutList();
                 }
                 else
                 {
-                    using var disabled = new EditorGUI.DisabledScope(locked);
-                    shown.Clear();
-                    for (int i = 0; i < list.arraySize; i++)
-                        if (TabOfMode(ModeOf(list.GetArrayElementAtIndex(i))) == Tab)
-                            shown.Add(i);
-                    shownSnapshot = shown.ToArray();
-                    DrawTabNote(list);
-                    GetList(list).DoLayoutList();
+                    using (new EditorGUI.DisabledScope(locked))
+                    {
+                        shown.Clear();
+                        for (int i = 0; i < list.arraySize; i++)
+                            if (TabOfMode(ModeOf(list.GetArrayElementAtIndex(i))) == Tab)
+                                shown.Add(i);
+                        shownSnapshot = shown.ToArray();
+                        DrawTabNote(list);
+                        GetList(list).DoLayoutList();
+                    }
+                    if (Tab == TabBlendshape)
+                    {
+                        var generate = serializedObject.FindProperty(nameof(VAPParameterBehaviors.generateCorrectives));
+                        EditorGUI.BeginChangeCheck();
+                        bool on = EditorGUILayout.ToggleLeft(GenerateLabel, generate.boolValue);
+                        if (EditorGUI.EndChangeCheck())
+                            generate.boolValue = on;
+                        if (generate.boolValue)
+                            correctives.Draw(locked);
+                    }
                 }
             }
             serializedObject.ApplyModifiedProperties();
@@ -115,7 +124,8 @@ namespace VAP.Editor
             for (int i = 0; i < list.arraySize; i++)
                 counts[TabOfMode(ModeOf(list.GetArrayElementAtIndex(i)))]++;
             counts[TabTrackingKey] = keyList?.arraySize ?? 0;
-            counts[TabCorrectives] = correctives.Count;
+            if (serializedObject.FindProperty(nameof(VAPParameterBehaviors.generateCorrectives)).boolValue)
+                counts[TabBlendshape] += correctives.Count;
             var labels = new GUIContent[TabNames.Length];
             for (int i = 0; i < labels.Length; i++)
                 labels[i] = new GUIContent($"{TabNames[i]} ({counts[i]})", TabTips[i]);

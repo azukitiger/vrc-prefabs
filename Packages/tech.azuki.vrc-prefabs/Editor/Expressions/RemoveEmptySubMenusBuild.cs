@@ -17,7 +17,7 @@ namespace VAP.Editor
 {
     internal static class RemoveEmptySubMenusBuild
     {
-        const string Log = "[VAP Remove Empty Sub Menus] ";
+        const string Log = "[VAP Remove Empty SubMenus] ";
 
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
@@ -108,7 +108,7 @@ namespace VAP.Editor
     public class RemoveEmptySubMenusPlugin : Plugin<RemoveEmptySubMenusPlugin>
     {
         public override string QualifiedName => "tech.azuki.vrc-prefabs.remove-empty-sub-menus";
-        public override string DisplayName => "VAP Remove Empty Sub Menus";
+        public override string DisplayName => "VAP Remove Empty SubMenus";
 
         protected override void Configure()
         {

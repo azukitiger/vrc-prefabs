@@ -345,10 +345,8 @@ namespace VAP.Editor
 
         internal static string FactorProblem(VAPFrameTime.Factor f)
         {
-            if (string.IsNullOrEmpty(f.parameter) || f.parameter == Prefix)
+            if (string.IsNullOrEmpty(f.parameter))
                 return "A factor has no parameter name.";
-            if (!f.parameter.StartsWith(Prefix))
-                return $"\"{f.parameter}\" must start with \"{Prefix}\".";
             if (Defaults().Any(d => d.parameter == f.parameter))
                 return $"\"{f.parameter}\" is already added by default.";
             if (f.kind == VAPFrameTime.Kind.Smoothing && f.value <= 0f)

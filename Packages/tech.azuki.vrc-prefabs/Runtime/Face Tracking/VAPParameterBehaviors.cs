@@ -6,7 +6,8 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/Face Tracking Parameter Behaviors")]
+    [HelpURL(VAPAvatar.Docs + "#vrc-face-tracking-parameter-behaviors")]
+    [AddComponentMenu("VAP/VRC Face Tracking Parameter Behaviors")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPParameterBehaviors : MonoBehaviour, IEditorOnly
     {
@@ -27,6 +28,9 @@ namespace VAP
         [Tooltip("Limits the blendshapes a Blendshapes Set uses for a tracking key or group of keys. " +
                  "Turned into Limit Blendshape behaviors at build time.")]
         public List<TrackingKeyBehavior> trackingKeyBehaviors = new List<TrackingKeyBehavior>();
+
+        [Tooltip("Add Apply to Blendshape behaviors for corrective blendshapes at build time.")]
+        public bool generateCorrectives = true;
 
         [Tooltip("The Blendshapes Set the correctives combine when Per Behavior is on.")]
         public string correctivesSet = "";

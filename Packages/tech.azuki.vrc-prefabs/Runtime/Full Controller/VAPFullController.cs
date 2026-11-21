@@ -6,6 +6,7 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP
 {
+    [HelpURL(VAPAvatar.Docs + "#vrcfury-full-controller")]
     [AddComponentMenu("VAP/VRCFury Full Controller")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPFullController : VAPExpressions, IVRCFuryWrapper

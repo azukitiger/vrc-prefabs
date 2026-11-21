@@ -3,7 +3,8 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/Remove Empty Sub Menus")]
+    [HelpURL(VAPAvatar.Docs + "#vrc-remove-empty-submenus")]
+    [AddComponentMenu("VAP/VRC Remove Empty SubMenus")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPRemoveEmptySubMenus : MonoBehaviour, IEditorOnly
     {

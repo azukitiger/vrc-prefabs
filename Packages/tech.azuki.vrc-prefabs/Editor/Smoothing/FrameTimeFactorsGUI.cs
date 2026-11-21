@@ -12,8 +12,8 @@ namespace VAP.Editor
         static readonly GUIContent DefaultsLabel = new GUIContent("Defaults", "Values every avatar with frame time gets.");
         static readonly GUIContent FactorsLabel = new GUIContent("Custom Factors",
             "Smoothing gives a smoothing factor for the given speed. Linear gives the value multiplied by the frame time, like StepSizeOne. " +
-            "Names always start with VAP/Smooth/. At build time each one is renamed by its value (like VAP/Smooth/Speed2.5 or VAP/Smooth/Linear2) " +
-            "in the animators here, so equal values share one parameter and different values never clash.");
+            "Use the parameter name your animators use. At build time it is renamed by its value (like VAP/Smooth/Speed2.5 or VAP/Smooth/Linear2) " +
+            "in the animators here and made global, so equal values share one parameter and different values never clash.");
         const float KindWidth = 80f;
         const float ValueWidth = 50f;
 
@@ -66,10 +66,7 @@ namespace VAP.Editor
                 rect.height = EditorGUIUtility.singleLineHeight;
                 var (name, kind, value) = Split(rect);
                 var parameter = e.FindPropertyRelative(nameof(VAPFrameTime.Factor.parameter));
-                EditorGUI.BeginChangeCheck();
-                string suffix = NameField(name, parameter.stringValue);
-                if (EditorGUI.EndChangeCheck())
-                    parameter.stringValue = ContactSmoothing.Prefix + suffix.TrimStart('/');
+                EditorGUI.PropertyField(name, parameter, GUIContent.none);
                 EditorGUI.PropertyField(kind, e.FindPropertyRelative(nameof(VAPFrameTime.Factor.kind)), GUIContent.none);
                 EditorGUI.PropertyField(value, e.FindPropertyRelative(nameof(VAPFrameTime.Factor.value)), GUIContent.none);
             };
@@ -90,18 +87,9 @@ namespace VAP.Editor
             rect.xMin += 20f;
             rect.xMax -= 6f;
             var (name, kindRect, valueRect) = Split(rect);
-            NameField(name, parameter);
+            EditorGUI.TextField(name, parameter);
             EditorGUI.EnumPopup(kindRect, kind);
             EditorGUI.TextField(valueRect, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        static string NameField(Rect rect, string value)
-        {
-            string prefix = ContactSmoothing.Prefix;
-            float width = EditorStyles.label.CalcSize(new GUIContent(prefix)).x + 2f;
-            EditorGUI.LabelField(new Rect(rect.x, rect.y, width, rect.height), prefix);
-            return EditorGUI.TextField(new Rect(rect.x + width, rect.y, rect.width - width, rect.height),
-                value.StartsWith(prefix) ? value.Substring(prefix.Length) : value);
         }
 
         static (Rect, Rect, Rect) Split(Rect rect)

@@ -51,9 +51,10 @@ MonoBehaviour:
   parametersAsset: {fileID: 0}
   defaultOverrides: []
   controlOverrides: []
-  wrapped: {fileID: 5527116933560190243}
   frameTime: 1
   frameTimeFactors: []
+  audioClips: []
+  wrapped: {fileID: 5527116933560190243}
 --- !u!114 &67991107304017948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +343,7 @@ MonoBehaviour:
       inputInverted: 
       combineMode: 4
       customExpression: min(TongueDown, max(TongueOut * 2 - 1, 0))
+  generateCorrectives: 1
   correctivesSet: 
   disabledCorrectives: []
 --- !u!114 &5527116933560190243
@@ -358,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1492.0
+  vrcfuryVersion: 1.1493.0
   somethingIsBroken: 0
   config:
     features: []
@@ -453,7 +455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1492.0
+  vrcfuryVersion: 1.1493.0
   somethingIsBroken: 0
   config:
     features: []

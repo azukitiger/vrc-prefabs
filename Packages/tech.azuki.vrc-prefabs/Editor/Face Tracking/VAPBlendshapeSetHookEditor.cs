@@ -23,13 +23,13 @@ namespace VAP.Editor
             "Meshes whose blendshapes are hooked. The ones with blendshapes renamed to the target set are added to the " +
             "avatar's Face Tracking Meshes at build time.");
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Face Tracking BlendShape Set Hook", DrawFields, this);
+        public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("VRC Face Tracking BlendShape Set Hook", DrawFields, this), this);
 
         void DrawFields()
         {
             if (target == null)
                 return;
-            bool locked = VAPPrefabLock.Draw(targets);
+            bool locked = targets.Any(VAPPrefabLock.IsFromPrefab);
             serializedObject.Update();
             var nameProp = serializedObject.FindProperty("blendshapesSet").FindPropertyRelative("setName");
             var formatProp = serializedObject.FindProperty("nameFormat");

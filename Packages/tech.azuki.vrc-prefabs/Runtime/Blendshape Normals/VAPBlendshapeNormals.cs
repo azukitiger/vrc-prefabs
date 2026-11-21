@@ -4,7 +4,8 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/Blendshape Normals")]
+    [HelpURL(VAPAvatar.Docs + "#mesh-blendshape-normals")]
+    [AddComponentMenu("VAP/Mesh Blendshape Normals")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPBlendshapeNormals : MonoBehaviour, IEditorOnly
     {

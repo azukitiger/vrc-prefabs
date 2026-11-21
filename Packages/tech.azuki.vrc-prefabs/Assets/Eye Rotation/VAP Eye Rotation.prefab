@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1492.0
+  vrcfuryVersion: 1.1493.0
   somethingIsBroken: 0
   config:
     features: []
@@ -188,5 +188,6 @@ MonoBehaviour:
     customExpression: (EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight)
       / 2
   trackingKeyBehaviors: []
+  generateCorrectives: 0
   correctivesSet: 
   disabledCorrectives: []

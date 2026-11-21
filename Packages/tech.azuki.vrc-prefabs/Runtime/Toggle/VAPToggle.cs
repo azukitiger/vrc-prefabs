@@ -3,6 +3,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
+    [HelpURL(VAPAvatar.Docs + "#vrcfury-toggle")]
     [AddComponentMenu("VAP/VRCFury Toggle")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPToggle : MonoBehaviour, IEditorOnly, IVRCFuryWrapper

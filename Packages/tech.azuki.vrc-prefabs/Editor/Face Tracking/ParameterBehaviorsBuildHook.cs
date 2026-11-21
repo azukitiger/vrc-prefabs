@@ -60,7 +60,7 @@ namespace VAP.Editor
                 }
 
                 var applied = AppliedBlendshapes(target);
-                foreach (var (c, behaviors) in own)
+                foreach (var (c, behaviors) in own.Where(o => o.Item1.generateCorrectives))
                     foreach (var behavior in Correctives(c, sets, ftShapes, applied, Limits(behaviors)))
                     {
                         Add(behavior);

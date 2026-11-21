@@ -29,7 +29,7 @@ namespace VAP.Editor
             available = new Cached<HashSet<string>>(1.0, Available);
         }
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Blendshape Normals", DrawFields, this);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Mesh Blendshape Normals", DrawFields, this);
 
         HashSet<string> Available()
         {

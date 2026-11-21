@@ -5,6 +5,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
+    [HelpURL(VAPAvatar.Docs + "#frame-time")]
     [AddComponentMenu("")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPFrameTime : MonoBehaviour, IEditorOnly

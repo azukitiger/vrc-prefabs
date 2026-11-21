@@ -21,13 +21,13 @@ namespace VAP.Editor
             var other = VAPAvatar.Other(c);
             if (other != null)
             {
-                EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne("Remove Empty Sub Menus", other), MessageType.Error);
+                EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne("VRC Remove Empty SubMenus", other), MessageType.Error);
                 return;
             }
             EditorGUILayout.LabelField(Status, EditorStyles.miniLabel);
         }
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Remove Empty Sub Menus", Draw, this);
+        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("VRC Remove Empty SubMenus", Draw, this);
     }
 }
 #endif

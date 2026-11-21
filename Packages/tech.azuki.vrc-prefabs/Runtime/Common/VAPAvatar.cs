@@ -7,6 +7,8 @@ namespace VAP
 {
     public static class VAPAvatar
     {
+        public const string Docs = "https://github.com/azukitiger/vrc-prefabs";
+
         public static VRCAvatarDescriptor Descriptor(Component c) =>
             c == null ? null : c.GetComponentInParent<VRCAvatarDescriptor>(true);
 

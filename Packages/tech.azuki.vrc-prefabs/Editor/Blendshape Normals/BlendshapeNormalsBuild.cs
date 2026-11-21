@@ -16,7 +16,7 @@ namespace VAP.Editor
 {
     internal static class BlendshapeNormalsBuild
     {
-        const string Log = "[VAP Blendshape Normals] ";
+        const string Log = "[VAP Mesh Blendshape Normals] ";
 
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
@@ -173,7 +173,7 @@ namespace VAP.Editor
     public class BlendshapeNormalsPlugin : Plugin<BlendshapeNormalsPlugin>
     {
         public override string QualifiedName => "tech.azuki.vrc-prefabs.blendshape-normals";
-        public override string DisplayName => "VAP Blendshape Normals";
+        public override string DisplayName => "VAP Mesh Blendshape Normals";
 
         protected override void Configure()
         {
