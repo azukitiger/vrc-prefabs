@@ -11,6 +11,7 @@
     "bannerUrl": "banner.png",
     "githubRepos": [
         "azukitiger/vrc-prefabs",
-        "bdunderscore/ndmf"
+        "bdunderscore/ndmf",
+        "VRCFury/VRCFury"
     ]
 }

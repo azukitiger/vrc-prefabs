@@ -1,0 +1,6 @@
+{
+    "speeds": [
+        { "name": "Touch", "parameter": "VAP/Smooth/Touch", "speed": 8 },
+        { "name": "Gesture", "parameter": "VAP/Smooth/Gesture", "speed": 20 }
+    ]
+}
