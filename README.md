@@ -45,36 +45,55 @@ Adds a **smooth blink animation** driven by VRChat's eyelid data.
 
 ---
 
-## Ear Twitch Prefab
+## Eye Rotation Prefab
 
-Adds **ear twitches** at random intervals.
+> Works with the **Face Tracking Prefab** for the eye tracking toggle and **Eye Sensitivity**.
+
+Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blendshapes**.
+
+### Features
+- **Eye bones** rotate for both built-in gaze and eye tracking.
+- **Eye Sensitivity** only applies to eye tracking, leaving built-in gaze untouched.
+- **Eyelids** follow the eyes through these `Body` blendshapes:
+  - `EyeLookUpLeft`, `EyeLookDownLeft`, `EyeLookInLeft`, `EyeLookOutLeft`
+  - `EyeLookUpRight`, `EyeLookDownRight`, `EyeLookInRight`, `EyeLookOutRight`
+- **Rotate blendshapes** on `Body`, blended for diagonal looks:
+  - `EyeLookUpLeftRotate`, `EyeLookDownLeftRotate`, `EyeLookInLeftRotate`, `EyeLookOutLeftRotate`
+  - `EyeLookUpRightRotate`, `EyeLookDownRightRotate`, `EyeLookInRightRotate`, `EyeLookOutRightRotate`
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
-2. Use the **Output Animator Parameters** to drive animations.
-3. Optionally, add an expression parameter and toggle for `EarTwitchActive` to disable twitches.
+2. On the **VRC Avatar Descriptor**, set:
+   - **Eye Look** enabled, with:
+     - **Left Eye Bone** and **Right Eye Bone** set to `None`, since the prefab rotates them
+     - **Eye Gaze Mode** set to `Face Tracking`
+   - **Face Tracking** enabled, with **Use All Tracking Keys** on
+3. Adjust `Eye Down-Up` and `Eye In-Out` under the rig's **Muscles & Settings**.
 
-### Included Expression Parameters
+### Input Animator Parameters
 
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| EarTwitchLeft | Bool | Bool | ✔ | Syncs the left ear twitch |
-| EarTwitchRight | Bool | Bool | ✔ | Syncs the right ear twitch |
-
-### Optional Expression Parameters
-
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| EarTwitchActive | Bool | Bool | ✖ | Ear twitch toggle |
+| Property | Animator Type | Description |
+|-|-|-|
+| EyeLeftX | Float | Set by the prefab: `EyeLookInLeft - EyeLookOutLeft` |
+| EyeRightX | Float | Set by the prefab: `EyeLookOutRight - EyeLookInRight` |
+| EyeY | Float | Set by the prefab: `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
+| UserEyeTracking | Float | `1` while the user's own eye tracking is active; required for **Eye Sensitivity** |
+| UserEyeTrackingSensitivity | Float | **Eye Sensitivity** from the **Face Tracking Prefab**; `0` is 1× and `1` is 2× |
+| VAP/EyeLook/EaseOut | Float | Optional; `1` turns off all `EyeLook*` blendshapes |
+| VAP/EyeLook/LeftVerticalEaseOut | Float | Optional; `1` turns off the left eye's up/down `EyeLook*` blendshapes |
+| VAP/EyeLook/RightVerticalEaseOut | Float | Optional; `1` turns off the right eye's up/down `EyeLook*` blendshapes |
+| Derp | Float | Optional; `1` makes the eyes silly, turning both outward with the left looking up and the right looking down; ignores **Eye Sensitivity** |
 
 ### Output Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| VAP/Ear/Left_Twitch | Float | Left ear twitch |
-| VAP/Ear/Right_Twitch | Float | Right ear twitch |
+| VAP/EyeLeftX | Float | Left eye horizontal look, with sensitivity |
+| VAP/EyeRightX | Float | Right eye horizontal look, with sensitivity |
+| VAP/EyeLeftY | Float | Left eye vertical look, with sensitivity |
+| VAP/EyeRightY | Float | Right eye vertical look, with sensitivity |
 
-Both are `10` during a twitch, to override other animations in a direct blend tree.
+> **Warning:** With **Eye Sensitivity**, these outputs range from `-2` to `2`. Use **1D or 2D blend trees**, which stop at their outermost motions, not **Direct blend trees**, which would overdrive the motion up to 2×.
 
 ---
 
@@ -110,56 +129,6 @@ Adds **smoothed gesture values** for blend trees.
 | VAP/GestureRight/Weight | Float | Smoothed right gesture weight |
 | VAP/GestureLeft/[Gesture] | Float | Smoothed value per left gesture: `Idle`, `Fist`, `Open`, `Point`, `Victory`, `Rock&Roll`, `Gun` and `ThumbsUp` |
 | VAP/GestureRight/[Gesture] | Float | Smoothed value per right gesture: `Fist`, `Open`, `Point`, `Victory`, `Rock&Roll`, `Gun` and `ThumbsUp` |
-
----
-
-## Toe Curl System Prefab
-
-Adds **toe curls** with two contact sensors and two rotation constraints.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Add an empty game object with no offset to each **foot** (ex. `Curl_L` and `Curl_R`).
-3. On `Left Curl`, set the contact sensor's `Root Transform` and the rotation constraint's `Target Transform` to `Curl_L`.
-4. On `Right Curl`, set the contact sensor's `Root Transform` and the rotation constraint's `Target Transform` to `Curl_R`.
-5. Set the rotation constraints' `Source Transform` to each **foot**, so the contact sensors don't rotate.
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| Touch/FootLCurl | Float | Raw left toe curl proximity |
-| Touch/FootRCurl | Float | Raw right toe curl proximity |
-
----
-
-## Heartbeat System Prefab
-
-Adds a **heartbeat sound and visual display**.
-
-### Features
-- Synced `float (7 bits)` shared by the Expression Menu and OSC.
-- Synced `bool (1 bit)` toggling the heart rate counter.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Place **Heartbeat Sound** at the chest.
-3. Place **Heartbeat Counter** over the **left hand**, or remove its **VRCFury Armature Link** to attach it elsewhere.
-
----
-
-## GoGo Loco Simplified Prefab
-
-**GoGo Loco controllers and menus**, simplified and improved.
-
-### Features
-- Fixes the **Index controller finger tracking issue**
-- **Feral movement animations** toggle
-- Simplified **menu options**
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Requires GoGo Loco `1.8.6` in the project.
 
 ---
 
@@ -257,77 +226,7 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 
 ---
 
-## Eye Rotation Prefab
-
-> Works with the **Face Tracking Prefab** for the eye tracking toggle and **Eye Sensitivity**.
-
-Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blendshapes**.
-
-### Features
-- **Eye bones** rotate for both built-in gaze and eye tracking.
-- **Eye Sensitivity** only applies to eye tracking, leaving built-in gaze untouched.
-- **Eyelids** follow the eyes through these `Body` blendshapes:
-  - `EyeLookUpLeft`, `EyeLookDownLeft`, `EyeLookInLeft`, `EyeLookOutLeft`
-  - `EyeLookUpRight`, `EyeLookDownRight`, `EyeLookInRight`, `EyeLookOutRight`
-- **Rotate blendshapes** on `Body`, blended for diagonal looks:
-  - `EyeLookUpLeftRotate`, `EyeLookDownLeftRotate`, `EyeLookInLeftRotate`, `EyeLookOutLeftRotate`
-  - `EyeLookUpRightRotate`, `EyeLookDownRightRotate`, `EyeLookInRightRotate`, `EyeLookOutRightRotate`
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. On the **VRC Avatar Descriptor**, set:
-   - **Eye Look** enabled, with:
-     - **Left Eye Bone** and **Right Eye Bone** set to `None`, since the prefab rotates them
-     - **Eye Gaze Mode** set to `Face Tracking`
-   - **Face Tracking** enabled, with **Use All Tracking Keys** on
-3. Adjust `Eye Down-Up` and `Eye In-Out` under the rig's **Muscles & Settings**.
-
-### Input Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| EyeLeftX | Float | Set by the prefab: `EyeLookInLeft - EyeLookOutLeft` |
-| EyeRightX | Float | Set by the prefab: `EyeLookOutRight - EyeLookInRight` |
-| EyeY | Float | Set by the prefab: `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
-| UserEyeTracking | Float | `1` while the user's own eye tracking is active; required for **Eye Sensitivity** |
-| UserEyeTrackingSensitivity | Float | **Eye Sensitivity** from the **Face Tracking Prefab**; `0` is 1× and `1` is 2× |
-| VAP/EyeLook/EaseOut | Float | Optional; `1` turns off all `EyeLook*` blendshapes |
-| VAP/EyeLook/LeftVerticalEaseOut | Float | Optional; `1` turns off the left eye's up/down `EyeLook*` blendshapes |
-| VAP/EyeLook/RightVerticalEaseOut | Float | Optional; `1` turns off the right eye's up/down `EyeLook*` blendshapes |
-| Derp | Float | Optional; `1` makes the eyes silly, turning both outward with the left looking up and the right looking down; ignores **Eye Sensitivity** |
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/EyeLeftX | Float | Left eye horizontal look, with sensitivity |
-| VAP/EyeRightX | Float | Right eye horizontal look, with sensitivity |
-| VAP/EyeLeftY | Float | Left eye vertical look, with sensitivity |
-| VAP/EyeRightY | Float | Right eye vertical look, with sensitivity |
-
-> **Warning:** With **Eye Sensitivity**, these outputs range from `-2` to `2`. Use **1D or 2D blend trees**, which stop at their outermost motions, not **Direct blend trees**, which would overdrive the motion up to 2×.
-
----
-
-## Pupil Focus System Prefab
-
-Adds a **Face Proximity contact receiver** that constricts the pupils when something nears the face.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Place the contact receiver in front of the face, between the eyes.
-3. Use the **Output Animator Parameters** to drive animations.
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/Touch/PupilFocus | Float | Smoothed face proximity |
-| Touch/PupilFocus | Float | Raw face proximity |
-
----
-
-## Pupil Dilation Smoothing Prefab
+## Pupil Dilation Prefab
 
 Combines **pupil dilation** from three sources into one value per eye:
 - **User dilation** set per eye (ex. from the **Expression Menu**).
@@ -360,6 +259,44 @@ Combines **pupil dilation** from three sources into one value per eye:
 | VAP/Pupil/DilationSmoothedInput | Float | Input dilation |
 | VAP/Pupil/LeftEyeClosedInput | Float | Left eye closed amount; above `0.9` adds closed eye dilation |
 | VAP/Pupil/RightEyeClosedInput | Float | Right eye closed amount; above `0.9` adds closed eye dilation |
+
+---
+
+## Pupil Focus System Prefab
+
+Adds a **Face Proximity contact receiver** that constricts the pupils when something nears the face.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Place the contact receiver in front of the face, between the eyes.
+3. Use the **Output Animator Parameters** to drive animations.
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Touch/PupilFocus | Float | Smoothed face proximity |
+| Touch/PupilFocus | Float | Raw face proximity |
+
+---
+
+## Toe Curl System Prefab
+
+Adds **toe curls** with two contact sensors and two rotation constraints.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Add an empty game object with no offset to each **foot** (ex. `Curl_L` and `Curl_R`).
+3. On `Left Curl`, set the contact sensor's `Root Transform` and the rotation constraint's `Target Transform` to `Curl_L`.
+4. On `Right Curl`, set the contact sensor's `Root Transform` and the rotation constraint's `Target Transform` to `Curl_R`.
+5. Set the rotation constraints' `Source Transform` to each **foot**, so the contact sensors don't rotate.
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| Touch/FootLCurl | Float | Raw left toe curl proximity |
+| Touch/FootRCurl | Float | Raw right toe curl proximity |
 
 ---
 
@@ -398,6 +335,69 @@ Sets the wall PhysBone collider with 2 raycasts aiming left and right.
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
 | WallCollider | Bool | Bool | ✔ | Wall collider toggle |
+
+---
+
+## Heartbeat System Prefab
+
+Adds a **heartbeat sound and visual display**.
+
+### Features
+- Synced `float (7 bits)` shared by the Expression Menu and OSC.
+- Synced `bool (1 bit)` toggling the heart rate counter.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Place **Heartbeat Sound** at the chest.
+3. Place **Heartbeat Counter** over the **left hand**, or remove its **VRCFury Armature Link** to attach it elsewhere.
+
+---
+
+## GoGo Loco Simplified Prefab
+
+**GoGo Loco controllers and menus**, simplified and improved.
+
+### Features
+- Fixes the **Index controller finger tracking issue**
+- **Feral movement animations** toggle
+- Simplified **menu options**
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Requires GoGo Loco `1.8.6` in the project.
+
+---
+
+## Ear Twitch Prefab
+
+Adds **ear twitches** at random intervals.
+
+### Instructions
+1. Drag and drop the prefab into the avatar's hierarchy.
+2. Use the **Output Animator Parameters** to drive animations.
+3. Optionally, add an expression parameter and toggle for `EarTwitchActive` to disable twitches.
+
+### Included Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| EarTwitchLeft | Bool | Bool | ✔ | Syncs the left ear twitch |
+| EarTwitchRight | Bool | Bool | ✔ | Syncs the right ear twitch |
+
+### Optional Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| EarTwitchActive | Bool | Bool | ✖ | Ear twitch toggle |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Ear/Left_Twitch | Float | Left ear twitch |
+| VAP/Ear/Right_Twitch | Float | Right ear twitch |
+
+Both are `10` during a twitch, to override other animations in a direct blend tree.
 
 ###
 # Asset Prefabs
