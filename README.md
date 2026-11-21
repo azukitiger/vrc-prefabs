@@ -113,54 +113,6 @@ Adds **smoothed gesture values** for blend trees.
 
 ---
 
-## Smooth Ear Grab Prefab
-
-Adds **smooth ear grabs** that stretch the face.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Set `Ear/Left` and `Ear/Right` as the ear PhysBone parameters.
-3. Use the **Output Animator Parameters** to drive animations.
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/Ear/Left_Stretch | Float | Smoothed left ear stretch while grabbed |
-| VAP/Ear/Right_Stretch | Float | Smoothed right ear stretch while grabbed |
-
----
-
-## Tail Wag Speed Prefab
-
-Controls **tail wag speed**, stopping when the tail is grabbed or a pose is active.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Set `Tail` as the tail PhysBone parameter.
-3. Use the **Output Animator Parameters** to drive animations.
-4. Optionally, use the **Input Animator Parameters** to raise the speed.
-
-### Optional Expression Parameters
-
-| Property | Animator Type | Expression Type | Synced | Description |
-|-|-|-|-|-|
-| TailWagSpeed | Float | Float | ✔ | Tail wag speed menu value |
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/Tail/WagSpeed | Float | Tail wag speed multiplier |
-
-### Input Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/Override/Tail/WagSpeed | Float | Overrides the minimum wag speed |
-
----
-
 ## Toe Curl System Prefab
 
 Adds **toe curls** with two contact sensors and two rotation constraints.
