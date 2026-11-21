@@ -7,9 +7,6 @@ namespace VAP
     [Icon(IconPath)]
     public class VAPFaceTrackingDebug : VAPBlendshapeSetBase
     {
-        [SerializeField, HideInInspector] string setName;
-        [SerializeField, HideInInspector] float setWeight = -1f;
-
         void Reset()
         {
             blendshapesSet = new VRCAvatarDescriptor.FaceTrackingBlendshapesSet { setName = "Debug", setWeight = 1f };
@@ -20,16 +17,6 @@ namespace VAP
         {
             if (blendshapesSet == null)
                 blendshapesSet = new VRCAvatarDescriptor.FaceTrackingBlendshapesSet { setName = "Debug", setWeight = 1f };
-            if (!string.IsNullOrEmpty(setName))
-            {
-                blendshapesSet.setName = setName;
-                setName = null;
-            }
-            if (setWeight >= 0f)
-            {
-                blendshapesSet.setWeight = setWeight;
-                setWeight = -1f;
-            }
         }
 #endif
     }

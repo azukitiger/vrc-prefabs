@@ -21,7 +21,7 @@ namespace VAP.Editor
         internal static float BoxHeaderHeight => Line + EditorStyles.helpBox.padding.vertical;
 
         internal static string OnlyOne(string what, Component other) =>
-            $"This {what} does nothing because \"{other.name}\" already has one.";
+            $"This {what} does nothing because \"{other.name}\" game object already has one.";
 
         internal static Action<string> Setter(SerializedProperty prop)
         {

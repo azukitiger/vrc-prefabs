@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5122133022090774766}
-  - component: {fileID: 2893366470340116506}
   m_Layer: 0
   m_Name: VAP Pupil Focus System
   m_TagString: Untagged
@@ -35,79 +34,6 @@ Transform:
   - {fileID: 3787399266653994888}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2893366470340116506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2372671203836717146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9e94e501a2d4c95bff3d5601013d923, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
-  somethingIsBroken: 0
-  config:
-    features: []
-  content:
-    rid: 270954893063749993
-  references:
-    version: 2
-    RefIds:
-    - rid: 270954893063749993
-      type: {class: FullController, ns: VF.Model.Feature, asm: VRCFury}
-      data:
-        version: 4
-        controllers:
-        - controller:
-            version: 1
-            fileID: 0
-            guid: 
-            id: 2fb7e4164b15e7649821ec4864f30372|Packages/tech.azuki.vrc-prefabs/Assets/Pupil
-              Focus System/Pupil Focus System Animator.controller
-            objRef: {fileID: 9100000, guid: 2fb7e4164b15e7649821ec4864f30372, type: 2}
-          type: 5
-        menus: []
-        prms: []
-        smoothedPrms: []
-        globalParams:
-        - '*'
-        allNonsyncedAreGlobal: 0
-        ignoreSaved: 0
-        toggleParam: 
-        rootObjOverride: {fileID: 0}
-        rootBindingsApplyToAvatar: 0
-        rewriteBindings: []
-        allowMissingAssets: 0
-        injectParams: []
-        injectSpsDepthParam: 
-        injectSpsVelocityParam: 
-        controller:
-          version: 1
-          fileID: 0
-          guid: 
-          id: 
-          objRef: {fileID: 0}
-        menu:
-          version: 1
-          fileID: 0
-          guid: 
-          id: 
-          objRef: {fileID: 0}
-        parameters:
-          version: 1
-          fileID: 0
-          guid: 
-          id: 
-          objRef: {fileID: 0}
-        submenu: 
-        removePrefixes: []
-        addPrefix: 
-        useSecurityForToggle: 0
 --- !u!1 &2449118438098044643
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,8 +79,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1429.0
+  unityVersion: 6000.0.67f1
+  vrcfuryVersion: 1.1493.0
   somethingIsBroken: 0
   config:
     features: []
@@ -204,6 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5581113790967267743}
   - component: {fileID: 5628966336518550058}
+  - component: {fileID: 3886550664735578999}
   m_Layer: 0
   m_Name: Pupil Focus Contact Receiver
   m_TagString: Untagged
@@ -259,6 +186,45 @@ MonoBehaviour:
   receiverType: 2
   parameter: Touch/PupilFocus
   minVelocity: 0.05
+  writeToMaterials: 0
+  writeToMaterialsContactTags: 0
+  separateShaderParameter: 
+  shaderTargetRenderers: []
+  advancedParameters: 0
+--- !u!114 &3886550664735578999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257299642506057003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e932c5148ef4ec8a9c260f910f1a70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outputParameter: 
+  smoothing: Touch
+  customSpeed: 12
+  splitSmoothing: 0
+  decreaseSmoothing: Touch
+  decreaseCustomSpeed: 12
+  passes: 0
+  timer: 0
+  timerParameter: 
+  transformOutput: 0
+  transformParameter: 
+  transformBeforeSmoothing: 0
+  transformPoints:
+  - position: {x: 0, y: 0}
+    value: 0
+  - position: {x: 1, y: 0}
+    value: 0
+  - position: {x: 0, y: 1}
+    value: 0
+  - position: {x: 1, y: 1}
+    value: 1
+  contactParameter: 
 --- !u!1 &5873595125106950067
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +272,7 @@ MonoBehaviour:
   IsActive: 1
   GlobalWeight: 2
   TargetTransform: {fileID: 4543824115445865282}
+  SmoothingFactor: 0
   SolveInLocalSpace: 0
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0

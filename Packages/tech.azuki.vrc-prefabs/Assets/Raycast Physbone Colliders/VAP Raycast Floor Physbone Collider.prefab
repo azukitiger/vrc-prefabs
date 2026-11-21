@@ -71,6 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1962815490794609016}
+  - component: {fileID: 5842517615213762670}
   - component: {fileID: 2171512906711503933}
   m_Layer: 0
   m_Name: VAP Raycast Floor Physbone Collider
@@ -95,6 +96,26 @@ Transform:
   - {fileID: 7623723731988096115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5842517615213762670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5731977128526610642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e081b1046ec462428b1dac7b70e9feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 0}
+  parametersAsset: {fileID: 0}
+  defaultOverrides: []
+  controlOverrides: []
+  frameTime: 0
+  frameTimeFactors: []
+  audioClips: []
+  wrapped: {fileID: 2171512906711503933}
 --- !u!114 &2171512906711503933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1434.1-beta.13
+  unityVersion: 6000.0.67f1
+  vrcfuryVersion: 1.1493.0
   somethingIsBroken: 0
   config:
     features: []
@@ -151,7 +172,6 @@ MonoBehaviour:
         smoothedPrms: []
         globalParams:
         - '*'
-        allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
         rootObjOverride: {fileID: 0}
@@ -163,8 +183,11 @@ MonoBehaviour:
         faceTrackingMeshes: []
         faceTrackingBlendshapeSets: []
         faceTrackingParameterBehaviors: []
+        visemeDampenMode: 0
+        visemeDampenAmount: 1
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
+        allNonsyncedAreGlobal: 0
         controller:
           version: 1
           fileID: 0
@@ -244,3 +267,4 @@ MonoBehaviour:
   globalCollisionAllowOthers: 1
   globalCollisionFlags: 0
   _globalCollisionSerializationVersion: 1
+  globalIgnoredPhysBones: []

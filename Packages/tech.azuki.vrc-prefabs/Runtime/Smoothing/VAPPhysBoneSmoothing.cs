@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/PhysBone Smoothing")]
+    [AddComponentMenu("VAP/VRC PhysBone Smoothing")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPPhysBoneSmoothing : VAPSmoothing
     {

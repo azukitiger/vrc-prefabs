@@ -49,6 +49,7 @@ MonoBehaviour:
   shapeType: 0
   radius: 1
   height: 2
+  size: {x: 1, y: 1, z: 1}
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
@@ -57,9 +58,15 @@ MonoBehaviour:
   - FootL
   allowSelf: 1
   allowOthers: 0
+  useFaceProximity: 0
   receiverType: 2
   parameter: Touch/FootLCurl
   minVelocity: 0.05
+  writeToMaterials: 0
+  writeToMaterialsContactTags: 0
+  separateShaderParameter: 
+  shaderTargetRenderers: []
+  advancedParameters: 0
 --- !u!114 &5929301160384339604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,6 +82,7 @@ MonoBehaviour:
   IsActive: 1
   GlobalWeight: 1
   TargetTransform: {fileID: 0}
+  SmoothingFactor: 0
   SolveInLocalSpace: 1
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0
@@ -193,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2493920167643243933}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4236996, y: -0, z: -0, w: 0.9058028}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -201,7 +209,7 @@ Transform:
   - {fileID: 1929758824455422235}
   - {fileID: 227816627409064661}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50.137, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7825356732473826648
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +259,7 @@ MonoBehaviour:
   shapeType: 0
   radius: 1
   height: 2
+  size: {x: 1, y: 1, z: 1}
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   localOnly: 0
@@ -259,9 +268,15 @@ MonoBehaviour:
   - FootR
   allowSelf: 1
   allowOthers: 0
+  useFaceProximity: 0
   receiverType: 2
   parameter: Touch/FootRCurl
   minVelocity: 0.05
+  writeToMaterials: 0
+  writeToMaterialsContactTags: 0
+  separateShaderParameter: 
+  shaderTargetRenderers: []
+  advancedParameters: 0
 --- !u!114 &2161729171962079893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +292,7 @@ MonoBehaviour:
   IsActive: 1
   GlobalWeight: 1
   TargetTransform: {fileID: 0}
+  SmoothingFactor: 0
   SolveInLocalSpace: 1
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0

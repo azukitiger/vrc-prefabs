@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using VRC.SDKBase;
 
@@ -40,11 +41,32 @@ namespace VAP
         [Tooltip("Animator parameter that receives the time. If empty, the output parameter followed by Timer.")]
         public string timerParameter = "";
 
-        [Tooltip("Multiply the smoothed output by another parameter, like a PhysBone Stretch that fades in and out with a smoothed IsGrabbed.")]
-        public bool multiply = false;
+        [System.Serializable]
+        public struct TransformPoint
+        {
+            public Vector2 position;
+            public float value;
+        }
 
-        [Tooltip("Parameter the smoothed output is multiplied by. It is not smoothed itself. If empty, the first other parameter found is used.")]
-        public string multiplyParameter = "";
+        [Tooltip("Map the smoothed value and another parameter to the output with a 2D blend, like a PhysBone Stretch that fades in and out with a smoothed IsGrabbed.")]
+        public bool transformOutput = false;
+
+        [Tooltip("Parameter used as the Y axis. It is not smoothed itself. If empty, the first other parameter found is used.")]
+        public string transformParameter = "";
+
+        [Tooltip("Transform the input before it is smoothed, so the smoothing follows the 2D blend result. Off transforms the smoothed value instead.")]
+        public bool transformBeforeSmoothing = false;
+
+        [Tooltip("Output value at each point. X is the smoothed value, Y is the transform parameter.")]
+        public List<TransformPoint> transformPoints = DefaultPoints();
+
+        public static List<TransformPoint> DefaultPoints() => new List<TransformPoint>
+        {
+            new TransformPoint { position = new Vector2(0f, 0f), value = 0f },
+            new TransformPoint { position = new Vector2(1f, 0f), value = 0f },
+            new TransformPoint { position = new Vector2(0f, 1f), value = 0f },
+            new TransformPoint { position = new Vector2(1f, 1f), value = 1f },
+        };
 
         public abstract string InputParameter { get; }
     }

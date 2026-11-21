@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,14 +18,17 @@ namespace VAP.Editor
             "The VRC PhysBone IsGrabbed, IsPosed, Angle, Stretch or Squish parameter to smooth, from a component on this object.");
         static readonly GUIContent OutputLabel = new GUIContent("Output Parameter",
             "Animator parameter that receives the smoothed value. If empty, VAP/ followed by the input parameter.");
-        static readonly GUIContent SmoothingLabel = new GUIContent("Smoothing",
+        static readonly GUIContent SmoothingLabel = new GUIContent("Smoothing Factor",
             "How fast the output follows the input. Custom sets your own speed.");
-        static readonly GUIContent IncreaseLabel = new GUIContent("Increase Smoothing",
+        static readonly GUIContent IncreaseLabel = new GUIContent("Rise Factor",
             "Smoothing used when the value goes up. None follows the input directly.");
-        static readonly GUIContent DecreaseLabel = new GUIContent("Decrease Smoothing",
+        static readonly GUIContent DecreaseLabel = new GUIContent("Drop Factor",
             "Smoothing used when the value goes down. None follows the input directly.");
-        static readonly GUIContent SplitLabel = new GUIContent("Split Increase / Decrease",
-            "Use a different smoothing when the value goes down than when it goes up.");
+        static GUIContent linkedIcon, unlinkedIcon;
+        static GUIContent LinkedIcon => linkedIcon ??= new GUIContent(EditorGUIUtility.IconContent("Linked").image,
+            "Rise and drop use the same factor. Click to set them separately.");
+        static GUIContent UnlinkedIcon => unlinkedIcon ??= new GUIContent(EditorGUIUtility.IconContent("Unlinked").image,
+            "Rise and drop use separate factors. Click to use one factor for both.");
         static readonly GUIContent PassesLabel = new GUIContent("Passes",
             "Double smooths through an extra hidden step for a softer curve. Single moves the output straight toward the input.");
         static readonly GUIContent SpeedLabel = new GUIContent("Speed", "Higher follows faster. Touch is 8, Gesture is 20.");
@@ -33,10 +37,16 @@ namespace VAP.Editor
         static readonly GUIContent TimerParameterLabel = new GUIContent("Timer Parameter",
             "Animator parameter that receives the touch time. If empty, the output parameter followed by Timer.");
 
-        static readonly GUIContent MultiplyLabel = new GUIContent("Multiply Output Parameter",
-            "Multiply the smoothed output by another parameter, like a PhysBone Stretch that fades in and out with a smoothed IsGrabbed.");
-        static readonly GUIContent MultiplyByLabel = new GUIContent("Multiply By",
-            "Parameter the smoothed output is multiplied by. It is not smoothed itself.");
+        static readonly GUIContent TransformLabel = new GUIContent("Transform Output",
+            "Map the smoothed value and another parameter to the output with a 2D blend, like a PhysBone Stretch that fades in and out with a smoothed IsGrabbed.");
+        static readonly GUIContent TransformByLabel = new GUIContent("Y Parameter",
+            "Parameter used as the Y axis. It is not smoothed itself.");
+        static readonly GUIContent BeforeLabel = new GUIContent("Apply Before Smoothing",
+            "Transform the input before it is smoothed, so the smoothing follows the 2D blend result. Off transforms the smoothed value.");
+        static readonly GUIContent PointsTooltip = new GUIContent("", "Drag points in the graph to move them, hold Shift to move freely.");
+
+        readonly CartesianGraph graph = new CartesianGraph();
+        ReorderableList pointList;
 
         static GUIStyle placeholderStyle;
         static GUIStyle PlaceholderStyle => placeholderStyle ??= new GUIStyle(EditorStyles.label)
@@ -48,7 +58,7 @@ namespace VAP.Editor
         bool PhysBone => target is VAPPhysBoneSmoothing;
 
         public override VisualElement CreateInspectorGUI() =>
-            VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create(PhysBone ? "PhysBone Smoothing" : "Contact Smoothing", DrawFields, this), this);
+            VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create(PhysBone ? "VRC PhysBone Smoothing" : "VRC Contact Smoothing", DrawFields, this), this);
 
         void DrawFields()
         {
@@ -63,19 +73,17 @@ namespace VAP.Editor
                     DrawInput(c);
                 var split = serializedObject.FindProperty(nameof(VAPSmoothing.splitSmoothing));
                 bool splitOn = split.boolValue && !split.hasMultipleDifferentValues;
-                DrawSmoothing(nameof(VAPSmoothing.smoothing), nameof(VAPSmoothing.customSpeed), splitOn ? IncreaseLabel : SmoothingLabel, splitOn);
-                EditorGUILayout.PropertyField(split, SplitLabel);
+                DrawSmoothing(nameof(VAPSmoothing.smoothing), nameof(VAPSmoothing.customSpeed), splitOn ? IncreaseLabel : SmoothingLabel, splitOn, split);
                 if (splitOn)
                     DrawSmoothing(nameof(VAPSmoothing.decreaseSmoothing), nameof(VAPSmoothing.decreaseCustomSpeed), DecreaseLabel, true);
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(VAPSmoothing.passes)), PassesLabel);
                 string output = single ? ContactSmoothing.Output(c, ContactSmoothing.Input(c)) : null;
                 Field(nameof(VAPSmoothing.outputParameter), OutputLabel, output);
                 EditorGUILayout.Space(4f);
-                ToggleBox(nameof(VAPSmoothing.multiply), MultiplyLabel, () =>
+                ToggleBox(nameof(VAPSmoothing.transformOutput), TransformLabel, () =>
                 {
                     if (single)
-                        Pick(MultiplyByLabel, serializedObject.FindProperty(nameof(VAPSmoothing.multiplyParameter)), ContactSmoothing.Parameters(c),
-                            ContactSmoothing.Factor(c, ContactSmoothing.Input(c)));
+                        DrawTransform(c);
                 });
                 ToggleBox(nameof(VAPSmoothing.timer), TimerLabel, () =>
                     Field(nameof(VAPSmoothing.timerParameter), TimerParameterLabel, output == null ? null : output + "Timer"));
@@ -91,6 +99,79 @@ namespace VAP.Editor
             else
                 foreach (var (name, by) in ContactSmoothing.Repeats(c))
                     EditorGUILayout.HelpBox(ContactSmoothing.RepeatMessage(name, by), MessageType.Error);
+        }
+
+        void DrawTransform(VAPSmoothing c)
+        {
+            string input = ContactSmoothing.Input(c);
+            string axis = ContactSmoothing.Axis(c, input);
+            Pick(TransformByLabel, serializedObject.FindProperty(nameof(VAPSmoothing.transformParameter)), ContactSmoothing.Parameters(c), axis);
+            var before = serializedObject.FindProperty(nameof(VAPSmoothing.transformBeforeSmoothing));
+            EditorGUILayout.PropertyField(before, BeforeLabel);
+            string xName = VAPEditorGUI.MenuName(input ?? "Input") + (before.boolValue ? "" : " (smoothed)");
+            var points = serializedObject.FindProperty(nameof(VAPSmoothing.transformPoints));
+            EditorGUILayout.Space(2f);
+            int wasSelected = graph.selected = pointList?.index ?? -1;
+            if (graph.Draw(points, nameof(VAPSmoothing.TransformPoint.position), nameof(VAPSmoothing.TransformPoint.value),
+                xName, VAPEditorGUI.MenuName(axis ?? "None")) || graph.selected != wasSelected)
+                Repaint();
+            GUI.Label(GUILayoutUtility.GetLastRect(), PointsTooltip);
+            EditorGUILayout.Space(2f);
+            pointList ??= PointList(points);
+            pointList.serializedProperty = points;
+            if (graph.selected != pointList.index)
+                pointList.index = graph.selected;
+            pointList.DoLayoutList();
+        }
+
+        ReorderableList PointList(SerializedProperty points)
+        {
+            const float gap = 4f;
+            var list = new ReorderableList(serializedObject, points, true, true, true, true);
+            Rect[] Columns(Rect r)
+            {
+                float w = (r.width - gap * 2f) / 3f;
+                return new[]
+                {
+                    new Rect(r.x, r.y, w, r.height),
+                    new Rect(r.x + w + gap, r.y, w, r.height),
+                    new Rect(r.x + (w + gap) * 2f, r.y, w, r.height),
+                };
+            }
+            list.drawHeaderCallback = r =>
+            {
+                r.xMin += 14f;
+                var cols = Columns(r);
+                EditorGUI.LabelField(cols[0], "Pos X");
+                EditorGUI.LabelField(cols[1], "Pos Y");
+                EditorGUI.LabelField(cols[2], new GUIContent("Value", "Value at this point. With Apply Before Smoothing on it is what gets smoothed, otherwise it is the output."));
+            };
+            list.drawElementCallback = (r, i, active, focused) =>
+            {
+                var element = list.serializedProperty.GetArrayElementAtIndex(i);
+                var position = element.FindPropertyRelative(nameof(VAPSmoothing.TransformPoint.position));
+                var value = element.FindPropertyRelative(nameof(VAPSmoothing.TransformPoint.value));
+                r.y += 1f;
+                r.height = EditorGUIUtility.singleLineHeight;
+                var cols = Columns(r);
+                var p = position.vector2Value;
+                EditorGUI.BeginChangeCheck();
+                p.x = EditorGUI.FloatField(cols[0], p.x);
+                p.y = EditorGUI.FloatField(cols[1], p.y);
+                if (EditorGUI.EndChangeCheck())
+                    position.vector2Value = p;
+                EditorGUI.PropertyField(cols[2], value, GUIContent.none);
+            };
+            list.onAddCallback = l =>
+            {
+                var prop = l.serializedProperty;
+                prop.arraySize++;
+                var element = prop.GetArrayElementAtIndex(prop.arraySize - 1);
+                element.FindPropertyRelative(nameof(VAPSmoothing.TransformPoint.position)).vector2Value = new Vector2(0.5f, 0.5f);
+                element.FindPropertyRelative(nameof(VAPSmoothing.TransformPoint.value)).floatValue = 0f;
+                l.index = prop.arraySize - 1;
+            };
+            return list;
         }
 
         void DrawInput(VAPSmoothing c)
@@ -120,7 +201,7 @@ namespace VAP.Editor
                 prop.stringValue = found[picked];
         }
 
-        void DrawSmoothing(string property, string customProperty, GUIContent label, bool allowNone)
+        void DrawSmoothing(string property, string customProperty, GUIContent label, bool allowNone, SerializedProperty link = null)
         {
             var smoothing = serializedObject.FindProperty(property);
             var values = SmoothingSpeeds.Entries.Select(e => e.name).Append("").ToList();
@@ -134,15 +215,32 @@ namespace VAP.Editor
                 index = options.Count;
                 options.Add(new GUIContent(current + " (missing)"));
             }
+            bool custom = !smoothing.hasMultipleDifferentValues && string.IsNullOrEmpty(smoothing.stringValue);
+            var rect = EditorGUI.PrefixLabel(EditorGUILayout.GetControlRect(), label);
+            if (link != null)
+            {
+                var icon = new Rect(rect.x - 20f, rect.y, 18f, rect.height);
+                bool linked = !link.boolValue || link.hasMultipleDifferentValues;
+                if (GUI.Button(icon, linked ? LinkedIcon : UnlinkedIcon, EditorStyles.iconButton))
+                    link.boolValue = linked;
+            }
+            var popupRect = rect;
+            if (custom)
+                popupRect.width = (rect.width - 4f) * 0.5f;
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
             EditorGUI.showMixedValue = smoothing.hasMultipleDifferentValues;
             EditorGUI.BeginChangeCheck();
-            int picked = EditorGUILayout.Popup(label, index, options.ToArray());
+            int picked = EditorGUI.Popup(popupRect, index, options.ToArray());
             if (EditorGUI.EndChangeCheck() && picked < values.Count)
                 smoothing.stringValue = values[picked];
             EditorGUI.showMixedValue = false;
-            if (!smoothing.hasMultipleDifferentValues && string.IsNullOrEmpty(smoothing.stringValue))
-                using (new EditorGUI.IndentLevelScope())
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty(customProperty), SpeedLabel);
+            if (custom)
+            {
+                var speedRect = new Rect(popupRect.xMax + 4f, rect.y, rect.xMax - popupRect.xMax - 4f, rect.height);
+                EditorGUI.PropertyField(speedRect, serializedObject.FindProperty(customProperty), new GUIContent("", SpeedLabel.tooltip));
+            }
+            EditorGUI.indentLevel = indent;
         }
 
         static string Display(string value)

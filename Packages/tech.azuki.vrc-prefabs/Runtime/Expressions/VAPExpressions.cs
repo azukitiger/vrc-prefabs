@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using VRC.SDKBase;
 
@@ -12,7 +11,6 @@ namespace VAP
     public abstract class VAPExpressions : MonoBehaviour, IEditorOnly
     {
         [Tooltip("The Expressions Menu asset. It is never changed; values set here are applied to a copy at build time.")]
-        [FormerlySerializedAs("asset")]
         public VRCExpressionsMenu menuAsset;
 
         [Tooltip("The Expression Parameters asset. It is never changed; values set here are applied to a copy at build time.")]

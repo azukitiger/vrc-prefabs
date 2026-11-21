@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/Contact Smoothing")]
+    [AddComponentMenu("VAP/VRC Contact Smoothing")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPContactSmoothing : VAPSmoothing
     {
