@@ -5,8 +5,7 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/VRC Avatar Descriptor Expressions")]
-    [DisallowMultipleComponent]
+    [AddComponentMenu("VAP/VRC Avatar Descriptor")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPDescriptorExpressions : VAPExpressions
     {

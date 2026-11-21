@@ -25,19 +25,14 @@ namespace VAP.Editor
             var swaps = new List<(Component owner, Object original, Object copy)>();
             var components = avatarRoot.GetComponentsInChildren<VAPExpressions>(true);
             var parameterCopies = new Dictionary<VAPExpressions, List<VRCExpressionParameters>>();
-            var descriptorUsed = false;
             foreach (var c in components)
             {
                 if (c is VAPFullController f)
                     FullControllerSource.Resolve(f);
-                if (c is VAPDescriptorExpressions)
+                if (c is VAPDescriptorExpressions d && d.Other() is VAPDescriptorExpressions other)
                 {
-                    if (descriptorUsed)
-                    {
-                        Debug.LogError(Log + $"{c.name}: only one VRC Avatar Descriptor Expressions is allowed per avatar; this one was skipped.", c);
-                        continue;
-                    }
-                    descriptorUsed = true;
+                    Debug.LogError(Log + $"{c.name}: does nothing because \"{other.name}\" already has a VRC Avatar Descriptor; skipped.", c);
+                    continue;
                 }
                 var roots = c.RootMenus();
                 var parameterAssets = c.ParameterAssets();

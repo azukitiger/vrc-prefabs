@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3091714829160834213}
+  - component: {fileID: 5340450107798870515}
   - component: {fileID: 2931219261481226998}
   m_Layer: 0
   m_Name: VAP Smooth Ear Grab
@@ -32,6 +33,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5340450107798870515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4797314159395938030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e081b1046ec462428b1dac7b70e9feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 0}
+  parametersAsset: {fileID: 0}
+  defaultOverrides: []
+  controlOverrides: []
+  frameTime: 1
+  frameTimeFactors: []
+  audioClips: []
+  wrapped: {fileID: 2931219261481226998}
 --- !u!114 &2931219261481226998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,8 +66,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1382.0
+  unityVersion: 6000.0.67f1
+  vrcfuryVersion: 1.1492.0
   somethingIsBroken: 0
   config:
     features: []
@@ -74,16 +95,22 @@ MonoBehaviour:
         globalParams:
         - '*'
         - '!Proxy/*'
-        allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
         rootObjOverride: {fileID: 0}
         rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
         rewriteBindings: []
         allowMissingAssets: 0
         injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets: []
+        faceTrackingParameterBehaviors: []
+        visemeDampenMode: 0
+        visemeDampenAmount: 1
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
+        allNonsyncedAreGlobal: 0
         controller:
           version: 1
           fileID: 0

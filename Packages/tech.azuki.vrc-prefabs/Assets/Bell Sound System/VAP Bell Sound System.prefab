@@ -52,7 +52,12 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0, w: 1}
   bonesAsSpheres: 0
+  globalCollision: 0
+  globalCollisionAllowSelf: 1
+  globalCollisionAllowOthers: 1
   globalCollisionFlags: 0
+  _globalCollisionSerializationVersion: 1
+  globalIgnoredPhysBones: []
 --- !u!1 &6449109681641611767
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +310,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8475762421160494973}
+  - component: {fileID: 3160158547393644563}
   - component: {fileID: 3257761099740381857}
   m_Layer: 0
   m_Name: VAP Bell Sound System
@@ -331,6 +337,29 @@ Transform:
   - {fileID: 7748620987462094373}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3160158547393644563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8475762421160494962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e081b1046ec462428b1dac7b70e9feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 0}
+  parametersAsset: {fileID: 0}
+  defaultOverrides: []
+  controlOverrides: []
+  frameTime: 1
+  frameTimeFactors:
+  - parameter: VAP/Smooth/Proxy/Smoothing/Velocity
+    kind: 0
+    value: 4
+  audioClips: []
+  wrapped: {fileID: 3257761099740381857}
 --- !u!114 &3257761099740381857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,8 +373,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1382.0
+  unityVersion: 6000.0.67f1
+  vrcfuryVersion: 1.1492.0
   somethingIsBroken: 0
   config:
     features: []
@@ -374,16 +403,22 @@ MonoBehaviour:
         - FXWeight
         - ScaleFactor
         - FrameTime
-        allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
         rootObjOverride: {fileID: 0}
         rootBindingsApplyToAvatar: 0
+        overwriteLocomotion: 1
         rewriteBindings: []
         allowMissingAssets: 0
         injectParams: []
+        faceTrackingMeshes: []
+        faceTrackingBlendshapeSets: []
+        faceTrackingParameterBehaviors: []
+        visemeDampenMode: 0
+        visemeDampenAmount: 1
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
+        allNonsyncedAreGlobal: 0
         controller:
           version: 1
           fileID: 0
@@ -449,7 +484,8 @@ AudioSource:
   m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 49c9003f5c1535c4a991b8f4c0c8b866, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 49c9003f5c1535c4a991b8f4c0c8b866, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0
   m_Pitch: 1

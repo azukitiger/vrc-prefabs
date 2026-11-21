@@ -3,24 +3,6 @@
 # Avatar Prefabs
 Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
 
-## Frame Time Prefab
-
-Adds a **Frame Time system**, required by most other prefabs.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| FrameTime | Float | Calculated frame time |
-| VAP/Smooth/Gesture | Float | Smoothing factor for gestures |
-| VAP/Smooth/Touch | Float | Smoothing factor for touch interactions |
-| VAP/Smooth/StepSizeOne | Float | Step increment applied every second |
-
----
-
 ## Better Blink Prefab
 
 Adds a **smooth blink animation** driven by VRChat's eyelid data.
@@ -98,8 +80,6 @@ Both are `10` during a twitch, to override other animations in a direct blend tr
 
 ## Logarithmic Gestures Prefab
 
-> Requires the **Frame Time Prefab**.
-
 Adds **smoothed gesture values** for blend trees.
 
 ### Instructions
@@ -134,8 +114,6 @@ Adds **smoothed gesture values** for blend trees.
 ---
 
 ## Smooth Ear Grab Prefab
-
-> Requires the **Frame Time Prefab**.
 
 Adds **smooth ear grabs** that stretch the face.
 
@@ -235,7 +213,7 @@ Adds a **heartbeat sound and visual display**.
 
 ## Face Tracking Prefab
 
-> Requires the **Frame Time Prefab**. Works with the **Better Blink Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
+> Works with the **Better Blink Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
 
 VRChat drives and smooths the **Unified Expressions** blendshapes through the descriptor's **Blendshapes Sets**, so this prefab only handles the rest.
 
@@ -375,8 +353,6 @@ Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blend
 ---
 
 ## Pupil Focus System Prefab
-
-> Requires the **Frame Time Prefab**.
 
 Adds a **Face Proximity contact receiver** that constricts the pupils when something nears the face.
 

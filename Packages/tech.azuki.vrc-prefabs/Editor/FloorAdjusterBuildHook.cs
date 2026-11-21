@@ -22,11 +22,12 @@ namespace VAP.Editor
             var all = avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(true);
             if (all.Length == 0)
                 return;
-            var active = avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(false);
-            if (active.Length > 1)
-                Debug.LogWarning(Log + "More than one active Floor Adjuster; none were applied.", avatarRoot);
-            else if (active.Length == 1)
-                Apply(avatarRoot, active[0], saveAsset);
+            var used = VAPAvatar.First<VAPFloorAdjuster>(all[0], false);
+            foreach (var c in avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(false))
+                if (c != used)
+                    Debug.LogWarning(Log + $"{c.name}: does nothing because \"{used.name}\" already has a Floor Adjuster.", c);
+            if (used != null)
+                Apply(avatarRoot, used, saveAsset);
 
             foreach (var c in all)
                 Object.DestroyImmediate(c);

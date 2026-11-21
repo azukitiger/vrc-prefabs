@@ -21,6 +21,15 @@ namespace VAP
         public List<DefaultOverride> defaultOverrides = new List<DefaultOverride>();
         public List<ControlOverride> controlOverrides = new List<ControlOverride>();
 
+        [Tooltip("Add frame time to the avatar and make its parameters available to the animators.")]
+        public bool frameTime = false;
+
+        [Tooltip("Extra values added to the frame time for the animators.")]
+        public List<VAPFrameTime.Factor> frameTimeFactors = new List<VAPFrameTime.Factor>();
+
+        [Tooltip("Clips for the VRC Animator Play Audio behaviours in the animators, applied at build time.")]
+        public List<VAPPlayAudioClips.Entry> audioClips = new List<VAPPlayAudioClips.Entry>();
+
         [Serializable]
         public class DefaultOverride
         {

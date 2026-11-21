@@ -20,12 +20,12 @@ namespace VAP.Editor
 {
     internal static class ContactSmoothing
     {
-        const string Log = "[VAP Contact Smoothing] ";
-        const string LayerName = "VAP Contact Smoothing";
-        const string One = "One";
-        const string Delta = "Delta";
-        const string StepSize = "VAP/Smooth/StepSizeOne";
+        const string Log = "[VAP Smoothing] ";
+        internal const string Prefix = "VAP/Smooth/";
+        const string StepSize = Prefix + "StepSizeOne";
         const string ReceiverType = "VRCContactReceiver";
+        const string PhysBoneType = "VRCPhysBone";
+        static readonly string[] PhysBoneSuffixes = { "_IsGrabbed", "_IsPosed", "_Angle", "_Stretch", "_Squish" };
         const string FrameTimeGuid = "d98fd14472eed544694d47b4b61947df";
         const string FrameTimePrefabGuid = "2e48dbcd6b001364bb18b2e986ba24cd";
         const string FrameTime = "FrameTime";
@@ -37,7 +37,7 @@ namespace VAP.Editor
 
         internal struct Contact
         {
-            internal string input, output, pass, timer;
+            internal string input, output, pass, delta, timer;
         }
 
         internal static string Parameter(Component receiver)
@@ -47,24 +47,31 @@ namespace VAP.Editor
             return string.IsNullOrEmpty(value) ? null : value;
         }
 
-        internal static List<string> Parameters(VAPContactSmoothing c) =>
-            c.GetComponentsInChildren<Component>(true)
-                .Where(x => x != null && x.GetType().Name == ReceiverType)
+        internal static string SourceName(VAPSmoothing c) => c is VAPPhysBoneSmoothing ? "VRC PhysBone" : "VRC Contact Receiver";
+
+        internal static List<string> Parameters(VAPSmoothing c)
+        {
+            bool physBone = c is VAPPhysBoneSmoothing;
+            string type = physBone ? PhysBoneType : ReceiverType;
+            return c.GetComponentsInChildren<Component>(true)
+                .Where(x => x != null && x.GetType().Name == type)
                 .Select(Parameter)
                 .Where(p => p != null)
+                .SelectMany(p => physBone ? PhysBoneSuffixes.Select(s => p + s) : new[] { p })
                 .Distinct()
                 .ToList();
+        }
 
-        internal static string Input(VAPContactSmoothing c) =>
-            !string.IsNullOrEmpty(c.contactParameter) ? c.contactParameter : Parameters(c).FirstOrDefault();
+        internal static string Input(VAPSmoothing c) =>
+            !string.IsNullOrEmpty(c.InputParameter) ? c.InputParameter : Parameters(c).FirstOrDefault();
 
-        internal static string Output(VAPContactSmoothing c, string input) =>
+        internal static string Output(VAPSmoothing c, string input) =>
             !string.IsNullOrEmpty(c.outputParameter) ? c.outputParameter : input == null ? null : "VAP/" + input;
 
-        internal static string TimerFor(VAPContactSmoothing c, string output) =>
+        internal static string TimerFor(VAPSmoothing c, string output) =>
             !c.timer ? null : !string.IsNullOrEmpty(c.timerParameter) ? c.timerParameter : output == null ? null : output + "Timer";
 
-        internal static Contact Resolve(VAPContactSmoothing c)
+        internal static Contact Resolve(VAPSmoothing c)
         {
             string input = Input(c);
             string output = Output(c, input);
@@ -72,22 +79,31 @@ namespace VAP.Editor
             {
                 input = input,
                 output = output,
-                pass = c.passes == VAPContactSmoothing.PassMode.Double ? "Pass" : null,
+                pass = c.passes == VAPSmoothing.PassMode.Double ? output + "/Pass" : null,
+                delta = c.splitSmoothing ? output + "/Delta" : null,
                 timer = TimerFor(c, output),
             };
         }
 
         internal static bool IsCustom(string smoothing) => string.IsNullOrEmpty(smoothing);
 
+        static string Number(float value) => value.ToString("0.###", CultureInfo.InvariantCulture);
+
+        static string DefaultFor(VAPFrameTime.Kind kind, float value) =>
+            Defaults().FirstOrDefault(d => d.kind == kind && Number(d.value) == Number(value))?.parameter;
+
         internal static string CustomParameter(float speed) =>
-            "VAP/Smooth/Speed" + speed.ToString("0.###", CultureInfo.InvariantCulture);
+            DefaultFor(VAPFrameTime.Kind.Smoothing, speed) ?? Prefix + "Speed" + Number(speed);
+
+        internal static string ValueName(VAPFrameTime.Factor f) =>
+            f.kind == VAPFrameTime.Kind.Linear ? DefaultFor(f.kind, f.value) ?? Prefix + "Linear" + Number(f.value) : CustomParameter(f.value);
 
         internal static string SpeedParameter(string smoothing, float customSpeed) =>
-            smoothing == VAPContactSmoothing.None ? null
+            smoothing == VAPSmoothing.None ? null
             : IsCustom(smoothing) ? CustomParameter(customSpeed)
             : SmoothingSpeeds.Find(smoothing)?.parameter;
 
-        internal static IEnumerable<(string smoothing, float customSpeed)> Sides(VAPContactSmoothing c)
+        internal static IEnumerable<(string smoothing, float customSpeed)> Sides(VAPSmoothing c)
         {
             yield return (c.smoothing, c.customSpeed);
             if (c.splitSmoothing)
@@ -96,51 +112,55 @@ namespace VAP.Editor
 
         static string SideProblem(string smoothing, float customSpeed, bool split)
         {
-            if (smoothing == VAPContactSmoothing.None)
+            if (smoothing == VAPSmoothing.None)
                 return split ? null : "Smoothing can only be None when Split is on.";
             if (IsCustom(smoothing))
                 return customSpeed > 0f ? null : "The custom speed must be above 0.";
             return SmoothingSpeeds.Find(smoothing) == null ? $"There is no smoothing named \"{smoothing}\"." : null;
         }
 
-        internal static string Problem(VAPContactSmoothing c, Contact x)
+        internal static string Problem(VAPSmoothing c, Contact x)
         {
             if (x.input == null)
-                return "No VRC Contact Receiver with a parameter on this object or its children.";
+                return $"No {SourceName(c)} with a parameter on this object or its children.";
             if (!Parameters(c).Contains(x.input))
-                return $"No VRC Contact Receiver on this object or its children uses \"{x.input}\".";
+                return $"No {SourceName(c)} on this object or its children gives \"{x.input}\".";
             foreach (var (smoothing, speed) in Sides(c))
                 if (SideProblem(smoothing, speed, c.splitSmoothing) is string problem)
                     return problem;
-            if (c.splitSmoothing && c.smoothing == VAPContactSmoothing.None && c.decreaseSmoothing == VAPContactSmoothing.None)
+            if (c.splitSmoothing && c.smoothing == VAPSmoothing.None && c.decreaseSmoothing == VAPSmoothing.None)
                 return "Both directions are None, so nothing is smoothed.";
-            var reserved = new[] { One, x.pass, Delta }.Where(p => p != null).ToArray();
+            var reserved = new[] { Weight, x.pass, x.delta }.Where(p => p != null).ToArray();
             if (new[] { x.input, x.output, x.timer }.Any(p => p != null && reserved.Contains(p)))
                 return string.Join(", ", reserved.Select(p => $"\"{p}\"")) + " are used inside the smoothing and can't be parameter names here.";
             if (x.output == x.input)
-                return "The output parameter can't be the contact parameter.";
+                return "The output parameter can't be the input parameter.";
             if (x.timer != null && (x.timer == x.input || x.timer == x.output))
-                return "The timer parameter must be different from the contact and output parameters.";
+                return "The timer parameter must be different from the input and output parameters.";
             return null;
         }
 
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
-            var all = avatarRoot.GetComponentsInChildren<VAPContactSmoothing>(true);
+            var all = avatarRoot.GetComponentsInChildren<VAPSmoothing>(true);
             var frameTimes = avatarRoot.GetComponentsInChildren<VAPFrameTime>(true);
-            if (all.Length == 0 && frameTimes.Length == 0)
-                return;
+            var fullControllers = avatarRoot.GetComponentsInChildren<VAPFullController>(true).Where(f => f.frameTime).ToArray();
             var vfType = VRCFuryWrap.FindType(VRCFuryWrap.VRCFuryType);
             var feature = VRCFuryWrap.FindType(FullControllerSource.FeatureType);
+            var descriptors = avatarRoot.GetComponentsInChildren<VAPDescriptorExpressions>(true).Where(d => d.frameTime && d.Other() == null).ToArray();
+            bool needed = fullControllers.Length > 0 || descriptors.Length > 0;
+            if (all.Length == 0 && frameTimes.Length == 0 && !needed)
+                return;
             if (vfType == null || feature == null)
-                Debug.LogWarning(Log + "VRCFury is not installed; contact smoothing skipped.", avatarRoot);
+                Debug.LogWarning(Log + "VRCFury is not installed; smoothing skipped.", avatarRoot);
             else
             {
                 var outputs = new HashSet<string>();
-                var inputs = new Dictionary<string, VAPContactSmoothing>();
+                var inputs = new Dictionary<string, VAPSmoothing>();
                 var speeds = new Dictionary<string, float>();
+                var contacts = new List<(VAPSmoothing c, Contact x)>();
                 bool any = false;
-                foreach (var c in RootFirst(all))
+                foreach (var c in VAPAvatar.RootFirst(all))
                 {
                     var contact = Resolve(c);
                     if (Problem(c, contact) is string problem)
@@ -156,44 +176,53 @@ namespace VAP.Editor
                     inputs[contact.input] = c;
                     if (!outputs.Add(contact.output) || (contact.timer != null && !outputs.Add(contact.timer)))
                     {
-                        Debug.LogWarning(Log + $"{c.name}: another Contact Smoothing already writes \"{contact.output}\" or its timer; skipped.", c);
+                        Debug.LogWarning(Log + $"{c.name}: another smoothing already writes \"{contact.output}\" or its timer; skipped.", c);
                         continue;
                     }
-                    var made = new List<Object>();
-                    var controller = Controller(c, contact, made);
-                    foreach (var o in made)
-                        saveAsset?.Invoke(o);
-                    AddFullController(c.gameObject, vfType, feature, controller, Globals(c, contact));
+                    contacts.Add((c, contact));
                     any = true;
                     foreach (var (smoothing, speed) in Sides(c))
                         if (IsCustom(smoothing))
                             speeds[CustomParameter(speed)] = speed;
                 }
                 var linear = new Dictionary<string, float>();
-                var picked = new Dictionary<string, (VAPFrameTime.Factor factor, Object from)>();
-                var ordered = RootFirst(frameTimes).ToList();
+                var renames = new Dictionary<Component, Dictionary<string, string>>();
+                var ordered = VAPAvatar.RootFirst(frameTimes.Cast<Component>().Concat(fullControllers).Concat(descriptors)).ToList();
                 foreach (var f in ordered)
-                    foreach (var factor in f.factors)
+                {
+                    var own = new HashSet<string>();
+                    foreach (var factor in FactorsOf(f))
                     {
                         if (FactorProblem(factor) is string problem)
                         {
                             Debug.LogWarning(Log + $"{f.name}: {problem} Skipped.", f);
                             continue;
                         }
-                        if (picked.TryGetValue(factor.parameter, out var first))
+                        if (!own.Add(factor.parameter))
                         {
-                            if (!Same(first.factor, factor))
-                                Debug.LogWarning(Log + $"{f.name}: \"{factor.parameter}\" is set to another value on {first.from.name}, which is used instead.", f);
+                            Debug.LogWarning(Log + $"{f.name}: \"{factor.parameter}\" is listed more than once; only the first one is used.", f);
                             continue;
                         }
-                        picked[factor.parameter] = (factor, f);
+                        string name = ValueName(factor);
+                        if (name != factor.parameter)
+                        {
+                            if (!renames.TryGetValue(f, out var names))
+                                renames[f] = names = new Dictionary<string, string>();
+                            names[factor.parameter] = name;
+                        }
                         if (factor.kind == VAPFrameTime.Kind.Linear)
-                            linear[factor.parameter] = factor.value;
+                            linear[name] = factor.value;
                         else
-                            speeds[factor.parameter] = factor.value;
+                            speeds[name] = factor.value;
                     }
-                if (any || frameTimes.Length > 0)
-                    AddFrameTime(avatarRoot, vfType, feature, speeds, linear, saveAsset);
+                }
+                if (any || frameTimes.Length > 0 || needed)
+                {
+                    foreach (var pair in renames)
+                        Rename(pair.Key, pair.Value, saveAsset);
+                    var globals = AddFrameTime(avatarRoot, vfType, feature, speeds, linear, contacts, saveAsset);
+                    ExposeFrameTime(avatarRoot, vfType, globals);
+                }
             }
             foreach (var c in all)
                 Object.DestroyImmediate(c);
@@ -201,7 +230,7 @@ namespace VAP.Editor
                 Object.DestroyImmediate(f);
         }
 
-        static IEnumerable<string> Globals(VAPContactSmoothing c, Contact x)
+        static IEnumerable<string> Globals(VAPSmoothing c, Contact x)
         {
             yield return x.input;
             yield return x.output;
@@ -222,16 +251,48 @@ namespace VAP.Editor
             yield return new VAPFrameTime.Factor { parameter = StepSize, kind = VAPFrameTime.Kind.Linear, value = 1f };
         }
 
-        static IEnumerable<T> RootFirst<T>(IEnumerable<T> components) where T : Component =>
-            components.Select((c, i) => (c, i)).OrderBy(x => Depth(x.c.transform)).ThenBy(x => x.i).Select(x => x.c);
+        static IEnumerable<VAPFrameTime.Factor> FactorsOf(Component c) =>
+            c is VAPFrameTime ft ? ft.factors : ((VAPExpressions)c).frameTimeFactors;
 
-        internal static VAPContactSmoothing SmoothedBy(VAPContactSmoothing c)
+        static void Rename(Component owner, Dictionary<string, string> names, Action<Object> saveAsset)
+        {
+            AnimatorController Renamed(AnimatorController controller) => ControllerCopy.Rename(controller, names, saveAsset);
+            if (owner is VAPFullController f)
+                ControllerCopy.SwapFullController(f.wrapped, Renamed);
+            else if (owner is VAPDescriptorExpressions d)
+                ControllerCopy.SwapDescriptor(d.Descriptor, Renamed);
+        }
+
+        static void ExposeFrameTime(GameObject avatarRoot, Type vfType, IEnumerable<string> parameters)
+        {
+            var names = new HashSet<string>(parameters);
+            foreach (var vf in avatarRoot.GetComponentsInChildren(vfType, true))
+            {
+                var used = ControllerCopy.FullControllers(vf).SelectMany(c => c.parameters).Select(p => p.name).Where(names.Contains).Distinct().ToList();
+                if (used.Count == 0)
+                    continue;
+                using var so = new SerializedObject(vf);
+                var globals = so.FindProperty("content.globalParams");
+                if (globals == null || !globals.isArray)
+                    continue;
+                var existing = new HashSet<string>();
+                for (int i = 0; i < globals.arraySize; i++)
+                    existing.Add(globals.GetArrayElementAtIndex(i).stringValue);
+                if (existing.Contains("*"))
+                    continue;
+                foreach (var p in used.Where(p => !existing.Contains(p)))
+                    globals.GetArrayElementAtIndex(globals.arraySize++).stringValue = p;
+                so.ApplyModifiedPropertiesWithoutUndo();
+            }
+        }
+
+        internal static VAPSmoothing SmoothedBy(VAPSmoothing c)
         {
             var root = VAPAvatar.Descriptor(c);
             string input = Input(c);
             if (root == null || input == null)
                 return null;
-            foreach (var other in RootFirst(root.GetComponentsInChildren<VAPContactSmoothing>(true)))
+            foreach (var other in VAPAvatar.RootFirst(root.GetComponentsInChildren<VAPSmoothing>(true)))
             {
                 if (other == c)
                     return null;
@@ -241,22 +302,14 @@ namespace VAP.Editor
             return null;
         }
 
-        static int Depth(Transform t)
-        {
-            int depth = 0;
-            for (; t.parent != null; t = t.parent)
-                depth++;
-            return depth;
-        }
 
-        internal static bool Same(VAPFrameTime.Factor a, VAPFrameTime.Factor b) => a.kind == b.kind && Mathf.Approximately(a.value, b.value);
 
         internal static string FactorProblem(VAPFrameTime.Factor f)
         {
-            if (string.IsNullOrEmpty(f.parameter))
+            if (string.IsNullOrEmpty(f.parameter) || f.parameter == Prefix)
                 return "A factor has no parameter name.";
-            if (new[] { FrameTime, TimeName, LastTimeName, Weight }.Contains(f.parameter))
-                return $"\"{f.parameter}\" is used by the frame time itself.";
+            if (!f.parameter.StartsWith(Prefix))
+                return $"\"{f.parameter}\" must start with \"{Prefix}\".";
             if (Defaults().Any(d => d.parameter == f.parameter))
                 return $"\"{f.parameter}\" is already added by default.";
             if (f.kind == VAPFrameTime.Kind.Smoothing && f.value <= 0f)
@@ -264,8 +317,8 @@ namespace VAP.Editor
             return null;
         }
 
-        static void AddFrameTime(GameObject avatarRoot, Type vfType, Type feature, Dictionary<string, float> customSpeeds,
-            Dictionary<string, float> customLinear, Action<Object> saveAsset)
+        static List<string> AddFrameTime(GameObject avatarRoot, Type vfType, Type feature, Dictionary<string, float> customSpeeds,
+            Dictionary<string, float> customLinear, List<(VAPSmoothing c, Contact x)> contacts, Action<Object> saveAsset)
         {
             RemoveFrameTime(avatarRoot, vfType);
             var speeds = new Dictionary<string, float>();
@@ -277,10 +330,12 @@ namespace VAP.Editor
             foreach (var pair in customLinear)
                 linear[pair.Key] = pair.Value;
             var made = new List<Object>();
-            var controller = FrameTimeController(speeds, linear, made);
+            var controller = FrameTimeController(speeds, linear, contacts, made);
             foreach (var o in made)
                 saveAsset?.Invoke(o);
-            AddFullController(avatarRoot, vfType, feature, controller, new[] { Weight, FrameTime }.Concat(speeds.Keys).Concat(linear.Keys));
+            var globals = speeds.Keys.Concat(linear.Keys).Concat(contacts.SelectMany(x => Globals(x.c, x.x))).Distinct().ToList();
+            AddFullController(avatarRoot, vfType, feature, controller, globals);
+            return globals;
         }
 
         static void RemoveFrameTime(GameObject avatarRoot, Type vfType)
@@ -330,7 +385,8 @@ namespace VAP.Editor
                 && AssetDatabase.TryGetGUIDAndLocalFileIdentifier(source, out string guid, out long _) && guid == FrameTimePrefabGuid;
         }
 
-        static AnimatorController FrameTimeController(Dictionary<string, float> speeds, Dictionary<string, float> linear, List<Object> made)
+        static AnimatorController FrameTimeController(Dictionary<string, float> speeds, Dictionary<string, float> linear,
+            List<(VAPSmoothing c, Contact x)> contacts, List<Object> made)
         {
             var controller = new AnimatorController { name = "VAP Frame Time Controller" };
             made.Add(controller);
@@ -370,6 +426,8 @@ namespace VAP.Editor
                         parameters, SpeedValues[i], made), Weight, SpeedSteps[i]);
                 children.Add(Child(Tree(string.Join(", ", parameters), BlendTreeType.Simple1D, rates[p], made, steps), Weight));
             }
+            foreach (var (c, x) in contacts)
+                children.Add(Child(ContactTree(c, x, controller, made), Weight));
             Layer(controller, "Frame Time", Tree("Frame Time", BlendTreeType.Direct, null, made, children.ToArray()), made);
             return controller;
         }
@@ -407,17 +465,12 @@ namespace VAP.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        static AnimatorController Controller(VAPContactSmoothing c, Contact x, List<Object> made)
+        static Motion ContactTree(VAPSmoothing c, Contact x, AnimatorController controller, List<Object> made)
         {
             string increase = SpeedParameter(c.smoothing, c.customSpeed);
             string decrease = c.splitSmoothing ? SpeedParameter(c.decreaseSmoothing, c.decreaseCustomSpeed) : null;
-            var controller = new AnimatorController { name = c.name + " Contact Smoothing" };
-            made.Add(controller);
-            foreach (string p in new[] { x.input, x.output, x.pass, increase, decrease }.Where(p => p != null))
+            foreach (string p in new[] { x.input, x.output, x.pass, x.delta, increase, decrease }.Where(p => p != null))
                 AddFloat(controller, p, 0f);
-            AddFloat(controller, One, 1f);
-            if (c.splitSmoothing)
-                AddFloat(controller, Delta, 0f);
             if (x.timer != null)
             {
                 AddFloat(controller, x.timer, 0f);
@@ -425,7 +478,7 @@ namespace VAP.Editor
             }
 
             var reset = Clip("Reset Contact Smoothing AAP",
-                new[] { x.output, x.pass, c.splitSmoothing ? Delta : null, x.timer }.Where(p => p != null), 0f, made);
+                new[] { x.output, x.pass, x.delta, x.timer }.Where(p => p != null), 0f, made);
             var outClip = Clip(x.output, new[] { x.output }, 1f, made);
             var passClip = x.pass == null ? null : Clip(x.pass, new[] { x.pass }, 1f, made);
             ChildMotion[] Write(string pass, string output) => passClip == null
@@ -435,24 +488,24 @@ namespace VAP.Editor
             Motion Follow(string speed, string label)
             {
                 if (speed == null)
-                    return snap ??= Tree("Follow", BlendTreeType.Direct, null, made, Write(x.input, x.input));
+                    return snap ??= Tree("Direct", BlendTreeType.Direct, null, made, Write(x.input, x.input));
                 keep ??= Tree("Output", BlendTreeType.Direct, null, made, Write(x.pass, x.output));
                 step ??= Tree("Input", BlendTreeType.Direct, null, made, Write(x.input, x.pass ?? x.input));
-                return Tree(label, BlendTreeType.Simple1D, speed, made, Child(keep, One, 0f), Child(step, One, 1f));
+                return Tree(label, BlendTreeType.Simple1D, speed, made, Child(keep, Weight, 0f), Child(step, Weight, 1f));
             }
 
-            var children = new List<ChildMotion> { Child(reset, One) };
+            var children = new List<ChildMotion> { Child(reset, Weight) };
             if (!c.splitSmoothing)
-                children.Add(Child(Follow(increase, "Smooth Setup"), One));
+                children.Add(Child(Follow(increase, "Smooth Setup"), Weight));
             else
             {
                 var delta = Tree("Delta", BlendTreeType.Direct, null, made,
-                    Child(Clip("Delta 1", new[] { Delta }, 1f, made), x.input),
-                    Child(Clip("Delta -1", new[] { Delta }, -1f, made), x.output));
-                children.Add(Child(delta, One));
-                children.Add(Child(Tree("Direction", BlendTreeType.Simple1D, Delta, made,
-                    Child(Follow(decrease, "Decrease Smoothing"), One, 0.00001f),
-                    Child(Follow(increase, "Increase Smoothing"), One, 0.00002f)), One));
+                    Child(Clip("Delta 1", new[] { x.delta }, 1f, made), x.input),
+                    Child(Clip("Delta -1", new[] { x.delta }, -1f, made), x.output));
+                children.Add(Child(delta, Weight));
+                children.Add(Child(Tree("Direction", BlendTreeType.Simple1D, x.delta, made,
+                    Child(Follow(decrease, "Decrease Smoothing"), Weight, 0.00001f),
+                    Child(Follow(increase, "Increase Smoothing"), Weight, 0.00002f)), Weight));
             }
             if (x.timer != null)
             {
@@ -460,10 +513,9 @@ namespace VAP.Editor
                 var timerClip = Clip(x.timer, new[] { x.timer }, 1f, made);
                 var count = Tree("Timer Count", BlendTreeType.Direct, null, made, Child(timerClip, x.timer), Child(timerClip, StepSize));
                 children.Add(Child(Tree("Timer", BlendTreeType.Simple1D, x.input, made,
-                    Child(empty, One, 0.00001f), Child(count, One, 0.00002f)), One));
+                    Child(empty, Weight, 0.00001f), Child(count, Weight, 0.00002f)), Weight));
             }
-            Layer(controller, LayerName, Tree(LayerName, BlendTreeType.Direct, null, made, children.ToArray()), made);
-            return controller;
+            return Tree(x.output, BlendTreeType.Direct, null, made, children.ToArray());
         }
 
         static void AddFloat(AnimatorController controller, string name, float value)
@@ -520,6 +572,8 @@ namespace VAP.Editor
         protected override void Configure()
         {
             InPhase(BuildPhase.Transforming)
+                .AfterPlugin("tech.azuki.vrc-prefabs.play-audio-clips")
+                .BeforePlugin("tech.azuki.vrc-prefabs.expressions")
                 .Run("Add contact smoothing", ctx =>
                     ContactSmoothing.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
         }

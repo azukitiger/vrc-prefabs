@@ -52,6 +52,8 @@ MonoBehaviour:
   defaultOverrides: []
   controlOverrides: []
   wrapped: {fileID: 5527116933560190243}
+  frameTime: 1
+  frameTimeFactors: []
 --- !u!114 &67991107304017948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,8 +357,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1460.1-beta.2
+  unityVersion: 6000.0.67f1
+  vrcfuryVersion: 1.1492.0
   somethingIsBroken: 0
   config:
     features: []
@@ -399,7 +401,6 @@ MonoBehaviour:
         globalParams:
         - '*'
         - '!FT/State/*'
-        allNonsyncedAreGlobal: 0
         ignoreSaved: 0
         toggleParam: 
         rootObjOverride: {fileID: 0}
@@ -415,6 +416,7 @@ MonoBehaviour:
         visemeDampenAmount: 1
         injectSpsDepthParam: 
         injectSpsVelocityParam: 
+        allNonsyncedAreGlobal: 0
         controller:
           version: 1
           fileID: 0
@@ -450,8 +452,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 3
-  unityVersion: 2022.3.22f1
-  vrcfuryVersion: 1.1460.1-beta.2
+  unityVersion: 6000.0.67f1
+  vrcfuryVersion: 1.1492.0
   somethingIsBroken: 0
   config:
     features: []

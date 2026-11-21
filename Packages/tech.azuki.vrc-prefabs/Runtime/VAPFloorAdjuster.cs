@@ -3,7 +3,6 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [DisallowMultipleComponent]
     [AddComponentMenu("VAP/Floor Adjuster")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPFloorAdjuster : MonoBehaviour, IEditorOnly

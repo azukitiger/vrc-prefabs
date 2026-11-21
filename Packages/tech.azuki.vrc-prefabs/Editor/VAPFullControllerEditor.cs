@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -24,24 +25,29 @@ namespace VAP.Editor
                 return;
             FullControllerSource.Resolve(Owner);
             if (Owner.RootMenus().Count == 0 && Owner.ParameterAssets().Count == 0)
-            {
                 EditorGUILayout.HelpBox("The Full Controller below has no menu or parameters yet.", MessageType.Info);
-                return;
-            }
-            DrawContents(Owner);
+            else
+                DrawContents(Owner);
+        }
+
+        IEnumerable<Object> Controllers()
+        {
+            if (Wrapped == null)
+                yield break;
+            using var so = new SerializedObject(Wrapped);
+            var controllers = so.FindProperty("content.controllers");
+            for (int i = 0; i < (controllers?.arraySize ?? 0); i++)
+                yield return controllers.GetArrayElementAtIndex(i).FindPropertyRelative("controller.objRef")?.objectReferenceValue;
         }
 
         void DrawInfo(Rect rect)
         {
-            using var so = new SerializedObject(Wrapped);
-            var controllers = so.FindProperty("content.controllers");
-            var names = Enumerable.Range(0, controllers?.arraySize ?? 0)
-                .Select(i => controllers.GetArrayElementAtIndex(i).FindPropertyRelative("controller.objRef")?.objectReferenceValue)
-                .Where(o => o != null).Select(o => o.name).ToList();
+            var names = Controllers().Where(o => o != null).Select(o => o.name).ToList();
             VRCFuryWrap.BarLabels(rect, rect.x, "Full Controller", string.Join(", ", names), 0.6f);
         }
 
-        public override VisualElement CreateInspectorGUI() => wrap.Build(this, DrawFullController, DrawInfo);
+        public override VisualElement CreateInspectorGUI() => wrap.Build(this, DrawFullController, DrawInfo,
+            new ExpressionsSections(this, () => ControllerCopy.FullControllers(Wrapped).ToList()).Build(), true);
     }
 }
 #endif

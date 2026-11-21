@@ -29,17 +29,23 @@ namespace VAP.Editor
         protected void DrawContents(VAPExpressions component)
         {
             subMenusSection ??= new SubMenusSection(component);
-            if (component.ParameterAssets().Count > 0)
-                EditorGUILayout.LabelField(SyncedBits(component, component.DroppedParameters()), EditorStyles.miniLabel);
+            string bits = component.ParameterAssets().Count > 0 ? SyncedBits(component, component.DroppedParameters()) : null;
             if (component.RootMenus().Count > 0)
             {
                 EditorGUILayout.Space(6f);
                 var header = EditorGUILayout.GetControlRect();
                 EditorGUI.LabelField(header, MenuHeader, EditorStyles.boldLabel);
+                if (bits != null)
+                {
+                    float x = header.x + EditorStyles.boldLabel.CalcSize(MenuHeader).x + 6f;
+                    EditorGUI.LabelField(new Rect(x, header.y, header.xMax - x, header.height), "|  " + bits, EditorStyles.miniLabel);
+                }
                 hintStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
                 EditorGUI.LabelField(header, MenuHint, hintStyle);
                 subMenusSection.Draw();
             }
+            else if (bits != null)
+                EditorGUILayout.LabelField(bits, EditorStyles.miniLabel);
         }
     }
 }

@@ -5,7 +5,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [AddComponentMenu("VAP/VRC Animator Play Audio Clips")]
+    [AddComponentMenu("")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPPlayAudioClips : MonoBehaviour, IEditorOnly
     {

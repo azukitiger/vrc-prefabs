@@ -6,27 +6,29 @@ using UnityEngine.UIElements;
 
 namespace VAP.Editor
 {
-    [CustomEditor(typeof(VAPContactSmoothing))]
+    [CustomEditor(typeof(VAPSmoothing), true)]
     [CanEditMultipleObjects]
     public class VAPContactSmoothingEditor : UnityEditor.Editor
     {
         static readonly GUIContent ContactLabel = new GUIContent("Contact Parameter",
             "The VRC Contact Receiver parameter to smooth, from this object or its children.");
+        static readonly GUIContent PhysBoneLabel = new GUIContent("PhysBone Parameter",
+            "The VRC PhysBone IsGrabbed, IsPosed, Angle, Stretch or Squish parameter to smooth, from this object or its children.");
         static readonly GUIContent OutputLabel = new GUIContent("Output Parameter",
-            "Animator parameter that receives the smoothed value. If empty, VAP/ followed by the contact parameter.");
+            "Animator parameter that receives the smoothed value. If empty, VAP/ followed by the input parameter.");
         static readonly GUIContent SmoothingLabel = new GUIContent("Smoothing",
-            "How fast the output follows the contact. Custom sets your own speed.");
+            "How fast the output follows the input. Custom sets your own speed.");
         static readonly GUIContent IncreaseLabel = new GUIContent("Increase Smoothing",
-            "Smoothing used when the value goes up. None follows the contact directly.");
+            "Smoothing used when the value goes up. None follows the input directly.");
         static readonly GUIContent DecreaseLabel = new GUIContent("Decrease Smoothing",
-            "Smoothing used when the value goes down. None follows the contact directly.");
+            "Smoothing used when the value goes down. None follows the input directly.");
         static readonly GUIContent SplitLabel = new GUIContent("Split Increase / Decrease",
             "Use a different smoothing when the value goes down than when it goes up.");
         static readonly GUIContent PassesLabel = new GUIContent("Passes",
-            "Double smooths through an extra hidden step for a softer curve. Single moves the output straight toward the contact.");
+            "Double smooths through an extra hidden step for a softer curve. Single moves the output straight toward the input.");
         static readonly GUIContent SpeedLabel = new GUIContent("Speed", "Higher follows faster. Touch is 8, Gesture is 20.");
         static readonly GUIContent TimerLabel = new GUIContent("Timer",
-            "Also count, in seconds, how long the contact is touched. Goes back to 0 when it is released.");
+            "Also count, in seconds, how long the input is above 0. Goes back to 0 when it is.");
         static readonly GUIContent TimerParameterLabel = new GUIContent("Timer Parameter",
             "Animator parameter that receives the touch time. If empty, the output parameter followed by Timer.");
 
@@ -37,36 +39,44 @@ namespace VAP.Editor
             padding = new RectOffset(3, 3, 0, 0),
         };
 
-        public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("Contact Smoothing", DrawFields);
+        bool PhysBone => target is VAPPhysBoneSmoothing;
+
+        public override VisualElement CreateInspectorGUI() =>
+            VAPInspectorHeader.Create(PhysBone ? "PhysBone Smoothing" : "Contact Smoothing", DrawFields);
 
         void DrawFields()
         {
             if (target == null)
                 return;
             serializedObject.Update();
-            var c = (VAPContactSmoothing)target;
+            var c = (VAPSmoothing)target;
             bool single = targets.Length == 1;
             if (VAPAvatar.Descriptor(c) == null)
                 EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
+            else if (single && ContactSmoothing.SmoothedBy(c) is VAPSmoothing owner)
+            {
+                EditorGUILayout.HelpBox($"This does nothing because {ContactSmoothing.Input(c)} is already smoothed on {owner.name}.", MessageType.Error);
+                return;
+            }
 
             using (new EditorGUI.DisabledScope(targets.Any(VAPPrefabLock.IsFromPrefab)))
             {
                 if (single)
-                    DrawContact(c);
-                var split = serializedObject.FindProperty(nameof(VAPContactSmoothing.splitSmoothing));
+                    DrawInput(c);
+                var split = serializedObject.FindProperty(nameof(VAPSmoothing.splitSmoothing));
                 bool splitOn = split.boolValue && !split.hasMultipleDifferentValues;
-                DrawSmoothing(nameof(VAPContactSmoothing.smoothing), nameof(VAPContactSmoothing.customSpeed), splitOn ? IncreaseLabel : SmoothingLabel, splitOn);
+                DrawSmoothing(nameof(VAPSmoothing.smoothing), nameof(VAPSmoothing.customSpeed), splitOn ? IncreaseLabel : SmoothingLabel, splitOn);
                 EditorGUILayout.PropertyField(split, SplitLabel);
                 if (splitOn)
-                    DrawSmoothing(nameof(VAPContactSmoothing.decreaseSmoothing), nameof(VAPContactSmoothing.decreaseCustomSpeed), DecreaseLabel, true);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(VAPContactSmoothing.passes)), PassesLabel);
+                    DrawSmoothing(nameof(VAPSmoothing.decreaseSmoothing), nameof(VAPSmoothing.decreaseCustomSpeed), DecreaseLabel, true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(VAPSmoothing.passes)), PassesLabel);
                 string output = single ? ContactSmoothing.Output(c, ContactSmoothing.Input(c)) : null;
-                Field(nameof(VAPContactSmoothing.outputParameter), OutputLabel, output);
-                var timer = serializedObject.FindProperty(nameof(VAPContactSmoothing.timer));
+                Field(nameof(VAPSmoothing.outputParameter), OutputLabel, output);
+                var timer = serializedObject.FindProperty(nameof(VAPSmoothing.timer));
                 EditorGUILayout.PropertyField(timer, TimerLabel);
                 if (timer.boolValue || timer.hasMultipleDifferentValues)
                     using (new EditorGUI.IndentLevelScope())
-                        Field(nameof(VAPContactSmoothing.timerParameter), TimerParameterLabel, output == null ? null : output + "Timer");
+                        Field(nameof(VAPSmoothing.timerParameter), TimerParameterLabel, output == null ? null : output + "Timer");
             }
             serializedObject.ApplyModifiedProperties();
 
@@ -74,13 +84,12 @@ namespace VAP.Editor
                 return;
             if (ContactSmoothing.Problem(c, ContactSmoothing.Resolve(c)) is string problem)
                 EditorGUILayout.HelpBox(problem, MessageType.Warning);
-            else if (ContactSmoothing.SmoothedBy(c) is VAPContactSmoothing owner)
-                EditorGUILayout.HelpBox($"This does nothing because {ContactSmoothing.Input(c)} is already smoothed on {owner.name}.", MessageType.Error);
         }
 
-        void DrawContact(VAPContactSmoothing c)
+        void DrawInput(VAPSmoothing c)
         {
-            var prop = serializedObject.FindProperty(nameof(VAPContactSmoothing.contactParameter));
+            var label = PhysBone ? PhysBoneLabel : ContactLabel;
+            var prop = serializedObject.FindProperty(PhysBone ? nameof(VAPPhysBoneSmoothing.physBoneParameter) : nameof(VAPContactSmoothing.contactParameter));
             var found = ContactSmoothing.Parameters(c);
             string current = ContactSmoothing.Input(c);
             var options = found.Select(p => new GUIContent(p.Replace("/", "\u2215"))).ToList();
@@ -93,11 +102,11 @@ namespace VAP.Editor
             if (options.Count == 0)
             {
                 using (new EditorGUI.DisabledScope(true))
-                    EditorGUILayout.Popup(ContactLabel, 0, new[] { new GUIContent("No contacts found") });
+                    EditorGUILayout.Popup(label, 0, new[] { new GUIContent(PhysBone ? "No PhysBone parameters found" : "No contacts found") });
                 return;
             }
             EditorGUI.BeginChangeCheck();
-            int picked = EditorGUILayout.Popup(ContactLabel, Mathf.Max(index, 0), options.ToArray());
+            int picked = EditorGUILayout.Popup(label, Mathf.Max(index, 0), options.ToArray());
             if (EditorGUI.EndChangeCheck() && picked < found.Count)
                 prop.stringValue = found[picked];
         }
@@ -107,7 +116,7 @@ namespace VAP.Editor
             var smoothing = serializedObject.FindProperty(property);
             var values = SmoothingSpeeds.Entries.Select(e => e.name).Append("").ToList();
             if (allowNone)
-                values.Add(VAPContactSmoothing.None);
+                values.Add(VAPSmoothing.None);
             var options = values.Select(v => new GUIContent(Display(v))).ToList();
             string current = smoothing.stringValue;
             int index = values.IndexOf(current);

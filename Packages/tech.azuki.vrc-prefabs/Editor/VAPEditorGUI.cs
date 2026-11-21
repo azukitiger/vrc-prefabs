@@ -19,7 +19,7 @@ namespace VAP.Editor
         internal static float BoxHeaderHeight => Line + EditorStyles.helpBox.padding.vertical;
 
         internal static string OnlyOne(string what, Component other) =>
-            $"Only one {what} is allowed per avatar. \"{other.name}\" has one too.";
+            $"This {what} does nothing because \"{other.name}\" already has one.";
 
         internal static Action<string> Setter(SerializedProperty prop)
         {

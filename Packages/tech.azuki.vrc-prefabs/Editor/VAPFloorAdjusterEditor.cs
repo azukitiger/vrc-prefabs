@@ -28,6 +28,11 @@ namespace VAP.Editor
             var adjuster = (VAPFloorAdjuster)target;
             if (VAPAvatar.Descriptor(adjuster) == null)
                 EditorGUILayout.HelpBox(VAPEditorGUI.NotInAvatar, MessageType.Warning);
+            else if (targets.Length == 1 && VAPAvatar.Other(adjuster, false) is VAPFloorAdjuster other)
+            {
+                EditorGUILayout.HelpBox(VAPEditorGUI.OnlyOne("Floor Adjuster", other), MessageType.Error);
+                return;
+            }
 
             using (new EditorGUI.DisabledScope(locked))
             {
@@ -38,12 +43,11 @@ namespace VAP.Editor
             }
             serializedObject.ApplyModifiedProperties();
 
-            if (!height.hasMultipleDifferentValues)
+            if (!height.hasMultipleDifferentValues && Mathf.Abs(height.floatValue) >= 0.0005f)
             {
                 float h = height.floatValue;
-                string status = Mathf.Abs(h) < 0.0005f ? "No change."
-                    : $"The armature moves {(h > 0 ? "up" : "down")} {Mathf.Abs(h) * 100f:0.0} cm at build time.";
-                EditorGUILayout.LabelField(status, EditorStyles.wordWrappedLabel);
+                EditorGUILayout.LabelField($"The armature moves {(h > 0 ? "up" : "down")} {Mathf.Abs(h) * 100f:0.0} cm at build time.",
+                    EditorStyles.wordWrappedLabel);
             }
         }
     }

@@ -134,7 +134,7 @@ namespace VAP.Editor
             VRCFuryWrap.ScheduleRemoval(Owner, Wrapped);
         }
 
-        internal VisualElement Build(UnityEditor.Editor editor, Action drawTop, Action<Rect> drawInfo)
+        internal VisualElement Build(UnityEditor.Editor editor, Action drawTop, Action<Rect> drawInfo, VisualElement extra = null, bool sectionFirst = false)
         {
             var root = new VisualElement();
             if (editor.targets.Length > 1)
@@ -143,10 +143,24 @@ namespace VAP.Editor
                 root.Add(VRCFuryWrap.MissingMessage(title));
             else
             {
-                root.Add(new IMGUIContainer(drawTop));
+                var top = new IMGUIContainer(drawTop);
                 section?.Dispose();
                 section = new WrappedSection(Wrapped, key, drawInfo);
-                root.Add(section.Root);
+                if (sectionFirst)
+                {
+                    root.Add(section.Root);
+                    if (extra != null)
+                        root.Add(extra);
+                    top.style.marginTop = 6f;
+                    root.Add(top);
+                }
+                else
+                {
+                    root.Add(top);
+                    if (extra != null)
+                        root.Add(extra);
+                    root.Add(section.Root);
+                }
             }
             VAPInspectorHeader.Attach(root, title);
             return root;
