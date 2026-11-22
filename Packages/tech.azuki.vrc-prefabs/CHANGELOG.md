@@ -1,3 +1,6 @@
+## Version 3.0.16
+- Fixed Bell Sound System (broke on version 3.0.14).
+
 ## Version 3.0.15
 - Physbone Gizmos now supports Contacts.
 

@@ -355,7 +355,7 @@ MonoBehaviour:
   controlOverrides: []
   frameTime: 1
   frameTimeFactors:
-  - parameter: VAP/Smooth/Proxy/Smoothing/Velocity
+  - parameter: Proxy/Smoothing/Velocity
     kind: 0
     value: 4
   audioClips: []
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1492.0
+  vrcfuryVersion: 1.1494.0
   somethingIsBroken: 0
   config:
     features: []
