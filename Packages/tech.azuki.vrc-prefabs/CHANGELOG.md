@@ -1,15 +1,10 @@
-## Version 3.0.16
-- Fixed Bell Sound System (broke on version 3.0.14).
-
-## Version 3.0.15
-- Physbone Gizmos now supports Contacts.
-
-## Version 3.0.14
+## Version 3.1.0
 - Deprecated prefabs that can be replaced by components.
 - Tail wag can no longer be animated if it's off.
 - Added new VAP components for smoothing physbone and contacts parameters.
 - Improved Physbone Gizmos tool.
 - Cleaned up UV Bake Tool.
+- Physbone Gizmos now supports Contacts.
 
 ## Version 3.0.13
 - Set PupilDilationFoward value to 0.5 by default in animator.
