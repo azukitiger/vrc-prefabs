@@ -183,7 +183,7 @@ namespace VAP.Editor
         {
             if (sdkDraw == null || !pb.isActiveAndEnabled)
                 return;
-            if (mode == Mode.Pinned && !pinnedCache.Contains(pb) || mode == Mode.Selected && !selectedCache.Contains(pb))
+            if (mode != Mode.All && !selectedCache.Contains(pb) && (mode != Mode.Pinned || !pinnedCache.Contains(pb)))
                 return;
             try
             {
@@ -239,7 +239,7 @@ namespace VAP.Editor
         [EditorToolbarElement(ToolbarId + "Pinned", typeof(SceneView))]
         class PinnedToggle : ModeToggle
         {
-            public PinnedToggle() : base(Mode.Pinned, "Pinned", "Draw pinned PhysBones only") { }
+            public PinnedToggle() : base(Mode.Pinned, "Pinned", "Draw pinned and selected PhysBones") { }
         }
 
         [EditorToolbarElement(ToolbarId + "All", typeof(SceneView))]

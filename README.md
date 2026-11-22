@@ -560,7 +560,7 @@ Shows the VRChat SDK's **VRC PhysBone** gizmos in the Scene view without selecti
 
 ### Instructions
 1. If the **PhysBone Gizmos** toolbar isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on. Drag it by its handle to dock it, for example in the top toolbar.
-2. Pick **Selected** to draw PhysBones whose root or bones are selected, **Pinned** to draw pinned PhysBones, or **All** to draw every one.
+2. Pick **Selected** to draw PhysBones whose root or bones are selected, **Pinned** to also draw pinned PhysBones, or **All** to draw every one.
 3. Select game objects and click **Pin** or **Unpin** to pin every PhysBone on them and their children.
 
 ### Settings
