@@ -60,8 +60,9 @@ jobs:
       
       - name: Keep Only Main VRCFury Package
         run: |
-          urls=$(gh api --paginate "repos/VRCFury/VRCFury/releases?per_page=100" --jq '.[].assets[] | select(.name | startswith("com.vrcfury.vrcfury-") and endswith(".zip")) | .browser_download_url' | jq -R . | jq -s .)
-          jq --argjson urls "$urls" '.githubRepos -= ["VRCFury/VRCFury"] | .packages = (.packages // []) + [{"id": "com.vrcfury.vrcfury", "releases": $urls}]' source.json > source.tmp
+          gh api --paginate "repos/VRCFury/VRCFury/releases?per_page=100" --jq '.[].assets[] | select(.name | startswith("com.vrcfury.vrcfury-") and endswith(".zip")) | .browser_download_url' > vrcfury-urls.txt
+          jq -R . vrcfury-urls.txt | jq -s . > vrcfury-urls.json
+          jq --slurpfile urls vrcfury-urls.json '.githubRepos -= ["VRCFury/VRCFury"] | .packages = (.packages // []) + [{"id": "com.vrcfury.vrcfury", "releases": $urls[0]}]' source.json > source.tmp
           mv source.tmp source.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
