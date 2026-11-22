@@ -1,6 +1,6 @@
 {
   "name": "tech.azuki.vrc-prefabs",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "displayName": "VAP (VRChat Azuki Prefabs)",
   "description": "A collection of prefabs & assets for enhancing VRChat avatars with advanced logic and interactions.",
   "unity": "2022.3",
@@ -17,7 +17,7 @@
   ],
   "vpmDependencies": {
     "com.vrchat.avatars": ">=3.10.6",
-    "nadena.dev.ndmf": ">=1.6.0",
-    "com.vrcfury.vrcfury": ">=1.1491.0"
+    "nadena.dev.ndmf": ">=1.15.1",
+    "com.vrcfury.vrcfury": ">=1.1495.0"
   }
 }
