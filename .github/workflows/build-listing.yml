@@ -58,12 +58,18 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
       
-      - name: Keep Only Main VRCFury Package
+      - name: Limit Dependency Versions
         run: |
-          gh api --paginate "repos/VRCFury/VRCFury/releases?per_page=100" --jq '.[].assets[] | select(.name | startswith("com.vrcfury.vrcfury-") and endswith(".zip")) | .browser_download_url' > vrcfury-urls.txt
-          jq -R . vrcfury-urls.txt | jq -s . > vrcfury-urls.json
-          jq --slurpfile urls vrcfury-urls.json '.githubRepos -= ["VRCFury/VRCFury"] | .packages = (.packages // []) + [{"id": "com.vrcfury.vrcfury", "releases": $urls[0]}]' source.json > source.tmp
-          mv source.tmp source.json
+          limit() {
+            gh api --paginate "repos/$1/releases?per_page=100" --jq ".[].assets[] | select(.name | startswith(\"$2-\") and endswith(\".zip\")) | .browser_download_url" > urls.txt
+            min=$(jq -c --arg id "$2" '.vpmDependencies[$id] | ltrimstr(">=") | split("-")[0] | split(".") | map(tonumber)' Packages/tech.azuki.vrc-prefabs/package.json)
+            jq -R --arg id "$2" --argjson min "$min" 'select((capture(($id | gsub("\\."; "\\.")) + "-(?<v>[0-9]+(\\.[0-9]+)*)")? // empty).v | split(".") | map(tonumber) >= $min)' urls.txt | jq -s . > urls.json
+            jq --arg repo "$1" --arg id "$2" --slurpfile urls urls.json '.githubRepos -= [$repo] | .packages = (.packages // []) + [{"id": $id, "releases": $urls[0]}]' source.json > source.tmp
+            mv source.tmp source.json
+          }
+          limit VRCFury/VRCFury com.vrcfury.vrcfury
+          limit bdunderscore/ndmf nadena.dev.ndmf
+          rm urls.txt urls.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
