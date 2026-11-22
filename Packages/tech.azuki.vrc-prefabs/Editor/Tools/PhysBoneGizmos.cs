@@ -1,12 +1,18 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
 using UnityEditor.Toolbars;
 using UnityEngine;
 using UnityEngine.UIElements;
+using VRC.Dynamics;
+using VRC.SDK3.Dynamics.Contact.Components;
 using VRC.SDK3.Dynamics.PhysBone.Components;
+using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
@@ -15,17 +21,19 @@ namespace VAP.Editor
     {
         enum Mode { Selected, Pinned, All }
 
-        const string Log = "[VAP PhysBone Gizmos] ";
+        const string Log = "[VAP PhysBone & Contact Gizmos] ";
         const string ModeKey = "Azuki.PhysBoneGizmos.Mode";
         static readonly string PinsKey = "Azuki.PhysBoneGizmos.PathPins." + Application.dataPath.GetHashCode();
+        static readonly Type[] Types = { typeof(VRCPhysBone), typeof(VRCContactReceiver), typeof(VRCContactSender) };
 
         static Mode mode;
-        static System.Action modeChanged;
-        static System.Action pinsChanged;
+        static Action modeChanged;
+        static Action pinsChanged;
         static readonly HashSet<string> pins = new HashSet<string>();
-        static VRCPhysBone[] cache = new VRCPhysBone[0];
-        static readonly HashSet<VRCPhysBone> pinnedCache = new HashSet<VRCPhysBone>();
-        static readonly HashSet<VRCPhysBone> selectedCache = new HashSet<VRCPhysBone>();
+        static Component[] cache = new Component[0];
+        static readonly HashSet<Component> pinnedCache = new HashSet<Component>();
+        static readonly HashSet<Component> selectedCache = new HashSet<Component>();
+        static readonly Dictionary<Type, MethodInfo> sdkDraw = new Dictionary<Type, MethodInfo>();
 
         static PhysBoneGizmos()
         {
@@ -39,7 +47,7 @@ namespace VAP.Editor
             PrefabStage.prefabStageClosing += s => EditorApplication.delayCall += RefreshCache;
             EditorApplication.delayCall += () =>
             {
-                sdkDraw = FindSdkDraw();
+                FindSdkDraw();
                 SceneView.RepaintAll();
             };
         }
@@ -47,27 +55,27 @@ namespace VAP.Editor
         static void PinSelected()
         {
             int n = 0;
-            foreach (var pb in SelectedPhysBones())
+            foreach (var c in SelectedComponents())
             {
-                pins.Add(Id(pb));
-                pinnedCache.Add(pb);
+                pins.Add(Id(c));
+                pinnedCache.Add(c);
                 n++;
             }
             AfterPinChange();
-            Debug.Log(Log + $"Pinned {n} PhysBone(s). Total pinned: {pins.Count}.");
+            Debug.Log(Log + $"Pinned {n}. Total pinned: {pins.Count}.");
         }
 
         static void UnpinSelected()
         {
             int n = 0;
-            foreach (var pb in SelectedPhysBones())
+            foreach (var c in SelectedComponents())
             {
-                pinnedCache.Remove(pb);
-                if (pins.Remove(Id(pb)))
+                pinnedCache.Remove(c);
+                if (pins.Remove(Id(c)))
                     n++;
             }
             AfterPinChange();
-            Debug.Log(Log + $"Unpinned {n} PhysBone(s). Total pinned: {pins.Count}.");
+            Debug.Log(Log + $"Unpinned {n}. Total pinned: {pins.Count}.");
         }
 
         static void ClearPins()
@@ -85,14 +93,11 @@ namespace VAP.Editor
             SceneView.RepaintAll();
         }
 
-        static IEnumerable<VRCPhysBone> SelectedPhysBones()
-        {
-            var seen = new HashSet<VRCPhysBone>();
-            foreach (var go in Selection.gameObjects)
-                foreach (var pb in go.GetComponentsInChildren<VRCPhysBone>(true))
-                    if (seen.Add(pb))
-                        yield return pb;
-        }
+        static IEnumerable<Component> Find(GameObject go) =>
+            Types.SelectMany(t => go.GetComponentsInChildren(t, true));
+
+        static IEnumerable<Component> SelectedComponents() =>
+            Selection.gameObjects.SelectMany(Find).Distinct();
 
         static string Path(Transform t)
         {
@@ -105,10 +110,17 @@ namespace VAP.Editor
             return s;
         }
 
-        static string Id(VRCPhysBone pb)
+        static string Id(Component c)
         {
-            int index = System.Array.IndexOf(pb.GetComponents<VRCPhysBone>(), pb);
-            return pb.gameObject.scene.name + ":" + Path(pb.transform) + "#" + index;
+            int index = Array.IndexOf(c.GetComponents(c.GetType()), c);
+            string id = c.gameObject.scene.name + ":" + Path(c.transform) + "#" + index;
+            return c is VRCPhysBone ? id : c.GetType().Name + "|" + id;
+        }
+
+        static Transform Root(Component c)
+        {
+            var root = c is VRCPhysBoneBase pb ? pb.rootTransform : c is ContactBase contact ? contact.rootTransform : null;
+            return root != null ? root : c.transform;
         }
 
         static void LoadPins()
@@ -131,31 +143,15 @@ namespace VAP.Editor
         {
             var stage = PrefabStageUtility.GetCurrentPrefabStage();
             cache = stage != null && stage.prefabContentsRoot != null
-                ? stage.prefabContentsRoot.GetComponentsInChildren<VRCPhysBone>(true)
-                : Object.FindObjectsByType<VRCPhysBone>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                ? Find(stage.prefabContentsRoot).ToArray()
+                : Types.SelectMany(t => Object.FindObjectsByType(t, FindObjectsInactive.Include, FindObjectsSortMode.None)).Cast<Component>().ToArray();
             RefreshSelected();
-            pinnedCache.RemoveWhere(p => p == null);
+            pinnedCache.RemoveWhere(c => c == null);
             if (pins.Count == 0)
                 return;
-            foreach (var pb in cache)
-                if (pb != null && !pinnedCache.Contains(pb) && pins.Contains(Id(pb)))
-                    pinnedCache.Add(pb);
-        }
-
-        static System.Reflection.MethodInfo sdkDraw;
-
-        static System.Reflection.MethodInfo FindSdkDraw()
-        {
-            foreach (var method in TypeCache.GetMethodsWithAttribute<DrawGizmo>())
-            {
-                var p = method.GetParameters();
-                if (method.IsStatic && method.DeclaringType != typeof(PhysBoneGizmos) && p.Length == 2 &&
-                    p[0].ParameterType != typeof(Object) && p[0].ParameterType != typeof(Component) &&
-                    p[0].ParameterType.IsAssignableFrom(typeof(VRCPhysBone)))
-                    return method;
-            }
-            Debug.LogWarning(Log + "VRChat SDK gizmos not found.");
-            return null;
+            foreach (var c in cache)
+                if (c != null && !pinnedCache.Contains(c) && pins.Contains(Id(c)))
+                    pinnedCache.Add(c);
         }
 
         static void RefreshSelected()
@@ -163,42 +159,69 @@ namespace VAP.Editor
             selectedCache.Clear();
             var selected = Selection.transforms;
             if (selected.Length > 0)
-                foreach (var pb in cache)
+                foreach (var c in cache)
                 {
-                    if (pb == null)
+                    if (c == null)
                         continue;
-                    var root = pb.rootTransform != null ? pb.rootTransform : pb.transform;
-                    foreach (var t in selected)
-                        if (t.IsChildOf(root))
-                        {
-                            selectedCache.Add(pb);
-                            break;
-                        }
+                    var root = Root(c);
+                    if (selected.Any(t => c is VRCPhysBone ? t.IsChildOf(root) : t == root))
+                        selectedCache.Add(c);
                 }
             SceneView.RepaintAll();
         }
 
-        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
-        static void DrawPinned(VRCPhysBone pb, GizmoType type)
+        static void FindSdkDraw()
         {
-            if (sdkDraw == null || !pb.isActiveAndEnabled)
-                return;
-            if (mode != Mode.All && !selectedCache.Contains(pb) && (mode != Mode.Pinned || !pinnedCache.Contains(pb)))
-                return;
-            try
+            sdkDraw.Clear();
+            var methods = TypeCache.GetMethodsWithAttribute<DrawGizmo>();
+            foreach (var type in Types)
             {
-                sdkDraw.Invoke(null, new object[] { pb, GizmoType.Selected | GizmoType.Active });
-            }
-            catch (System.Exception e)
-            {
-                sdkDraw = null;
-                Debug.LogWarning(Log + "Couldn't draw the VRChat SDK gizmos. " + (e.InnerException ?? e).Message);
+                foreach (var method in methods)
+                {
+                    var p = method.GetParameters();
+                    if (method.IsStatic && method.DeclaringType != typeof(PhysBoneGizmos) && p.Length == 2 &&
+                        p[0].ParameterType != typeof(Object) && p[0].ParameterType != typeof(Component) &&
+                        p[0].ParameterType != typeof(Behaviour) && p[0].ParameterType != typeof(MonoBehaviour) &&
+                        p[0].ParameterType.IsAssignableFrom(type))
+                    {
+                        sdkDraw[type] = method;
+                        break;
+                    }
+                }
+                if (!sdkDraw.ContainsKey(type))
+                    Debug.LogWarning(Log + $"VRChat SDK gizmos for {type.Name} not found.");
             }
         }
 
+        static void Draw(Component c)
+        {
+            if (!(c is Behaviour b) || !b.isActiveAndEnabled || !sdkDraw.TryGetValue(c.GetType(), out var method))
+                return;
+            if (mode != Mode.All && !selectedCache.Contains(c) && (mode != Mode.Pinned || !pinnedCache.Contains(c)))
+                return;
+            try
+            {
+                method.Invoke(null, new object[] { c, GizmoType.Selected | GizmoType.Active });
+            }
+            catch (Exception e)
+            {
+                sdkDraw.Remove(c.GetType());
+                Debug.LogWarning(Log + $"Couldn't draw the VRChat SDK gizmos for {c.GetType().Name}. " + (e.InnerException ?? e).Message);
+            }
+        }
+
+        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
+        static void DrawPhysBone(VRCPhysBone c, GizmoType type) => Draw(c);
+
+        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
+        static void DrawReceiver(VRCContactReceiver c, GizmoType type) => Draw(c);
+
+        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
+        static void DrawSender(VRCContactSender c, GizmoType type) => Draw(c);
+
         const string ToolbarId = "VAP/PhysBoneGizmos/";
 
-        [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "PhysBone Gizmos", true)]
+        [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "PhysBone & Contact Gizmos", true)]
         class GizmosOverlay : ToolbarOverlay
         {
             public GizmosOverlay() : base(
@@ -233,26 +256,26 @@ namespace VAP.Editor
         [EditorToolbarElement(ToolbarId + "Selected", typeof(SceneView))]
         class SelectedToggle : ModeToggle
         {
-            public SelectedToggle() : base(Mode.Selected, "Selected", "Draw PhysBones whose root or bones are selected") { }
+            public SelectedToggle() : base(Mode.Selected, "Selected", "Draw PhysBones whose root or bones are selected, and contacts whose root is selected") { }
         }
 
         [EditorToolbarElement(ToolbarId + "Pinned", typeof(SceneView))]
         class PinnedToggle : ModeToggle
         {
-            public PinnedToggle() : base(Mode.Pinned, "Pinned", "Draw pinned and selected PhysBones") { }
+            public PinnedToggle() : base(Mode.Pinned, "Pinned", "Draw pinned and selected PhysBones and contacts") { }
         }
 
         [EditorToolbarElement(ToolbarId + "All", typeof(SceneView))]
         class AllToggle : ModeToggle
         {
-            public AllToggle() : base(Mode.All, "All", "Draw every PhysBone") { }
+            public AllToggle() : base(Mode.All, "All", "Draw every PhysBone and contact") { }
         }
 
         abstract class SelectionButton : EditorToolbarButton
         {
-            readonly System.Func<bool> enabled;
+            readonly Func<bool> enabled;
 
-            protected SelectionButton(string label, string tip, System.Action action, System.Func<bool> enabled)
+            protected SelectionButton(string label, string tip, Action action, Func<bool> enabled)
             {
                 this.enabled = enabled;
                 text = label;
@@ -274,18 +297,18 @@ namespace VAP.Editor
             void Refresh() => SetEnabled(enabled());
         }
 
-        static bool AnySelected() => SelectedPhysBones().GetEnumerator().MoveNext();
+        static bool AnySelected() => SelectedComponents().Any();
 
         [EditorToolbarElement(ToolbarId + "Pin", typeof(SceneView))]
         class PinButton : SelectionButton
         {
-            public PinButton() : base("Pin", "Pin the selected PhysBones", PinSelected, AnySelected) { }
+            public PinButton() : base("Pin", "Pin the PhysBones and contacts on the selected game objects and their children", PinSelected, AnySelected) { }
         }
 
         [EditorToolbarElement(ToolbarId + "Unpin", typeof(SceneView))]
         class UnpinButton : SelectionButton
         {
-            public UnpinButton() : base("Unpin", "Unpin the selected PhysBones", UnpinSelected, AnySelected) { }
+            public UnpinButton() : base("Unpin", "Unpin the PhysBones and contacts on the selected game objects and their children", UnpinSelected, AnySelected) { }
         }
 
         [EditorToolbarElement(ToolbarId + "Clear", typeof(SceneView))]

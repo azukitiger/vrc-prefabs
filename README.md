@@ -32,7 +32,7 @@ Prefabs and assets that add **advanced animations and interactive systems** to *
   - [Mesh Blendshape Normals](#mesh-blendshape-normals)
   - [Rig Floor Adjuster](#rig-floor-adjuster)
 - [Tools](#tools)
-  - [PhysBone Gizmos](#physbone-gizmos)
+  - [PhysBone & Contact Gizmos](#physbone--contact-gizmos)
   - [UV Bake Tool](#uv-bake-tool)
 
 ## Better Blink Prefab
@@ -554,20 +554,20 @@ Moves the armature and the view position up or down by **Armature Height Offset*
 
 Editor tools that only help while working in Unity. They don't change the avatar.
 
-## PhysBone Gizmos
+## PhysBone & Contact Gizmos
 
-Shows the VRChat SDK's **VRC PhysBone** gizmos in the Scene view without selecting the PhysBones. Disabled PhysBones are skipped.
+Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC Contact Sender** and **VRC Contact Receiver** components in the Scene view without selecting them. Disabled components are skipped.
 
 ### Instructions
-1. If the **PhysBone Gizmos** toolbar isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on. Drag it by its handle to dock it, for example in the top toolbar.
-2. Pick **Selected** to draw PhysBones whose root or bones are selected, **Pinned** to also draw pinned PhysBones, or **All** to draw every one.
-3. Select game objects and click **Pin** or **Unpin** to pin every PhysBone on them and their children.
+1. If the **PhysBone & Contact Gizmos** toolbar isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on. Drag it by its handle to dock it, for example in the top toolbar.
+2. Pick **Selected** to draw PhysBones whose root or bones are selected and contacts whose root is selected, **Pinned** to also draw pinned PhysBones, or **All** to draw all of them.
+3. Select game objects and click **Pin** or **Unpin** to pin every PhysBone and contact on them and their children.
 
 ### Settings
 | Setting | Description |
 |-|-|
-| Selected, Pinned, All | Which PhysBones are drawn. **Selected** uses the selected game objects: a PhysBone shows when its root transform or any bone under it is selected |
-| Pin, Unpin | Pins or unpins the PhysBones of the selected game objects and their children |
+| Selected, Pinned, All | What is drawn. **Selected** uses the selected game objects: a PhysBone shows when its root transform or any bone under it is selected, a contact when its root transform is selected. **Pinned** also shows pinned ones |
+| Pin, Unpin | Pins or unpins the PhysBones and contacts of the selected game objects and their children |
 | Clear | Unpins everything |
 
 Pins are saved per project on this computer.

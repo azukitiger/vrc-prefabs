@@ -1,3 +1,6 @@
+## Version 3.0.15
+- Physbone Gizmos now supports Contacts.
+
 ## Version 3.0.14
 - Deprecated prefabs that can be replaced by components.
 - Tail wag can no longer be animated if it's off.
