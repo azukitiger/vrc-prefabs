@@ -29,6 +29,8 @@ namespace VAP.Editor
         static Mode mode;
         static Action modeChanged;
         static Action pinsChanged;
+        static Action targetsChanged;
+        static readonly List<Component> targets = new List<Component>();
         static readonly HashSet<string> pins = new HashSet<string>();
         static Component[] cache = new Component[0];
         static readonly HashSet<Component> pinnedCache = new HashSet<Component>();
@@ -52,32 +54,6 @@ namespace VAP.Editor
             };
         }
 
-        static void PinSelected()
-        {
-            int n = 0;
-            foreach (var c in SelectedComponents())
-            {
-                pins.Add(Id(c));
-                pinnedCache.Add(c);
-                n++;
-            }
-            AfterPinChange();
-            Debug.Log(Log + $"Pinned {n}. Total pinned: {pins.Count}.");
-        }
-
-        static void UnpinSelected()
-        {
-            int n = 0;
-            foreach (var c in SelectedComponents())
-            {
-                pinnedCache.Remove(c);
-                if (pins.Remove(Id(c)))
-                    n++;
-            }
-            AfterPinChange();
-            Debug.Log(Log + $"Unpinned {n}. Total pinned: {pins.Count}.");
-        }
-
         static void ClearPins()
         {
             pins.Clear();
@@ -95,9 +71,6 @@ namespace VAP.Editor
 
         static IEnumerable<Component> Find(GameObject go) =>
             Types.SelectMany(t => go.GetComponentsInChildren(t, true));
-
-        static IEnumerable<Component> SelectedComponents() =>
-            Selection.gameObjects.SelectMany(Find).Distinct();
 
         static string Path(Transform t)
         {
@@ -167,6 +140,9 @@ namespace VAP.Editor
                     if (selected.Any(t => c is VRCPhysBone ? t.IsChildOf(root) : t == root))
                         selectedCache.Add(c);
                 }
+            targets.Clear();
+            targets.AddRange(cache.Where(selectedCache.Contains).OrderBy(c => Array.IndexOf(Types, c.GetType())).ThenBy(c => c.name));
+            targetsChanged?.Invoke();
             SceneView.RepaintAll();
         }
 
@@ -219,14 +195,187 @@ namespace VAP.Editor
         [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
         static void DrawSender(VRCContactSender c, GizmoType type) => Draw(c);
 
+        static string TypeLabel(Component c) =>
+            c is VRCPhysBone ? "PhysBone" : c is VRCContactReceiver ? "Receiver" : "Sender";
+
+        static bool IsPinned(Component c) => pinnedCache.Contains(c);
+
+        static void TogglePin(Component c)
+        {
+            if (c == null)
+                return;
+            if (pinnedCache.Remove(c))
+                pins.Remove(Id(c));
+            else
+            {
+                pinnedCache.Add(c);
+                pins.Add(Id(c));
+            }
+            AfterPinChange();
+        }
+
+        static Texture2D Icon(params string[] names)
+        {
+            foreach (var name in names)
+            {
+                var icon = EditorGUIUtility.FindTexture(name);
+                if (icon != null)
+                    return icon;
+            }
+            return null;
+        }
+
+        static void SizeLikeToolbar(VisualElement e)
+        {
+            e.style.height = 20f;
+            e.style.minWidth = 30f;
+            e.style.paddingLeft = 8f;
+            e.style.paddingRight = 8f;
+            e.style.justifyContent = Justify.Center;
+            e.style.alignItems = Align.Center;
+        }
+
+        static Button IconButton(Texture2D icon, string fallback, string tip, Action action, Color? tint = null)
+        {
+            var button = new Button(action) { tooltip = tip, style = { width = 22, height = 18, paddingLeft = 1, paddingRight = 1 } };
+            if (icon != null)
+                button.Add(new Image { image = icon, scaleMode = ScaleMode.ScaleToFit, tintColor = tint ?? Color.white, style = { flexGrow = 1 } });
+            else
+                button.text = fallback;
+            return button;
+        }
+
+        static readonly Color PinnedColor = new Color(0.3f, 0.6f, 1f);
+        static readonly Color UnpinnedColor = new Color(0.55f, 0.55f, 0.55f);
+        static Texture2D pinIcon;
+
+        static Texture2D PinIcon()
+        {
+            if (pinIcon != null)
+                return pinIcon;
+            const int size = 32;
+            const int samples = 4;
+            pinIcon = new Texture2D(size, size, TextureFormat.RGBA32, false) { hideFlags = HideFlags.HideAndDontSave, filterMode = FilterMode.Bilinear };
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    int hits = 0;
+                    for (int sy = 0; sy < samples; sy++)
+                        for (int sx = 0; sx < samples; sx++)
+                            if (InPin(x + (sx + 0.5f) / samples, y + (sy + 0.5f) / samples))
+                                hits++;
+                    pixels[y * size + x] = new Color32(255, 255, 255, (byte)(hits * 255 / (samples * samples)));
+                }
+            pinIcon.SetPixels32(pixels);
+            pinIcon.Apply();
+            return pinIcon;
+        }
+
+        static bool InPin(float px, float py)
+        {
+            const float c = 0.7071f;
+            float dx = px - 16f, dy = py - 16f;
+            float x = 16f + dx * c + dy * c;
+            float y = 16f - dx * c + dy * c;
+            if ((x - 16f) * (x - 16f) + (y - 23f) * (y - 23f) <= 6f * 6f)
+                return true;
+            if (x >= 12.5f && x <= 19.5f && y >= 14f && y <= 23f)
+                return true;
+            if (x >= 9f && x <= 23f && y >= 12f && y <= 15f)
+                return true;
+            return Mathf.Abs(x - 16f) <= 1f && y >= 2f && y <= 12f;
+        }
+
         const string ToolbarId = "VAP/PhysBoneGizmos/";
 
         [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "PhysBone & Contact Gizmos", true)]
-        class GizmosOverlay : ToolbarOverlay
+        class GizmosOverlay : Overlay, ICreateToolbar
         {
-            public GizmosOverlay() : base(
-                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "All",
-                ToolbarId + "Pin", ToolbarId + "Unpin", ToolbarId + "Clear") { }
+            public IEnumerable<string> toolbarElements => new[]
+            {
+                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "All", ToolbarId + "Clear",
+            };
+
+            public override VisualElement CreatePanelContent()
+            {
+                var root = new VisualElement { style = { minWidth = 240 } };
+                var modes = new VisualElement { style = { flexDirection = FlexDirection.Row } };
+                var group = new VisualElement[] { new SelectedToggle(), new PinnedToggle(), new AllToggle() };
+                for (int i = 0; i < group.Length; i++)
+                {
+                    var st = group[i].style;
+                    SizeLikeToolbar(group[i]);
+                    float left = i == 0 ? 3f : 0f;
+                    float right = i == group.Length - 1 ? 3f : 0f;
+                    st.borderTopLeftRadius = left;
+                    st.borderBottomLeftRadius = left;
+                    st.borderTopRightRadius = right;
+                    st.borderBottomRightRadius = right;
+                    if (i > 0)
+                    {
+                        st.marginLeft = 0f;
+                        st.borderLeftWidth = 0f;
+                    }
+                    if (i < group.Length - 1)
+                        st.marginRight = 0f;
+                    modes.Add(group[i]);
+                }
+                modes.Add(new VisualElement { style = { flexGrow = 1 } });
+                var clear = new ClearButton();
+                SizeLikeToolbar(clear);
+                clear.style.borderTopLeftRadius = 3f;
+                clear.style.borderBottomLeftRadius = 3f;
+                clear.style.borderTopRightRadius = 3f;
+                clear.style.borderBottomRightRadius = 3f;
+                modes.Add(clear);
+                root.Add(modes);
+                var list = new VisualElement { style = { marginTop = 4 } };
+                root.Add(list);
+
+                var properties = Icon("d_UnityEditor.InspectorWindow", "UnityEditor.InspectorWindow");
+
+                void Rebuild()
+                {
+                    list.Clear();
+                    targets.RemoveAll(c => c == null);
+                    foreach (var c in targets)
+                    {
+                        var component = c;
+                        bool isPinned = IsPinned(c);
+                        var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+                        var pin = IconButton(PinIcon(), "Pin", isPinned ? "Unpin" : "Pin", () => TogglePin(component),
+                            isPinned ? Color.white : UnpinnedColor);
+                        if (isPinned)
+                            pin.style.backgroundColor = PinnedColor;
+                        row.Add(pin);
+                        row.Add(new Label($"{TypeLabel(c)}: {c.name}")
+                        {
+                            tooltip = Path(c.transform),
+                            style =
+                            {
+                                flexGrow = 1, height = 18, marginLeft = 4, marginTop = 0, marginBottom = 0,
+                                paddingTop = 0, paddingBottom = 0, unityTextAlign = TextAnchor.MiddleLeft,
+                            },
+                        });
+                        row.Add(IconButton(properties, "...", "Open in a Properties window", () => EditorUtility.OpenPropertyEditor(component)));
+                        list.Add(row);
+                    }
+                }
+
+                root.RegisterCallback<AttachToPanelEvent>(_ =>
+                {
+                    targetsChanged += Rebuild;
+                    pinsChanged += Rebuild;
+                    Rebuild();
+                });
+                root.RegisterCallback<DetachFromPanelEvent>(_ =>
+                {
+                    targetsChanged -= Rebuild;
+                    pinsChanged -= Rebuild;
+                });
+                return root;
+            }
         }
 
         abstract class ModeToggle : EditorToolbarToggle
@@ -250,7 +399,14 @@ namespace VAP.Editor
                 Refresh();
             }
 
-            void Refresh() => SetValueWithoutNotify(mode == target);
+            void Refresh()
+            {
+                bool on = mode == target;
+                SetValueWithoutNotify(on);
+                var color = on ? new StyleColor(Color.white) : new StyleColor(StyleKeyword.Null);
+                style.color = color;
+                this.Query<TextElement>().ForEach(t => t.style.color = color);
+            }
         }
 
         [EditorToolbarElement(ToolbarId + "Selected", typeof(SceneView))]
@@ -271,50 +427,23 @@ namespace VAP.Editor
             public AllToggle() : base(Mode.All, "All", "Draw every PhysBone and contact") { }
         }
 
-        abstract class SelectionButton : EditorToolbarButton
+        [EditorToolbarElement(ToolbarId + "Clear", typeof(SceneView))]
+        class ClearButton : EditorToolbarButton
         {
-            readonly Func<bool> enabled;
-
-            protected SelectionButton(string label, string tip, Action action, Func<bool> enabled)
+            public ClearButton()
             {
-                this.enabled = enabled;
-                text = label;
-                tooltip = tip;
-                clicked += action;
+                text = "Clear";
+                tooltip = "Clear all pins";
+                clicked += ClearPins;
                 RegisterCallback<AttachToPanelEvent>(_ =>
                 {
-                    Selection.selectionChanged += Refresh;
                     pinsChanged += Refresh;
                     Refresh();
                 });
-                RegisterCallback<DetachFromPanelEvent>(_ =>
-                {
-                    Selection.selectionChanged -= Refresh;
-                    pinsChanged -= Refresh;
-                });
+                RegisterCallback<DetachFromPanelEvent>(_ => pinsChanged -= Refresh);
             }
 
-            void Refresh() => SetEnabled(enabled());
-        }
-
-        static bool AnySelected() => SelectedComponents().Any();
-
-        [EditorToolbarElement(ToolbarId + "Pin", typeof(SceneView))]
-        class PinButton : SelectionButton
-        {
-            public PinButton() : base("Pin", "Pin the PhysBones and contacts on the selected game objects and their children", PinSelected, AnySelected) { }
-        }
-
-        [EditorToolbarElement(ToolbarId + "Unpin", typeof(SceneView))]
-        class UnpinButton : SelectionButton
-        {
-            public UnpinButton() : base("Unpin", "Unpin the PhysBones and contacts on the selected game objects and their children", UnpinSelected, AnySelected) { }
-        }
-
-        [EditorToolbarElement(ToolbarId + "Clear", typeof(SceneView))]
-        class ClearButton : SelectionButton
-        {
-            public ClearButton() : base("Clear", "Clear all pins", ClearPins, () => pins.Count > 0) { }
+            void Refresh() => SetEnabled(pins.Count > 0);
         }
     }
 }

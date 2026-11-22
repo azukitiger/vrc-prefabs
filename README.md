@@ -559,18 +559,19 @@ Editor tools that only help while working in Unity. They don't change the avatar
 Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC Contact Sender** and **VRC Contact Receiver** components in the Scene view without selecting them. Disabled components are skipped.
 
 ### Instructions
-1. If the **PhysBone & Contact Gizmos** toolbar isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on. Drag it by its handle to dock it, for example in the top toolbar.
-2. Pick **Selected** to draw PhysBones whose root or bones are selected and contacts whose root is selected, **Pinned** to also draw pinned PhysBones, or **All** to draw all of them.
-3. Select game objects and click **Pin** or **Unpin** to pin every PhysBone and contact on them and their children.
+1. If the **PhysBone & Contact Gizmos** panel isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on.
+2. Pick **Selected**, **Pinned** or **All**.
+3. Select a bone. The panel lists the PhysBones and contacts that target it. Click the pin icon next to one to pin or unpin it, or the properties icon to open it in its own tab.
 
 ### Settings
 | Setting | Description |
 |-|-|
-| Selected, Pinned, All | What is drawn. **Selected** uses the selected game objects: a PhysBone shows when its root transform or any bone under it is selected, a contact when its root transform is selected. **Pinned** also shows pinned ones |
-| Pin, Unpin | Pins or unpins the PhysBones and contacts of the selected game objects and their children |
+| Selected | Draws PhysBones whose root transform or any bone under it is selected, and contacts whose root transform is selected |
+| Pinned | Also draws pinned PhysBones and contacts |
+| All | Draws every PhysBone and contact |
 | Clear | Unpins everything |
 
-Pins are saved per project on this computer.
+Pins are saved per project on this computer. When the panel is docked in a toolbar, only the mode and **Clear** buttons are shown.
 
 ## UV Bake Tool
 
