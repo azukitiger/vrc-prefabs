@@ -1,9 +1,11 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
+using UnityEditor.Toolbars;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 using VRC.SDK3.Dynamics.PhysBone.Components;
 
 namespace VAP.Editor
@@ -11,47 +13,37 @@ namespace VAP.Editor
     [InitializeOnLoad]
     public static class PhysBoneGizmos
     {
-        enum Mode { Off, Pinned, All }
+        enum Mode { Selected, Pinned, All }
 
-        const string MenuRoot = "Tools/VAP/PhysBone Gizmos/";
         const string Log = "[VAP PhysBone Gizmos] ";
         const string ModeKey = "Azuki.PhysBoneGizmos.Mode";
-        const string DrawSelectedKey = "Azuki.PhysBoneGizmos.DrawWhenSelected";
         static readonly string PinsKey = "Azuki.PhysBoneGizmos.PathPins." + Application.dataPath.GetHashCode();
 
-        static readonly Color LineColor = new Color(1f, 0.85f, 0.2f, 0.9f);
-        static readonly Color RadiusColor = new Color(0.3f, 0.9f, 1f, 0.6f);
-        static readonly Color EndColor = new Color(1f, 0.5f, 0.2f, 0.9f);
-
         static Mode mode;
-        static bool drawWhenSelected;
+        static System.Action modeChanged;
+        static System.Action pinsChanged;
         static readonly HashSet<string> pins = new HashSet<string>();
         static VRCPhysBone[] cache = new VRCPhysBone[0];
         static readonly HashSet<VRCPhysBone> pinnedCache = new HashSet<VRCPhysBone>();
-        static readonly List<(Transform t, int depth, bool leaf)> nodes = new List<(Transform, int, bool)>();
+        static readonly HashSet<VRCPhysBone> selectedCache = new HashSet<VRCPhysBone>();
 
         static PhysBoneGizmos()
         {
             mode = (Mode)EditorPrefs.GetInt(ModeKey, (int)Mode.Pinned);
-            drawWhenSelected = EditorPrefs.GetBool(DrawSelectedKey, true);
             LoadPins();
             RefreshCache();
             EditorApplication.hierarchyChanged += RefreshCache;
+            Selection.selectionChanged += RefreshSelected;
             EditorSceneManager.sceneOpened += (s, m) => RefreshCache();
             PrefabStage.prefabStageOpened += s => RefreshCache();
             PrefabStage.prefabStageClosing += s => EditorApplication.delayCall += RefreshCache;
-            SceneView.duringSceneGui += OnSceneGUI;
+            EditorApplication.delayCall += () =>
+            {
+                sdkDraw = FindSdkDraw();
+                SceneView.RepaintAll();
+            };
         }
 
-        [MenuItem(MenuRoot + "Off", false, 0)] static void SetOff() => SetMode(Mode.Off);
-        [MenuItem(MenuRoot + "Pinned Only", false, 1)] static void SetPinned() => SetMode(Mode.Pinned);
-        [MenuItem(MenuRoot + "All", false, 2)] static void SetAll() => SetMode(Mode.All);
-
-        [MenuItem(MenuRoot + "Off", true)] static bool ValidateOff() => Checks();
-        [MenuItem(MenuRoot + "Pinned Only", true)] static bool ValidatePinned() => Checks();
-        [MenuItem(MenuRoot + "All", true)] static bool ValidateAll() => Checks();
-
-        [MenuItem(MenuRoot + "Pin Selected", false, 20)]
         static void PinSelected()
         {
             int n = 0;
@@ -65,7 +57,6 @@ namespace VAP.Editor
             Debug.Log(Log + $"Pinned {n} PhysBone(s). Total pinned: {pins.Count}.");
         }
 
-        [MenuItem(MenuRoot + "Unpin Selected", false, 21)]
         static void UnpinSelected()
         {
             int n = 0;
@@ -79,7 +70,6 @@ namespace VAP.Editor
             Debug.Log(Log + $"Unpinned {n} PhysBone(s). Total pinned: {pins.Count}.");
         }
 
-        [MenuItem(MenuRoot + "Clear Pins", false, 22)]
         static void ClearPins()
         {
             pins.Clear();
@@ -87,71 +77,12 @@ namespace VAP.Editor
             AfterPinChange();
         }
 
-        const string ObjectMenu = "GameObject/VAP/PhysBone Gizmos/";
-
-        [MenuItem(ObjectMenu + "Pin", false, 20)]
-        static void ObjectPin() => PinSelected();
-
-        [MenuItem(ObjectMenu + "Unpin", false, 21)]
-        static void ObjectUnpin() => UnpinSelected();
-
-        [MenuItem(ObjectMenu + "Clear Pins", false, 22)]
-        static void ObjectClear() => ClearPins();
-
-        [MenuItem(ObjectMenu + "Pin", true)]
-        [MenuItem(ObjectMenu + "Unpin", true)]
-        static bool ValidateObject()
-        {
-            foreach (var go in Selection.gameObjects)
-                if (go.GetComponentInChildren<VRCPhysBone>(true) != null)
-                    return true;
-            return false;
-        }
-
-        [MenuItem(MenuRoot + "Also Draw When Selected", false, 30)]
-        static void ToggleDrawSelected()
-        {
-            drawWhenSelected = !drawWhenSelected;
-            EditorPrefs.SetBool(DrawSelectedKey, drawWhenSelected);
-            SceneView.RepaintAll();
-        }
-
-        [MenuItem(MenuRoot + "Also Draw When Selected", true)]
-        static bool ValidateDrawSelected()
-        {
-            Menu.SetChecked(MenuRoot + "Also Draw When Selected", drawWhenSelected);
-            return true;
-        }
-
-        [MenuItem("CONTEXT/VRCPhysBone/Toggle Always-On Gizmo")]
-        static void TogglePin(MenuCommand cmd)
-        {
-            var pb = (VRCPhysBone)cmd.context;
-            string id = Id(pb);
-            bool pinned = !pins.Remove(id);
-            if (pinned)
-            {
-                pins.Add(id);
-                pinnedCache.Add(pb);
-            }
-            else
-                pinnedCache.Remove(pb);
-            AfterPinChange();
-        }
-
         static void SetMode(Mode m)
         {
             mode = m;
             EditorPrefs.SetInt(ModeKey, (int)m);
+            modeChanged?.Invoke();
             SceneView.RepaintAll();
-        }
-
-        static bool Checks()
-        {
-            Menu.SetChecked(MenuRoot + "Off", mode == Mode.Off);
-            Menu.SetChecked(MenuRoot + "Pinned Only", mode == Mode.Pinned);
-            Menu.SetChecked(MenuRoot + "All", mode == Mode.All);
-            return true;
         }
 
         static IEnumerable<VRCPhysBone> SelectedPhysBones()
@@ -191,8 +122,7 @@ namespace VAP.Editor
         static void AfterPinChange()
         {
             EditorPrefs.SetString(PinsKey, string.Join("\n", pins));
-            if (mode == Mode.Off)
-                SetMode(Mode.Pinned);
+            pinsChanged?.Invoke();
             RefreshCache();
             SceneView.RepaintAll();
         }
@@ -203,6 +133,7 @@ namespace VAP.Editor
             cache = stage != null && stage.prefabContentsRoot != null
                 ? stage.prefabContentsRoot.GetComponentsInChildren<VRCPhysBone>(true)
                 : Object.FindObjectsByType<VRCPhysBone>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            RefreshSelected();
             pinnedCache.RemoveWhere(p => p == null);
             if (pins.Count == 0)
                 return;
@@ -211,102 +142,156 @@ namespace VAP.Editor
                     pinnedCache.Add(pb);
         }
 
-        static void OnSceneGUI(SceneView view)
+        static System.Reflection.MethodInfo sdkDraw;
+
+        static System.Reflection.MethodInfo FindSdkDraw()
         {
-            if (mode == Mode.Off || Event.current.type != EventType.Repaint || view.camera == null)
+            foreach (var method in TypeCache.GetMethodsWithAttribute<DrawGizmo>())
+            {
+                var p = method.GetParameters();
+                if (method.IsStatic && method.DeclaringType != typeof(PhysBoneGizmos) && p.Length == 2 &&
+                    p[0].ParameterType != typeof(Object) && p[0].ParameterType != typeof(Component) &&
+                    p[0].ParameterType.IsAssignableFrom(typeof(VRCPhysBone)))
+                    return method;
+            }
+            Debug.LogWarning(Log + "VRChat SDK gizmos not found.");
+            return null;
+        }
+
+        static void RefreshSelected()
+        {
+            selectedCache.Clear();
+            var selected = Selection.transforms;
+            if (selected.Length > 0)
+                foreach (var pb in cache)
+                {
+                    if (pb == null)
+                        continue;
+                    var root = pb.rootTransform != null ? pb.rootTransform : pb.transform;
+                    foreach (var t in selected)
+                        if (t.IsChildOf(root))
+                        {
+                            selectedCache.Add(pb);
+                            break;
+                        }
+                }
+            SceneView.RepaintAll();
+        }
+
+        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
+        static void DrawPinned(VRCPhysBone pb, GizmoType type)
+        {
+            if (sdkDraw == null || !pb.isActiveAndEnabled)
                 return;
-            var camForward = view.camera.transform.forward;
-            var oldZTest = Handles.zTest;
-            var oldColor = Handles.color;
-            Handles.zTest = CompareFunction.Always;
-            foreach (var pb in cache)
+            if (mode == Mode.Pinned && !pinnedCache.Contains(pb) || mode == Mode.Selected && !selectedCache.Contains(pb))
+                return;
+            try
             {
-                if (pb == null || !pb.isActiveAndEnabled)
-                    continue;
-                if (mode == Mode.Pinned && !pinnedCache.Contains(pb))
-                    continue;
-                if (!drawWhenSelected && Selection.Contains(pb.gameObject))
-                    continue;
-                Draw(pb, camForward);
+                sdkDraw.Invoke(null, new object[] { pb, GizmoType.Selected | GizmoType.Active });
             }
-            Handles.zTest = oldZTest;
-            Handles.color = oldColor;
-        }
-
-        static Transform Root(VRCPhysBone pb) => pb.rootTransform != null ? pb.rootTransform : pb.transform;
-
-        static bool HasEndpoint(VRCPhysBone pb) => pb.endpointPosition != Vector3.zero;
-
-        static int CollectChain(VRCPhysBone pb)
-        {
-            nodes.Clear();
-            int maxDepth = Collect(Root(pb), 0, pb.ignoreTransforms);
-            return HasEndpoint(pb) ? maxDepth + 1 : maxDepth;
-        }
-
-        static void Draw(VRCPhysBone pb, Vector3 camForward)
-        {
-            var root = Root(pb);
-            int maxDepth = CollectChain(pb);
-            bool hasEnd = HasEndpoint(pb);
-            Handles.color = LineColor;
-            Handles.Label(root.position, pb.name);
-
-            foreach (var (t, depth, leaf) in nodes)
+            catch (System.Exception e)
             {
-                if (t != root && t.parent != null)
+                sdkDraw = null;
+                Debug.LogWarning(Log + "Couldn't draw the VRChat SDK gizmos. " + (e.InnerException ?? e).Message);
+            }
+        }
+
+        const string ToolbarId = "VAP/PhysBoneGizmos/";
+
+        [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "PhysBone Gizmos", true)]
+        class GizmosOverlay : ToolbarOverlay
+        {
+            public GizmosOverlay() : base(
+                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "All",
+                ToolbarId + "Pin", ToolbarId + "Unpin", ToolbarId + "Clear") { }
+        }
+
+        abstract class ModeToggle : EditorToolbarToggle
+        {
+            readonly Mode target;
+
+            protected ModeToggle(Mode target, string label, string tip)
+            {
+                this.target = target;
+                text = label;
+                tooltip = tip;
+                this.RegisterValueChangedCallback(e =>
                 {
-                    Handles.color = LineColor;
-                    Handles.DrawLine(t.parent.position, t.position);
-                }
-                DrawJoint(t.position, Radius(pb, depth, maxDepth, Scale(t)), camForward);
-
-                if (hasEnd && leaf)
-                {
-                    var end = t.TransformPoint(pb.endpointPosition);
-                    Handles.color = EndColor;
-                    Handles.DrawLine(t.position, end);
-                    DrawJoint(end, Radius(pb, depth + 1, maxDepth, Scale(t)), camForward);
-                }
+                    if (e.newValue)
+                        SetMode(target);
+                    else
+                        SetValueWithoutNotify(mode == target);
+                });
+                RegisterCallback<AttachToPanelEvent>(_ => modeChanged += Refresh);
+                RegisterCallback<DetachFromPanelEvent>(_ => modeChanged -= Refresh);
+                Refresh();
             }
+
+            void Refresh() => SetValueWithoutNotify(mode == target);
         }
 
-        static int Collect(Transform t, int depth, List<Transform> ignore)
+        [EditorToolbarElement(ToolbarId + "Selected", typeof(SceneView))]
+        class SelectedToggle : ModeToggle
         {
-            int index = nodes.Count;
-            nodes.Add((t, depth, true));
-            int max = depth;
-            foreach (Transform child in t)
+            public SelectedToggle() : base(Mode.Selected, "Selected", "Draw PhysBones whose root or bones are selected") { }
+        }
+
+        [EditorToolbarElement(ToolbarId + "Pinned", typeof(SceneView))]
+        class PinnedToggle : ModeToggle
+        {
+            public PinnedToggle() : base(Mode.Pinned, "Pinned", "Draw pinned PhysBones only") { }
+        }
+
+        [EditorToolbarElement(ToolbarId + "All", typeof(SceneView))]
+        class AllToggle : ModeToggle
+        {
+            public AllToggle() : base(Mode.All, "All", "Draw every PhysBone") { }
+        }
+
+        abstract class SelectionButton : EditorToolbarButton
+        {
+            readonly System.Func<bool> enabled;
+
+            protected SelectionButton(string label, string tip, System.Action action, System.Func<bool> enabled)
             {
-                if (ignore != null && ignore.Contains(child))
-                    continue;
-                nodes[index] = (t, depth, false);
-                max = Mathf.Max(max, Collect(child, depth + 1, ignore));
+                this.enabled = enabled;
+                text = label;
+                tooltip = tip;
+                clicked += action;
+                RegisterCallback<AttachToPanelEvent>(_ =>
+                {
+                    Selection.selectionChanged += Refresh;
+                    pinsChanged += Refresh;
+                    Refresh();
+                });
+                RegisterCallback<DetachFromPanelEvent>(_ =>
+                {
+                    Selection.selectionChanged -= Refresh;
+                    pinsChanged -= Refresh;
+                });
             }
-            return max;
+
+            void Refresh() => SetEnabled(enabled());
         }
 
-        static float Radius(VRCPhysBone pb, int depth, int maxDepth, float scale)
+        static bool AnySelected() => SelectedPhysBones().GetEnumerator().MoveNext();
+
+        [EditorToolbarElement(ToolbarId + "Pin", typeof(SceneView))]
+        class PinButton : SelectionButton
         {
-            float r = pb.radius;
-            if (pb.radiusCurve != null && pb.radiusCurve.length > 0)
-                r *= pb.radiusCurve.Evaluate(maxDepth > 0 ? (float)depth / maxDepth : 0f);
-            return r * scale;
+            public PinButton() : base("Pin", "Pin the selected PhysBones", PinSelected, AnySelected) { }
         }
 
-        static void DrawJoint(Vector3 pos, float radius, Vector3 camForward)
+        [EditorToolbarElement(ToolbarId + "Unpin", typeof(SceneView))]
+        class UnpinButton : SelectionButton
         {
-            Handles.color = RadiusColor;
-            float size = HandleUtility.GetHandleSize(pos) * 0.025f;
-            Handles.DotHandleCap(0, pos, Quaternion.LookRotation(camForward), size, EventType.Repaint);
-            if (radius > 0.0001f)
-                Handles.DrawWireDisc(pos, camForward, radius);
+            public UnpinButton() : base("Unpin", "Unpin the selected PhysBones", UnpinSelected, AnySelected) { }
         }
 
-        static float Scale(Transform t)
+        [EditorToolbarElement(ToolbarId + "Clear", typeof(SceneView))]
+        class ClearButton : SelectionButton
         {
-            var s = t.lossyScale;
-            return Mathf.Max(Mathf.Abs(s.x), Mathf.Abs(s.y), Mathf.Abs(s.z));
+            public ClearButton() : base("Clear", "Clear all pins", ClearPins, () => pins.Count > 0) { }
         }
     }
 }

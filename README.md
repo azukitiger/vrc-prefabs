@@ -31,6 +31,9 @@ Prefabs and assets that add **advanced animations and interactive systems** to *
   - [VRC Face Tracking Parameter Behaviors](#vrc-face-tracking-parameter-behaviors)
   - [Mesh Blendshape Normals](#mesh-blendshape-normals)
   - [Rig Floor Adjuster](#rig-floor-adjuster)
+- [Tools](#tools)
+  - [PhysBone Gizmos](#physbone-gizmos)
+  - [UV Bake Tool](#uv-bake-tool)
 
 ## Better Blink Prefab
 
@@ -544,3 +547,46 @@ Recalculates the normals and tangents of the listed **Blendshapes** at build tim
 ## Rig Floor Adjuster
 
 Moves the armature and the view position up or down by **Armature Height Offset** (in meters) at build time, and rebuilds the humanoid avatar to match. One per avatar.
+
+---
+
+# Tools
+
+Editor tools that only help while working in Unity. They don't change the avatar.
+
+## PhysBone Gizmos
+
+Shows the VRChat SDK's **VRC PhysBone** gizmos in the Scene view without selecting the PhysBones. Disabled PhysBones are skipped.
+
+### Instructions
+1. If the **PhysBone Gizmos** toolbar isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on. Drag it by its handle to dock it, for example in the top toolbar.
+2. Pick **Selected** to draw PhysBones whose root or bones are selected, **Pinned** to draw pinned PhysBones, or **All** to draw every one.
+3. Select game objects and click **Pin** or **Unpin** to pin every PhysBone on them and their children.
+
+### Settings
+| Setting | Description |
+|-|-|
+| Selected, Pinned, All | Which PhysBones are drawn. **Selected** uses the selected game objects: a PhysBone shows when its root transform or any bone under it is selected |
+| Pin, Unpin | Pins or unpins the PhysBones of the selected game objects and their children |
+| Clear | Unpins everything |
+
+Pins are saved per project on this computer.
+
+## UV Bake Tool
+
+Rebakes a texture from one UV map of a model to another, using [Blender](https://www.blender.org) in the background. Works on Windows, macOS and Linux.
+
+### Instructions
+1. Open **Tools** > **VAP** > **UV Bake Tool**.
+2. Set **Blender** to the Blender executable, or click **Find** to look for it.
+3. Pick the FBX **Model**. Its materials and UV maps are read from the file; click **Refresh** after re-exporting it.
+4. Pick the **Material**, the **From UV** the texture is laid out on, the **To UV** to bake it onto, and the **Texture**.
+5. Click **Bake**.
+
+The result is saved next to the texture as `<texture>_<model>_<To UV>`, with the same size, file format and import settings.
+
+### Settings
+| Setting | Description |
+|-|-|
+| Margin (px) | How far the baked color extends past each UV island. Raise it if islands get dark edges |
+| Bake Device | `Auto` uses the GPU when Blender finds one. Use `CPU` if the result comes out patchy or purple |

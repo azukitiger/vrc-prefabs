@@ -19,13 +19,7 @@ namespace VAP.Editor
 
         static readonly Item[] Items =
         {
-            new Item { path = DeleteSubAsset.MenuPath, priority = 2000, run = DeleteSubAsset.Delete, valid = DeleteSubAsset.Validate },
             new Item { path = AddParametersWindow.AssetsMenu, priority = 2001, run = AddParametersWindow.FromAssets, valid = AddParametersWindow.ValidateAssets },
-            new Item { path = ExpressionsAssets.AssetsMenu, priority = 2001, run = ExpressionsAssets.CreateFromAssets, valid = ExpressionsAssets.ValidateAssets },
-            new Item { path = AssetMoves.InsertMenu, priority = 2002, run = AssetMoves.Insert, valid = AssetMoves.ValidateInsert },
-            new Item { path = AssetMoves.InsertPickMenu, priority = 2002, run = AssetMoves.InsertPick, valid = AssetMoves.ValidateInsertPick },
-            new Item { path = AssetMoves.ExtractMenu, priority = 2003, run = AssetMoves.Extract, valid = AssetMoves.ValidateExtract },
-            new Item { path = AssetMoves.HidePartsMenu, priority = 2004, run = AssetMoves.HideParts, valid = AssetMoves.ValidateHideParts },
         };
 
         const BindingFlags Internal = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public;

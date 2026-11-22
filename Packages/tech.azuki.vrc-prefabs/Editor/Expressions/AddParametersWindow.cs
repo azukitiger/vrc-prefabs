@@ -124,7 +124,7 @@ namespace VAP.Editor
                 list.Add(VAPExpressions.Copy(p));
             target.parameters = list.ToArray();
             EditorUtility.SetDirty(target);
-            AssetMoves.KeepPartsHidden(AssetDatabase.GetAssetPath(target), () => AssetDatabase.SaveAssetIfDirty(target));
+            AssetDatabase.SaveAssetIfDirty(target);
         }
     }
 }

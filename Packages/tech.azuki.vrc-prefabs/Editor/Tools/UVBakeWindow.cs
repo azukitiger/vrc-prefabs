@@ -1,793 +1,630 @@
-
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
-namespace Azuki.Tools
+namespace VAP.Editor
 {
-    public class UVBakeWindow : EditorWindow
+    internal class UVBakeWindow : EditorWindow
     {
-        private const string PrefBlenderPath = "AzukiUVBake_BlenderExePath";
-        private const string PrefDeviceMode = "AzukiUVBake_DeviceMode";
-        private const string ScriptFileName = "bake_uv.py";
+        const string PrefBlenderPath = "AzukiUVBake_BlenderExePath";
+        const string PrefDeviceMode = "AzukiUVBake_DeviceMode";
+        const string ScriptFileName = "bake_uv.py";
 
-        private static readonly string[] DeviceModeLabels = { "Auto", "GPU", "CPU" };
+        static readonly string[] DeviceModes = { "Auto", "GPU", "CPU" };
 
-        private string blenderExePath = "";
-        private UnityEngine.Object fbxAsset;
-        private Texture2D textureAsset;
+        string blenderPath = "";
+        UnityEngine.Object fbxAsset;
+        Texture2D texture;
 
-        private string[] availableMaterials = Array.Empty<string>();
-        private readonly Dictionary<string, string[]> uvMapsByMaterial = new Dictionary<string, string[]>();
-        private string lastFetchedFbx = "";
+        string[] materials = Array.Empty<string>();
+        readonly Dictionary<string, string[]> uvMaps = new Dictionary<string, string[]>();
+        string fetchedFbx = "";
+        int pickerId = -1;
 
-        private int fbxPickerControlID = -1;
+        int materialIndex = -1;
+        int sourceIndex = -1;
+        int destIndex = -1;
+        int margin = 32;
+        int deviceMode;
 
-        private int materialIndex = -1;
-        private int sourceUVIndex = -1;
-        private int destUVIndex = -1;
-        private int marginPx = 32;
-        private int deviceModeIndex = 0;
+        readonly StringBuilder log = new StringBuilder();
+        readonly object logLock = new object();
+        Vector2 logScroll;
+        bool scrollToBottom;
+        volatile bool logChanged;
 
-        private readonly StringBuilder logBuilder = new StringBuilder();
-        private readonly object logLock = new object();
-        private Vector2 logScroll;
-        private bool scrollLogToBottom;
-        private Process bakeProcess;
-        private volatile bool isBaking = false;
-        private DateTime bakeStartTime;
+        Process bakeProcess;
+        bool baking;
+        volatile bool bakeExited;
+        DateTime bakeStart;
+        string bakeOutput;
+        Texture2D bakeSource;
 
-        private string SelectedMaterialName =>
-            (materialIndex >= 0 && materialIndex < availableMaterials.Length) ? availableMaterials[materialIndex] : "";
+        string Material => materialIndex >= 0 && materialIndex < materials.Length ? materials[materialIndex] : "";
 
-        private string[] CurrentUVs =>
-            (!string.IsNullOrEmpty(SelectedMaterialName) && uvMapsByMaterial.TryGetValue(SelectedMaterialName, out var uvs))
-                ? uvs : Array.Empty<string>();
+        string[] UVs => Material.Length > 0 && uvMaps.TryGetValue(Material, out var uvs) ? uvs : Array.Empty<string>();
 
         [MenuItem("Tools/VAP/UV Bake Tool")]
-        public static void ShowWindow()
+        static void ShowWindow()
         {
-            var win = GetWindow<UVBakeWindow>("UV Bake Tool");
-            win.minSize = new Vector2(420, 520);
+            var window = GetWindow<UVBakeWindow>("UV Bake Tool");
+            window.minSize = new Vector2(420, 520);
         }
 
-        private void OnEnable()
+        void OnEnable()
         {
-            blenderExePath = EditorPrefs.GetString(PrefBlenderPath, "");
-            if (string.IsNullOrEmpty(blenderExePath) || !File.Exists(blenderExePath))
+            blenderPath = EditorPrefs.GetString(PrefBlenderPath, "");
+            if (!File.Exists(blenderPath))
             {
-                string detected = AutoDetectBlenderPath();
-                if (!string.IsNullOrEmpty(detected))
-                {
-                    blenderExePath = detected;
-                    EditorPrefs.SetString(PrefBlenderPath, blenderExePath);
-                }
+                string found = FindBlender();
+                if (found != null)
+                    SetBlenderPath(found);
             }
-
-            deviceModeIndex = EditorPrefs.GetInt(PrefDeviceMode, 0);
+            deviceMode = Mathf.Clamp(EditorPrefs.GetInt(PrefDeviceMode, 0), 0, DeviceModes.Length - 1);
+            EditorApplication.update += OnUpdate;
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
-            EditorApplication.update -= PollRepaint;
+            EditorApplication.update -= OnUpdate;
         }
 
-        private void OnGUI()
+        void SetBlenderPath(string path)
         {
-            EditorGUILayout.LabelField("Blender UV Rebake", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox(
-                "Imports an FBX headlessly in Blender and rebakes a texture from one UV map to another. " +
-                "Output is saved next to the source texture, suffixed with the FBX name and target UV map name, " +
-                "matching the source's resolution and file format.",
-                MessageType.None);
+            blenderPath = path;
+            EditorPrefs.SetString(PrefBlenderPath, path);
+        }
 
-            EditorGUILayout.Space(8);
-            EditorGUILayout.BeginHorizontal();
-            DrawPathField("Blender", ref blenderExePath, extension: GetBlenderFilePickerExtension(),
-                onChanged: () => EditorPrefs.SetString(PrefBlenderPath, blenderExePath));
-            if (GUILayout.Button("Auto-detect", GUILayout.Width(90)))
+        void OnGUI()
+        {
+            EditorGUILayout.Space(4);
+            using (new EditorGUILayout.HorizontalScope())
             {
-                string detected = AutoDetectBlenderPath();
-                if (!string.IsNullOrEmpty(detected))
+                string newPath = EditorGUILayout.TextField(new GUIContent("Blender", "Path to the Blender executable"), blenderPath);
+                if (GUILayout.Button("...", GUILayout.Width(30)))
                 {
-                    blenderExePath = detected;
-                    EditorPrefs.SetString(PrefBlenderPath, blenderExePath);
+                    string dir = File.Exists(newPath) ? Path.GetDirectoryName(newPath) : "";
+                    string picked = EditorUtility.OpenFilePanel("Blender", dir, Application.platform == RuntimePlatform.WindowsEditor ? "exe" : "");
+                    if (!string.IsNullOrEmpty(picked))
+                        newPath = picked;
                 }
-                else
+                if (GUILayout.Button(new GUIContent("Find", "Look for Blender in the usual install folders and PATH"), GUILayout.Width(50)))
                 {
-                    EditorUtility.DisplayDialog("Blender not found",
-                        "Couldn't automatically locate Blender. Please browse to the Blender executable manually.", "OK");
+                    string found = FindBlender();
+                    if (found != null)
+                        newPath = found;
+                    else
+                        EditorUtility.DisplayDialog("Blender not found", "Couldn't find Blender. Pick the Blender executable with the ... button.", "OK");
                 }
-            }
-            EditorGUILayout.EndHorizontal();
-
-            string scriptPath = GetScriptPath();
-            if (!File.Exists(scriptPath))
-            {
-                EditorGUILayout.HelpBox(
-                    $"bake_uv.py not found next to this script. Place it at:\n{scriptPath}",
-                    MessageType.Warning);
+                if (newPath != blenderPath)
+                    SetBlenderPath(newPath);
             }
 
-            bool showRest = fbxAsset != null || isBaking;
+            if (!File.Exists(ScriptPath()))
+                EditorGUILayout.HelpBox($"{ScriptFileName} is missing from:\n{Path.GetDirectoryName(ScriptPath())}", MessageType.Warning);
 
-            EditorGUILayout.Space(10);
-            EditorGUILayout.BeginHorizontal();
-            DrawFbxField();
-            if (showRest)
+            EditorGUILayout.Space(6);
+            using (new EditorGUILayout.HorizontalScope())
             {
-                using (new EditorGUI.DisabledScope(fbxAsset == null))
-                {
-                    if (GUILayout.Button("Refresh", GUILayout.Width(60)))
-                    {
-                        RefreshAll();
-                    }
-                }
+                DrawFbxField();
+                if (fbxAsset != null && GUILayout.Button(new GUIContent("Refresh", "Read the materials and UV maps again"), GUILayout.Width(60)))
+                    Refresh();
             }
-            EditorGUILayout.EndHorizontal();
 
-            MaybeAutoFetch();
+            AutoFetch();
 
-            if (!showRest)
+            if (fbxAsset == null && !baking)
             {
+                DrawLog();
                 return;
             }
 
-            DrawMaterialPopup();
-            DrawUVPopup("From UV", ref sourceUVIndex);
-            DrawUVPopup("To UV", ref destUVIndex);
+            DrawMaterials();
+            DrawUVPopup(new GUIContent("From UV", "UV map the texture is laid out on"), ref sourceIndex);
+            DrawUVPopup(new GUIContent("To UV", "UV map to bake the texture onto"), ref destIndex);
+            texture = (Texture2D)EditorGUILayout.ObjectField(new GUIContent("Texture", "Texture laid out on From UV. The result is saved next to it, named <texture>_<model>_<To UV>, with the same size, format and import settings"), texture, typeof(Texture2D), false);
+            margin = EditorGUILayout.IntSlider(new GUIContent("Margin (px)", "How far the baked color extends past each UV island. Raise it if islands get dark edges"), margin, 1, 256);
 
-            textureAsset = (Texture2D)EditorGUILayout.ObjectField("Texture", textureAsset, typeof(Texture2D), false);
-
-            marginPx = EditorGUILayout.IntSlider(
-                new GUIContent("Margin (px)", "How far baked color dilates past each UV island's edge. " +
-                    "Increase this if unbaked areas show up as hard black borders around your UV shapes " +
-                    "(bigger textures generally need a bigger margin)."),
-                marginPx, 1, 256);
-
-            EditorGUILayout.Space(4);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Bake Device", GUILayout.Width(EditorGUIUtility.labelWidth));
-            int newDeviceIdx = GUILayout.Toolbar(deviceModeIndex, DeviceModeLabels);
-            EditorGUILayout.EndHorizontal();
-            if (newDeviceIdx != deviceModeIndex)
+            using (new EditorGUILayout.HorizontalScope())
             {
-                deviceModeIndex = newDeviceIdx;
-                EditorPrefs.SetInt(PrefDeviceMode, deviceModeIndex);
-            }
-            if (deviceModeIndex != 2)
-            {
-                EditorGUILayout.HelpBox(
-                    "AMD/HIP baking has known corruption bugs (patchy purple/garbled output) on some " +
-                    "driver/Blender combinations. If you see that, switch this to CPU.",
-                    MessageType.None);
-            }
-
-            EditorGUILayout.Space(14);
-            using (new EditorGUI.DisabledScope(isBaking || !CanBake()))
-            {
-                if (GUILayout.Button(isBaking ? "Baking..." : "Bake", GUILayout.Height(32)))
+                EditorGUILayout.PrefixLabel(new GUIContent("Bake Device", "Auto uses the GPU when Blender finds one. Use CPU if the result comes out patchy or purple"));
+                int newMode = GUILayout.Toolbar(deviceMode, DeviceModes);
+                if (newMode != deviceMode)
                 {
+                    deviceMode = newMode;
+                    EditorPrefs.SetInt(PrefDeviceMode, deviceMode);
+                }
+            }
+
+            EditorGUILayout.Space(10);
+            string problem = Problem();
+            using (new EditorGUI.DisabledScope(baking || problem != null))
+                if (GUILayout.Button(baking ? "Baking..." : "Bake", GUILayout.Height(32)))
                     StartBake();
-                }
-            }
 
-            if (isBaking)
+            if (baking)
             {
-                double elapsed = (DateTime.Now - bakeStartTime).TotalSeconds;
-                EditorGUILayout.HelpBox(
-                    $"Blender is running in the background ({elapsed:0.0}s elapsed). Log updates below as it works.",
-                    MessageType.Info);
+                EditorGUILayout.HelpBox($"Baking ({(DateTime.Now - bakeStart).TotalSeconds:0.0}s)", MessageType.Info);
                 if (GUILayout.Button("Cancel"))
-                {
                     CancelBake();
-                }
             }
-            else if (!CanBake())
-            {
-                EditorGUILayout.HelpBox(GetValidationMessage(), MessageType.Warning);
-            }
+            else if (problem != null)
+                EditorGUILayout.HelpBox(problem, MessageType.Warning);
 
+            DrawLog();
+        }
+
+        void DrawLog()
+        {
             EditorGUILayout.Space(8);
             EditorGUILayout.LabelField("Log", EditorStyles.boldLabel);
-
-            string logText;
-            lock (logLock) { logText = logBuilder.ToString(); }
-
-            float labelWidth = Mathf.Max(position.width - 40f, 50f);
-            float labelHeight = Mathf.Max(EditorStyles.textArea.CalcHeight(new GUIContent(logText), labelWidth), 20f);
-
-            if (scrollLogToBottom)
+            string text;
+            lock (logLock)
+                text = log.ToString();
+            float width = Mathf.Max(position.width - 40f, 50f);
+            float height = Mathf.Max(EditorStyles.textArea.CalcHeight(new GUIContent(text), width), 20f);
+            if (scrollToBottom && Event.current.type == EventType.Layout)
             {
-                logScroll.y = labelHeight;
-                scrollLogToBottom = false;
+                logScroll.y = height;
+                scrollToBottom = false;
             }
-
-            logScroll = EditorGUILayout.BeginScrollView(logScroll, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
-            EditorGUILayout.SelectableLabel(logText, EditorStyles.textArea,
-                GUILayout.Height(labelHeight), GUILayout.ExpandWidth(true));
+            logScroll = EditorGUILayout.BeginScrollView(logScroll, GUILayout.ExpandHeight(true));
+            EditorGUILayout.SelectableLabel(text, EditorStyles.textArea, GUILayout.Height(height), GUILayout.ExpandWidth(true));
             EditorGUILayout.EndScrollView();
-
             if (GUILayout.Button("Clear Log"))
             {
-                lock (logLock) { logBuilder.Clear(); }
+                lock (logLock)
+                    log.Clear();
                 logScroll = Vector2.zero;
             }
         }
 
-        private bool CanBake()
+        string Problem()
         {
-            var uvs = CurrentUVs;
-            return File.Exists(blenderExePath)
-                && fbxAsset != null
-                && textureAsset != null
-                && File.Exists(GetScriptPath())
-                && materialIndex >= 0 && materialIndex < availableMaterials.Length
-                && sourceUVIndex >= 0 && sourceUVIndex < uvs.Length
-                && destUVIndex >= 0 && destUVIndex < uvs.Length
-                && sourceUVIndex != destUVIndex;
+            if (!File.Exists(blenderPath)) return "Set the path to the Blender executable.";
+            if (!File.Exists(ScriptPath())) return $"{ScriptFileName} is missing.";
+            if (fbxAsset == null) return "Pick an FBX model.";
+            if (materials.Length == 0) return "This model has no materials.";
+            if (materialIndex < 0) return "Pick a material.";
+            if (UVs.Length < 2) return "This material needs at least two UV maps.";
+            if (sourceIndex < 0 || sourceIndex >= UVs.Length) return "Pick a From UV.";
+            if (destIndex < 0 || destIndex >= UVs.Length) return "Pick a To UV.";
+            if (sourceIndex == destIndex) return "From UV and To UV must be different.";
+            if (texture == null) return "Pick a texture.";
+            return null;
         }
 
-        private string GetValidationMessage()
+        void DrawFbxField()
         {
-            if (!File.Exists(blenderExePath)) return "Set a valid path to the Blender executable.";
-            if (fbxAsset == null) return "Select an FBX asset.";
-            if (textureAsset == null) return "Select a source texture asset.";
-            if (!File.Exists(GetScriptPath())) return "bake_uv.py must sit next to this .cs file.";
-            if (availableMaterials.Length == 0) return "This FBX has no materials to select.";
-            if (materialIndex < 0) return "Select a Material.";
-            if (CurrentUVs.Length == 0) return "No UV maps found for this material.";
-            if (sourceUVIndex < 0) return "Select a From UV.";
-            if (destUVIndex < 0) return "Select a To UV.";
-            if (sourceUVIndex == destUVIndex) return "From UV and To UV must be different.";
-            return "";
-        }
-
-        private void DrawFbxField()
-        {
-            Rect fieldRect = EditorGUILayout.GetControlRect();
-            int controlID = GUIUtility.GetControlID(FocusType.Passive, fieldRect);
-            Event evt = Event.current;
-
-            if (evt.type == EventType.MouseDown && evt.button == 0 && fieldRect.Contains(evt.mousePosition))
+            var rect = EditorGUILayout.GetControlRect();
+            int id = GUIUtility.GetControlID(FocusType.Passive, rect);
+            var e = Event.current;
+            var fieldRect = EditorGUI.PrefixLabel(rect, new GUIContent("Model", "FBX model that has both UV maps"));
+            var pickerRect = new Rect(fieldRect.xMax - 19f, fieldRect.y, 19f, fieldRect.height);
+            if (e.type == EventType.MouseDown && e.button == 0 && pickerRect.Contains(e.mousePosition))
             {
-                fbxPickerControlID = controlID;
-                EditorGUIUtility.ShowObjectPicker<GameObject>(fbxAsset as GameObject, false, "glob:\"*.fbx\"", controlID);
-                evt.Use();
+                pickerId = id;
+                EditorGUIUtility.ShowObjectPicker<GameObject>(fbxAsset as GameObject, false, "glob:\"*.fbx\"", id);
+                e.Use();
             }
-            else
+            var picked = EditorGUI.ObjectField(fieldRect, fbxAsset, typeof(GameObject), false);
+            if (picked != fbxAsset)
+                SetFbx(picked);
+            if (e.commandName == "ObjectSelectorUpdated" && EditorGUIUtility.GetObjectPickerControlID() == pickerId)
             {
-                var pickedFbxAsset = EditorGUI.ObjectField(fieldRect, "Model", fbxAsset, typeof(GameObject), false);
-                if (pickedFbxAsset != fbxAsset)
-                {
-                    SetFbxAsset(pickedFbxAsset);
-                }
-            }
-
-            if (evt.commandName == "ObjectSelectorUpdated" && EditorGUIUtility.GetObjectPickerControlID() == fbxPickerControlID)
-            {
-                SetFbxAsset(EditorGUIUtility.GetObjectPickerObject());
+                SetFbx(EditorGUIUtility.GetObjectPickerObject());
                 Repaint();
             }
         }
 
-        private void SetFbxAsset(UnityEngine.Object candidate)
+        void SetFbx(UnityEngine.Object candidate)
         {
-            if (candidate == null)
+            if (candidate != null && !AssetDatabase.GetAssetPath(candidate).EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
             {
-                fbxAsset = null;
+                Log($"{candidate.name} is not an FBX file.");
                 return;
             }
-
-            string path = AssetDatabase.GetAssetPath(candidate);
-            if (string.IsNullOrEmpty(path) || !path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
-            {
-                AppendLogMainThread($"'{candidate.name}' is not an FBX file - ignoring selection.");
-                return;
-            }
-
             fbxAsset = candidate;
         }
 
-        private string GetFbxPath()
+        static string FullPath(UnityEngine.Object asset)
         {
-            if (fbxAsset == null) return "";
-            string assetPath = AssetDatabase.GetAssetPath(fbxAsset);
-            return string.IsNullOrEmpty(assetPath) ? "" : Path.GetFullPath(assetPath);
+            string assetPath = asset != null ? AssetDatabase.GetAssetPath(asset) : "";
+            return string.IsNullOrEmpty(assetPath) ? "" : Path.GetFullPath(FileUtil.GetPhysicalPath(assetPath));
         }
 
-        private string GetTexturePath()
+        string OutputAssetPath()
         {
-            if (textureAsset == null) return "";
-            string assetPath = AssetDatabase.GetAssetPath(textureAsset);
-            return string.IsNullOrEmpty(assetPath) ? "" : Path.GetFullPath(assetPath);
+            string texturePath = AssetDatabase.GetAssetPath(texture);
+            if (string.IsNullOrEmpty(texturePath) || fbxAsset == null || destIndex < 0 || destIndex >= UVs.Length)
+                return "";
+            string dir = Path.GetDirectoryName(texturePath)?.Replace('\\', '/');
+            string name = $"{Path.GetFileNameWithoutExtension(texturePath)}_{FileName(fbxAsset.name)}_{FileName(UVs[destIndex])}{Path.GetExtension(texturePath)}";
+            return string.IsNullOrEmpty(dir) ? name : dir + "/" + name;
         }
 
-        private string GetOutputPath()
+        static string FileName(string s)
         {
-            string texturePath = GetTexturePath();
-            var uvs = CurrentUVs;
-            if (string.IsNullOrEmpty(texturePath) || fbxAsset == null) return "";
-            if (destUVIndex < 0 || destUVIndex >= uvs.Length) return "";
-
-            string fbxName = SanitizeForFilename(fbxAsset.name);
-            string destUvName = SanitizeForFilename(uvs[destUVIndex]);
-
-            string dir = Path.GetDirectoryName(texturePath);
-            string name = Path.GetFileNameWithoutExtension(texturePath);
-            string ext = Path.GetExtension(texturePath);
-            return Path.Combine(dir ?? "", $"{name}_{fbxName}_{destUvName}{ext}");
+            foreach (char c in Path.GetInvalidFileNameChars().Concat(new[] { ' ', '/', '\\', ':', '*', '?', '"', '<', '>', '|' }))
+                s = s.Replace(c, '_');
+            return s;
         }
 
-        private static string SanitizeForFilename(string s)
+        string ScriptPath()
         {
-            return string.IsNullOrEmpty(s) ? s : s.Replace(' ', '_');
+            string scriptAsset = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
+            string dir = Path.GetDirectoryName(Path.GetFullPath(FileUtil.GetPhysicalPath(scriptAsset))) ?? "";
+            return Path.Combine(dir, ScriptFileName);
         }
 
-        private string GetScriptPath()
+        void AutoFetch()
         {
-            var monoScript = MonoScript.FromScriptableObject(this);
-            string thisAssetPath = AssetDatabase.GetAssetPath(monoScript);
-            string dir = Path.GetDirectoryName(thisAssetPath);
-            string fullDir = Path.GetFullPath(dir ?? "");
-            return Path.Combine(fullDir, ScriptFileName);
-        }
-
-        private void MaybeAutoFetch()
-        {
-            string fbxPath = GetFbxPath();
+            string fbxPath = FullPath(fbxAsset);
             if (fbxAsset != null && File.Exists(fbxPath))
             {
-                if (fbxPath != lastFetchedFbx)
-                {
-                    FetchMaterialsAndUVs(fbxPath);
-                }
+                if (fbxPath != fetchedFbx)
+                    Fetch(fbxPath);
             }
-            else if (availableMaterials.Length > 0)
-            {
-                ClearAllState();
-            }
+            else if (fetchedFbx.Length > 0)
+                ClearFetched();
         }
 
-        private void RefreshAll()
+        void Refresh()
         {
-            string fbxPath = GetFbxPath();
-            if (fbxAsset == null || !File.Exists(fbxPath))
+            string fbxPath = FullPath(fbxAsset);
+            if (!File.Exists(fbxPath))
+                return;
+            string material = Material;
+            string source = sourceIndex >= 0 && sourceIndex < UVs.Length ? UVs[sourceIndex] : null;
+            string dest = destIndex >= 0 && destIndex < UVs.Length ? UVs[destIndex] : null;
+            Fetch(fbxPath);
+            int index = Array.IndexOf(materials, material);
+            if (index < 0)
+                return;
+            materialIndex = index;
+            if (source != null && Array.IndexOf(UVs, source) >= 0)
+                sourceIndex = Array.IndexOf(UVs, source);
+            if (dest != null && Array.IndexOf(UVs, dest) >= 0)
+                destIndex = Array.IndexOf(UVs, dest);
+        }
+
+        void ClearFetched()
+        {
+            materials = Array.Empty<string>();
+            uvMaps.Clear();
+            fetchedFbx = "";
+            materialIndex = sourceIndex = destIndex = -1;
+        }
+
+        void Fetch(string fbxPath)
+        {
+            ClearFetched();
+            fetchedFbx = fbxPath;
+            if (!File.Exists(blenderPath) || !File.Exists(ScriptPath()))
             {
-                AppendLogMainThread("Select an FBX first.");
+                Log("Set the Blender path to read the model's materials.");
                 return;
             }
-
-            string previousMaterial = SelectedMaterialName;
-            string previousSourceUV = (sourceUVIndex >= 0 && sourceUVIndex < CurrentUVs.Length) ? CurrentUVs[sourceUVIndex] : null;
-            string previousDestUV = (destUVIndex >= 0 && destUVIndex < CurrentUVs.Length) ? CurrentUVs[destUVIndex] : null;
-
-            FetchMaterialsAndUVs(fbxPath);
-
-            int matIdx = Array.IndexOf(availableMaterials, previousMaterial);
-            if (!string.IsNullOrEmpty(previousMaterial) && matIdx >= 0)
-            {
-                materialIndex = matIdx;
-                var uvs = CurrentUVs;
-
-                if (!string.IsNullOrEmpty(previousSourceUV))
-                {
-                    int srcIdx = Array.IndexOf(uvs, previousSourceUV);
-                    if (srcIdx >= 0) sourceUVIndex = srcIdx;
-                }
-                if (!string.IsNullOrEmpty(previousDestUV))
-                {
-                    int dstIdx = Array.IndexOf(uvs, previousDestUV);
-                    if (dstIdx >= 0) destUVIndex = dstIdx;
-                }
-            }
-        }
-
-        private void ClearAllState()
-        {
-            availableMaterials = Array.Empty<string>();
-            uvMapsByMaterial.Clear();
-            lastFetchedFbx = "";
-            materialIndex = -1;
-            sourceUVIndex = -1;
-            destUVIndex = -1;
-        }
-
-        private void FetchMaterialsAndUVs(string fbxPath)
-        {
-            lastFetchedFbx = fbxPath;
-            materialIndex = -1;
-            sourceUVIndex = -1;
-            destUVIndex = -1;
-            availableMaterials = Array.Empty<string>();
-            uvMapsByMaterial.Clear();
-
-            if (!File.Exists(blenderExePath) || !File.Exists(GetScriptPath()))
-            {
-                AppendLogMainThread("Can't query Blender - set a valid Blender executable path first.");
-                return;
-            }
-
-            var psi = BlenderStartInfo($"--list-all \"{fbxPath}\"");
 
             try
             {
-                using (var proc = Process.Start(psi))
+                using (var process = Process.Start(StartInfo("--list-all", fbxPath)))
                 {
-                    string stdout = proc.StandardOutput.ReadToEnd();
-                    string stderr = proc.StandardError.ReadToEnd();
-                    proc.WaitForExit(30000);
+                    var stderrTask = process.StandardError.ReadToEndAsync();
+                    string stdout = process.StandardOutput.ReadToEnd();
+                    process.WaitForExit();
+                    string stderr = stderrTask.Result;
 
-                    availableMaterials = ParseMarkerList(stdout, "MATLIST_START", "MATLIST_END");
-                    foreach (string mat in availableMaterials)
-                    {
-                        uvMapsByMaterial[mat] = ParseMarkerList(stdout, $"UVLIST_START:{mat}", $"UVLIST_END:{mat}");
-                    }
+                    materials = Section(stdout, "MATLIST_START", "MATLIST_END");
+                    foreach (string m in materials)
+                        uvMaps[m] = Section(stdout, "UVLIST_START:" + m, "UVLIST_END:" + m);
 
-                    if (availableMaterials.Length == 0)
+                    if (materials.Length == 0)
                     {
-                        AppendLogMainThread("No materials found on this FBX. Blender output:");
-                        AppendLogMainThread(stdout);
-                        if (!string.IsNullOrEmpty(stderr)) AppendLogMainThread("[stderr] " + stderr);
+                        Log("No materials found. Blender output:");
+                        Log(stdout);
+                        if (!string.IsNullOrWhiteSpace(stderr))
+                            Log(stderr);
                     }
                     else
-                    {
-                        AppendLogMainThread($"Materials: {string.Join(", ", availableMaterials)}");
-                        foreach (string mat in availableMaterials)
-                        {
-                            var uvs = uvMapsByMaterial[mat];
-                            AppendLogMainThread(uvs.Length > 0
-                                ? $"  '{mat}': {string.Join(", ", uvs)}"
-                                : $"  '{mat}': no UV maps found");
-                        }
-                    }
+                        foreach (string m in materials)
+                            Log($"{m}: {(uvMaps[m].Length > 0 ? string.Join(", ", uvMaps[m]) : "no UV maps")}");
                 }
             }
             catch (Exception ex)
             {
-                AppendLogMainThread("ERROR fetching materials/UVs: " + ex.Message);
-                availableMaterials = Array.Empty<string>();
-                uvMapsByMaterial.Clear();
+                Log("Couldn't run Blender: " + ex.Message);
+                materials = Array.Empty<string>();
+                uvMaps.Clear();
             }
 
-            if (availableMaterials.Length > 0)
+            if (materials.Length > 0)
             {
                 materialIndex = 0;
-                var uvs = CurrentUVs;
-                sourceUVIndex = uvs.Length > 0 ? 0 : -1;
-                destUVIndex = uvs.Length > 1 ? uvs.Length - 1 : -1;
+                sourceIndex = UVs.Length > 0 ? 0 : -1;
+                destIndex = UVs.Length > 1 ? UVs.Length - 1 : -1;
             }
-
             Repaint();
         }
 
-        private void DrawMaterialPopup()
+        void DrawMaterials()
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Material", GUILayout.Width(EditorGUIUtility.labelWidth));
-
-            if (availableMaterials.Length == 0)
+            using (new EditorGUILayout.HorizontalScope())
             {
-                using (new EditorGUI.DisabledScope(true))
+                EditorGUILayout.PrefixLabel("Material");
+                if (materials.Length == 0)
                 {
-                    GUILayout.Toolbar(-1, new[] { "(none)" });
+                    using (new EditorGUI.DisabledScope(true))
+                        GUILayout.Toolbar(-1, new[] { "None" });
+                    return;
                 }
-                EditorGUILayout.EndHorizontal();
-                return;
-            }
-
-            int newIndex = GUILayout.Toolbar(materialIndex, availableMaterials);
-            EditorGUILayout.EndHorizontal();
-
-            if (newIndex != materialIndex)
-            {
-                SelectMaterial(newIndex);
+                int index = GUILayout.Toolbar(materialIndex, materials);
+                if (index == materialIndex)
+                    return;
+                string source = sourceIndex >= 0 && sourceIndex < UVs.Length ? UVs[sourceIndex] : null;
+                string dest = destIndex >= 0 && destIndex < UVs.Length ? UVs[destIndex] : null;
+                materialIndex = index;
+                sourceIndex = source != null ? Array.IndexOf(UVs, source) : -1;
+                destIndex = dest != null ? Array.IndexOf(UVs, dest) : -1;
             }
         }
 
-        private void SelectMaterial(int newIndex)
+        void DrawUVPopup(GUIContent label, ref int index)
         {
-            string previousSourceUV = (sourceUVIndex >= 0 && sourceUVIndex < CurrentUVs.Length) ? CurrentUVs[sourceUVIndex] : null;
-            string previousDestUV = (destUVIndex >= 0 && destUVIndex < CurrentUVs.Length) ? CurrentUVs[destUVIndex] : null;
-
-            materialIndex = newIndex;
-
-            var uvs = CurrentUVs;
-            sourceUVIndex = !string.IsNullOrEmpty(previousSourceUV) ? Array.IndexOf(uvs, previousSourceUV) : -1;
-            destUVIndex = !string.IsNullOrEmpty(previousDestUV) ? Array.IndexOf(uvs, previousDestUV) : -1;
-        }
-
-        private void DrawUVPopup(string label, ref int index)
-        {
-            var uvs = CurrentUVs;
+            var uvs = UVs;
             if (uvs.Length == 0)
             {
                 using (new EditorGUI.DisabledScope(true))
-                {
-                    EditorGUILayout.Popup(label, 0, new[] { "" });
-                }
+                    EditorGUILayout.Popup(label, 0, new[] { new GUIContent("") });
                 return;
             }
-
-            index = EditorGUILayout.Popup(label, index, uvs);
+            index = EditorGUILayout.Popup(label, index, uvs.Select(u => new GUIContent(u)).ToArray());
         }
 
-        private static string[] ParseMarkerList(string stdout, string startMarker, string endMarker)
+        static string[] Section(string text, string start, string end)
         {
-            var lines = stdout.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             var result = new List<string>();
-            bool inList = false;
-            foreach (string line in lines)
+            bool inside = false;
+            foreach (string raw in text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
             {
-                string trimmed = line.Trim();
-                if (trimmed == startMarker) { inList = true; continue; }
-                if (trimmed == endMarker) { inList = false; continue; }
-                if (inList && trimmed.Length > 0) result.Add(trimmed);
+                string line = raw.Trim();
+                if (line == start)
+                    inside = true;
+                else if (line == end)
+                    inside = false;
+                else if (inside && line.Length > 0)
+                    result.Add(line);
             }
             return result.ToArray();
         }
 
-        private static string AutoDetectBlenderPath()
+        static string FindBlender()
         {
-#if UNITY_EDITOR_WIN
-            string[] roots =
+            var candidates = new List<string>();
+            if (Application.platform == RuntimePlatform.WindowsEditor)
             {
-                @"C:\Program Files\Blender Foundation",
-                @"C:\Program Files (x86)\Blender Foundation"
-            };
-
-            string best = null;
-            Version bestVersion = null;
-            foreach (string root in roots)
-            {
-                if (!Directory.Exists(root)) continue;
-                string[] subdirs;
-                try { subdirs = Directory.GetDirectories(root); }
-                catch { continue; }
-
-                foreach (string dir in subdirs)
+                foreach (var root in new[]
                 {
-                    string exe = Path.Combine(dir, "blender.exe");
-                    if (!File.Exists(exe)) continue;
-
-                    var match = System.Text.RegularExpressions.Regex.Match(Path.GetFileName(dir), @"(\d+(?:\.\d+)+)");
-                    Version v = (match.Success && Version.TryParse(match.Groups[1].Value, out var parsed))
-                        ? parsed : new Version(0, 0);
-
-                    if (bestVersion == null || v > bestVersion)
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                }.Where(r => !string.IsNullOrEmpty(r)).Distinct())
+                {
+                    string foundation = Path.Combine(root, "Blender Foundation");
+                    if (Directory.Exists(foundation))
                     {
-                        bestVersion = v;
-                        best = exe;
+                        try
+                        {
+                            candidates.AddRange(Directory.GetDirectories(foundation)
+                                .OrderByDescending(VersionOf)
+                                .Select(d => Path.Combine(d, "blender.exe")));
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
+                    candidates.Add(Path.Combine(root, "Steam", "steamapps", "common", "Blender", "blender.exe"));
                 }
             }
-            if (best != null) return best;
-#elif UNITY_EDITOR_OSX
-            string macPath = "/Applications/Blender.app/Contents/MacOS/Blender";
-            if (File.Exists(macPath)) return macPath;
-#elif UNITY_EDITOR_LINUX
-            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string[] linuxCandidates =
+            else if (Application.platform == RuntimePlatform.OSXEditor)
+                candidates.Add("/Applications/Blender.app/Contents/MacOS/Blender");
+            else
             {
-                "/usr/bin/blender",
-                "/usr/local/bin/blender",
-                "/snap/bin/blender",
-                Path.Combine(home, ".local/share/Steam/steamapps/common/Blender/blender"),
-                Path.Combine(home, ".steam/steam/steamapps/common/Blender/blender"),
-                Path.Combine(home, ".var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Blender/blender")
-            };
-
-            foreach (string candidate in linuxCandidates)
-            {
-                if (File.Exists(candidate)) return candidate;
+                string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                candidates.AddRange(new[]
+                {
+                    "/usr/bin/blender",
+                    "/usr/local/bin/blender",
+                    "/snap/bin/blender",
+                    "/opt/blender/blender",
+                    Path.Combine(home, ".local", "bin", "blender"),
+                    Path.Combine(home, ".local", "share", "Steam", "steamapps", "common", "Blender", "blender"),
+                    Path.Combine(home, ".steam", "steam", "steamapps", "common", "Blender", "blender"),
+                    Path.Combine(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam", "steamapps", "common", "Blender", "blender"),
+                });
             }
-#endif
-            string exeName = Application.platform == RuntimePlatform.WindowsEditor ? "blender.exe" : "blender";
-            string pathEnv = Environment.GetEnvironmentVariable("PATH") ?? "";
-            foreach (string dir in pathEnv.Split(Path.PathSeparator))
+
+            string exe = Application.platform == RuntimePlatform.WindowsEditor ? "blender.exe" : "blender";
+            foreach (string dir in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(Path.PathSeparator))
             {
+                if (string.IsNullOrWhiteSpace(dir))
+                    continue;
                 try
                 {
-                    string candidate = Path.Combine(dir, exeName);
-                    if (File.Exists(candidate)) return candidate;
+                    candidates.Add(Path.Combine(dir.Trim('"'), exe));
                 }
-                catch
+                catch (ArgumentException)
                 {
                 }
             }
 
-            return null;
+            return candidates.FirstOrDefault(File.Exists);
         }
 
-        private static string GetBlenderFilePickerExtension()
+        static Version VersionOf(string dir)
         {
-#if UNITY_EDITOR_WIN
-            return "exe";
-#else
-            return "";
-#endif
+            var match = Regex.Match(Path.GetFileName(dir), @"\d+(\.\d+)+");
+            return match.Success && Version.TryParse(match.Value, out var v) ? v : new Version(0, 0);
         }
 
-        private void DrawPathField(string label, ref string path, string extension, Action onChanged = null)
+        static string Quote(string arg)
         {
-            EditorGUILayout.BeginHorizontal();
-            string newPath = EditorGUILayout.TextField(label, path);
-            bool changed = newPath != path;
-            path = newPath;
-            if (GUILayout.Button("...", GUILayout.Width(30)))
+            var sb = new StringBuilder("\"");
+            int slashes = 0;
+            foreach (char c in arg)
             {
-                string startDir = (!string.IsNullOrEmpty(path) && Directory.Exists(Path.GetDirectoryName(path)))
-                    ? Path.GetDirectoryName(path) : "";
-                string result = EditorUtility.OpenFilePanel(label, startDir, extension);
-                if (!string.IsNullOrEmpty(result))
+                if (c == '\\')
                 {
-                    path = result;
-                    changed = true;
+                    slashes++;
+                    continue;
                 }
+                sb.Append('\\', c == '"' ? slashes * 2 + 1 : slashes);
+                slashes = 0;
+                sb.Append(c);
             }
-            EditorGUILayout.EndHorizontal();
-            if (changed) onChanged?.Invoke();
+            sb.Append('\\', slashes * 2);
+            sb.Append('"');
+            return sb.ToString();
         }
 
-        private void StartBake()
+        ProcessStartInfo StartInfo(params string[] args)
         {
-            lock (logLock) { logBuilder.Clear(); }
-            string fbxPath = GetFbxPath();
-            string texturePath = GetTexturePath();
-            string outputPath = GetOutputPath();
-            string materialName = SelectedMaterialName;
-            var uvs = CurrentUVs;
-            string sourceUV = uvs[sourceUVIndex];
-            string destUV = uvs[destUVIndex];
-            string deviceArg = DeviceModeLabels[deviceModeIndex].ToUpperInvariant();
-
-            AppendLogMainThread($"Starting bake: material='{materialName}'  {sourceUV} -> {destUV}");
-            AppendLogMainThread($"FBX: {fbxPath}");
-            AppendLogMainThread($"Source texture: {texturePath}");
-            AppendLogMainThread($"Output: {outputPath}");
-            AppendLogMainThread($"Device mode: {deviceArg}");
-
-            Texture2D capturedSourceTexture = textureAsset;
-
-            var psi = BlenderStartInfo(
-                $"\"{fbxPath}\" \"{materialName}\" \"{sourceUV}\" \"{destUV}\" \"{texturePath}\" \"{outputPath}\" {marginPx} {deviceArg}");
-            psi.EnvironmentVariables["PYTHONUNBUFFERED"] = "1";
-
-            bakeStartTime = DateTime.Now;
-            bakeProcess = new Process { StartInfo = psi, EnableRaisingEvents = true };
-            bakeProcess.OutputDataReceived += (s, e) => { if (e.Data != null) QueueLog(e.Data); };
-            bakeProcess.ErrorDataReceived += (s, e) => { if (e.Data != null) QueueLog("[stderr] " + e.Data); };
-            bakeProcess.Exited += (s, e) =>
+            var info = new ProcessStartInfo
             {
-                int code = -1;
-                try { code = bakeProcess.ExitCode; } catch { }
-                QueueLog(code == 0 ? "Bake finished successfully." : $"Blender exited with code {code}.");
-                isBaking = false;
-
-                if (code == 0)
-                {
-                    EditorApplication.delayCall += () => PostProcessOutputTexture(outputPath, capturedSourceTexture);
-                }
+                FileName = blenderPath,
+                Arguments = "--background --factory-startup --python " + Quote(ScriptPath()) + " -- " + string.Join(" ", args.Select(Quote)),
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8,
             };
+            info.EnvironmentVariables["PYTHONUNBUFFERED"] = "1";
+            info.EnvironmentVariables["PYTHONIOENCODING"] = "utf-8";
+            return info;
+        }
+
+        void StartBake()
+        {
+            lock (logLock)
+                log.Clear();
+            string outputAsset = OutputAssetPath();
+            string outputPath = Path.Combine(Path.GetDirectoryName(FullPath(texture)) ?? "", Path.GetFileName(outputAsset));
+            string source = UVs[sourceIndex];
+            string dest = UVs[destIndex];
+            string device = DeviceModes[deviceMode].ToUpperInvariant();
+
+            Log($"Baking {Material}: {source} to {dest} ({device})");
+            Log("Output: " + outputAsset);
+
+            bakeOutput = outputAsset;
+            bakeSource = texture;
+            bakeExited = false;
+            bakeStart = DateTime.Now;
+            bakeProcess = new Process
+            {
+                StartInfo = StartInfo(FullPath(fbxAsset), Material, source, dest, FullPath(texture), outputPath, margin.ToString(), device),
+                EnableRaisingEvents = true,
+            };
+            bakeProcess.OutputDataReceived += (s, e) => { if (e.Data != null) Log(e.Data); };
+            bakeProcess.ErrorDataReceived += (s, e) => { if (e.Data != null) Log(e.Data); };
+            bakeProcess.Exited += (s, e) => bakeExited = true;
 
             try
             {
                 bakeProcess.Start();
                 bakeProcess.BeginOutputReadLine();
                 bakeProcess.BeginErrorReadLine();
-                isBaking = true;
-                EditorApplication.update += PollRepaint;
+                baking = true;
             }
             catch (Exception ex)
             {
-                AppendLogMainThread("ERROR starting Blender: " + ex.Message);
+                Log("Couldn't start Blender: " + ex.Message);
+                bakeProcess.Dispose();
+                bakeProcess = null;
             }
         }
 
-        private ProcessStartInfo BlenderStartInfo(string scriptArgs) => new ProcessStartInfo
-        {
-            FileName = blenderExePath,
-            Arguments = $"--background --factory-startup --python \"{GetScriptPath()}\" -- {scriptArgs}",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true
-        };
-
-        private void PostProcessOutputTexture(string outputPathAbsolute, Texture2D sourceTexture)
-        {
-            try
-            {
-                string relOutput = ToProjectRelativePath(outputPathAbsolute);
-                if (string.IsNullOrEmpty(relOutput))
-                {
-                    AppendLogMainThread("Output file is outside this Unity project's Assets folder - " +
-                                         "skipping import settings copy.");
-                    return;
-                }
-
-                AssetDatabase.ImportAsset(relOutput, ImportAssetOptions.ForceUpdate);
-
-                if (sourceTexture == null)
-                {
-                    AppendLogMainThread("Source texture reference was lost - skipping import settings copy.");
-                    return;
-                }
-
-                string sourceAssetPath = AssetDatabase.GetAssetPath(sourceTexture);
-                var srcImporter = AssetImporter.GetAtPath(sourceAssetPath) as TextureImporter;
-                var dstImporter = AssetImporter.GetAtPath(relOutput) as TextureImporter;
-
-                if (srcImporter == null || dstImporter == null)
-                {
-                    AppendLogMainThread("Could not access texture importers - output was saved but " +
-                                         "import settings weren't copied.");
-                    return;
-                }
-
-                EditorUtility.CopySerialized(srcImporter, dstImporter);
-                dstImporter.SaveAndReimport();
-
-                AppendLogMainThread($"Copied import settings from '{sourceAssetPath}' to '{relOutput}'.");
-            }
-            catch (Exception ex)
-            {
-                AppendLogMainThread("ERROR copying texture import settings: " + ex.Message);
-            }
-        }
-
-        private static string ToProjectRelativePath(string absolutePath)
-        {
-            string fullDataPath = Path.GetFullPath(Application.dataPath);
-            string fullAbs = Path.GetFullPath(absolutePath);
-            if (!fullAbs.StartsWith(fullDataPath, StringComparison.OrdinalIgnoreCase)) return null;
-            string rel = "Assets" + fullAbs.Substring(fullDataPath.Length);
-            return rel.Replace('\\', '/');
-        }
-
-        private void CancelBake()
+        void CancelBake()
         {
             try
             {
                 if (bakeProcess != null && !bakeProcess.HasExited)
-                {
                     bakeProcess.Kill();
-                    QueueLog("Bake cancelled by user.");
-                }
             }
             catch (Exception ex)
             {
-                QueueLog("Error cancelling: " + ex.Message);
+                Log("Couldn't stop Blender: " + ex.Message);
             }
-            isBaking = false;
+            Log("Bake cancelled.");
+            FinishBake(false);
         }
 
-        private void QueueLog(string line)
+        void OnUpdate()
         {
-            lock (logLock) { logBuilder.AppendLine(line); }
-            scrollLogToBottom = true;
-            EditorApplication.delayCall += Repaint;
-        }
-
-        private void AppendLogMainThread(string line)
-        {
-            lock (logLock) { logBuilder.AppendLine(line); }
-            scrollLogToBottom = true;
-            Repaint();
-        }
-
-        private void PollRepaint()
-        {
-            if (!isBaking)
+            if (baking && bakeExited)
             {
-                EditorApplication.update -= PollRepaint;
+                int code = -1;
+                try
+                {
+                    bakeProcess.WaitForExit();
+                    code = bakeProcess.ExitCode;
+                }
+                catch (Exception)
+                {
+                }
+                Log(code == 0 ? "Bake finished." : $"Blender exited with code {code}.");
+                FinishBake(code == 0);
             }
-            Repaint();
+            if (logChanged || baking)
+            {
+                logChanged = false;
+                Repaint();
+            }
+        }
+
+        void FinishBake(bool succeeded)
+        {
+            baking = false;
+            bakeExited = false;
+            bakeProcess?.Dispose();
+            bakeProcess = null;
+            if (succeeded)
+                ImportOutput(bakeOutput, bakeSource);
+        }
+
+        void ImportOutput(string outputAsset, Texture2D source)
+        {
+            if (string.IsNullOrEmpty(outputAsset))
+                return;
+            AssetDatabase.ImportAsset(outputAsset, ImportAssetOptions.ForceUpdate);
+            var from = source != null ? AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(source)) as TextureImporter : null;
+            var to = AssetImporter.GetAtPath(outputAsset) as TextureImporter;
+            if (from == null || to == null)
+            {
+                Log("Saved, but the import settings couldn't be copied.");
+                return;
+            }
+            EditorUtility.CopySerialized(from, to);
+            to.SaveAndReimport();
+            Log("Copied the texture's import settings.");
+            EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Texture2D>(outputAsset));
+        }
+
+        void Log(string line)
+        {
+            lock (logLock)
+                log.AppendLine(line);
+            scrollToBottom = true;
+            logChanged = true;
         }
     }
 }
+#endif
