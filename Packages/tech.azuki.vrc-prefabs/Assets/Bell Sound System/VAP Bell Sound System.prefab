@@ -374,7 +374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1494.0
+  vrcfuryVersion: 1.1496.0
   somethingIsBroken: 0
   config:
     features: []
@@ -402,7 +402,6 @@ MonoBehaviour:
         globalParams:
         - FXWeight
         - ScaleFactor
-        - FrameTime
         ignoreSaved: 0
         toggleParam: 
         rootObjOverride: {fileID: 0}
