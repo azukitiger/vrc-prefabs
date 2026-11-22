@@ -501,6 +501,7 @@ Smooths one parameter of a **VRC Contact Receiver** or a **VRC PhysBone** on the
 | Setting | Description |
 |-|-|
 | Smoothing Factor | `Touch` (8), `Gesture` (20) or `Custom`; higher follows faster |
+| Rise Factor & Drop Factor | Shown instead of **Smoothing Factor** after clicking its chain icon. **Rise Factor** is used while the input goes up and **Drop Factor** while it goes down, so an output can, for example, snap on and fade out. Each also offers `None`, which follows the input directly in that direction; setting both to `None` stops the build. Click the chain icon again to go back to one factor |
 | Passes | `Double` smooths through an extra hidden step for a softer curve, `Single` moves straight toward the input |
 | Output Parameter | Receives the smoothed value |
 | Transform Output | Maps the smoothed value (X) and a second parameter (**Y Parameter**) to the output with a 2D blend. Drag the points in the graph or edit them in the list. The default points multiply the two. **Apply Before Smoothing** blends the raw input instead, so the result is what gets smoothed |
