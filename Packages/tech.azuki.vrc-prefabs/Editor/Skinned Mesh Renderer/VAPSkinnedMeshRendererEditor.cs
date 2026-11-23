@@ -72,7 +72,7 @@ namespace VAP.Editor
             root.Add(Foldout("Lighting", DrawLightingBar, DrawLighting, false, "m_CastShadows", "m_ProbeAnchor"));
             root.Add(Foldout("Materials", DrawMaterialsBar, DrawMaterials, true, "m_Materials"));
             root.Add(Foldout("BlendShapes", DrawBlendShapesBar, () => DrawBlendShapes(Owner.wrapped), true, "m_BlendShapeWeights"));
-            root.Add(new VAPFoldout("VAP.SkinnedMeshRenderer.BlendshapeNormals", DrawNormalsBar, () => Run(DrawNormals), () => Owner != null && Owner.blendShapeNormals, true)
+            var normalsFoldout = new VAPFoldout("VAP.SkinnedMeshRenderer.BlendshapeNormals", DrawNormalsBar, () => Run(DrawNormals), () => Owner != null && Owner.blendShapeNormals, true)
             {
                 Overrides = () =>
                 {
@@ -83,7 +83,11 @@ namespace VAP.Editor
                         serializedObject.FindProperty(nameof(VAPSkinnedMeshRenderer.normalBlendShapes)),
                     };
                 },
-            }.Root);
+            }.Root;
+            void RefreshNormals() => normalsFoldout.style.display = ShowNormals() ? DisplayStyle.Flex : DisplayStyle.None;
+            RefreshNormals();
+            normalsFoldout.schedule.Execute(RefreshNormals).Every(500);
+            root.Add(normalsFoldout);
             VAPInspectorHeader.Attach(root, Title, null, new VAPInspectorHeader.Toggle
             {
                 Get = () => Owner != null && Owner.wrapped != null && Owner.wrapped.enabled,
@@ -388,6 +392,15 @@ namespace VAP.Editor
             EditorGUILayout.EndScrollView();
             if (content > MaxListHeight)
                 ResizeHandle(listHeight, content);
+        }
+
+        bool ShowNormals()
+        {
+            var mesh = Owner != null && Owner.wrapped != null ? Owner.wrapped.sharedMesh : null;
+            if (mesh == null)
+                return false;
+            var importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(mesh)) as ModelImporter;
+            return importer == null || importer.importBlendShapeNormals == ModelImporterNormals.None;
         }
 
         void DrawNormalsBar(Rect bar)
