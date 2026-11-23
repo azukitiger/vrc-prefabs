@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1493.0
+  vrcfuryVersion: 1.1498.0
   somethingIsBroken: 0
   config:
     features: []
@@ -212,6 +212,9 @@ MonoBehaviour:
   passes: 0
   timer: 0
   timerParameter: 
+  timerStart: 0
+  splitTimer: 0
+  timerReset: 0
   transformOutput: 0
   transformParameter: 
   transformBeforeSmoothing: 0
@@ -270,7 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsActive: 1
-  GlobalWeight: 2
+  GlobalWeight: 1.5
   TargetTransform: {fileID: 4543824115445865282}
   SmoothingFactor: 0
   SolveInLocalSpace: 0
