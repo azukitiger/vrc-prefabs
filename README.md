@@ -12,7 +12,6 @@ Prefabs and assets that add **advanced animations and interactive systems** to *
   - [Face Tracking Prefab](#face-tracking-prefab)
   - [Pupil Dilation Prefab](#pupil-dilation-prefab)
   - [Pupil Focus System Prefab](#pupil-focus-system-prefab)
-  - [Toe Curl System Prefab](#toe-curl-system-prefab)
   - [Raycast Floor Physbone Collider Prefab](#raycast-floor-physbone-collider-prefab)
   - [Raycast Wall Physbone Collider Prefab](#raycast-wall-physbone-collider-prefab)
   - [GoGo Loco Simplified Prefab](#gogo-loco-simplified-prefab)
@@ -309,26 +308,6 @@ Adds a **Face Proximity contact receiver** that constricts the pupils when somet
 |-|-|-|
 | VAP/Touch/PupilFocus | Float | Smoothed face proximity |
 | Touch/PupilFocus | Float | Raw face proximity |
-
----
-
-## Toe Curl System Prefab
-
-Adds **toe curls** with two contact sensors and two rotation constraints.
-
-### Instructions
-1. Drag and drop the prefab into the avatar's hierarchy.
-2. Add an empty game object with no offset to each **foot** (ex. `Curl_L` and `Curl_R`).
-3. On `Left Curl`, set the contact sensor's `Root Transform` and the rotation constraint's `Target Transform` to `Curl_L`.
-4. On `Right Curl`, set the contact sensor's `Root Transform` and the rotation constraint's `Target Transform` to `Curl_R`.
-5. Set the rotation constraints' `Source Transform` to each **foot**, so the contact sensors don't rotate.
-
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| Touch/FootLCurl | Float | Raw left toe curl proximity |
-| Touch/FootRCurl | Float | Raw right toe curl proximity |
 
 ---
 
