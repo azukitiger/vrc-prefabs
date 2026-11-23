@@ -37,6 +37,10 @@ namespace VAP.Editor
         const float ButtonWidth = 110f;
         const float MaxListHeight = 300f;
         static readonly Color StripeColor = new Color(1f, 1f, 1f, 0.04f);
+        static readonly Color SelectedColor = new Color(0.17f, 0.36f, 0.53f, 0.9f);
+        UnityEditor.IMGUI.Controls.SearchField shapeSearch;
+        string selectedShape;
+        bool reveal;
         const string HeightPref = "VAP.SkinnedMeshRenderer.BlendShapesHeight";
         float dragStart, dragHeight;
         static readonly GUIContent ShowActiveLabel = new GUIContent("Show Active", "List the blendshapes above 0.");
@@ -318,7 +322,11 @@ namespace VAP.Editor
             {
                 if (active == null)
                 {
-                    search = EditorGUILayout.TextField(search, EditorStyles.toolbarSearchField);
+                    shapeSearch ??= new UnityEditor.IMGUI.Controls.SearchField();
+                    string before = search;
+                    search = shapeSearch.OnToolbarGUI(EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, EditorStyles.toolbarSearchField), search) ?? "";
+                    if (!string.IsNullOrEmpty(before) && search.Length == 0)
+                        reveal = true;
                     if (GUILayout.Button(ShowActiveLabel, GUILayout.Width(ButtonWidth)))
                     {
                         active = new List<int>();
@@ -336,6 +344,7 @@ namespace VAP.Editor
                     {
                         active = null;
                         scroll = Vector2.zero;
+                        reveal = true;
                         GUIUtility.ExitGUI();
                     }
                 }
@@ -356,6 +365,13 @@ namespace VAP.Editor
             float content = rows.Count * step + listStyle.padding.vertical + 2f;
             float listHeight = Mathf.Clamp(EditorPrefs.GetFloat(HeightPref, MaxListHeight), MaxListHeight, MaxListHeight * 2f);
             float height = Mathf.Min(content, listHeight);
+            if (reveal && Event.current.type == EventType.Layout)
+            {
+                reveal = false;
+                int at = rows.FindIndex(i => mesh.GetBlendShapeName(i) == selectedShape);
+                if (at >= 0)
+                    scroll.y = Mathf.Max(0f, at * step - (height - step) * 0.5f);
+            }
             scroll = EditorGUILayout.BeginScrollView(scroll, listStyle, GUILayout.Height(height));
             var weights = rendererSO.FindProperty("m_BlendShapeWeights");
             float outerLabelWidth = EditorGUIUtility.labelWidth;
@@ -366,10 +382,19 @@ namespace VAP.Editor
                 string name = mesh.GetBlendShapeName(i);
                 var label = new GUIContent(name, name);
                 var rowRect = EditorGUILayout.GetControlRect();
-                if (r % 2 == 1 && Event.current.type == EventType.Repaint)
+                float gap = EditorGUIUtility.standardVerticalSpacing * 0.5f;
+                var back = new Rect(rowRect.x - 4f, rowRect.y - gap, rowRect.width + 8f, rowRect.height + gap * 2f);
+                bool selected = name == selectedShape;
+                var e = Event.current;
+                if (e.type == EventType.Repaint && (selected || r % 2 == 1))
+                    EditorGUI.DrawRect(back, selected ? SelectedColor : StripeColor);
+                var labelRect = new Rect(rowRect.x, rowRect.y, EditorGUIUtility.labelWidth, rowRect.height);
+                if (e.type == EventType.MouseDown && e.button == 0 && labelRect.Contains(e.mousePosition))
                 {
-                    float gap = EditorGUIUtility.standardVerticalSpacing * 0.5f;
-                    EditorGUI.DrawRect(new Rect(rowRect.x - 4f, rowRect.y - gap, rowRect.width + 8f, rowRect.height + gap * 2f), StripeColor);
+                    selectedShape = selected ? null : name;
+                    GUIUtility.keyboardControl = 0;
+                    e.Use();
+                    Repaint();
                 }
                 if (i < weights.arraySize)
                 {
