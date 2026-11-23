@@ -574,22 +574,22 @@ Editor tools that only help while working in Unity. They don't change the avatar
 
 ## PhysBone & Contact Gizmos
 
-Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC Contact Sender** and **VRC Contact Receiver** components in the Scene view without selecting them. Disabled components are skipped.
+Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC PhysBone Collider**, **VRC Contact Sender** and **VRC Contact Receiver** components in the Scene view without selecting them, and can draw the avatar descriptor's colliders. Disabled components are skipped.
 
 ### Instructions
 1. If the **PhysBone & Contact Gizmos** panel isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on.
-2. Pick **Selected**, **Pinned** or **All**.
-3. Select a bone. The panel lists the PhysBones and contacts that target it. Click the pin icon next to one to pin or unpin it, or the properties icon to open it in its own tab.
+2. Turn on the toggles you want: cursor, pin and avatar.
+3. Select a bone, or the object a component is on. The panel lists the PhysBones, colliders and contacts that target it or sit on it. Click the pin icon next to one to pin or unpin it, or the properties icon to open it in its own tab.
 
 ### Settings
 | Setting | Description |
 |-|-|
-| Selected | Draws PhysBones whose root transform or any bone under it is selected, and contacts whose root transform is selected |
-| Pinned | Also draws pinned PhysBones and contacts |
-| All | Draws every PhysBone and contact |
-| Clear | Unpins everything |
+| Cursor | On: only draws what is selected (PhysBones whose root transform or any bone under it is selected, colliders and contacts whose root transform is selected, and components on the selected object). Off: draws every PhysBone, collider and contact |
+| Pin | Lists pinned PhysBones, colliders and contacts under the selection's, and draws them while the cursor is on |
+| Avatar | Also draws the colliders set on every avatar descriptor (head, torso, hands, feet and fingers) |
+| Clear Pins | Under the list, unpins everything |
 
-Pins are saved per project on this computer. When the panel is docked in a toolbar, only the mode and **Clear** buttons are shown.
+Pins are saved per project on this computer. When the panel is docked in a toolbar, it shows the toggles and a list button. The list button opens the selected and pinned PhysBones, colliders and contacts, to pin, unpin or open them, with **Clear Pins** under them.
 
 ## UV Bake Tool
 

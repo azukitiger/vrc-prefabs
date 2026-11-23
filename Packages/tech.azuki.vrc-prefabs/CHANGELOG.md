@@ -1,5 +1,7 @@
 ## Version 3.1.1
 - New Skinned Mesh Renderer component with better features.
+- Display Physbone colliders & Avatar colliders.
+- Improve UI slightly of Physbone & Contact Gizmos.
 
 ## Version 3.1.0
 - Deprecated prefabs that can be replaced by components.

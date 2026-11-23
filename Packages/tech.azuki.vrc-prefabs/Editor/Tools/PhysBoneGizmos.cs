@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using VRC.Dynamics;
 using VRC.SDK3.Dynamics.Contact.Components;
+using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.PhysBone.Components;
 using Object = UnityEngine.Object;
 
@@ -19,14 +20,20 @@ namespace VAP.Editor
     [InitializeOnLoad]
     public static class PhysBoneGizmos
     {
-        enum Mode { Selected, Pinned, All }
-
         const string Log = "[VAP PhysBone & Contact Gizmos] ";
         const string ModeKey = "Azuki.PhysBoneGizmos.Mode";
+        const string SelectedKey = "VAP.PhysBoneGizmos.SelectedOnly";
+        const string PinnedKey = "VAP.PhysBoneGizmos.ShowPinned";
+        const string AvatarCollidersKey = "VAP.PhysBoneGizmos.AvatarColliders";
+        static readonly Color AvatarColliderColor = new Color(1f, 0.6f, 0.2f, 0.9f);
+        static bool avatarColliders;
+        static Action avatarCollidersChanged;
+        static VRCAvatarDescriptor[] descriptors = new VRCAvatarDescriptor[0];
         static readonly string PinsKey = "Azuki.PhysBoneGizmos.PathPins." + Application.dataPath.GetHashCode();
-        static readonly Type[] Types = { typeof(VRCPhysBone), typeof(VRCContactReceiver), typeof(VRCContactSender) };
+        static readonly Type[] Types = { typeof(VRCPhysBone), typeof(VRCPhysBoneCollider), typeof(VRCContactReceiver), typeof(VRCContactSender) };
 
-        static Mode mode;
+        static bool selectedOnly;
+        static bool showPinned;
         static Action modeChanged;
         static Action pinsChanged;
         static Action targetsChanged;
@@ -36,10 +43,15 @@ namespace VAP.Editor
         static readonly HashSet<Component> pinnedCache = new HashSet<Component>();
         static readonly HashSet<Component> selectedCache = new HashSet<Component>();
         static readonly Dictionary<Type, MethodInfo> sdkDraw = new Dictionary<Type, MethodInfo>();
+        static readonly Dictionary<Type, MethodInfo> selfDraw = new Dictionary<Type, MethodInfo>();
 
         static PhysBoneGizmos()
         {
-            mode = (Mode)EditorPrefs.GetInt(ModeKey, (int)Mode.Pinned);
+            int old = EditorPrefs.GetInt(ModeKey, 1);
+            selectedOnly = EditorPrefs.GetBool(SelectedKey, old != 2);
+            showPinned = EditorPrefs.GetBool(PinnedKey, old == 1);
+            avatarColliders = EditorPrefs.GetBool(AvatarCollidersKey, false);
+            SceneView.duringSceneGui += DrawAvatarColliders;
             LoadPins();
             RefreshCache();
             EditorApplication.hierarchyChanged += RefreshCache;
@@ -61,10 +73,18 @@ namespace VAP.Editor
             AfterPinChange();
         }
 
-        static void SetMode(Mode m)
+        static void SetSelectedOnly(bool on)
         {
-            mode = m;
-            EditorPrefs.SetInt(ModeKey, (int)m);
+            selectedOnly = on;
+            EditorPrefs.SetBool(SelectedKey, on);
+            modeChanged?.Invoke();
+            SceneView.RepaintAll();
+        }
+
+        static void SetShowPinned(bool on)
+        {
+            showPinned = on;
+            EditorPrefs.SetBool(PinnedKey, on);
             modeChanged?.Invoke();
             SceneView.RepaintAll();
         }
@@ -92,7 +112,9 @@ namespace VAP.Editor
 
         static Transform Root(Component c)
         {
-            var root = c is VRCPhysBoneBase pb ? pb.rootTransform : c is ContactBase contact ? contact.rootTransform : null;
+            var root = c is VRCPhysBoneBase pb ? pb.rootTransform
+                : c is VRCPhysBoneColliderBase collider ? collider.rootTransform
+                : c is ContactBase contact ? contact.rootTransform : null;
             return root != null ? root : c.transform;
         }
 
@@ -115,9 +137,13 @@ namespace VAP.Editor
         static void RefreshCache()
         {
             var stage = PrefabStageUtility.GetCurrentPrefabStage();
-            cache = stage != null && stage.prefabContentsRoot != null
+            bool inStage = stage != null && stage.prefabContentsRoot != null;
+            cache = inStage
                 ? Find(stage.prefabContentsRoot).ToArray()
                 : Types.SelectMany(t => Object.FindObjectsByType(t, FindObjectsInactive.Include, FindObjectsSortMode.None)).Cast<Component>().ToArray();
+            descriptors = inStage
+                ? stage.prefabContentsRoot.GetComponentsInChildren<VRCAvatarDescriptor>(true)
+                : Object.FindObjectsByType<VRCAvatarDescriptor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             RefreshSelected();
             pinnedCache.RemoveWhere(c => c == null);
             if (pins.Count == 0)
@@ -137,7 +163,7 @@ namespace VAP.Editor
                     if (c == null)
                         continue;
                     var root = Root(c);
-                    if (selected.Any(t => c is VRCPhysBone ? t.IsChildOf(root) : t == root))
+                    if (selected.Any(t => t == c.transform || (c is VRCPhysBone ? t.IsChildOf(root) : t == root)))
                         selectedCache.Add(c);
                 }
             targets.Clear();
@@ -149,6 +175,7 @@ namespace VAP.Editor
         static void FindSdkDraw()
         {
             sdkDraw.Clear();
+            selfDraw.Clear();
             var methods = TypeCache.GetMethodsWithAttribute<DrawGizmo>();
             foreach (var type in Types)
             {
@@ -164,24 +191,48 @@ namespace VAP.Editor
                         break;
                     }
                 }
-                if (!sdkDraw.ContainsKey(type))
+                if (sdkDraw.ContainsKey(type))
+                    continue;
+                for (var t = type; t != null && t != typeof(MonoBehaviour); t = t.BaseType)
+                {
+                    var self = t.GetMethod("OnDrawGizmosSelected", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly, null, Type.EmptyTypes, null);
+                    if (self != null)
+                    {
+                        selfDraw[type] = self;
+                        break;
+                    }
+                }
+                if (!selfDraw.ContainsKey(type))
                     Debug.LogWarning(Log + $"VRChat SDK gizmos for {type.Name} not found.");
             }
         }
 
         static void Draw(Component c)
         {
-            if (!(c is Behaviour b) || !b.isActiveAndEnabled || !sdkDraw.TryGetValue(c.GetType(), out var method))
+            if (!(c is Behaviour b) || !b.isActiveAndEnabled)
                 return;
-            if (mode != Mode.All && !selectedCache.Contains(c) && (mode != Mode.Pinned || !pinnedCache.Contains(c)))
+            bool isStatic = sdkDraw.TryGetValue(c.GetType(), out var method);
+            if (!isStatic && !selfDraw.TryGetValue(c.GetType(), out method))
+                return;
+            if (selectedOnly && !selectedCache.Contains(c) && (!showPinned || !pinnedCache.Contains(c)))
                 return;
             try
             {
-                method.Invoke(null, new object[] { c, GizmoType.Selected | GizmoType.Active });
+                if (isStatic)
+                    method.Invoke(null, new object[] { c, GizmoType.Selected | GizmoType.Active });
+                else
+                {
+                    var matrix = Gizmos.matrix;
+                    var color = Gizmos.color;
+                    method.Invoke(c, null);
+                    Gizmos.matrix = matrix;
+                    Gizmos.color = color;
+                }
             }
             catch (Exception e)
             {
                 sdkDraw.Remove(c.GetType());
+                selfDraw.Remove(c.GetType());
                 Debug.LogWarning(Log + $"Couldn't draw the VRChat SDK gizmos for {c.GetType().Name}. " + (e.InnerException ?? e).Message);
             }
         }
@@ -190,13 +241,102 @@ namespace VAP.Editor
         static void DrawPhysBone(VRCPhysBone c, GizmoType type) => Draw(c);
 
         [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
+        static void DrawCollider(VRCPhysBoneCollider c, GizmoType type) => Draw(c);
+
+        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
         static void DrawReceiver(VRCContactReceiver c, GizmoType type) => Draw(c);
 
         [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
         static void DrawSender(VRCContactSender c, GizmoType type) => Draw(c);
 
+        static void SetAvatarColliders(bool on)
+        {
+            avatarColliders = on;
+            EditorPrefs.SetBool(AvatarCollidersKey, on);
+            avatarCollidersChanged?.Invoke();
+            SceneView.RepaintAll();
+        }
+
+        static void DrawAvatarColliders(SceneView view)
+        {
+            if (!avatarColliders || Event.current.type != EventType.Repaint)
+                return;
+            var matrix = Handles.matrix;
+            var color = Handles.color;
+            Handles.color = AvatarColliderColor;
+            foreach (var d in descriptors)
+            {
+                if (d == null || !d.isActiveAndEnabled)
+                    continue;
+                DrawAvatarCollider(d.collider_head, false);
+                DrawAvatarCollider(d.collider_torso, false);
+                DrawAvatarCollider(d.collider_handL, false);
+                DrawAvatarCollider(d.collider_handR, false);
+                DrawAvatarCollider(d.collider_footL, false);
+                DrawAvatarCollider(d.collider_footR, false);
+                DrawAvatarCollider(d.collider_fingerIndexL, true);
+                DrawAvatarCollider(d.collider_fingerIndexR, true);
+                DrawAvatarCollider(d.collider_fingerMiddleL, true);
+                DrawAvatarCollider(d.collider_fingerMiddleR, true);
+                DrawAvatarCollider(d.collider_fingerRingL, true);
+                DrawAvatarCollider(d.collider_fingerRingR, true);
+                DrawAvatarCollider(d.collider_fingerLittleL, true);
+                DrawAvatarCollider(d.collider_fingerLittleR, true);
+            }
+            Handles.matrix = matrix;
+            Handles.color = color;
+        }
+
+        static void DrawAvatarCollider(VRCAvatarDescriptor.ColliderConfig c, bool finger)
+        {
+            var t = c.transform;
+            if (t == null || c.state.ToString() == "Disabled" || c.radius <= 0f)
+                return;
+            if (finger)
+            {
+                var start = t.parent != null ? t.parent.position : t.position;
+                var dir = t.position - start;
+                if (c.height <= c.radius * 2f || dir.sqrMagnitude < 1e-10f)
+                {
+                    Handles.matrix = Matrix4x4.TRS(t.position, Quaternion.identity, Vector3.one);
+                    WireCapsule(c.radius, 0f);
+                    return;
+                }
+                dir.Normalize();
+                Handles.matrix = Matrix4x4.TRS(start + dir * (c.height * 0.5f), Quaternion.FromToRotation(Vector3.up, dir), Vector3.one);
+                WireCapsule(c.radius, c.height);
+                return;
+            }
+            Handles.matrix = Matrix4x4.TRS(t.position + t.rotation * c.position, t.rotation * c.rotation, Vector3.one);
+            WireCapsule(c.radius, c.height);
+        }
+
+        static void WireCapsule(float radius, float height)
+        {
+            float half = Mathf.Max(0f, height * 0.5f - radius);
+            var top = Vector3.up * half;
+            var bottom = -top;
+            if (half <= 0f)
+            {
+                Handles.DrawWireDisc(Vector3.zero, Vector3.up, radius);
+                Handles.DrawWireDisc(Vector3.zero, Vector3.right, radius);
+                Handles.DrawWireDisc(Vector3.zero, Vector3.forward, radius);
+                return;
+            }
+            Handles.DrawWireDisc(top, Vector3.up, radius);
+            Handles.DrawWireDisc(bottom, Vector3.up, radius);
+            Handles.DrawLine(top + Vector3.right * radius, bottom + Vector3.right * radius);
+            Handles.DrawLine(top - Vector3.right * radius, bottom - Vector3.right * radius);
+            Handles.DrawLine(top + Vector3.forward * radius, bottom + Vector3.forward * radius);
+            Handles.DrawLine(top - Vector3.forward * radius, bottom - Vector3.forward * radius);
+            Handles.DrawWireArc(top, Vector3.forward, Vector3.right, 180f, radius);
+            Handles.DrawWireArc(bottom, Vector3.forward, Vector3.left, 180f, radius);
+            Handles.DrawWireArc(top, Vector3.right, Vector3.back, 180f, radius);
+            Handles.DrawWireArc(bottom, Vector3.right, Vector3.forward, 180f, radius);
+        }
+
         static string TypeLabel(Component c) =>
-            c is VRCPhysBone ? "PhysBone" : c is VRCContactReceiver ? "Receiver" : "Sender";
+            c is VRCPhysBone ? "PhysBone" : c is VRCPhysBoneCollider ? "Collider" : c is VRCContactReceiver ? "Receiver" : "Sender";
 
         static bool IsPinned(Component c) => pinnedCache.Contains(c);
 
@@ -225,14 +365,23 @@ namespace VAP.Editor
             return null;
         }
 
-        static void SizeLikeToolbar(VisualElement e)
+        static readonly Color IconOff = new Color(0.77f, 0.77f, 0.77f);
+
+        static void StyleIcon(VisualElement e, bool on)
         {
-            e.style.height = 20f;
-            e.style.minWidth = 30f;
-            e.style.paddingLeft = 8f;
-            e.style.paddingRight = 8f;
-            e.style.justifyContent = Justify.Center;
-            e.style.alignItems = Align.Center;
+            e.Query<Image>().ForEach(i =>
+            {
+                i.tintColor = on ? Color.white : IconOff;
+            });
+        }
+
+        static VisualElement Strip(params VisualElement[] elements)
+        {
+            var strip = new VisualElement { style = { flexDirection = FlexDirection.Row } };
+            foreach (var e in elements)
+                strip.Add(e);
+            EditorToolbarUtility.SetupChildrenAsButtonStrip(strip);
+            return strip;
         }
 
         static Button IconButton(Texture2D icon, string fallback, string tip, Action action, Color? tint = null)
@@ -249,13 +398,58 @@ namespace VAP.Editor
         static readonly Color UnpinnedColor = new Color(0.55f, 0.55f, 0.55f);
         static Texture2D pinIcon;
 
-        static Texture2D PinIcon()
+        static Texture2D cursorIcon, avatarIcon;
+
+        static Texture2D PinIcon() => pinIcon != null ? pinIcon : pinIcon = MakeIcon(InPin);
+
+        static Texture2D CursorIcon() => cursorIcon != null ? cursorIcon : cursorIcon = MakeIcon(InCursor);
+
+        static Texture2D AvatarIcon() => avatarIcon != null ? avatarIcon : avatarIcon = MakeIcon(InAvatar);
+
+        static readonly Vector2[] CursorShape =
         {
-            if (pinIcon != null)
-                return pinIcon;
+            new Vector2(9f, 3f), new Vector2(9f, 26f), new Vector2(14.5f, 20.5f), new Vector2(18.5f, 29f),
+            new Vector2(22f, 27.5f), new Vector2(18f, 19.5f), new Vector2(25f, 19.5f),
+        };
+
+        static bool InCursor(float px, float py)
+        {
+            float x = px, y = 32f - py;
+            bool inside = false;
+            for (int i = 0, j = CursorShape.Length - 1; i < CursorShape.Length; j = i++)
+            {
+                var a = CursorShape[i];
+                var b = CursorShape[j];
+                if ((a.y > y) != (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x)
+                    inside = !inside;
+            }
+            return inside;
+        }
+
+        static bool InAvatar(float px, float py)
+        {
+            var p = new Vector2(px, 32f - py);
+            const float w = 1.25f;
+            return (p - new Vector2(16f, 6.5f)).sqrMagnitude <= 3.6f * 3.6f
+                || Segment(p, new Vector2(16f, 11f), new Vector2(16f, 20f)) <= w
+                || Segment(p, new Vector2(16f, 13.5f), new Vector2(8.5f, 18f)) <= w
+                || Segment(p, new Vector2(16f, 13.5f), new Vector2(23.5f, 18f)) <= w
+                || Segment(p, new Vector2(16f, 20f), new Vector2(10f, 29.5f)) <= w
+                || Segment(p, new Vector2(16f, 20f), new Vector2(22f, 29.5f)) <= w;
+        }
+
+        static float Segment(Vector2 p, Vector2 a, Vector2 b)
+        {
+            var ab = b - a;
+            float t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / ab.sqrMagnitude);
+            return (p - (a + ab * t)).magnitude;
+        }
+
+        static Texture2D MakeIcon(Func<float, float, bool> inside)
+        {
             const int size = 32;
             const int samples = 4;
-            pinIcon = new Texture2D(size, size, TextureFormat.RGBA32, false) { hideFlags = HideFlags.HideAndDontSave, filterMode = FilterMode.Bilinear };
+            var icon = new Texture2D(size, size, TextureFormat.RGBA32, false) { hideFlags = HideFlags.HideAndDontSave, filterMode = FilterMode.Bilinear };
             var pixels = new Color32[size * size];
             for (int y = 0; y < size; y++)
                 for (int x = 0; x < size; x++)
@@ -263,13 +457,13 @@ namespace VAP.Editor
                     int hits = 0;
                     for (int sy = 0; sy < samples; sy++)
                         for (int sx = 0; sx < samples; sx++)
-                            if (InPin(x + (sx + 0.5f) / samples, y + (sy + 0.5f) / samples))
+                            if (inside(x + (sx + 0.5f) / samples, y + (sy + 0.5f) / samples))
                                 hits++;
                     pixels[y * size + x] = new Color32(255, 255, 255, (byte)(hits * 255 / (samples * samples)));
                 }
-            pinIcon.SetPixels32(pixels);
-            pinIcon.Apply();
-            return pinIcon;
+            icon.SetPixels32(pixels);
+            icon.Apply();
+            return icon;
         }
 
         static bool InPin(float px, float py)
@@ -289,161 +483,192 @@ namespace VAP.Editor
 
         const string ToolbarId = "VAP/PhysBoneGizmos/";
 
+        static List<Component> Listed()
+        {
+            targets.RemoveAll(c => c == null);
+            var items = new List<Component>(targets);
+            if (showPinned)
+                items.AddRange(pinnedCache.Where(c => c != null && !targets.Contains(c))
+                    .OrderBy(c => Array.IndexOf(Types, c.GetType())).ThenBy(c => c.name));
+            return items;
+        }
+
+        static VisualElement ListView()
+        {
+            var list = new VisualElement { style = { marginTop = 4 } };
+            var properties = Icon("d_UnityEditor.InspectorWindow", "UnityEditor.InspectorWindow");
+
+            void Rebuild()
+            {
+                list.Clear();
+                var items = Listed();
+                if (items.Count == 0)
+                    list.Add(new Label("Nothing selected or pinned") { style = { marginLeft = 4, marginTop = 2 } });
+                foreach (var c in items)
+                {
+                    var component = c;
+                    bool isPinned = IsPinned(c);
+                    var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+                    var pin = IconButton(PinIcon(), "Pin", isPinned ? "Unpin" : "Pin", () => TogglePin(component),
+                        isPinned ? Color.white : UnpinnedColor);
+                    if (isPinned)
+                        pin.style.backgroundColor = PinnedColor;
+                    row.Add(pin);
+                    row.Add(new Label($"{TypeLabel(c)}: {c.name}")
+                    {
+                        tooltip = Path(c.transform),
+                        style =
+                        {
+                            flexGrow = 1, height = 18, marginLeft = 4, marginTop = 0, marginBottom = 0,
+                            paddingTop = 0, paddingBottom = 0, unityTextAlign = TextAnchor.MiddleLeft,
+                        },
+                    });
+                    row.Add(IconButton(properties, "...", "Open in a Properties window", () => EditorUtility.OpenPropertyEditor(component)));
+                    list.Add(row);
+                }
+                var clear = new Button(ClearPins) { text = "Clear Pins", tooltip = "Unpin everything", style = { marginTop = 4, height = 20 } };
+                clear.SetEnabled(pins.Count > 0);
+                list.Add(clear);
+            }
+
+            list.RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                targetsChanged += Rebuild;
+                pinsChanged += Rebuild;
+                modeChanged += Rebuild;
+                Rebuild();
+            });
+            list.RegisterCallback<DetachFromPanelEvent>(_ =>
+            {
+                targetsChanged -= Rebuild;
+                pinsChanged -= Rebuild;
+                modeChanged -= Rebuild;
+            });
+            return list;
+        }
+
+        class ListPopup : PopupWindowContent
+        {
+            public override Vector2 GetWindowSize()
+            {
+                var items = Listed();
+                float label = items.Count == 0 ? 180f : items.Max(c => EditorStyles.label.CalcSize(new GUIContent($"{TypeLabel(c)}: {c.name}")).x);
+                return new Vector2(Mathf.Clamp(label + 90f, 240f, 700f), Mathf.Clamp(items.Count, 1, 20) * 24f + 48f);
+            }
+
+            public override void OnGUI(Rect rect) { }
+
+            public override void OnOpen()
+            {
+                var root = editorWindow.rootVisualElement;
+                root.style.paddingLeft = 4f;
+                root.style.paddingRight = 4f;
+                root.style.paddingTop = 4f;
+                root.style.paddingBottom = 4f;
+                var scroll = new ScrollView(ScrollViewMode.Vertical);
+                scroll.Add(ListView());
+                root.Add(scroll);
+            }
+        }
+
+        static Texture2D listIcon;
+
+        static Texture2D ListIcon() => listIcon != null ? listIcon : listIcon = MakeIcon((px, py) =>
+        {
+            float y = 32f - py;
+            foreach (float row in new[] { 8f, 16f, 24f })
+                if (Mathf.Abs(y - row) <= 1.75f && ((px >= 5f && px <= 8.5f) || (px >= 12f && px <= 27f)))
+                    return true;
+            return false;
+        });
+
+        [EditorToolbarElement(ToolbarId + "List", typeof(SceneView))]
+        class ListButton : EditorToolbarButton
+        {
+            public ListButton()
+            {
+                icon = ListIcon();
+                RegisterCallback<AttachToPanelEvent>(_ => StyleIcon(this, false));
+                tooltip = "Show the selected and pinned PhysBones, colliders and contacts";
+                clicked += () => UnityEditor.PopupWindow.Show(worldBound, new ListPopup());
+            }
+        }
+
         [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "PhysBone & Contact Gizmos", true)]
         class GizmosOverlay : Overlay, ICreateToolbar
         {
             public IEnumerable<string> toolbarElements => new[]
             {
-                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "All", ToolbarId + "Clear",
+                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "AvatarColliders", ToolbarId + "List",
             };
 
             public override VisualElement CreatePanelContent()
             {
                 var root = new VisualElement { style = { minWidth = 240 } };
-                var modes = new VisualElement { style = { flexDirection = FlexDirection.Row } };
-                var group = new VisualElement[] { new SelectedToggle(), new PinnedToggle(), new AllToggle() };
-                for (int i = 0; i < group.Length; i++)
-                {
-                    var st = group[i].style;
-                    SizeLikeToolbar(group[i]);
-                    float left = i == 0 ? 3f : 0f;
-                    float right = i == group.Length - 1 ? 3f : 0f;
-                    st.borderTopLeftRadius = left;
-                    st.borderBottomLeftRadius = left;
-                    st.borderTopRightRadius = right;
-                    st.borderBottomRightRadius = right;
-                    if (i > 0)
-                    {
-                        st.marginLeft = 0f;
-                        st.borderLeftWidth = 0f;
-                    }
-                    if (i < group.Length - 1)
-                        st.marginRight = 0f;
-                    modes.Add(group[i]);
-                }
-                modes.Add(new VisualElement { style = { flexGrow = 1 } });
-                var clear = new ClearButton();
-                SizeLikeToolbar(clear);
-                clear.style.borderTopLeftRadius = 3f;
-                clear.style.borderBottomLeftRadius = 3f;
-                clear.style.borderTopRightRadius = 3f;
-                clear.style.borderBottomRightRadius = 3f;
-                modes.Add(clear);
+                var modes = new OverlayToolbar { style = { flexDirection = FlexDirection.Row } };
+                modes.Add(Strip(new SelectedToggle(), new PinnedToggle(), new AvatarCollidersToggle()));
                 root.Add(modes);
-                var list = new VisualElement { style = { marginTop = 4 } };
-                root.Add(list);
-
-                var properties = Icon("d_UnityEditor.InspectorWindow", "UnityEditor.InspectorWindow");
-
-                void Rebuild()
-                {
-                    list.Clear();
-                    targets.RemoveAll(c => c == null);
-                    foreach (var c in targets)
-                    {
-                        var component = c;
-                        bool isPinned = IsPinned(c);
-                        var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
-                        var pin = IconButton(PinIcon(), "Pin", isPinned ? "Unpin" : "Pin", () => TogglePin(component),
-                            isPinned ? Color.white : UnpinnedColor);
-                        if (isPinned)
-                            pin.style.backgroundColor = PinnedColor;
-                        row.Add(pin);
-                        row.Add(new Label($"{TypeLabel(c)}: {c.name}")
-                        {
-                            tooltip = Path(c.transform),
-                            style =
-                            {
-                                flexGrow = 1, height = 18, marginLeft = 4, marginTop = 0, marginBottom = 0,
-                                paddingTop = 0, paddingBottom = 0, unityTextAlign = TextAnchor.MiddleLeft,
-                            },
-                        });
-                        row.Add(IconButton(properties, "...", "Open in a Properties window", () => EditorUtility.OpenPropertyEditor(component)));
-                        list.Add(row);
-                    }
-                }
-
-                root.RegisterCallback<AttachToPanelEvent>(_ =>
-                {
-                    targetsChanged += Rebuild;
-                    pinsChanged += Rebuild;
-                    Rebuild();
-                });
-                root.RegisterCallback<DetachFromPanelEvent>(_ =>
-                {
-                    targetsChanged -= Rebuild;
-                    pinsChanged -= Rebuild;
-                });
+                root.Add(ListView());
                 return root;
             }
         }
 
-        abstract class ModeToggle : EditorToolbarToggle
+        abstract class IconToggle : EditorToolbarToggle
         {
-            readonly Mode target;
+            readonly Func<bool> get;
 
-            protected ModeToggle(Mode target, string label, string tip)
+            protected IconToggle(Texture2D image, string tip, Func<bool> get, Action<bool> set)
             {
-                this.target = target;
-                text = label;
+                this.get = get;
+                icon = image;
                 tooltip = tip;
-                this.RegisterValueChangedCallback(e =>
+                this.RegisterValueChangedCallback(e => set(e.newValue));
+                RegisterCallback<AttachToPanelEvent>(_ =>
                 {
-                    if (e.newValue)
-                        SetMode(target);
-                    else
-                        SetValueWithoutNotify(mode == target);
+                    modeChanged += Refresh;
+                    avatarCollidersChanged += Refresh;
+                    Refresh();
                 });
-                RegisterCallback<AttachToPanelEvent>(_ => modeChanged += Refresh);
-                RegisterCallback<DetachFromPanelEvent>(_ => modeChanged -= Refresh);
+                RegisterCallback<DetachFromPanelEvent>(_ =>
+                {
+                    modeChanged -= Refresh;
+                    avatarCollidersChanged -= Refresh;
+                });
                 Refresh();
             }
 
-            void Refresh()
+            protected virtual void Refresh()
             {
-                bool on = mode == target;
+                bool on = get();
                 SetValueWithoutNotify(on);
-                var color = on ? new StyleColor(Color.white) : new StyleColor(StyleKeyword.Null);
-                style.color = color;
-                this.Query<TextElement>().ForEach(t => t.style.color = color);
+                StyleIcon(this, on);
             }
         }
 
         [EditorToolbarElement(ToolbarId + "Selected", typeof(SceneView))]
-        class SelectedToggle : ModeToggle
+        class SelectedToggle : IconToggle
         {
-            public SelectedToggle() : base(Mode.Selected, "Selected", "Draw PhysBones whose root or bones are selected, and contacts whose root is selected") { }
+            public SelectedToggle() : base(CursorIcon(),
+                "Only draw what is selected: PhysBones whose root or bones are selected, and components on or targeting the selection. Off draws every PhysBone, collider and contact",
+                () => selectedOnly, SetSelectedOnly) { }
         }
 
         [EditorToolbarElement(ToolbarId + "Pinned", typeof(SceneView))]
-        class PinnedToggle : ModeToggle
+        class PinnedToggle : IconToggle
         {
-            public PinnedToggle() : base(Mode.Pinned, "Pinned", "Draw pinned and selected PhysBones and contacts") { }
-        }
+            public PinnedToggle() : base(PinIcon(), "Also draw pinned PhysBones, colliders and contacts", () => showPinned, SetShowPinned) { }
 
-        [EditorToolbarElement(ToolbarId + "All", typeof(SceneView))]
-        class AllToggle : ModeToggle
-        {
-            public AllToggle() : base(Mode.All, "All", "Draw every PhysBone and contact") { }
-        }
-
-        [EditorToolbarElement(ToolbarId + "Clear", typeof(SceneView))]
-        class ClearButton : EditorToolbarButton
-        {
-            public ClearButton()
+            protected override void Refresh()
             {
-                text = "Clear";
-                tooltip = "Clear all pins";
-                clicked += ClearPins;
-                RegisterCallback<AttachToPanelEvent>(_ =>
-                {
-                    pinsChanged += Refresh;
-                    Refresh();
-                });
-                RegisterCallback<DetachFromPanelEvent>(_ => pinsChanged -= Refresh);
+                base.Refresh();
+                SetEnabled(selectedOnly);
             }
+        }
 
-            void Refresh() => SetEnabled(pins.Count > 0);
+        [EditorToolbarElement(ToolbarId + "AvatarColliders", typeof(SceneView))]
+        class AvatarCollidersToggle : IconToggle
+        {
+            public AvatarCollidersToggle() : base(AvatarIcon(), "Also draw the colliders set on the avatar descriptor", () => avatarColliders, SetAvatarColliders) { }
         }
     }
 }
