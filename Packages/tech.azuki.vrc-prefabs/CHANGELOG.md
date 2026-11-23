@@ -1,3 +1,6 @@
+## Version 3.1.1
+- New Skinned Mesh Renderer component with better features.
+
 ## Version 3.1.0
 - Deprecated prefabs that can be replaced by components.
 - Tail wag can no longer be animated if it's off.

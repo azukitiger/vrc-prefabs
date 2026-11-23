@@ -61,8 +61,19 @@ namespace VAP.Editor
             if (menu == null || menu.controls == null)
                 return false;
             for (int i = 0; i < menu.controls.Count; i++)
+            {
                 if (RemovedChanged(c, menu, i))
                     return true;
+                var control = menu.controls[i];
+                if (control == null || c.IsRemoved(menu, i))
+                    continue;
+                if (control.parameter != null && !string.IsNullOrEmpty(control.parameter.name) && DefaultChanged(c, control.parameter.name))
+                    return true;
+                if (control.subParameters != null)
+                    foreach (var sub in control.subParameters)
+                        if (sub != null && !string.IsNullOrEmpty(sub.name) && DefaultChanged(c, sub.name))
+                            return true;
+            }
             return false;
         }
 

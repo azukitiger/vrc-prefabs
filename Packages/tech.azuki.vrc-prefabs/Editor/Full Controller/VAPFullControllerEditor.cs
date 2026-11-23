@@ -43,7 +43,7 @@ namespace VAP.Editor
         void DrawInfo(Rect rect)
         {
             var names = Controllers().Where(o => o != null).Select(o => o.name).ToList();
-            VRCFuryWrap.BarLabels(rect, rect.x, "Full Controller", string.Join(", ", names), 0.6f);
+            VRCFuryWrap.BarLabels(rect, rect.x, "Full Controller", string.Join(", ", names), 0.6f, VRCFuryWrap.ContentChanged(Wrapped));
         }
 
         public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(wrap.Build(this, DrawFullController, DrawInfo,

@@ -16,31 +16,24 @@ namespace VAP.Editor
 {
     internal static class BlendshapeNormalsBuild
     {
-        const string Log = "[VAP Mesh Blendshape Normals] ";
-
         internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
         {
-            var all = avatarRoot.GetComponentsInChildren<VAPBlendshapeNormals>(true);
-            if (all.Length == 0)
+            var wrappers = avatarRoot.GetComponentsInChildren<VAPSkinnedMeshRenderer>(true)
+                .Where(w => w.blendShapeNormals && w.wrapped != null && w.wrapped.sharedMesh != null)
+                .ToList();
+            if (wrappers.Count == 0)
                 return;
 
             var wanted = new Dictionary<SkinnedMeshRenderer, HashSet<string>>();
-            var renderers = avatarRoot.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            foreach (var c in all)
+            foreach (var w in wrappers)
             {
-                var names = c.blendShapes.Where(n => !string.IsNullOrEmpty(n)).ToList();
-                foreach (var smr in renderers)
-                {
-                    if (smr == null || smr.sharedMesh == null || (c.targetRenderer != null && c.targetRenderer != smr))
-                        continue;
-                    var has = new HashSet<string>(Blendshapes.Names(smr.sharedMesh));
-                    var found = names.Where(has.Contains).ToList();
-                    if (found.Count == 0)
-                        continue;
-                    if (!wanted.TryGetValue(smr, out var set))
-                        wanted[smr] = set = new HashSet<string>();
-                    set.UnionWith(found);
-                }
+                var has = new HashSet<string>(Blendshapes.Names(w.wrapped.sharedMesh));
+                var found = w.normalBlendShapes.Where(n => !string.IsNullOrEmpty(n) && has.Contains(n)).ToList();
+                if (found.Count == 0)
+                    continue;
+                if (!wanted.TryGetValue(w.wrapped, out var set))
+                    wanted[w.wrapped] = set = new HashSet<string>();
+                set.UnionWith(found);
             }
 
             var done = new Dictionary<(Mesh, string), Mesh>();
@@ -56,9 +49,6 @@ namespace VAP.Editor
                 }
                 smr.sharedMesh = mesh;
             }
-
-            foreach (var c in all)
-                Object.DestroyImmediate(c);
         }
 
         internal static Mesh Recalculate(Mesh source, HashSet<string> names)
@@ -173,7 +163,7 @@ namespace VAP.Editor
     public class BlendshapeNormalsPlugin : Plugin<BlendshapeNormalsPlugin>
     {
         public override string QualifiedName => "tech.azuki.vrc-prefabs.blendshape-normals";
-        public override string DisplayName => "VAP Mesh Blendshape Normals";
+        public override string DisplayName => "VAP Blendshape Normals";
 
         protected override void Configure()
         {

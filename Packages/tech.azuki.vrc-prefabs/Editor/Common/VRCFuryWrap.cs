@@ -91,14 +91,28 @@ namespace VAP.Editor
                 FindType(VRCFuryType) == null ? "VRCFury is not installed." : $"The wrapped {what} is missing. Open the prefab to fix it.",
                 MessageType.Error));
 
-        static GUIStyle barLeftStyle, barRightStyle;
+        static GUIStyle barLeftStyle, barBoldStyle, barRightStyle;
+        static readonly Color OverrideColor = new Color(1f / 255f, 153f / 255f, 235f / 255f, 0.75f);
 
-        internal static void BarLabels(Rect rect, float x, string left, string right, float rightMaxFraction)
+        internal static bool Changed(SerializedProperty prop) => prop != null && prop.prefabOverride;
+
+        internal static bool ContentChanged(Component wrapped)
+        {
+            if (wrapped == null || !PrefabUtility.IsPartOfPrefabInstance(wrapped))
+                return false;
+            using var so = new SerializedObject(wrapped);
+            return Changed(so.FindProperty("content"));
+        }
+
+        internal static void BarLabels(Rect rect, float x, string left, string right, float rightMaxFraction, bool bold = false)
         {
             barLeftStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft, clipping = TextClipping.Clip, padding = new RectOffset(0, 0, 0, 0) };
+            barBoldStyle ??= new GUIStyle(barLeftStyle) { fontStyle = FontStyle.Bold };
             barRightStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, clipping = TextClipping.Clip };
+            if (bold && Event.current.type == EventType.Repaint)
+                EditorGUI.DrawRect(new Rect(0f, rect.y, 2f, rect.height), OverrideColor);
             float rightWidth = string.IsNullOrEmpty(right) ? 0f : Mathf.Min(barRightStyle.CalcSize(new GUIContent(right)).x, rect.width * rightMaxFraction);
-            GUI.Label(new Rect(x, rect.y, rect.xMax - x - rightWidth - 8f, rect.height), left, barLeftStyle);
+            GUI.Label(new Rect(x, rect.y, rect.xMax - x - rightWidth - 8f, rect.height), left, bold ? barBoldStyle : barLeftStyle);
             if (rightWidth > 0f)
                 GUI.Label(new Rect(rect.xMax - rightWidth, rect.y, rightWidth, rect.height), right, barRightStyle);
         }

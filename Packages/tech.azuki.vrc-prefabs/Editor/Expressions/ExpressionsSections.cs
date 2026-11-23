@@ -65,7 +65,8 @@ namespace VAP.Editor
             using (new EditorGUI.DisabledScope(Locked))
                 enabled.boolValue = EditorGUI.Toggle(box, enabled.boolValue);
             Serialized.ApplyModifiedProperties();
-            VRCFuryWrap.BarLabels(new Rect(bar.x, bar.y, bar.width - width - 8f, bar.height), bar.x, "Frame Time", null, 0.6f);
+            bool changed = VRCFuryWrap.Changed(enabled) || VRCFuryWrap.Changed(Serialized.FindProperty(nameof(VAPExpressions.frameTimeFactors)));
+            VRCFuryWrap.BarLabels(new Rect(bar.x, bar.y, bar.width - width - 8f, bar.height), bar.x, "Frame Time", null, 0.6f, changed);
         }
 
         void DrawFrameTimeBody()
@@ -81,8 +82,10 @@ namespace VAP.Editor
 
         void DrawAudioHeader(Rect bar)
         {
-            int count = AudioControllers().Sum(c => Clips.Found(c).Count);
-            VRCFuryWrap.BarLabels(bar, bar.x, "Play Audio Clips", count + (count == 1 ? " Play Audio" : " Play Audios"), 0.6f);
+            var list = AudioControllers();
+            int count = list.Sum(c => Clips.Found(c).Count);
+            bool changed = list.Any(c => Clips.AnyChanged(c, PlayAudioClips.Prefix(c)));
+            VRCFuryWrap.BarLabels(bar, bar.x, "Play Audio Clips", count + (count == 1 ? " Play Audio" : " Play Audios"), 0.6f, changed);
         }
 
         void DrawAudioBody()

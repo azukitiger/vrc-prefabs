@@ -85,7 +85,7 @@ namespace VAP.Editor
                 GUI.DrawTexture(new Rect(x, rect.y + (rect.height - IconSize) * 0.5f, IconSize, IconSize), icon, ScaleMode.ScaleToFit);
                 x += IconSize + IconPad;
             }
-            VRCFuryWrap.BarLabels(rect, x, string.IsNullOrEmpty(path) ? "No menu path" : path, param, 0.35f);
+            VRCFuryWrap.BarLabels(rect, x, string.IsNullOrEmpty(path) ? "No menu path" : path, param, 0.35f, VRCFuryWrap.Changed(content));
         }
 
         internal static bool IsWrappable(Component c) => VRCFuryWrap.HasFeature(c, FeatureType);

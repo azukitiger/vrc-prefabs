@@ -24,12 +24,12 @@ Prefabs and assets that add **advanced animations and interactive systems** to *
   - [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements)
   - [VRCFury Full Controller](#vrcfury-full-controller)
   - [VRCFury Toggle](#vrcfury-toggle)
+  - [Skinned Mesh Renderer](#skinned-mesh-renderer)
   - [VRC Remove Empty SubMenus](#vrc-remove-empty-submenus)
   - [VRC Contact Smoothing & VRC PhysBone Smoothing](#vrc-contact-smoothing--vrc-physbone-smoothing)
   - [VRC Face Tracking BlendShape Set](#vrc-face-tracking-blendshape-set)
   - [VRC Face Tracking BlendShape Set Hook](#vrc-face-tracking-blendshape-set-hook)
   - [VRC Face Tracking Parameter Behaviors](#vrc-face-tracking-parameter-behaviors)
-  - [Mesh Blendshape Normals](#mesh-blendshape-normals)
   - [Rig Floor Adjuster](#rig-floor-adjuster)
 - [Tools](#tools)
   - [PhysBone & Contact Gizmos](#physbone--contact-gizmos)
@@ -483,6 +483,27 @@ A **VRCFury Toggle** with the ability to override the **Default** value it start
 2. Set it up in the **VRCFury** section like a normal Toggle.
 3. **Default** can be changed on prefab instances. Right-click it to revert.
 
+## Skinned Mesh Renderer
+
+Replaces the inspector of a **Skinned Mesh Renderer** with only the settings worth changing for VRChat, and keeps the rest at the recommended values.
+
+### Instructions
+1. Right-click a **Skinned Mesh Renderer** and pick **Wrap with VAP**, or add **VAP** > **Skinned Mesh Renderer**.
+2. Edit the renderer from this component. Right-click a setting to revert a prefab override.
+3. Use **Unwrap** from the component menu, or remove the component, to show the normal **Skinned Mesh Renderer** again.
+
+### Settings
+| Setting | Description |
+|-|-|
+| Enabled | Turns the renderer on or off |
+| Mesh, Root Bone, Bounds, Materials | Same as the **Skinned Mesh Renderer** |
+| BlendShapes | Every blendshape of the mesh, with a search field |
+| Override Blendshape Normals | When enabled, recalculates the normals and tangents of the listed blendshapes at build time, the way Blender shades them. Type in the search field to find blendshapes of this mesh and click one to add it, or click Enter or press **Add** to add the typed name. **Copy** and **Paste** move the list as text, one blendshape per line |
+| Cast Shadows | Whether the mesh casts shadows in worlds with realtime lights |
+| Anchor Override | Where probes are sampled. Use the same transform on every mesh of the avatar so they are lit the same |
+
+These are set to the recommended values when wrapping and again at build time, and are not shown: **Update When Offscreen** off, **Receive Shadows** on, **Light Probes** and **Reflection Probes** `Blend Probes`, **Quality** `Auto`, **Skinned Motion Vectors** off and **Dynamic Occlusion** on.
+
 ## VRC Remove Empty SubMenus
 
 Removes every sub menu control of the avatar's menu that ends up with nothing inside at build time.
@@ -540,10 +561,6 @@ Adds **Parameter Behaviors** to the avatar descriptor's **Face Tracking** at bui
 - **Tracking Key** tab limits (Max or Min) every blendshape a Blendshapes Set uses for a tracking key or a group of keys (ex. `LipFunnel`).
 - **Generate Correctives Based on Tracking Keys** (on by default, under the **Blendshape** tab) adds behaviors for blendshapes on the face tracking meshes named after two of the set's blendshapes followed by `Corrective` or `Morph` (ex. `MouthClosedLipPuckerCorrective`), driven by both. Uncheck any to leave it out.
 - **Copy All** and **Paste** copy behaviors between components.
-
-## Mesh Blendshape Normals
-
-Recalculates the normals and tangents of the listed **Blendshapes** at build time, the way Blender shades them. Leave **Mesh** empty to use every mesh in the avatar that has them.
 
 ## Rig Floor Adjuster
 

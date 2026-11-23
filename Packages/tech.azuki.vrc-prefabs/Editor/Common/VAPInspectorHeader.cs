@@ -37,15 +37,21 @@ namespace VAP.Editor
 
         static readonly Color WarningBorder = new Color32(200, 40, 40, 255);
 
-        public static VisualElement Create(string title, System.Action onGUI, UnityEditor.Editor editor = null)
+        public class Toggle
+        {
+            public System.Func<bool> Get;
+            public System.Action<bool> Set;
+        }
+
+        public static VisualElement Create(string title, System.Action onGUI, UnityEditor.Editor editor = null, Toggle toggle = null)
         {
             var root = new VisualElement();
             root.Add(new IMGUIContainer(onGUI));
-            Attach(root, title, editor);
+            Attach(root, title, editor, toggle);
             return root;
         }
 
-        public static void Attach(VisualElement inspectorRoot, string title, UnityEditor.Editor editor = null)
+        public static void Attach(VisualElement inspectorRoot, string title, UnityEditor.Editor editor = null, Toggle toggle = null)
         {
 #if !VAP_NDMF
             inspectorRoot.Clear();
@@ -60,11 +66,11 @@ namespace VAP.Editor
             {
                 inspectorRoot.schedule.Execute(() =>
                 {
-                    if (!WrapTitlebar(inspectorRoot, title))
-                        AddFallback(inspectorRoot, title);
+                    if (!WrapTitlebar(inspectorRoot, title, toggle))
+                        AddFallback(inspectorRoot, title, toggle);
                 });
                 watch?.Pause();
-                watch = inspectorRoot.schedule.Execute(() => WrapTitlebar(inspectorRoot, title)).Every(150);
+                watch = inspectorRoot.schedule.Execute(() => WrapTitlebar(inspectorRoot, title, toggle)).Every(150);
             });
             inspectorRoot.RegisterCallback<DetachFromPanelEvent>(_ => watch?.Pause());
         }
@@ -89,7 +95,7 @@ namespace VAP.Editor
             return box;
         }
 
-        static bool WrapTitlebar(VisualElement root, string title)
+        static bool WrapTitlebar(VisualElement root, string title, Toggle toggle)
         {
             VisualElement editorElement = root;
             while (editorElement != null && editorElement.GetType().Name != "EditorElement")
@@ -118,13 +124,18 @@ namespace VAP.Editor
             var original = titlebar.onGUIHandler;
             System.Action handler = () =>
             {
+                var r = titlebar.contentRect;
+                var area = new Rect(18, 0, Mathf.Max(0, r.width - 18 - 64), r.height);
+                if (HandleToggle(area, toggle))
+                {
+                    titlebar.MarkDirtyRepaint();
+                    return;
+                }
                 original?.Invoke();
                 if (Event.current.type != EventType.Repaint)
                     return;
-                var r = titlebar.contentRect;
-                var area = new Rect(18, 0, Mathf.Max(0, r.width - 18 - 64), r.height);
                 EditorGUI.DrawRect(area, EditorGUIUtility.isProSkin ? new Color32(62, 62, 62, 255) : new Color32(203, 203, 203, 255));
-                Draw(area, title);
+                Draw(area, title, toggle);
             };
             Wrapped.Add(titlebar, handler);
             titlebar.onGUIHandler = handler;
@@ -132,27 +143,54 @@ namespace VAP.Editor
             return true;
         }
 
-        static void AddFallback(VisualElement root, string title)
+        static void AddFallback(VisualElement root, string title, Toggle toggle)
         {
             if (root.Q<IMGUIContainer>("VAPHeaderFallback") != null)
                 return;
             var bar = new IMGUIContainer(() =>
             {
                 var rect = GUILayoutUtility.GetRect(0, 20, GUILayout.ExpandWidth(true));
+                if (HandleToggle(rect, toggle))
+                    return;
                 if (Event.current.type == EventType.Repaint)
-                    Draw(rect, title);
+                    Draw(rect, title, toggle);
             }) { name = "VAPHeaderFallback" };
             bar.style.marginBottom = 4;
             root.Insert(0, bar);
         }
 
-        static void Draw(Rect area, string title)
+        const float ToggleSize = 14f;
+
+        static Rect Badge(Rect area)
+        {
+            var tex = Logo;
+            float logoW = tex != null ? Mathf.Round(LogoHeight * tex.width / tex.height) : 30;
+            return new Rect(area.x + 2, area.y, logoW + 14, area.height);
+        }
+
+        static Rect ToggleRect(Rect area)
+        {
+            var box = Badge(area);
+            return new Rect(box.xMax + 6, Mathf.Round(area.y + (area.height - ToggleSize) / 2), ToggleSize, ToggleSize);
+        }
+
+        static bool HandleToggle(Rect area, Toggle toggle)
+        {
+            var e = Event.current;
+            if (toggle == null || e.type != EventType.MouseDown || e.button != 0 || !ToggleRect(area).Contains(e.mousePosition))
+                return false;
+            toggle.Set(!toggle.Get());
+            e.Use();
+            return true;
+        }
+
+        static void Draw(Rect area, string title, Toggle toggle)
         {
             float h = area.height;
             var tex = Logo;
             float logoH = LogoHeight;
             float logoW = tex != null ? Mathf.Round(logoH * tex.width / tex.height) : 30;
-            var box = new Rect(area.x + 2, area.y, logoW + 14, h);
+            var box = Badge(area);
             EditorGUI.DrawRect(box, BadgeBack);
             var logoRect = new Rect(Mathf.Round(box.x + 7), Mathf.Round(box.y + (box.height - logoH) / 2), logoW, logoH);
             if (tex != null)
@@ -160,7 +198,14 @@ namespace VAP.Editor
             else
                 GUI.Label(box, "VAP", new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.MiddleCenter, normal = { textColor = BadgeText } });
 
-            var labelRect = new Rect(box.xMax + 6, area.y, Mathf.Max(0, area.xMax - box.xMax - 6), h);
+            float labelX = box.xMax + 6;
+            if (toggle != null)
+            {
+                var t = ToggleRect(area);
+                EditorStyles.toggle.Draw(t, GUIContent.none, false, false, toggle.Get(), false);
+                labelX = t.xMax + 6;
+            }
+            var labelRect = new Rect(labelX, area.y, Mathf.Max(0, area.xMax - labelX), h);
             GUI.Label(labelRect, title, new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.MiddleLeft });
         }
     }

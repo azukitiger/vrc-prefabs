@@ -178,7 +178,7 @@ namespace VAP.Editor
             Undo.CollapseUndoOperations(group);
         }
 
-        static void Release(MonoBehaviour wrapper, Component vf)
+        internal static void Release(MonoBehaviour wrapper, Component vf)
         {
             Released.Add(vf);
             Set(vf, false);

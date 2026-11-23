@@ -104,13 +104,19 @@ namespace VAP.Editor
                 lists[key] = list;
             }
             list.serializedProperty = clips;
+            var behaviour = item.behaviour;
+            bool changed = ChangedFromSource(key, behaviour);
+            list.onChangedCallback = l => Schedule(key, behaviour);
             list.onCanAddCallback = l => l.serializedProperty.arraySize < max;
-            list.drawHeaderCallback = rect => Header(rect, path, title, clips.arraySize, max);
+            list.drawHeaderCallback = rect => Header(rect, path, title, clips.arraySize, max, changed);
             list.drawElementCallback = (rect, index, active, focused) =>
             {
                 rect.y += 1f;
                 rect.height = VAPEditorGUI.Line;
+                EditorGUI.BeginChangeCheck();
                 EditorGUI.PropertyField(rect, clips.GetArrayElementAtIndex(index), GUIContent.none);
+                if (EditorGUI.EndChangeCheck())
+                    Schedule(key, behaviour);
                 if (index >= max)
                     VAPEditorGUI.WarningIcon(rect, "The parameter driver only allows " + max + (max == 1 ? " clip" : " clips") + "; this one is left out.");
             };
@@ -126,7 +132,7 @@ namespace VAP.Editor
             unstored[key] = list;
             list.elementHeightCallback = _ => VAPEditorGUI.Line + 2f;
             list.onCanAddCallback = l => values.Count < max;
-            list.drawHeaderCallback = rect => Header(rect, path, title, values.Count, max);
+            list.drawHeaderCallback = rect => Header(rect, path, title, values.Count, max, false);
             list.onAddCallback = l =>
             {
                 values.Add(null);
@@ -154,12 +160,127 @@ namespace VAP.Editor
             return list;
         }
 
-        static void Header(Rect rect, string path, string title, int count, int max)
+        void Schedule(string key, StateMachineBehaviour behaviour) =>
+            EditorApplication.delayCall += () => Normalize(key, behaviour);
+
+        void Normalize(string key, StateMachineBehaviour behaviour)
+        {
+            if (serializedObject == null || serializedObject.targetObject == null || behaviour == null)
+                return;
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
+            var source = PrefabUtility.GetCorrespondingObjectFromSource(serializedObject.targetObject);
+            List<(string key, List<Object> clips)> sourceEntries = null;
+            if (source != null)
+            {
+                using var sourceSO = new SerializedObject(source);
+                sourceEntries = Read(sourceSO.FindProperty(property));
+            }
+            bool sourceHas = sourceEntries != null && sourceEntries.Exists(e => e.key == key);
+            var entries = Entries;
+            var defaults = PlayAudioClips.Clips(behaviour).ConvertAll(c => (Object)c);
+            for (int i = 0; i < entries.arraySize; i++)
+            {
+                var entry = entries.GetArrayElementAtIndex(i);
+                if (entry.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.key)).stringValue != key)
+                    continue;
+                if (!sourceHas && Same(ReadClips(entry.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.clips))), defaults))
+                {
+                    entries.DeleteArrayElementAtIndex(i);
+                    serializedObject.ApplyModifiedProperties();
+                    lists.Remove(key);
+                    unstored.Remove(key);
+                }
+                break;
+            }
+            serializedObject.Update();
+            entries = Entries;
+            if (sourceEntries != null && entries.prefabOverride && Equal(Read(entries), sourceEntries))
+            {
+                PrefabUtility.RevertPropertyOverride(entries, InteractionMode.UserAction);
+                serializedObject.Update();
+                lists.Clear();
+                unstored.Clear();
+            }
+        }
+
+        static List<Object> ReadClips(SerializedProperty clips)
+        {
+            var result = new List<Object>();
+            for (int i = 0; clips != null && i < clips.arraySize; i++)
+                result.Add(clips.GetArrayElementAtIndex(i).objectReferenceValue);
+            return result;
+        }
+
+        static List<(string key, List<Object> clips)> Read(SerializedProperty entries)
+        {
+            var result = new List<(string, List<Object>)>();
+            for (int i = 0; entries != null && i < entries.arraySize; i++)
+            {
+                var entry = entries.GetArrayElementAtIndex(i);
+                result.Add((entry.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.key)).stringValue,
+                    ReadClips(entry.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.clips)))));
+            }
+            return result;
+        }
+
+        static bool Same(List<Object> a, List<Object> b)
+        {
+            if (a.Count != b.Count)
+                return false;
+            for (int i = 0; i < a.Count; i++)
+                if (a[i] != b[i])
+                    return false;
+            return true;
+        }
+
+        static bool Equal(List<(string key, List<Object> clips)> a, List<(string key, List<Object> clips)> b)
+        {
+            if (a.Count != b.Count)
+                return false;
+            for (int i = 0; i < a.Count; i++)
+                if (a[i].key != b[i].key || !Same(a[i].clips, b[i].clips))
+                    return false;
+            return true;
+        }
+
+        internal bool AnyChanged(AnimatorController c, string prefix)
+        {
+            foreach (var item in Found(c))
+                if (ChangedFromSource(prefix + item.key, item.behaviour))
+                    return true;
+            return false;
+        }
+
+        bool ChangedFromSource(string key, StateMachineBehaviour behaviour)
+        {
+            if (serializedObject == null || serializedObject.targetObject == null)
+                return false;
+            var clips = Clips(key);
+            if (clips == null)
+                return false;
+            var current = ReadClips(clips);
+            var source = PrefabUtility.GetCorrespondingObjectFromSource(serializedObject.targetObject);
+            if (source != null)
+            {
+                using var sourceSO = new SerializedObject(source);
+                var entry = sourceSO.FindProperty(property);
+                for (int i = 0; entry != null && i < entry.arraySize; i++)
+                {
+                    var e = entry.GetArrayElementAtIndex(i);
+                    if (e.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.key)).stringValue == key)
+                        return !Same(current, ReadClips(e.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.clips))));
+                }
+            }
+            return behaviour != null && !Same(current, PlayAudioClips.Clips(behaviour).ConvertAll(c => (Object)c));
+        }
+
+        static void Header(Rect rect, string path, string title, int count, int max, bool changed)
         {
             string side = title + "  " + (max == int.MaxValue ? count.ToString() : count + "/" + max);
             var size = EditorStyles.miniLabel.CalcSize(new GUIContent(side));
             float width = Mathf.Min(size.x, rect.width * 0.4f);
-            EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width - width - 4f, rect.height), new GUIContent(path, "Clips for the VRC Animator Play Audio on " + path + "."), EditorStyles.boldLabel);
+            EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width - width - 4f, rect.height), new GUIContent(path, "Clips for the VRC Animator Play Audio on " + path + "."), changed ? EditorStyles.boldLabel : EditorStyles.label);
             EditorGUI.LabelField(new Rect(rect.xMax - width, rect.y, width, rect.height), new GUIContent(side, max == int.MaxValue ? "Clips set." : "Clips set, out of what the parameter driver allows."), EditorStyles.miniLabel);
         }
     }

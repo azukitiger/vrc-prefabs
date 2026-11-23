@@ -24,7 +24,7 @@ namespace VAP.Editor
         readonly VAPExpressions owner;
         readonly Dictionary<VRCExpressionsMenu, MenuSection> sections = new Dictionary<VRCExpressionsMenu, MenuSection>();
         readonly Dictionary<VRCExpressionsMenu, string> paths = new Dictionary<VRCExpressionsMenu, string>();
-        static GUIStyle stepStyle, slashStyle;
+        static GUIStyle stepStyle, stepBoldStyle, slashStyle;
 
         internal SubMenusSection(VAPExpressions owner)
         {
@@ -107,7 +107,8 @@ namespace VAP.Editor
                 string key = "VAP.SubMenu." + menu.GetInstanceID();
                 bool open = SessionState.GetBool(key, false);
                 var header = EditorGUILayout.GetControlRect(false, HeaderHeight);
-                if (ExpressionsOverrides.MenuChanged(owner, menu))
+                bool changed = ExpressionsOverrides.MenuChanged(owner, menu);
+                if (changed)
                     ExpressionsOverrides.DrawBar(header);
                 if (e.parent != null && ExpressionsOverrides.ContextClick(header))
                 {
@@ -128,7 +129,7 @@ namespace VAP.Editor
                 }
                 if (now != open)
                     SessionState.SetBool(key, now);
-                DrawSteps(new Rect(foldout.x + 16f, header.y, foldout.width - 16f, header.height), e.steps);
+                DrawSteps(new Rect(foldout.x + 16f, header.y, foldout.width - 16f, header.height), e.steps, changed);
                 if (now)
                 {
                     var section = Section(menu);
@@ -143,11 +144,13 @@ namespace VAP.Editor
             }
         }
 
-        static void DrawSteps(Rect rect, List<string> steps)
+        static void DrawSteps(Rect rect, List<string> steps, bool bold)
         {
             if (Event.current.type != EventType.Repaint)
                 return;
             stepStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft, clipping = TextClipping.Clip };
+            stepBoldStyle ??= new GUIStyle(stepStyle) { fontStyle = FontStyle.Bold };
+            var style = bold ? stepBoldStyle : stepStyle;
             slashStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleCenter, normal = { textColor = new Color(0.6f, 0.6f, 0.6f) } };
             float x = rect.x;
             for (int i = 0; i < steps.Count && x < rect.xMax; i++)
@@ -158,8 +161,8 @@ namespace VAP.Editor
                     x += 10f + Gap;
                 }
                 string name = steps[i];
-                float w = stepStyle.CalcSize(new GUIContent(name)).x;
-                GUI.Label(new Rect(x, rect.y, Mathf.Min(w, rect.xMax - x), rect.height), name, stepStyle);
+                float w = style.CalcSize(new GUIContent(name)).x;
+                GUI.Label(new Rect(x, rect.y, Mathf.Min(w, rect.xMax - x), rect.height), name, style);
                 x += w + Gap;
             }
         }

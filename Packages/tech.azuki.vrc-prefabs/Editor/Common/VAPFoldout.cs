@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,13 +12,20 @@ namespace VAP.Editor
         const float HeaderHeight = 26f;
 
         readonly string key;
+        readonly bool persistent;
+        readonly bool openByDefault;
+        const float BodyIndent = 6f;
         readonly VisualElement body = new VisualElement();
 
         internal VisualElement Root { get; } = new VisualElement();
 
-        internal VAPFoldout(string key, Action<Rect> drawHeader, Action drawBody, Func<bool> canOpen = null)
+        internal Func<SerializedProperty[]> Overrides { get; set; }
+
+        internal VAPFoldout(string key, Action<Rect> drawHeader, Action drawBody, Func<bool> canOpen = null, bool persistent = false, bool openByDefault = false)
         {
             this.key = key;
+            this.persistent = persistent;
+            this.openByDefault = openByDefault;
             var style = Root.style;
             style.marginTop = 6f;
             style.backgroundColor = new Color(0f, 0f, 0f, 0.12f);
@@ -32,20 +40,25 @@ namespace VAP.Editor
 
             Root.Add(new IMGUIContainer(() =>
             {
-                bool open = SessionState.GetBool(key, false);
+                bool open = IsOpen();
                 var header = EditorGUILayout.GetControlRect(false, HeaderHeight);
                 drawHeader(new Rect(header.x + 20f, header.y, header.width - 24f, header.height));
                 bool allowed = canOpen == null || canOpen();
+                if (Overrides != null && Event.current.type == EventType.ContextClick && header.Contains(Event.current.mousePosition))
+                {
+                    ShowRevertMenu();
+                    Event.current.Use();
+                }
                 if (!allowed && open)
                 {
                     open = false;
-                    SessionState.SetBool(key, false);
+                    SetOpen(false);
                     Show(false);
                 }
                 if (allowed && Event.current.type == EventType.MouseDown && Event.current.button == 0 && header.Contains(Event.current.mousePosition))
                 {
                     open = !open;
-                    SessionState.SetBool(key, open);
+                    SetOpen(open);
                     Show(open);
                     Event.current.Use();
                 }
@@ -55,9 +68,50 @@ namespace VAP.Editor
                 using (new EditorGUI.DisabledScope(!allowed))
                     EditorStyles.foldout.Draw(new Rect(header.x + 4f, header.y + (header.height - line) * 0.5f, 14f, line), false, false, open, false);
             }));
-            body.Add(new IMGUIContainer(drawBody));
+            body.Add(new IMGUIContainer(() =>
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.Space(BodyIndent);
+                    using (new EditorGUILayout.VerticalScope())
+                        drawBody();
+                }
+            }));
             Root.Add(body);
-            Show(SessionState.GetBool(key, false));
+            Show(IsOpen());
+        }
+
+        void ShowRevertMenu()
+        {
+            var changed = (Overrides() ?? Array.Empty<SerializedProperty>())
+                .Where(p => p != null && p.prefabOverride)
+                .ToList();
+            var menu = new GenericMenu();
+            var label = new GUIContent("Revert");
+            if (changed.Count == 0)
+                menu.AddDisabledItem(label);
+            else
+                menu.AddItem(label, false, () =>
+                {
+                    foreach (var p in changed)
+                    {
+                        p.serializedObject.Update();
+                        var current = p.serializedObject.FindProperty(p.propertyPath);
+                        if (current != null && current.prefabOverride)
+                            PrefabUtility.RevertPropertyOverride(current, InteractionMode.UserAction);
+                    }
+                });
+            menu.ShowAsContext();
+        }
+
+        bool IsOpen() => persistent ? EditorPrefs.GetBool(key, openByDefault) : SessionState.GetBool(key, openByDefault);
+
+        void SetOpen(bool open)
+        {
+            if (persistent)
+                EditorPrefs.SetBool(key, open);
+            else
+                SessionState.SetBool(key, open);
         }
 
         void Show(bool open) => body.style.display = open ? DisplayStyle.Flex : DisplayStyle.None;
