@@ -86,6 +86,12 @@ namespace VAP.Editor
             return section;
         }
 
+        internal List<string> SingleSteps()
+        {
+            var entries = Entries();
+            return entries.Count == 1 ? entries[0].steps : null;
+        }
+
         string PathOf(VRCExpressionsMenu menu) =>
             menu != null && paths.TryGetValue(menu, out var path) ? path : null;
 
@@ -144,10 +150,20 @@ namespace VAP.Editor
             }
         }
 
-        static void DrawSteps(Rect rect, List<string> steps, bool bold)
+        internal static void DrawHeader(Rect header, List<string> steps, GUIContent title, string bits)
         {
-            if (Event.current.type != EventType.Repaint)
-                return;
+            float bitsWidth = bits != null ? VAPEditorGUI.RightMini.CalcSize(new GUIContent(bits)).x + 8f : 0f;
+            var left = new Rect(header.x, header.y, header.width - bitsWidth, header.height);
+            if (steps != null)
+                DrawSteps(left, steps, true);
+            else
+                EditorGUI.LabelField(left, title, EditorStyles.boldLabel);
+            if (bits != null)
+                EditorGUI.LabelField(header, bits, VAPEditorGUI.RightMini);
+        }
+
+        internal static float DrawSteps(Rect rect, List<string> steps, bool bold)
+        {
             stepStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft, clipping = TextClipping.Clip };
             stepBoldStyle ??= new GUIStyle(stepStyle) { fontStyle = FontStyle.Bold };
             var style = bold ? stepBoldStyle : stepStyle;
@@ -162,9 +178,11 @@ namespace VAP.Editor
                 }
                 string name = steps[i];
                 float w = style.CalcSize(new GUIContent(name)).x;
-                GUI.Label(new Rect(x, rect.y, Mathf.Min(w, rect.xMax - x), rect.height), name, style);
+                if (Event.current.type == EventType.Repaint)
+                    GUI.Label(new Rect(x, rect.y, Mathf.Min(w, rect.xMax - x), rect.height), name, style);
                 x += w + Gap;
             }
+            return x - Gap;
         }
     }
 }

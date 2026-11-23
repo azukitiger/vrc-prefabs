@@ -206,12 +206,16 @@ namespace VAP.Editor
 
         static void DrawName(Rect rect, SerializedProperty control)
         {
+            DrawName(rect, control.FindPropertyRelative("icon").objectReferenceValue as Texture2D,
+                new GUIContent(CleanName(control.FindPropertyRelative("name").stringValue)));
+        }
+
+        internal static void DrawName(Rect rect, Texture2D icon, GUIContent text)
+        {
             nameStyle ??= new GUIStyle(EditorStyles.label)
             {
                 alignment = TextAnchor.MiddleLeft, wordWrap = false, clipping = TextClipping.Clip, padding = new RectOffset(0, 0, 0, 0),
             };
-            var icon = control.FindPropertyRelative("icon").objectReferenceValue as Texture2D;
-            string text = CleanName(control.FindPropertyRelative("name").stringValue);
             float x = rect.x;
             if (icon != null)
             {

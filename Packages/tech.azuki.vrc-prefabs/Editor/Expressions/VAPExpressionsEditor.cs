@@ -10,7 +10,6 @@ namespace VAP.Editor
     {
         static readonly GUIContent MenuHeader = new GUIContent("Menu");
         static readonly GUIContent MenuHint = new GUIContent("Right-click an item to remove, restore or revert it");
-        static GUIStyle hintStyle;
 
         SubMenusSection subMenusSection;
 
@@ -34,15 +33,9 @@ namespace VAP.Editor
             {
                 EditorGUILayout.Space(6f);
                 var header = EditorGUILayout.GetControlRect();
-                EditorGUI.LabelField(header, MenuHeader, EditorStyles.boldLabel);
-                if (bits != null)
-                {
-                    float x = header.x + EditorStyles.boldLabel.CalcSize(MenuHeader).x + 6f;
-                    EditorGUI.LabelField(new Rect(x, header.y, header.xMax - x, header.height), "|  " + bits, EditorStyles.miniLabel);
-                }
-                hintStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
-                EditorGUI.LabelField(header, MenuHint, hintStyle);
+                SubMenusSection.DrawHeader(header, subMenusSection.SingleSteps(), MenuHeader, bits);
                 subMenusSection.Draw();
+                EditorGUILayout.LabelField(MenuHint, VAPEditorGUI.RightMini);
             }
             else if (bits != null)
                 EditorGUILayout.LabelField(bits, EditorStyles.miniLabel);

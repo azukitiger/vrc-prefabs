@@ -480,8 +480,8 @@ A **VRCFury Toggle** with the ability to override the **Default** value it start
 
 ### Instructions
 1. Add **VAP** > **VRCFury Toggle**, or right-click an existing **VRCFury** Toggle and pick **Wrap with VAP**.
-2. Set it up in the **VRCFury** section like a normal Toggle.
-3. **Default** can be changed on prefab instances. Right-click it to revert.
+2. Set it up in the **Toggle** section like a normal VRCFury Toggle.
+3. The **Menu** below shows the toggle's menu item and its synced bits. Its checkbox (or slider) sets the start value and can be changed on prefab instances. Right-click the item to revert it.
 
 ## Skinned Mesh Renderer
 
@@ -498,7 +498,7 @@ Replaces the inspector of a **Skinned Mesh Renderer** with only the settings wor
 | Enabled | Turns the renderer on or off |
 | Mesh, Root Bone, Bounds, Materials | Same as the **Skinned Mesh Renderer** |
 | BlendShapes | Every blendshape of the mesh, with a search field |
-| Override Blendshape Normals | Only shown when the model's import settings have **Blend Shape Normals** set to `None`. When enabled, recalculates the normals and tangents of the listed blendshapes at build time, the way Blender shades them. Type in the search field to find blendshapes of this mesh and click one to add it, or click Enter or press **Add** to add the typed name. **Copy** and **Paste** move the list as text, one blendshape per line |
+| Calculate Blendshape Normals | Only shown when the model's import settings have **Blend Shape Normals** set to `None`. When enabled, recalculates the normals and tangents of the listed blendshapes at build time, the way Blender shades them. Type in the search field to find blendshapes of this mesh and click one to add it, or click Enter or press **Add** to add the typed name. **Copy** and **Paste** move the list as text, one blendshape per line |
 | Cast Shadows | Whether the mesh casts shadows in worlds with realtime lights |
 | Anchor Override | Where probes are sampled. Use the same transform on every mesh of the avatar so they are lit the same |
 

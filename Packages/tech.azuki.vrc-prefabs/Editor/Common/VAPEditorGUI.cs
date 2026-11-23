@@ -18,6 +18,26 @@ namespace VAP.Editor
         static GUIContent warnIcon, foundIcon;
 
         internal static float Line => EditorGUIUtility.singleLineHeight;
+
+        static GUIStyle rightMini;
+        internal static GUIStyle RightMini => rightMini ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
+
+        internal static void EnabledBar(Rect bar, string title, SerializedProperty enabled, bool locked, bool changed)
+        {
+            var box = new Rect(bar.xMax - 16f, bar.y + (bar.height - Line) * 0.5f, 16f, Line);
+            float width = RightMini.CalcSize(new GUIContent("Disabled")).x + 22f;
+            using (new EditorGUI.DisabledScope(locked))
+            {
+                string tip = locked ? "Use Edit in Prefab to change it." : "";
+                GUI.Label(new Rect(bar.xMax - width, bar.y, width - 20f, bar.height), new GUIContent(enabled.boolValue ? "Enabled" : "Disabled", tip), RightMini);
+                var color = GUI.color;
+                if (locked)
+                    GUI.color = new Color(color.r, color.g, color.b, color.a * 0.5f);
+                enabled.boolValue = EditorGUI.Toggle(box, new GUIContent("", tip), enabled.boolValue);
+                GUI.color = color;
+            }
+            VRCFuryWrap.BarLabels(new Rect(bar.x, bar.y, bar.width - width - 8f, bar.height), bar.x, title, null, 0.6f, changed);
+        }
         internal static float BoxHeaderHeight => Line + EditorStyles.helpBox.padding.vertical;
 
         internal static string OnlyOne(string what, Component other) =>

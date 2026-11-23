@@ -13,15 +13,12 @@ namespace VAP.Editor
 
         static readonly Dictionary<string, Dictionary<string, string[]>> before = new Dictionary<string, Dictionary<string, string[]>>();
 
-        static string[] Names(Mesh mesh) =>
-            Enumerable.Range(0, mesh.blendShapeCount).Select(mesh.GetBlendShapeName).ToArray();
-
         void OnPreprocessModel()
         {
             var names = new Dictionary<string, string[]>();
             foreach (var o in AssetDatabase.LoadAllAssetsAtPath(assetPath))
                 if (o is Mesh m && m.blendShapeCount > 0 && !names.ContainsKey(m.name))
-                    names[m.name] = Names(m);
+                    names[m.name] = Blendshapes.Names(m);
             if (names.Count > 0)
                 before[assetPath] = names;
         }
@@ -82,7 +79,7 @@ namespace VAP.Editor
         static bool Changed(string path, Dictionary<string, string[]> old)
         {
             foreach (var o in AssetDatabase.LoadAllAssetsAtPath(path))
-                if (o is Mesh m && old.TryGetValue(m.name, out var names) && !names.SequenceEqual(Names(m)))
+                if (o is Mesh m && old.TryGetValue(m.name, out var names) && !names.SequenceEqual(Blendshapes.Names(m)))
                     return true;
             return false;
         }
@@ -97,7 +94,7 @@ namespace VAP.Editor
 
         static bool Remap(SkinnedMeshRenderer smr, string[] old)
         {
-            var current = Names(smr.sharedMesh);
+            var current = Blendshapes.Names(smr.sharedMesh);
             if (old.SequenceEqual(current))
                 return false;
             var oldIndex = new Dictionary<string, int>();

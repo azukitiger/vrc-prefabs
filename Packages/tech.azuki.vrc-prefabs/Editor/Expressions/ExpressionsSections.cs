@@ -11,7 +11,6 @@ namespace VAP.Editor
 {
     internal class ExpressionsSections
     {
-        static GUIStyle stateStyle;
 
         readonly UnityEditor.Editor editor;
         readonly Func<IEnumerable<AnimatorController>> controllers;
@@ -57,16 +56,9 @@ namespace VAP.Editor
                 return;
             Serialized.Update();
             var enabled = Serialized.FindProperty(nameof(VAPExpressions.frameTime));
-            float line = EditorGUIUtility.singleLineHeight;
-            var box = new Rect(bar.xMax - 16f, bar.y + (bar.height - line) * 0.5f, 16f, line);
-            stateStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
-            float width = stateStyle.CalcSize(new GUIContent("Disabled")).x + 22f;
-            GUI.Label(new Rect(bar.xMax - width, bar.y, width - 20f, bar.height), enabled.boolValue ? "Enabled" : "Disabled", stateStyle);
-            using (new EditorGUI.DisabledScope(Locked))
-                enabled.boolValue = EditorGUI.Toggle(box, enabled.boolValue);
-            Serialized.ApplyModifiedProperties();
             bool changed = VRCFuryWrap.Changed(enabled) || VRCFuryWrap.Changed(Serialized.FindProperty(nameof(VAPExpressions.frameTimeFactors)));
-            VRCFuryWrap.BarLabels(new Rect(bar.x, bar.y, bar.width - width - 8f, bar.height), bar.x, "Frame Time", null, 0.6f, changed);
+            VAPEditorGUI.EnabledBar(bar, "Frame Time", enabled, Locked, changed);
+            Serialized.ApplyModifiedProperties();
         }
 
         void DrawFrameTimeBody()

@@ -1,3 +1,6 @@
+## Version 3.1.2
+- Update UI colors.
+
 ## Version 3.1.1
 - New Skinned Mesh Renderer component with better features.
 - Display Physbone colliders & Avatar colliders.

@@ -26,17 +26,7 @@ namespace VAP.Editor
             this.key = key;
             this.persistent = persistent;
             this.openByDefault = openByDefault;
-            var style = Root.style;
-            style.marginTop = 6f;
-            style.backgroundColor = new Color(0f, 0f, 0f, 0.12f);
-            var border = new Color(0f, 0f, 0f, 0.35f);
-            style.borderTopColor = style.borderBottomColor = border;
-            style.borderLeftColor = style.borderRightColor = border;
-            style.borderTopWidth = style.borderBottomWidth = style.borderLeftWidth = style.borderRightWidth = 1f;
-            style.borderTopLeftRadius = style.borderTopRightRadius = style.borderBottomLeftRadius = style.borderBottomRightRadius = 3f;
-            body.style.paddingLeft = 4f;
-            body.style.paddingRight = 4f;
-            body.style.paddingBottom = 4f;
+            StyleBox(Root, body, canOpen == null || canOpen());
 
             Root.Add(new IMGUIContainer(() =>
             {
@@ -44,6 +34,9 @@ namespace VAP.Editor
                 var header = EditorGUILayout.GetControlRect(false, HeaderHeight);
                 drawHeader(new Rect(header.x + 20f, header.y, header.width - 24f, header.height));
                 bool allowed = canOpen == null || canOpen();
+                var background = Background(allowed);
+                if (Root.style.backgroundColor.value != background)
+                    Root.style.backgroundColor = background;
                 if (Overrides != null && Event.current.type == EventType.ContextClick && header.Contains(Event.current.mousePosition))
                 {
                     ShowRevertMenu();
@@ -103,6 +96,25 @@ namespace VAP.Editor
                 });
             menu.ShowAsContext();
         }
+
+        internal static void StyleBox(VisualElement root, VisualElement body, bool enabled)
+        {
+            var style = root.style;
+            style.marginTop = 6f;
+            style.backgroundColor = Background(enabled);
+            var border = new Color(0f, 0f, 0f, 0.35f);
+            style.borderTopColor = style.borderBottomColor = border;
+            style.borderLeftColor = style.borderRightColor = border;
+            style.borderTopWidth = style.borderBottomWidth = style.borderLeftWidth = style.borderRightWidth = 1f;
+            style.borderTopLeftRadius = style.borderTopRightRadius = style.borderBottomLeftRadius = style.borderBottomRightRadius = 3f;
+            body.style.paddingLeft = 4f;
+            body.style.paddingRight = 4f;
+            body.style.paddingBottom = 4f;
+        }
+
+        static Color Background(bool enabled) =>
+            !enabled ? new Color(0f, 0f, 0f, 0.12f)
+            : EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.05f) : new Color(1f, 1f, 1f, 0.35f);
 
         bool IsOpen() => persistent ? EditorPrefs.GetBool(key, openByDefault) : SessionState.GetBool(key, openByDefault);
 

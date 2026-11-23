@@ -196,17 +196,7 @@ namespace VAP.Editor
         {
             this.wrapped = wrapped;
             this.drawInfo = drawInfo;
-            var style = Root.style;
-            style.marginTop = 6f;
-            style.backgroundColor = new Color(0f, 0f, 0f, 0.12f);
-            var border = new Color(0f, 0f, 0f, 0.35f);
-            style.borderTopColor = style.borderBottomColor = border;
-            style.borderLeftColor = style.borderRightColor = border;
-            style.borderTopWidth = style.borderBottomWidth = style.borderLeftWidth = style.borderRightWidth = 1f;
-            style.borderTopLeftRadius = style.borderTopRightRadius = style.borderBottomLeftRadius = style.borderBottomRightRadius = 3f;
-            body.style.paddingLeft = 4f;
-            body.style.paddingRight = 4f;
-            body.style.paddingBottom = 4f;
+            VAPFoldout.StyleBox(Root, body, true);
 
             key += wrapped.GetInstanceID();
             Root.Add(new IMGUIContainer(() =>

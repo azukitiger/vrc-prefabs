@@ -35,6 +35,40 @@ namespace VAP.Editor
 
         static readonly ConditionalWeakTable<IMGUIContainer, System.Action> Wrapped = new ConditionalWeakTable<IMGUIContainer, System.Action>();
 
+        static readonly ConditionalWeakTable<VisualElement, UnityEditor.Editor> EditButtons = new ConditionalWeakTable<VisualElement, UnityEditor.Editor>();
+        static readonly GUIContent EditLabel = new GUIContent("Edit in Prefab", "Open the prefab this component comes from, where it can be changed.");
+
+        internal static void AddEditButton(VisualElement root, UnityEditor.Editor editor)
+        {
+            EditButtons.Remove(root);
+            EditButtons.Add(root, editor);
+        }
+
+        static UnityEditor.Editor EditFor(VisualElement root) =>
+            root != null && EditButtons.TryGetValue(root, out var editor) && editor != null && editor.targets.Any(VAPPrefabLock.IsFromPrefab) ? editor : null;
+
+        static Rect EditRect(Rect area)
+        {
+            var size = EditorStyles.miniButton.CalcSize(EditLabel);
+            float height = Mathf.Min(18f, area.height - 2f);
+            return new Rect(area.xMax - size.x - 4f, Mathf.Round(area.y + (area.height - height) / 2), size.x, height);
+        }
+
+        static bool HandleEdit(Rect area, VisualElement root)
+        {
+            var e = Event.current;
+            if (e.type != EventType.MouseDown || e.button != 0)
+                return false;
+            var editor = EditFor(root);
+            if (editor == null || !EditRect(area).Contains(e.mousePosition))
+                return false;
+            var target = editor.targets.FirstOrDefault(VAPPrefabLock.IsFromPrefab);
+            e.Use();
+            if (target != null)
+                EditorApplication.delayCall += () => VAPPrefabLock.Open(target);
+            return true;
+        }
+
         static readonly Color WarningBorder = new Color32(200, 40, 40, 255);
 
         public class Toggle
@@ -125,8 +159,8 @@ namespace VAP.Editor
             System.Action handler = () =>
             {
                 var r = titlebar.contentRect;
-                var area = new Rect(18, 0, Mathf.Max(0, r.width - 18 - 64), r.height);
-                if (HandleToggle(area, toggle))
+                var area = new Rect(18, 1, Mathf.Max(0, r.width - 18 - 64), Mathf.Max(0, r.height - 2));
+                if (HandleToggle(area, toggle) || HandleEdit(area, root))
                 {
                     titlebar.MarkDirtyRepaint();
                     return;
@@ -135,7 +169,7 @@ namespace VAP.Editor
                 if (Event.current.type != EventType.Repaint)
                     return;
                 EditorGUI.DrawRect(area, EditorGUIUtility.isProSkin ? new Color32(62, 62, 62, 255) : new Color32(203, 203, 203, 255));
-                Draw(area, title, toggle);
+                Draw(area, title, toggle, root);
             };
             Wrapped.Add(titlebar, handler);
             titlebar.onGUIHandler = handler;
@@ -150,10 +184,10 @@ namespace VAP.Editor
             var bar = new IMGUIContainer(() =>
             {
                 var rect = GUILayoutUtility.GetRect(0, 20, GUILayout.ExpandWidth(true));
-                if (HandleToggle(rect, toggle))
+                if (HandleToggle(rect, toggle) || HandleEdit(rect, root))
                     return;
                 if (Event.current.type == EventType.Repaint)
-                    Draw(rect, title, toggle);
+                    Draw(rect, title, toggle, root);
             }) { name = "VAPHeaderFallback" };
             bar.style.marginBottom = 4;
             root.Insert(0, bar);
@@ -184,7 +218,7 @@ namespace VAP.Editor
             return true;
         }
 
-        static void Draw(Rect area, string title, Toggle toggle)
+        static void Draw(Rect area, string title, Toggle toggle, VisualElement root)
         {
             float h = area.height;
             var tex = Logo;
@@ -205,7 +239,14 @@ namespace VAP.Editor
                 EditorStyles.toggle.Draw(t, GUIContent.none, false, false, toggle.Get(), false);
                 labelX = t.xMax + 6;
             }
-            var labelRect = new Rect(labelX, area.y, Mathf.Max(0, area.xMax - labelX), h);
+            float labelEnd = area.xMax;
+            if (EditFor(root) != null)
+            {
+                var edit = EditRect(area);
+                EditorStyles.miniButton.Draw(edit, EditLabel, edit.Contains(Event.current.mousePosition), false, false, false);
+                labelEnd = edit.x - 4f;
+            }
+            var labelRect = new Rect(labelX, area.y, Mathf.Max(0, labelEnd - labelX), h);
             GUI.Label(labelRect, title, new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.MiddleLeft });
         }
     }

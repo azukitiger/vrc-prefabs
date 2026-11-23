@@ -48,7 +48,7 @@ namespace VAP.Editor
         static readonly GUIContent MaterialsHint = new GUIContent("Right-click for more options");
         static GUIContent editBoundsLabel;
         static readonly UnityEditor.IMGUI.Controls.BoxBoundsHandle boundsHandle = new UnityEditor.IMGUI.Controls.BoxBoundsHandle();
-        static readonly GUIContent NormalsLabel = new GUIContent("Override Blendshape Normals", "Recalculates the normals and tangents of the listed blendshapes at build time the way Blender shades them.");
+        static readonly GUIContent NormalsLabel = new GUIContent("Calculate Blendshape Normals", "Recalculates the normals and tangents of the listed blendshapes at build time the way Blender shades them.");
         const string NormalsSearchControl = "VAP.SkinnedMeshRenderer.NormalsSearch";
         const int MaxSuggestions = 8;
         static readonly GUIContent CopyLabel = new GUIContent("Copy", "Copy the list as text, one blendshape per line.");
@@ -56,7 +56,7 @@ namespace VAP.Editor
         static readonly GUIContent AddLabel = new GUIContent("Add", "Add the typed name to the list.");
         ReorderableList normals;
         string normalSearch = "";
-        static GUIStyle stateStyle, suggestionStyle;
+        static GUIStyle suggestionStyle;
 
         VAPSkinnedMeshRenderer Owner => target as VAPSkinnedMeshRenderer;
 
@@ -467,15 +467,9 @@ namespace VAP.Editor
                 return;
             serializedObject.Update();
             var enabled = serializedObject.FindProperty(nameof(VAPSkinnedMeshRenderer.blendShapeNormals));
-            float line = EditorGUIUtility.singleLineHeight;
-            var box = new Rect(bar.xMax - 16f, bar.y + (bar.height - line) * 0.5f, 16f, line);
-            stateStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
-            float width = stateStyle.CalcSize(new GUIContent("Disabled")).x + 22f;
-            GUI.Label(new Rect(bar.xMax - width, bar.y, width - 20f, bar.height), enabled.boolValue ? "Enabled" : "Disabled", stateStyle);
-            enabled.boolValue = EditorGUI.Toggle(box, enabled.boolValue);
-            serializedObject.ApplyModifiedProperties();
             bool changed = VRCFuryWrap.Changed(enabled) || VRCFuryWrap.Changed(serializedObject.FindProperty(nameof(VAPSkinnedMeshRenderer.normalBlendShapes)));
-            VRCFuryWrap.BarLabels(new Rect(bar.x, bar.y, bar.width - width - 8f, bar.height), bar.x, NormalsLabel.text, null, 0.6f, changed);
+            VAPEditorGUI.EnabledBar(bar, NormalsLabel.text, enabled, false, changed);
+            serializedObject.ApplyModifiedProperties();
         }
 
         void DrawNormals()
