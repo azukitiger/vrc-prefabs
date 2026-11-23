@@ -45,8 +45,7 @@ namespace VAP.Editor
         float dragStart, dragHeight;
         static readonly GUIContent ShowActiveLabel = new GUIContent("Show Active", "List the blendshapes above 0.");
         static readonly GUIContent BackLabel = new GUIContent("Back to Search");
-        static readonly GUIContent DuplicateLabel = new GUIContent("DUPE", "Save a copy of the material and replace it.");
-        const float DuplicateWidth = 50f;
+        static readonly GUIContent MaterialsHint = new GUIContent("Right-click for more options");
         static GUIContent editBoundsLabel;
         static readonly UnityEditor.IMGUI.Controls.BoxBoundsHandle boundsHandle = new UnityEditor.IMGUI.Controls.BoxBoundsHandle();
         static readonly GUIContent NormalsLabel = new GUIContent("Override Blendshape Normals", "Recalculates the normals and tangents of the listed blendshapes at build time the way Blender shades them.");
@@ -245,6 +244,9 @@ namespace VAP.Editor
         void DrawMaterials()
         {
             Materials(rendererSO.FindProperty("m_Materials")).DoLayoutList();
+            var list = GUILayoutUtility.GetLastRect();
+            if (Event.current.type == EventType.Repaint)
+                EditorStyles.miniLabel.Draw(new Rect(list.x + 2f, list.yMax - 20f, list.width - 70f, 18f), MaterialsHint, false, false, false, false);
             GUILayout.Space(-4f);
         }
 
@@ -271,7 +273,38 @@ namespace VAP.Editor
                 element.objectReferenceValue = copy;
                 element.serializedObject.ApplyModifiedProperties();
             }
-            GUIUtility.ExitGUI();
+        }
+
+        void MaterialMenu(SerializedProperty element)
+        {
+            var menu = new GenericMenu();
+            var mat = element.objectReferenceValue as Material;
+            var revert = new GUIContent("Revert");
+            if (element.prefabOverride)
+                menu.AddItem(revert, false, () =>
+                {
+                    element.serializedObject.Update();
+                    PrefabUtility.RevertPropertyOverride(element, InteractionMode.UserAction);
+                });
+            else
+                menu.AddDisabledItem(revert);
+            var show = new GUIContent("Show in Project");
+            var dupe = new GUIContent(Application.platform == RuntimePlatform.WindowsEditor ? "Duplicate, Save && Replace" : "Duplicate, Save & Replace");
+            if (mat != null)
+            {
+                menu.AddItem(show, false, () => EditorGUIUtility.PingObject(mat));
+                menu.AddItem(dupe, false, () =>
+                {
+                    element.serializedObject.Update();
+                    Duplicate(element);
+                });
+            }
+            else
+            {
+                menu.AddDisabledItem(show);
+                menu.AddDisabledItem(dupe);
+            }
+            menu.ShowAsContext();
         }
 
         void DrawBlendShapesBar(Rect bar)
@@ -299,12 +332,12 @@ namespace VAP.Editor
                         rect.y += 1f;
                         rect.height = EditorGUIUtility.singleLineHeight;
                         var element = materials.serializedProperty.GetArrayElementAtIndex(i);
-                        var button = new Rect(rect.xMax - DuplicateWidth, rect.y, DuplicateWidth, rect.height);
-                        rect.width -= DuplicateWidth + 4f;
+                        if (Event.current.type == EventType.ContextClick && rect.Contains(Event.current.mousePosition))
+                        {
+                            MaterialMenu(element.Copy());
+                            Event.current.Use();
+                        }
                         EditorGUI.PropertyField(rect, element, new GUIContent("Element " + i));
-                        using (new EditorGUI.DisabledScope(!(element.objectReferenceValue is Material)))
-                            if (GUI.Button(button, DuplicateLabel, EditorStyles.miniButton))
-                                Duplicate(element);
                     },
                 };
             }
