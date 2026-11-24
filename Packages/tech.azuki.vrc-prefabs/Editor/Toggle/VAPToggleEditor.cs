@@ -57,7 +57,7 @@ namespace VAP.Editor
                 steps.RemoveAt(steps.Count - 1);
             if (steps.Count == 0)
                 steps.Add("Main Menu");
-            SubMenusSection.DrawHeader(header, steps, null, (slider ? 8 : 1) + " synced bits");
+            SubMenusSection.DrawHeader(header, steps, null, SyncedBits(slider) + " synced bits");
 
             item ??= new ReorderableList(new[] { 0 }, typeof(int), false, false, false, false)
             {
@@ -72,6 +72,15 @@ namespace VAP.Editor
         }
 
         ReorderableList item;
+
+        int SyncedBits(bool slider)
+        {
+            if (!slider)
+                return 1;
+            using var so = new SerializedObject(Wrapped);
+            int bits = so.FindProperty("content")?.FindPropertyRelative("sliderBitWidthOverride")?.intValue ?? 0;
+            return bits == 0 ? 7 : Mathf.Clamp(bits, 1, 8);
+        }
 
         void DrawItem(Rect rect, bool slider, bool on, float value, bool ownOn, float ownValue, bool changed, VAPToggle source)
         {
