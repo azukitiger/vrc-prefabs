@@ -442,7 +442,7 @@ On a prefab instance, locked components show an **Edit in Prefab** button. Compo
 Adds extra settings for the avatar's own **VRC Avatar Descriptor**. Add it to the avatar root, one per avatar.
 
 ### Features
-- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed; a copy is edited at build time.
+- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed; a copy is edited at build time. A removed item keeps its default value, which can still be changed; parameters used only by removed items stay on the avatar but are no longer synced or saved, so everyone loads the default.
 - **Frame Time**: adds the frame time parameters to the avatar (see [Frame Time](#frame-time)).
 - **Play Audio Clips**: sets the clips of every **VRC Animator Play Audio** behaviour in the descriptor's playable layers, without changing the controllers.
 

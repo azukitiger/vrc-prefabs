@@ -138,9 +138,14 @@ namespace VAP
             var source = asset != null && asset.parameters != null
                 ? asset.parameters : new VRCExpressionParameters.Parameter[0];
             var dropped = DroppedParameters();
-            return source.Where(p => p != null && !dropped.Contains(p.name)).Select(p =>
+            return source.Where(p => p != null).Select(p =>
             {
                 var copy = Copy(p);
+                if (dropped.Contains(p.name))
+                {
+                    copy.networkSynced = false;
+                    copy.saved = false;
+                }
                 var o = FindDefault(p.name);
                 if (o != null)
                 {

@@ -1,4 +1,7 @@
 ## Version 3.1.8
+- Parameters are unsynced and not saved instead of removed for VAP components.
+
+## Version 3.1.8
 - Menu style changes.
 
 ## Version 3.1.7

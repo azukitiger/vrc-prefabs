@@ -9,10 +9,18 @@ namespace VAP.Editor
     {
         internal static readonly Color Bar = new Color(0.004f, 0.6f, 0.85f);
 
-        internal static void DrawBar(Rect row)
+        static readonly Color RemovedBar = new Color(0.9f, 0.3f, 0.25f);
+
+        internal static void DrawBar(Rect row, bool removed = false)
         {
             if (Event.current.type == EventType.Repaint)
-                EditorGUI.DrawRect(new Rect(row.x - 4f, row.y, 2f, row.height), Bar);
+                EditorGUI.DrawRect(new Rect(row.x - 4f, row.y, 2f, row.height), removed ? RemovedBar : Bar);
+        }
+
+        internal static void DrawRightBar(Rect row)
+        {
+            if (Event.current.type == EventType.Repaint)
+                EditorGUI.DrawRect(new Rect(row.xMax + 2f, row.y, 2f, row.height), Bar);
         }
 
         static void Changed(VAPExpressions c)

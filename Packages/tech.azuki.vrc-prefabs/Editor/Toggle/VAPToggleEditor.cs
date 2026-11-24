@@ -87,7 +87,7 @@ namespace VAP.Editor
         void DrawItem(Rect rect, bool slider, bool on, float value, bool ownOn, float ownValue, bool changed, VAPToggle source)
         {
             if (changed)
-                ExpressionsOverrides.DrawBar(rect);
+                ExpressionsOverrides.DrawRightBar(rect);
             if (changed && ExpressionsOverrides.ContextClick(rect))
             {
                 if (source == null)

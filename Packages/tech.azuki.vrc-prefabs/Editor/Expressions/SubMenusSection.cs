@@ -19,6 +19,8 @@ namespace VAP.Editor
             public List<string> steps;
             public VRCExpressionsMenu parent;
             public int control = -1;
+            public List<(VRCExpressionsMenu menu, int control)> removedLinks = new List<(VRCExpressionsMenu, int)>();
+            public bool removed => removedLinks.Count > 0;
         }
 
         readonly VAPExpressions owner;
@@ -60,7 +62,7 @@ namespace VAP.Editor
             {
                 var c = menu.controls[i];
                 var sub = c?.subMenu;
-                if (sub == null || owner.IsRemoved(menu, i) || !seen.Add(sub))
+                if (sub == null || !seen.Add(sub))
                     continue;
                 string name = MenuSection.CleanName(c.name);
                 if (name.Length == 0)
@@ -74,9 +76,23 @@ namespace VAP.Editor
                     steps = parent == null ? new List<string>() : new List<string>(parent.steps),
                 };
                 entry.steps.Add(name);
+                if (parent != null)
+                    entry.removedLinks.AddRange(parent.removedLinks);
+                if (owner.IsRemoved(menu, i))
+                    entry.removedLinks.Add((menu, i));
                 result.Add(entry);
                 Walk(sub, entry, seen, result);
             }
+        }
+
+        GenericMenu.MenuFunction Restore(Entry e)
+        {
+            var links = e.removedLinks;
+            return () =>
+            {
+                foreach (var (m, i) in links)
+                    ExpressionsOverrides.SetRemoved(owner, m, i, false);
+            };
         }
 
         MenuSection Section(VRCExpressionsMenu menu)
@@ -115,13 +131,16 @@ namespace VAP.Editor
                 var header = EditorGUILayout.GetControlRect(false, HeaderHeight);
                 bool changed = ExpressionsOverrides.MenuChanged(owner, menu);
                 if (changed)
-                    ExpressionsOverrides.DrawBar(header);
+                    ExpressionsOverrides.DrawBar(header, e.parent != null && owner.IsRemoved(e.parent, e.control));
                 if (e.parent != null && ExpressionsOverrides.ContextClick(header))
                 {
                     var context = new GenericMenu();
                     var parent = e.parent;
                     int control = e.control;
-                    context.AddItem(new GUIContent("Remove Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, parent, control, true));
+                    if (e.removed)
+                        context.AddItem(new GUIContent("Restore Menu Item"), false, Restore(e));
+                    else
+                        context.AddItem(new GUIContent("Remove Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, parent, control, true));
                     context.ShowAsContext();
                     Event.current.Use();
                 }
@@ -135,10 +154,12 @@ namespace VAP.Editor
                 }
                 if (now != open)
                     SessionState.SetBool(key, now);
-                DrawSteps(new Rect(foldout.x + 16f, header.y, foldout.width - 16f, header.height), e.steps, changed);
+                using (new EditorGUI.DisabledScope(e.removed))
+                    DrawSteps(new Rect(foldout.x + 16f, header.y, foldout.width - 16f, header.height), e.steps, changed);
                 if (now)
                 {
                     var section = Section(menu);
+                    section.RestoreSection = e.removed ? Restore(e) : null;
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(ChildIndent);
                     EditorGUILayout.BeginVertical();

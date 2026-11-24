@@ -24,6 +24,8 @@ namespace VAP.Editor
         SerializedObject assetSO;
         ReorderableList list;
         readonly System.Func<VRCExpressionsMenu, string> pathOf;
+        internal GenericMenu.MenuFunction RestoreSection;
+        bool SectionRemoved => RestoreSection != null;
         static GUIStyle nameStyle, pathStyle;
 
         internal MenuSection(VAPExpressions owner, VRCExpressionsMenu subMenu = null, System.Func<VRCExpressionsMenu, string> pathOf = null)
@@ -115,8 +117,6 @@ namespace VAP.Editor
 
         float Height(SerializedProperty control, int index)
         {
-            if (owner.IsRemoved(Asset, index))
-                return RowHeight;
             int axes = Axes(control, TypeOf(control)).Count;
             return RowHeight + (axes > 1 ? axes * Step : 0f);
         }
@@ -132,10 +132,13 @@ namespace VAP.Editor
             foreach (var (_, p) in axes)
                 related.Add(p.name);
             bool removed = owner.IsRemoved(menu, index);
-            bool changed = ExpressionsOverrides.RemovedChanged(owner, menu, index) ||
-                           related.Exists(n => ExpressionsOverrides.DefaultChanged(owner, n));
-            if (changed)
-                ExpressionsOverrides.DrawBar(rect);
+            bool removedChanged = ExpressionsOverrides.RemovedChanged(owner, menu, index);
+            bool defaultChanged = related.Exists(n => ExpressionsOverrides.DefaultChanged(owner, n));
+            bool changed = removedChanged || defaultChanged;
+            if (removedChanged)
+                ExpressionsOverrides.DrawBar(rect, removed);
+            if (defaultChanged)
+                ExpressionsOverrides.DrawRightBar(rect);
             if (ExpressionsOverrides.ContextClick(rect))
                 ShowContext(menu, index, removed, changed, related);
 
@@ -148,16 +151,14 @@ namespace VAP.Editor
             if (inline)
                 name.width = value.x - row.x - 8f;
 
-            string path = type == ControlType.SubMenu && !removed && pathOf != null
+            string path = type == ControlType.SubMenu && pathOf != null
                 ? pathOf(control.FindPropertyRelative("subMenu").objectReferenceValue as VRCExpressionsMenu)
                 : null;
             if (path != null)
                 name.width = Mathf.Min(name.width, row.width * 0.45f);
 
-            using (new EditorGUI.DisabledScope(removed))
+            using (new EditorGUI.DisabledScope(removed || SectionRemoved))
                 DrawName(new Rect(name.x, full.y, name.width, RowHeight), control);
-            if (removed)
-                return;
 
             if (path != null)
             {
@@ -195,6 +196,8 @@ namespace VAP.Editor
                 });
             if (removed)
                 context.AddItem(new GUIContent("Restore Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, menu, index, false));
+            else if (SectionRemoved)
+                context.AddItem(new GUIContent("Restore Menu Item"), false, RestoreSection);
             else
                 context.AddItem(new GUIContent("Remove Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, menu, index, true));
             context.ShowAsContext();
