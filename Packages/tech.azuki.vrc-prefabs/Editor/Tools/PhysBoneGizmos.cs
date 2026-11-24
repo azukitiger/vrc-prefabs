@@ -20,7 +20,7 @@ namespace VAP.Editor
     [InitializeOnLoad]
     public static class PhysBoneGizmos
     {
-        const string Log = "[VAP PhysBone & Contact Gizmos] ";
+        const string Log = "[VAP VRC Gizmos] ";
         const string ModeKey = "Azuki.PhysBoneGizmos.Mode";
         const string SelectedKey = "VAP.PhysBoneGizmos.SelectedOnly";
         const string PinnedKey = "VAP.PhysBoneGizmos.ShowPinned";
@@ -375,12 +375,15 @@ namespace VAP.Editor
             });
         }
 
-        static VisualElement Strip(params VisualElement[] elements)
+        static VisualElement ButtonRow(params VisualElement[] elements)
         {
             var strip = new VisualElement { style = { flexDirection = FlexDirection.Row } };
-            foreach (var e in elements)
-                strip.Add(e);
-            EditorToolbarUtility.SetupChildrenAsButtonStrip(strip);
+            for (int i = 0; i < elements.Length; i++)
+            {
+                elements[i].style.marginLeft = i == 0 ? 0f : 2f;
+                elements[i].style.marginRight = i == elements.Length - 1 ? 0f : 2f;
+                strip.Add(elements[i]);
+            }
             return strip;
         }
 
@@ -487,9 +490,8 @@ namespace VAP.Editor
         {
             targets.RemoveAll(c => c == null);
             var items = new List<Component>(targets);
-            if (showPinned)
-                items.AddRange(pinnedCache.Where(c => c != null && !targets.Contains(c))
-                    .OrderBy(c => Array.IndexOf(Types, c.GetType())).ThenBy(c => c.name));
+            items.AddRange(pinnedCache.Where(c => c != null && !targets.Contains(c))
+                .OrderBy(c => Array.IndexOf(Types, c.GetType())).ThenBy(c => c.name));
             return items;
         }
 
@@ -553,7 +555,7 @@ namespace VAP.Editor
             {
                 var items = Listed();
                 float label = items.Count == 0 ? 180f : items.Max(c => EditorStyles.label.CalcSize(new GUIContent($"{TypeLabel(c)}: {c.name}")).x);
-                return new Vector2(Mathf.Clamp(label + 90f, 240f, 700f), Mathf.Clamp(items.Count, 1, 20) * 24f + 48f);
+                return new Vector2(Mathf.Clamp(label + 90f, 240f, 700f), Mathf.Clamp(items.Count, 1, 20) * 20f + 38f);
             }
 
             public override void OnGUI(Rect rect) { }
@@ -571,44 +573,20 @@ namespace VAP.Editor
             }
         }
 
-        static Texture2D listIcon;
-
-        static Texture2D ListIcon() => listIcon != null ? listIcon : listIcon = MakeIcon((px, py) =>
-        {
-            float y = 32f - py;
-            foreach (float row in new[] { 8f, 16f, 24f })
-                if (Mathf.Abs(y - row) <= 1.75f && ((px >= 5f && px <= 8.5f) || (px >= 12f && px <= 27f)))
-                    return true;
-            return false;
-        });
-
-        [EditorToolbarElement(ToolbarId + "List", typeof(SceneView))]
-        class ListButton : EditorToolbarButton
-        {
-            public ListButton()
-            {
-                icon = ListIcon();
-                RegisterCallback<AttachToPanelEvent>(_ => StyleIcon(this, false));
-                tooltip = "Show the selected and pinned PhysBones, colliders and contacts";
-                clicked += () => UnityEditor.PopupWindow.Show(worldBound, new ListPopup());
-            }
-        }
-
-        [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "PhysBone & Contact Gizmos", true)]
+        [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "VRC Gizmos", true)]
         class GizmosOverlay : Overlay, ICreateToolbar
         {
             public IEnumerable<string> toolbarElements => new[]
             {
-                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "AvatarColliders", ToolbarId + "List",
+                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "AvatarColliders",
             };
 
             public override VisualElement CreatePanelContent()
             {
                 var root = new VisualElement { style = { minWidth = 240 } };
                 var modes = new OverlayToolbar { style = { flexDirection = FlexDirection.Row } };
-                modes.Add(Strip(new SelectedToggle(), new PinnedToggle(), new AvatarCollidersToggle()));
+                modes.Add(ButtonRow(new SelectedToggle(), new PinnedToggle(), new AvatarCollidersToggle()));
                 root.Add(modes);
-                root.Add(ListView());
                 return root;
             }
         }
@@ -656,14 +634,61 @@ namespace VAP.Editor
         [EditorToolbarElement(ToolbarId + "Pinned", typeof(SceneView))]
         class PinnedToggle : IconToggle
         {
-            public PinnedToggle() : base(PinIcon(), "Also draw pinned PhysBones, colliders and contacts", () => showPinned, SetShowPinned) { }
+            const float ArrowWidth = 14f;
+
+            public PinnedToggle() : base(PinIcon(), "Also draw pinned PhysBones, colliders and contacts. The arrow lists the selected and pinned ones",
+                () => showPinned, on =>
+                {
+                    if (selectedOnly)
+                        SetShowPinned(on);
+                    else
+                        modeChanged?.Invoke();
+                })
+            {
+                style.width = 22f + ArrowWidth;
+                style.paddingRight = ArrowWidth;
+                var arrow = new VisualElement
+                {
+                    pickingMode = PickingMode.Ignore,
+                    style =
+                    {
+                        position = Position.Absolute, right = 0, top = 0, bottom = 0, width = ArrowWidth,
+                        borderLeftWidth = 1f, borderLeftColor = new Color(0f, 0f, 0f, 0.3f),
+                        justifyContent = Justify.Center, alignItems = Align.Center,
+                    },
+                };
+                arrow.Add(new Image { image = ArrowIcon(), scaleMode = ScaleMode.ScaleToFit, pickingMode = PickingMode.Ignore, style = { width = ArrowWidth, height = ArrowWidth } });
+                Add(arrow);
+                RegisterCallback<PointerDownEvent>(e =>
+                {
+                    if (e.button != 0 || e.localPosition.x < layout.width - ArrowWidth)
+                        return;
+                    e.StopImmediatePropagation();
+                    e.PreventDefault();
+                    UnityEditor.PopupWindow.Show(worldBound, new ListPopup());
+                }, TrickleDown.TrickleDown);
+                RegisterCallback<MouseDownEvent>(e =>
+                {
+                    if (e.button == 0 && e.localMousePosition.x >= layout.width - ArrowWidth)
+                        e.StopImmediatePropagation();
+                }, TrickleDown.TrickleDown);
+            }
 
             protected override void Refresh()
             {
                 base.Refresh();
-                SetEnabled(selectedOnly);
+                if (!selectedOnly)
+                    this.Query<Image>().ForEach(i => i.tintColor = new Color(IconOff.r, IconOff.g, IconOff.b, 0.4f));
             }
         }
+
+        static Texture2D arrowIcon;
+
+        static Texture2D ArrowIcon() => arrowIcon != null ? arrowIcon : arrowIcon = MakeIcon((px, py) =>
+        {
+            float y = 32f - py;
+            return y >= 12f && y <= 20f && Mathf.Abs(px - 16f) <= 20f - y;
+        });
 
         [EditorToolbarElement(ToolbarId + "AvatarColliders", typeof(SceneView))]
         class AvatarCollidersToggle : IconToggle

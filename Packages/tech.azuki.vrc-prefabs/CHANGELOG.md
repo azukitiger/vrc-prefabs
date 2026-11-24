@@ -1,3 +1,6 @@
+## Version 3.1.4
+- Improve VRC gizmos tool.
+
 ## Version 3.1.3
 - Rebranding.
 

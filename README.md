@@ -31,7 +31,7 @@ Prefabs and assets that add **advanced animations and interactive systems** to *
   - [VRC Face Tracking Parameter Behaviors](#vrc-face-tracking-parameter-behaviors)
   - [Rig Floor Adjuster](#rig-floor-adjuster)
 - [Tools](#tools)
-  - [PhysBone & Contact Gizmos](#physbone--contact-gizmos)
+  - [VRC Gizmos](#vrc-gizmos)
   - [UV Bake Tool](#uv-bake-tool)
 
 ## Better Blink Prefab
@@ -551,24 +551,24 @@ Moves the armature and the view position up or down by **Armature Height Offset*
 
 Editor tools that only help while working in Unity. They don't change the avatar.
 
-## PhysBone & Contact Gizmos
+## VRC Gizmos
 
 Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC PhysBone Collider**, **VRC Contact Sender** and **VRC Contact Receiver** components in the Scene view without selecting them, and can draw the avatar descriptor's colliders. Disabled components are skipped.
 
 ### Instructions
-1. If the **PhysBone & Contact Gizmos** panel isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on.
+1. If the **VRC Gizmos** panel isn't shown, hover the Scene view and press the `` ` `` key (or click the Scene tab's **⋮** > **Overlay Menu**) and turn it on.
 2. Turn on the toggles you want: cursor, pin and avatar.
-3. Select a bone, or the object a component is on. The panel lists the PhysBones, colliders and contacts that target it or sit on it. Click the pin icon next to one to pin or unpin it, or the properties icon to open it in its own tab.
+3. Select a bone, or the object a component is on, then click the arrow next to the pin. It lists the PhysBones, colliders and contacts that target it or sit on it. Click the pin icon next to one to pin or unpin it, or the properties icon to open it in its own tab.
 
 ### Settings
 | Setting | Description |
 |-|-|
 | Cursor | On: only draws what is selected (PhysBones whose root transform or any bone under it is selected, colliders and contacts whose root transform is selected, and components on the selected object). Off: draws every PhysBone, collider and contact |
-| Pin | Lists pinned PhysBones, colliders and contacts under the selection's, and draws them while the cursor is on |
+| Pin | Draws pinned PhysBones, colliders and contacts while the cursor is on. Its arrow opens the list of selected and pinned ones |
 | Avatar | Also draws the colliders set on every avatar descriptor (head, torso, hands, feet and fingers) |
-| Clear Pins | Under the list, unpins everything |
+| Clear Pins | Under the pin list, unpins everything |
 
-Pins are saved per project on this computer. When the panel is docked in a toolbar, it shows the toggles and a list button. The list button opens the selected and pinned PhysBones, colliders and contacts, to pin, unpin or open them, with **Clear Pins** under them.
+Pins are saved per project on this computer.
 
 ## UV Bake Tool
 
