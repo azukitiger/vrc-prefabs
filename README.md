@@ -415,8 +415,10 @@ Adds **movement-based bell sounds** to an asset.
 Adds a **heartbeat sound and visual display**.
 
 ### Features
-- Synced `float (7 bits)` shared by the Expression Menu and OSC.
-- Synced `bool (1 bit)` toggling the heart rate counter.
+- `Heartbeat/HR`: synced `int (8 bits)`, the heart rate from 0 to 255 that everyone hears and sees. Set from OSC or from the **Speed** radial in the menu.
+- `HR`: local `int`, the OSC input for heart rate apps. Not synced; copied into `Heartbeat/HR` locally.
+- `Heartbeat/Counter`: synced `bool (1 bit)`, toggles the heart rate counter.
+- **Speed** and **Listen** radials are local only, so the prefab uses 9 synced bits in total.
 
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
