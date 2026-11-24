@@ -183,7 +183,7 @@ namespace VAP.Editor
 
     internal class WrappedSection : IDisposable
     {
-        const float HeaderHeight = 26f;
+        const float HeaderHeight = 26f, MaxBodyHeight = 440f;
 
         readonly Component wrapped;
         readonly Action<Rect> drawInfo;
@@ -228,7 +228,9 @@ namespace VAP.Editor
             if (open && inner == null && wrapped != null)
             {
                 inner = UnityEditor.Editor.CreateEditor(wrapped);
-                body.Add(new InspectorElement(inner));
+                var scroll = new ScrollView(ScrollViewMode.Vertical) { horizontalScrollerVisibility = ScrollerVisibility.Hidden, style = { maxHeight = MaxBodyHeight } };
+                scroll.Add(new InspectorElement(inner));
+                body.Add(scroll);
             }
         }
 
