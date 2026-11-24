@@ -570,7 +570,7 @@ Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC PhysBone Collider**, **
 | Avatar | Also draws the colliders set on every avatar descriptor (head, torso, hands, feet and fingers) |
 | Clear Pins | Under the pin list, unpins everything |
 
-Pins are saved per project on this computer.
+PhysBones, colliders and contacts also get a pin icon in their component header, left of the **?** icon, to pin or unpin them from the Inspector. Pins are saved per project on this computer.
 
 ## UV Bake Tool
 

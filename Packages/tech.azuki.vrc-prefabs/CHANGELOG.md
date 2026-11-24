@@ -1,3 +1,6 @@
+## Version 3.1.7
+- UI/UX changes for VRC Gizmos.
+
 ## Version 3.1.6
 - Fixed recording not working for Skinned Mesh Renderer.
 

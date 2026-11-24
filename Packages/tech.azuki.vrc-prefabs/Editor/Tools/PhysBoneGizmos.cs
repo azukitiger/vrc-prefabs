@@ -52,6 +52,7 @@ namespace VAP.Editor
             showPinned = EditorPrefs.GetBool(PinnedKey, old == 1);
             avatarColliders = EditorPrefs.GetBool(AvatarCollidersKey, false);
             SceneView.duringSceneGui += DrawAvatarColliders;
+            EditorApplication.update += InstallHeaderItem;
             LoadPins();
             RefreshCache();
             EditorApplication.hierarchyChanged += RefreshCache;
@@ -340,6 +341,51 @@ namespace VAP.Editor
 
         static bool IsPinned(Component c) => pinnedCache.Contains(c);
 
+        static void InstallHeaderItem()
+        {
+            try
+            {
+                var field = typeof(EditorGUIUtility).GetField("s_EditorHeaderItemsMethods", BindingFlags.NonPublic | BindingFlags.Static);
+                var type = typeof(EditorGUIUtility).GetNestedType("HeaderItemDelegate", BindingFlags.NonPublic);
+                if (field != null && type != null && !(field.GetValue(null) is System.Collections.IList))
+                    return;
+                EditorApplication.update -= InstallHeaderItem;
+                if (field == null || type == null)
+                    return;
+                var method = typeof(PhysBoneGizmos).GetMethod(nameof(DrawHeaderPin), BindingFlags.NonPublic | BindingFlags.Static);
+                ((System.Collections.IList)field.GetValue(null)).Insert(0, Delegate.CreateDelegate(type, method));
+            }
+            catch
+            {
+                EditorApplication.update -= InstallHeaderItem;
+            }
+        }
+
+        static GUIContent headerPin;
+        static GUIStyle iconButton;
+
+        static bool DrawHeaderPin(Rect rect, Object[] targets)
+        {
+            if (targets == null || targets.Length == 0 || !(targets[0] is Component first) || !Types.Contains(first.GetType()))
+                return false;
+            bool pinned = IsPinned(first);
+            headerPin ??= new GUIContent();
+            headerPin.image = PinIcon();
+            headerPin.tooltip = pinned ? "Unpin from VRC Gizmos" : "Pin to VRC Gizmos";
+            var color = GUI.color;
+            GUI.color = pinned ? PinnedColor : UnpinnedColor;
+            iconButton ??= GUI.skin.FindStyle("IconButton") ?? GUIStyle.none;
+            if (GUI.Button(rect, headerPin, iconButton))
+            {
+                foreach (var t in targets)
+                    if (t is Component c && IsPinned(c) == pinned)
+                        TogglePin(c);
+                UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+            }
+            GUI.color = color;
+            return true;
+        }
+
         static void TogglePin(Component c)
         {
             if (c == null)
@@ -375,18 +421,6 @@ namespace VAP.Editor
             });
         }
 
-        static VisualElement ButtonRow(params VisualElement[] elements)
-        {
-            var strip = new VisualElement { style = { flexDirection = FlexDirection.Row } };
-            for (int i = 0; i < elements.Length; i++)
-            {
-                elements[i].style.marginLeft = i == 0 ? 0f : 2f;
-                elements[i].style.marginRight = i == elements.Length - 1 ? 0f : 2f;
-                strip.Add(elements[i]);
-            }
-            return strip;
-        }
-
         static Button IconButton(Texture2D icon, string fallback, string tip, Action action, Color? tint = null)
         {
             var button = new Button(action) { tooltip = tip, style = { width = 22, height = 18, paddingLeft = 1, paddingRight = 1 } };
@@ -405,9 +439,9 @@ namespace VAP.Editor
 
         static Texture2D PinIcon() => pinIcon != null ? pinIcon : pinIcon = MakeIcon(InPin);
 
-        static Texture2D CursorIcon() => cursorIcon != null ? cursorIcon : cursorIcon = MakeIcon(InCursor);
+        static Texture2D CursorIcon() => cursorIcon != null ? cursorIcon : cursorIcon = MakeIcon(WithCollider(InCursor, -2f, 2f));
 
-        static Texture2D AvatarIcon() => avatarIcon != null ? avatarIcon : avatarIcon = MakeIcon(InAvatar);
+        static Texture2D AvatarIcon() => avatarIcon != null ? avatarIcon : avatarIcon = MakeIcon(WithCollider(InAvatar, -3f, 2f));
 
         static readonly Vector2[] CursorShape =
         {
@@ -446,6 +480,33 @@ namespace VAP.Editor
             var ab = b - a;
             float t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / ab.sqrMagnitude);
             return (p - (a + ab * t)).magnitude;
+        }
+
+        static bool InCollider(float px, float py)
+        {
+            float dx = px - 16f, dy = py - 16f;
+            float r = Mathf.Sqrt(dx * dx + dy * dy);
+            if (Mathf.Abs(r - 12f) <= 1.6f)
+                return true;
+            if (r > 12f)
+                return false;
+            float e = Mathf.Sqrt(dx * dx / 144f + dy * dy / 20f);
+            return Mathf.Abs(e - 1f) * 4.5f <= 0.9f || Mathf.Abs(dx) <= 1f;
+        }
+
+        static Func<float, float, bool> WithCollider(Func<float, float, bool> main, float shiftX, float shiftY)
+        {
+            const float bx = 23.5f, by = 8.5f, br = 8.5f;
+            return (px, py) =>
+            {
+                float d = Mathf.Sqrt((px - bx) * (px - bx) + (py - by) * (py - by));
+                if (d <= br)
+                {
+                    float s = br / 13.6f;
+                    return InCollider(16f + (px - bx) / s, 16f + (py - by) / s);
+                }
+                return d > br + 2f && main(px - shiftX, py - shiftY);
+            };
         }
 
         static Texture2D MakeIcon(Func<float, float, bool> inside)
@@ -573,21 +634,34 @@ namespace VAP.Editor
             }
         }
 
-        [Overlay(typeof(SceneView), "VAP PhysBone Gizmos", "VRC Gizmos", true)]
-        class GizmosOverlay : Overlay, ICreateToolbar
+        [Overlay(typeof(SceneView), "VAP VRC Gizmos", "VRC Gizmos", true, defaultLayout = Layout.VerticalToolbar)]
+        class GizmosOverlay : ToolbarOverlay
         {
-            public IEnumerable<string> toolbarElements => new[]
-            {
-                ToolbarId + "Selected", ToolbarId + "Pinned", ToolbarId + "AvatarColliders",
-            };
+            GizmosOverlay() : base(ToolbarId + "Buttons") { }
+        }
 
-            public override VisualElement CreatePanelContent()
+        const float ButtonWidth = 37f;
+
+        [EditorToolbarElement(ToolbarId + "Buttons", typeof(SceneView))]
+        class GizmoButtons : VisualElement
+        {
+            public GizmoButtons()
             {
-                var root = new VisualElement { style = { minWidth = 240 } };
-                var modes = new OverlayToolbar { style = { flexDirection = FlexDirection.Row } };
-                modes.Add(ButtonRow(new SelectedToggle(), new PinnedToggle(), new AvatarCollidersToggle()));
-                root.Add(modes);
-                return root;
+                foreach (var button in new VisualElement[] { new SelectedToggle(), new PinnedToggle(), new AvatarCollidersToggle() })
+                {
+                    button.style.width = ButtonWidth;
+                    Add(button);
+                }
+                EditorToolbarUtility.SetupChildrenAsButtonStrip(this);
+                RegisterCallback<AttachToPanelEvent>(_ =>
+                {
+                    for (var p = parent; p != null; p = p.parent)
+                        if (p.ClassListContains("unity-overlay"))
+                        {
+                            p.Query<Label>(className: "overlay-header__title").ForEach(l => l.style.display = DisplayStyle.None);
+                            break;
+                        }
+                });
             }
         }
 
@@ -645,7 +719,6 @@ namespace VAP.Editor
                         modeChanged?.Invoke();
                 })
             {
-                style.width = 22f + ArrowWidth;
                 style.paddingRight = ArrowWidth;
                 var arrow = new VisualElement
                 {
