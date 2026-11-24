@@ -33,7 +33,7 @@ jobs:
     name: build-listing
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment-retry.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       
@@ -92,4 +92,15 @@ jobs:
       # Deploy the uploaded VPM Listing Website to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
+
+      # Retry once if the artifact isn't visible yet
+      - name: Wait Before Retrying Deploy
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 60
+
+      - name: Retry Deploy to GitHub Pages
+        id: deployment-retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
