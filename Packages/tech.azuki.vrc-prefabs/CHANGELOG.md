@@ -1,3 +1,6 @@
+## Version 3.1.5
+- UI/UX improvements.
+
 ## Version 3.1.4
 - Improve VRC gizmos tool.
 
