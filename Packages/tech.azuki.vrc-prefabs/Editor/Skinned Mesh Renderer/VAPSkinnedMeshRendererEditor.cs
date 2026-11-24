@@ -78,6 +78,8 @@ namespace VAP.Editor
             {
                 Overrides = () =>
                 {
+                    if (NormalsLocked)
+                        return new SerializedProperty[0];
                     serializedObject.Update();
                     return new[]
                     {
@@ -95,7 +97,7 @@ namespace VAP.Editor
                 Get = () => Owner != null && Owner.wrapped != null && Owner.wrapped.enabled,
                 Set = SetEnabled,
             });
-            return root;
+            return VAPPrefabLock.AddEditButton(root, this);
         }
 
         void OnSceneGUI()
@@ -466,13 +468,18 @@ namespace VAP.Editor
             serializedObject.Update();
             var enabled = serializedObject.FindProperty(nameof(VAPSkinnedMeshRenderer.blendShapeNormals));
             bool changed = VRCFuryWrap.Changed(enabled) || VRCFuryWrap.Changed(serializedObject.FindProperty(nameof(VAPSkinnedMeshRenderer.normalBlendShapes)));
-            VAPEditorGUI.EnabledBar(bar, NormalsLabel.text, enabled, false, changed);
+            VAPEditorGUI.EnabledBar(bar, NormalsLabel.text, enabled, NormalsLocked, changed);
             serializedObject.ApplyModifiedProperties();
         }
+
+        bool NormalsLocked => VAPPrefabLock.IsFromPrefab(Owner);
 
         void DrawNormals()
         {
             serializedObject.Update();
+            bool wasEnabled = GUI.enabled;
+            bool locked = NormalsLocked;
+            GUI.enabled = wasEnabled && !locked;
             var prop = serializedObject.FindProperty(nameof(VAPSkinnedMeshRenderer.normalBlendShapes));
             var names = Blendshapes.Names(Owner.wrapped.sharedMesh);
             var added = new HashSet<string>();
@@ -524,11 +531,13 @@ namespace VAP.Editor
             }
             NormalsList(prop, new HashSet<string>(names)).DoLayoutList();
             GUILayout.Space(-18f);
+            GUI.enabled = wasEnabled;
             using (new EditorGUILayout.HorizontalScope())
             {
                 using (new EditorGUI.DisabledScope(prop.arraySize == 0))
                     if (GUILayout.Button(CopyLabel, EditorStyles.miniButtonLeft, GUILayout.Width(50f)))
                         EditorGUIUtility.systemCopyBuffer = string.Join("\n", Enumerable.Range(0, prop.arraySize).Select(i => prop.GetArrayElementAtIndex(i).stringValue).Where(n => !string.IsNullOrEmpty(n)));
+                GUI.enabled = wasEnabled && !locked;
                 if (GUILayout.Button(PasteLabel, EditorStyles.miniButtonRight, GUILayout.Width(50f)))
                 {
                     foreach (var line in (EditorGUIUtility.systemCopyBuffer ?? "").Split('\n'))
@@ -539,6 +548,7 @@ namespace VAP.Editor
                     }
                     GUIUtility.ExitGUI();
                 }
+                GUI.enabled = wasEnabled;
                 GUILayout.FlexibleSpace();
             }
             GUILayout.Space(-2f);

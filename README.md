@@ -477,7 +477,7 @@ Replaces the inspector of a **Skinned Mesh Renderer** with only the settings wor
 | Enabled | Turns the renderer on or off |
 | Mesh, Root Bone, Bounds, Materials | Same as the **Skinned Mesh Renderer** |
 | BlendShapes | Every blendshape of the mesh, with a search field |
-| Calculate Blendshape Normals | Only shown when the model's import settings have **Blend Shape Normals** set to `None`. When enabled, recalculates the normals and tangents of the listed blendshapes at build time, the way Blender shades them. Type in the search field to find blendshapes of this mesh and click one to add it, or click Enter or press **Add** to add the typed name. **Copy** and **Paste** move the list as text, one blendshape per line |
+| Calculate Blendshape Normals | Only shown when the model's import settings have **Blend Shape Normals** set to `None`. When enabled, recalculates the normals and tangents of the listed blendshapes at build time, the way Blender shades them. Type in the search field to find blendshapes of this mesh and click one to add it, or click Enter or press **Add** to add the typed name. **Copy** and **Paste** move the list as text, one blendshape per line. Locked on prefab instances; use **Edit in Prefab** to change it |
 | Cast Shadows | Whether the mesh casts shadows in worlds with realtime lights |
 | Anchor Override | Where probes are sampled. Use the same transform on every mesh of the avatar so they are lit the same |
 
