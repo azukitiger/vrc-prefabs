@@ -1,3 +1,6 @@
+## Version 3.1.6
+- Fixed recording not working for Skinned Mesh Renderer.
+
 ## Version 3.1.5
 - UI/UX improvements.
 

@@ -51,12 +51,19 @@ namespace VAP.Editor
         static readonly Dictionary<int, int> rebuilt = new Dictionary<int, int>();
         const int MaxRebuilds = 3;
         static double nextCheck;
+        static bool animating;
 
         static void Check()
         {
             if (EditorApplication.timeSinceStartup < nextCheck)
                 return;
             nextCheck = EditorApplication.timeSinceStartup + 0.25;
+            if (animating != AnimationMode.InAnimationMode())
+            {
+                animating = !animating;
+                foreach (var go in Selection.gameObjects)
+                    SetAll(go, true);
+            }
             HideShownEditors();
         }
 
@@ -103,6 +110,14 @@ namespace VAP.Editor
         {
             if (c == null)
                 return false;
+            if (hidden && c is Renderer && AnimationMode.InAnimationMode())
+            {
+                if ((c.hideFlags & HideFlags.HideInInspector) == 0)
+                    return false;
+                c.hideFlags &= ~HideFlags.HideInInspector;
+                InternalEditorUtility.SetIsInspectorExpanded(c, false);
+                return true;
+            }
             var flags = hidden ? c.hideFlags | HideFlags.HideInInspector : c.hideFlags & ~HideFlags.HideInInspector;
             if (flags == c.hideFlags)
                 return false;

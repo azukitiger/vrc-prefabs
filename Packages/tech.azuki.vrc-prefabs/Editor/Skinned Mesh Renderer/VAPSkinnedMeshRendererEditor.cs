@@ -165,9 +165,11 @@ namespace VAP.Editor
             var smr = Owner != null ? Owner.wrapped : null;
             if (smr == null)
                 return;
-            Undo.RecordObject(smr, on ? "Enable Renderer" : "Disable Renderer");
-            smr.enabled = on;
-            PrefabUtility.RecordPrefabInstancePropertyModifications(smr);
+            using (var so = new SerializedObject(smr))
+            {
+                so.FindProperty("m_Enabled").boolValue = on;
+                so.ApplyModifiedProperties();
+            }
             Repaint();
         }
 
@@ -333,7 +335,7 @@ namespace VAP.Editor
                         rect.y += 1f;
                         rect.height = EditorGUIUtility.singleLineHeight;
                         var element = materials.serializedProperty.GetArrayElementAtIndex(i);
-                        if (Event.current.type == EventType.ContextClick && rect.Contains(Event.current.mousePosition))
+                        if (Event.current.type == EventType.ContextClick && rect.Contains(Event.current.mousePosition) && !AnimationMode.InAnimationMode())
                         {
                             MaterialMenu(element.Copy());
                             Event.current.Use();
@@ -435,13 +437,15 @@ namespace VAP.Editor
                     continue;
                 }
                 EditorGUI.BeginChangeCheck();
-                float v = EditorGUI.Slider(rowRect, label, 0f, 0f, 100f);
+                float v = EditorGUI.Slider(rowRect, label, smr.GetBlendShapeWeight(i), 0f, 100f);
                 if (EditorGUI.EndChangeCheck())
                 {
+                    int size = weights.arraySize;
+                    weights.arraySize = i + 1;
+                    for (int k = size; k < i; k++)
+                        weights.GetArrayElementAtIndex(k).floatValue = smr.GetBlendShapeWeight(k);
+                    weights.GetArrayElementAtIndex(i).floatValue = v;
                     rendererSO.ApplyModifiedProperties();
-                    Undo.RecordObject(smr, "Change BlendShape");
-                    smr.SetBlendShapeWeight(i, v);
-                    PrefabUtility.RecordPrefabInstancePropertyModifications(smr);
                     rendererSO.Update();
                     weights = rendererSO.FindProperty("m_BlendShapeWeights");
                 }
