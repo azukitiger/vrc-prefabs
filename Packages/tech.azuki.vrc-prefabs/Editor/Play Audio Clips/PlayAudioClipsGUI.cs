@@ -14,8 +14,8 @@ namespace VAP.Editor
         readonly Dictionary<string, ReorderableList> lists = new Dictionary<string, ReorderableList>();
         readonly Dictionary<string, ReorderableList> unstored = new Dictionary<string, ReorderableList>();
         readonly Dictionary<StateMachineBehaviour, string> names = new Dictionary<StateMachineBehaviour, string>();
-        readonly Dictionary<AnimatorController, (double at, List<PlayAudioClips.Found> found)> cache =
-            new Dictionary<AnimatorController, (double, List<PlayAudioClips.Found>)>();
+        readonly Dictionary<AnimatorController, (double at, List<PlayAudioClipsBuild.Found> found)> cache =
+            new Dictionary<AnimatorController, (double, List<PlayAudioClipsBuild.Found>)>();
 
         internal PlayAudioClipsGUI(SerializedObject serializedObject, string property)
         {
@@ -25,14 +25,14 @@ namespace VAP.Editor
 
         SerializedProperty Entries => serializedObject.FindProperty(property);
 
-        internal List<PlayAudioClips.Found> Found(AnimatorController c)
+        internal List<PlayAudioClipsBuild.Found> Found(AnimatorController c)
         {
             if (c == null)
-                return new List<PlayAudioClips.Found>();
+                return new List<PlayAudioClipsBuild.Found>();
             double now = EditorApplication.timeSinceStartup;
             if (!cache.TryGetValue(c, out var hit) || now - hit.at >= 1.0)
             {
-                hit = (now, PlayAudioClips.Find(c));
+                hit = (now, PlayAudioClipsBuild.Find(c));
                 cache[c] = hit;
                 names.Clear();
             }
@@ -84,11 +84,11 @@ namespace VAP.Editor
         string Title(StateMachineBehaviour behaviour)
         {
             if (!names.TryGetValue(behaviour, out var name))
-                names[behaviour] = name = PlayAudioClips.SourceName(behaviour);
+                names[behaviour] = name = PlayAudioClipsBuild.SourceName(behaviour);
             return name;
         }
 
-        ReorderableList GetList(PlayAudioClips.Found item, string prefix)
+        ReorderableList GetList(PlayAudioClipsBuild.Found item, string prefix)
         {
             string key = prefix + item.key;
             var clips = Clips(key);
@@ -123,11 +123,11 @@ namespace VAP.Editor
             return list;
         }
 
-        ReorderableList Unstored(PlayAudioClips.Found item, string key, string title, string path, int max)
+        ReorderableList Unstored(PlayAudioClipsBuild.Found item, string key, string title, string path, int max)
         {
             if (unstored.TryGetValue(key, out var cached))
                 return cached;
-            var values = PlayAudioClips.Clips(item.behaviour);
+            var values = PlayAudioClipsBuild.Clips(item.behaviour);
             var list = new ReorderableList(values, typeof(AudioClip), true, true, true, true);
             unstored[key] = list;
             list.elementHeightCallback = _ => VAPEditorGUI.Line + 2f;
@@ -178,7 +178,7 @@ namespace VAP.Editor
             }
             bool sourceHas = sourceEntries != null && sourceEntries.Exists(e => e.key == key);
             var entries = Entries;
-            var defaults = PlayAudioClips.Clips(behaviour).ConvertAll(c => (Object)c);
+            var defaults = PlayAudioClipsBuild.Clips(behaviour).ConvertAll(c => (Object)c);
             for (int i = 0; i < entries.arraySize; i++)
             {
                 var entry = entries.GetArrayElementAtIndex(i);
@@ -272,7 +272,7 @@ namespace VAP.Editor
                         return !Same(current, ReadClips(e.FindPropertyRelative(nameof(VAPPlayAudioClips.Entry.clips))));
                 }
             }
-            return behaviour != null && !Same(current, PlayAudioClips.Clips(behaviour).ConvertAll(c => (Object)c));
+            return behaviour != null && !Same(current, PlayAudioClipsBuild.Clips(behaviour).ConvertAll(c => (Object)c));
         }
 
         static void Header(Rect rect, string path, string title, int count, int max, bool changed)

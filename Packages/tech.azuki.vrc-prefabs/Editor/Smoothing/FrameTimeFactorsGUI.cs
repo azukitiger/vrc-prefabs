@@ -31,7 +31,7 @@ namespace VAP.Editor
         {
             EditorGUILayout.LabelField(DefaultsLabel, EditorStyles.boldLabel);
             using (new EditorGUI.DisabledScope(true))
-                foreach (var d in ContactSmoothing.Defaults())
+                foreach (var d in ContactSmoothingBuild.Defaults())
                     Row(EditorGUILayout.GetControlRect(), d.parameter, d.kind, d.value);
 
             EditorGUILayout.Space();
@@ -45,7 +45,7 @@ namespace VAP.Editor
             var seen = new HashSet<string>();
             foreach (var factor in factors)
             {
-                string problem = ContactSmoothing.FactorProblem(factor);
+                string problem = ContactSmoothingBuild.FactorProblem(factor);
                 if (problem == null && !seen.Add(factor.parameter))
                     problem = $"\"{factor.parameter}\" is already in the list; only the first one is used.";
                 if (problem != null)

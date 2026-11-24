@@ -18,7 +18,7 @@ using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
-    internal static class ContactSmoothing
+    internal static class ContactSmoothingBuild
     {
         const string Log = "[VAP Smoothing] ";
         internal const string Prefix = "VAP/Smooth/";
@@ -650,7 +650,7 @@ namespace VAP.Editor
                 .AfterPlugin("tech.azuki.vrc-prefabs.play-audio-clips")
                 .BeforePlugin("tech.azuki.vrc-prefabs.expressions")
                 .Run("Add contact smoothing", ctx =>
-                    ContactSmoothing.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
+                    ContactSmoothingBuild.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
         }
     }
 #endif

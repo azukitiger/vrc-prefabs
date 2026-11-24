@@ -76,7 +76,7 @@ namespace VAP.Editor
         {
             var list = AudioControllers();
             int count = list.Sum(c => Clips.Found(c).Count);
-            bool changed = list.Any(c => Clips.AnyChanged(c, PlayAudioClips.Prefix(c)));
+            bool changed = list.Any(c => Clips.AnyChanged(c, PlayAudioClipsBuild.Prefix(c)));
             VRCFuryWrap.BarLabels(bar, bar.x, "Play Audio Clips", count + (count == 1 ? " Play Audio" : " Play Audios"), 0.6f, changed);
         }
 
@@ -93,7 +93,7 @@ namespace VAP.Editor
                     EditorGUILayout.Space(4f);
                     EditorGUILayout.LabelField(c.name, EditorStyles.boldLabel);
                 }
-                Clips.Draw(c, PlayAudioClips.Prefix(c));
+                Clips.Draw(c, PlayAudioClipsBuild.Prefix(c));
             }
             Serialized.ApplyModifiedProperties();
         }

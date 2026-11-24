@@ -18,18 +18,17 @@ using Object = UnityEngine.Object;
 namespace VAP.Editor
 {
     [InitializeOnLoad]
-    public static class PhysBoneGizmos
+    public static class VRCGizmos
     {
         const string Log = "[VAP VRC Gizmos] ";
-        const string ModeKey = "Azuki.PhysBoneGizmos.Mode";
-        const string SelectedKey = "VAP.PhysBoneGizmos.SelectedOnly";
-        const string PinnedKey = "VAP.PhysBoneGizmos.ShowPinned";
-        const string AvatarCollidersKey = "VAP.PhysBoneGizmos.AvatarColliders";
+        const string SelectedKey = "VAP.VRCGizmos.SelectedOnly";
+        const string PinnedKey = "VAP.VRCGizmos.ShowPinned";
+        const string AvatarCollidersKey = "VAP.VRCGizmos.AvatarColliders";
         static readonly Color AvatarColliderColor = new Color(1f, 0.6f, 0.2f, 0.9f);
         static bool avatarColliders;
         static Action avatarCollidersChanged;
         static VRCAvatarDescriptor[] descriptors = new VRCAvatarDescriptor[0];
-        static readonly string PinsKey = "Azuki.PhysBoneGizmos.PathPins." + Application.dataPath.GetHashCode();
+        static readonly string PinsKey = "VAP.VRCGizmos.Pins." + Application.dataPath.GetHashCode();
         static readonly Type[] Types = { typeof(VRCPhysBone), typeof(VRCPhysBoneCollider), typeof(VRCContactReceiver), typeof(VRCContactSender) };
 
         static bool selectedOnly;
@@ -45,11 +44,10 @@ namespace VAP.Editor
         static readonly Dictionary<Type, MethodInfo> sdkDraw = new Dictionary<Type, MethodInfo>();
         static readonly Dictionary<Type, MethodInfo> selfDraw = new Dictionary<Type, MethodInfo>();
 
-        static PhysBoneGizmos()
+        static VRCGizmos()
         {
-            int old = EditorPrefs.GetInt(ModeKey, 1);
-            selectedOnly = EditorPrefs.GetBool(SelectedKey, old != 2);
-            showPinned = EditorPrefs.GetBool(PinnedKey, old == 1);
+            selectedOnly = EditorPrefs.GetBool(SelectedKey, true);
+            showPinned = EditorPrefs.GetBool(PinnedKey, true);
             avatarColliders = EditorPrefs.GetBool(AvatarCollidersKey, false);
             SceneView.duringSceneGui += DrawAvatarColliders;
             EditorApplication.update += InstallHeaderItem;
@@ -183,7 +181,7 @@ namespace VAP.Editor
                 foreach (var method in methods)
                 {
                     var p = method.GetParameters();
-                    if (method.IsStatic && method.DeclaringType != typeof(PhysBoneGizmos) && p.Length == 2 &&
+                    if (method.IsStatic && method.DeclaringType != typeof(VRCGizmos) && p.Length == 2 &&
                         p[0].ParameterType != typeof(Object) && p[0].ParameterType != typeof(Component) &&
                         p[0].ParameterType != typeof(Behaviour) && p[0].ParameterType != typeof(MonoBehaviour) &&
                         p[0].ParameterType.IsAssignableFrom(type))
@@ -399,7 +397,7 @@ namespace VAP.Editor
                 EditorApplication.update -= InstallHeaderItem;
                 if (field == null || type == null)
                     return;
-                var method = typeof(PhysBoneGizmos).GetMethod(nameof(DrawHeaderPin), BindingFlags.NonPublic | BindingFlags.Static);
+                var method = typeof(VRCGizmos).GetMethod(nameof(DrawHeaderPin), BindingFlags.NonPublic | BindingFlags.Static);
                 ((System.Collections.IList)field.GetValue(null)).Insert(0, Delegate.CreateDelegate(type, method));
             }
             catch
@@ -594,7 +592,7 @@ namespace VAP.Editor
             return Mathf.Abs(x - 16f) <= 1f && y >= 2f && y <= 12f;
         }
 
-        const string ToolbarId = "VAP/PhysBoneGizmos/";
+        const string ToolbarId = "VAP/VRCGizmos/";
 
         static List<Component> Listed()
         {

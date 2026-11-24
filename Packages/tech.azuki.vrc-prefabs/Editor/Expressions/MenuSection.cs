@@ -134,13 +134,12 @@ namespace VAP.Editor
             bool removed = owner.IsRemoved(menu, index);
             bool removedChanged = ExpressionsOverrides.RemovedChanged(owner, menu, index);
             bool defaultChanged = related.Exists(n => ExpressionsOverrides.DefaultChanged(owner, n));
-            bool changed = removedChanged || defaultChanged;
             if (removedChanged)
                 ExpressionsOverrides.DrawBar(rect, removed);
             if (defaultChanged)
                 ExpressionsOverrides.DrawRightBar(rect);
             if (ExpressionsOverrides.ContextClick(rect))
-                ShowContext(menu, index, removed, changed, related);
+                ShowContext(menu, index, type == ControlType.SubMenu, removed, defaultChanged, related);
 
             var full = new Rect(rect.x, rect.y + 2f, rect.width, RowHeight);
             var row = new Rect(rect.x, full.y + (RowHeight - Line) * 0.5f, rect.width, Line);
@@ -171,35 +170,33 @@ namespace VAP.Editor
                 DrawToggleDefault(check, control, p0);
 
             if (inline)
-            {
                 DrawSliderDefault(value, axes[0].param, type == ControlType.RadialPuppet);
-                return;
-            }
-            foreach (var (axis, p) in axes)
-            {
-                row.y += Step;
-                var axisValue = new Rect(value.x, row.y, row.xMax - value.x, Line);
-                EditorGUI.LabelField(new Rect(row.x + Indent, row.y, axisValue.x - row.x - Indent - 8f, Line), axis, EditorStyles.miniLabel);
-                DrawSliderDefault(axisValue, p, type == ControlType.RadialPuppet);
-            }
+            else
+                foreach (var (axis, p) in axes)
+                {
+                    row.y += Step;
+                    var axisValue = new Rect(value.x, row.y, row.xMax - value.x, Line);
+                    EditorGUI.LabelField(new Rect(row.x + Indent, row.y, axisValue.x - row.x - Indent - 8f, Line), axis, EditorStyles.miniLabel);
+                    DrawSliderDefault(axisValue, p, type == ControlType.RadialPuppet);
+                }
         }
 
-        void ShowContext(VRCExpressionsMenu menu, int index, bool removed, bool changed, List<string> related)
+        void ShowContext(VRCExpressionsMenu menu, int index, bool subMenu, bool removed, bool defaultChanged, List<string> related)
         {
             var context = new GenericMenu();
-            if (changed)
-                context.AddItem(new GUIContent("Revert Menu Item"), false, () =>
+            if (!removed && SectionRemoved)
+                context.AddItem(new GUIContent("Restore Sub Menu"), false, RestoreSection);
+            else
+                ExpressionsOverrides.AddRemoveItems(context, owner, menu, index, subMenu ? "Sub Menu" : "Menu Item");
+            if (defaultChanged)
+            {
+                context.AddSeparator("");
+                context.AddItem(new GUIContent("Revert Menu Item Default Value"), false, () =>
                 {
-                    ExpressionsOverrides.RevertControl(owner, menu, index);
                     foreach (var n in related)
                         ExpressionsOverrides.RevertDefault(owner, n);
                 });
-            if (removed)
-                context.AddItem(new GUIContent("Restore Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, menu, index, false));
-            else if (SectionRemoved)
-                context.AddItem(new GUIContent("Restore Menu Item"), false, RestoreSection);
-            else
-                context.AddItem(new GUIContent("Remove Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, menu, index, true));
+            }
             context.ShowAsContext();
             Event.current.Use();
         }

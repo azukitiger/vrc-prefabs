@@ -20,7 +20,7 @@ namespace VAP.Editor
             public VRCExpressionsMenu parent;
             public int control = -1;
             public List<(VRCExpressionsMenu menu, int control)> removedLinks = new List<(VRCExpressionsMenu, int)>();
-            public bool removed => removedLinks.Count > 0;
+            public bool Removed => removedLinks.Count > 0;
         }
 
         readonly VAPExpressions owner;
@@ -137,10 +137,10 @@ namespace VAP.Editor
                     var context = new GenericMenu();
                     var parent = e.parent;
                     int control = e.control;
-                    if (e.removed)
-                        context.AddItem(new GUIContent("Restore Menu Item"), false, Restore(e));
+                    if (e.Removed && !owner.IsRemoved(parent, control))
+                        context.AddItem(new GUIContent("Restore Sub Menu"), false, Restore(e));
                     else
-                        context.AddItem(new GUIContent("Remove Menu Item"), false, () => ExpressionsOverrides.SetRemoved(owner, parent, control, true));
+                        ExpressionsOverrides.AddRemoveItems(context, owner, parent, control, "Sub Menu");
                     context.ShowAsContext();
                     Event.current.Use();
                 }
@@ -154,12 +154,12 @@ namespace VAP.Editor
                 }
                 if (now != open)
                     SessionState.SetBool(key, now);
-                using (new EditorGUI.DisabledScope(e.removed))
+                using (new EditorGUI.DisabledScope(e.Removed))
                     DrawSteps(new Rect(foldout.x + 16f, header.y, foldout.width - 16f, header.height), e.steps, changed);
                 if (now)
                 {
                     var section = Section(menu);
-                    section.RestoreSection = e.removed ? Restore(e) : null;
+                    section.RestoreSection = e.Removed ? Restore(e) : null;
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(ChildIndent);
                     EditorGUILayout.BeginVertical();

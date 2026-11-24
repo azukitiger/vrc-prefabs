@@ -1,4 +1,7 @@
-## Version 3.1.8
+## Version 3.1.10
+- Added more context menu options for Menu.
+
+## Version 3.1.9
 - Parameters are unsynced and not saved instead of removed for VAP components.
 
 ## Version 3.1.8

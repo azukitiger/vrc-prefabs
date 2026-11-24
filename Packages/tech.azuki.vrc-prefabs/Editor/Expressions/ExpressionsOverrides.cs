@@ -1,4 +1,6 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.ScriptableObjects;
@@ -113,17 +115,60 @@ namespace VAP.Editor
             Changed(c);
         }
 
-        internal static bool HasControl(VAPExpressions c, VRCExpressionsMenu menu, int control) =>
-            c.controlOverrides.Exists(o => o != null && o.menu == menu && o.control == control && !o.IsEmpty);
-
-        internal static void RevertControl(VAPExpressions c, VRCExpressionsMenu menu, int control)
+        static HashSet<string> RelatedNames(VAPExpressions c, VRCExpressionsMenu menu, int control)
         {
-            Undo.RecordObject(c, "Revert Menu Item");
-            bool removed = Source(c)?.IsRemoved(menu, control) ?? false;
-            c.controlOverrides.RemoveAll(o => o != null && o.menu == menu && o.control == control);
-            if (removed)
-                Get(c, menu, control, -1).removed = true;
+            var names = new HashSet<string>();
+            var item = menu != null && menu.controls != null && control >= 0 && control < menu.controls.Count ? menu.controls[control] : null;
+            if (item == null)
+                return names;
+            names.UnionWith(VAPExpressions.ControlParameters(item));
+            if (item.subMenu == null)
+                return names;
+            var menus = new List<VRCExpressionsMenu> { item.subMenu };
+            var seen = new HashSet<VRCExpressionsMenu> { item.subMenu };
+            for (int m = 0; m < menus.Count; m++)
+                if (menus[m].controls != null)
+                    foreach (var sub in menus[m].controls)
+                    {
+                        names.UnionWith(VAPExpressions.ControlParameters(sub));
+                        if (sub?.subMenu != null && seen.Add(sub.subMenu))
+                            menus.Add(sub.subMenu);
+                    }
+            return names;
+        }
+
+        static List<(VRCExpressionsMenu menu, int control)> RelatedItems(VAPExpressions c, VRCExpressionsMenu menu, int control)
+        {
+            var names = RelatedNames(c, menu, control);
+            var result = new List<(VRCExpressionsMenu, int)> { (menu, control) };
+            if (names.Count == 0)
+                return result;
+            foreach (var m in c.AllMenus())
+                if (m.controls != null)
+                    for (int i = 0; i < m.controls.Count; i++)
+                        if ((m != menu || i != control) && VAPExpressions.ControlParameters(m.controls[i]).Any(names.Contains))
+                            result.Add((m, i));
+            return result;
+        }
+
+        static void SetRelatedRemoved(VAPExpressions c, VRCExpressionsMenu menu, int control, bool removed)
+        {
+            Undo.RecordObject(c, removed ? "Remove Menu Item" : "Restore Menu Item");
+            foreach (var (m, i) in RelatedItems(c, menu, control))
+                Get(c, m, i, -1).removed = removed;
             Changed(c);
+        }
+
+        internal static void AddRemoveItems(GenericMenu context, VAPExpressions c, VRCExpressionsMenu menu, int control, string item)
+        {
+            if (c.IsRemoved(menu, control))
+            {
+                context.AddItem(new GUIContent($"Restore {item}"), false, () => SetRemoved(c, menu, control, false));
+                context.AddItem(new GUIContent("Restore Related Menu Items"), false, () => SetRelatedRemoved(c, menu, control, false));
+                return;
+            }
+            context.AddItem(new GUIContent($"Remove {item}"), false, () => SetRemoved(c, menu, control, true));
+            context.AddItem(new GUIContent("Remove Related Menu Items"), false, () => SetRelatedRemoved(c, menu, control, true));
         }
 
         internal static bool ContextClick(Rect rect)

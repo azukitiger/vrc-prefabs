@@ -81,7 +81,7 @@ namespace VAP.Editor
                 if (splitOn)
                     DrawSmoothing(nameof(VAPSmoothing.decreaseSmoothing), nameof(VAPSmoothing.decreaseCustomSpeed), DecreaseLabel, true);
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(VAPSmoothing.passes)), PassesLabel);
-                string output = single ? ContactSmoothing.Output(c, ContactSmoothing.Input(c)) : null;
+                string output = single ? ContactSmoothingBuild.Output(c, ContactSmoothingBuild.Input(c)) : null;
                 Field(nameof(VAPSmoothing.outputParameter), OutputLabel, output);
                 EditorGUILayout.Space(4f);
                 ToggleBox(nameof(VAPSmoothing.transformOutput), TransformLabel, () =>
@@ -99,20 +99,20 @@ namespace VAP.Editor
 
             if (!single)
                 return;
-            if (VAPAvatar.Descriptor(c) != null && ContactSmoothing.SmoothedBy(c) is VAPSmoothing owner)
-                EditorGUILayout.HelpBox($"This does nothing because {ContactSmoothing.Input(c)} is already smoothed on {owner.name}.", MessageType.Error);
-            else if (ContactSmoothing.Problem(c, ContactSmoothing.Resolve(c)) is string problem)
+            if (VAPAvatar.Descriptor(c) != null && ContactSmoothingBuild.SmoothedBy(c) is VAPSmoothing owner)
+                EditorGUILayout.HelpBox($"This does nothing because {ContactSmoothingBuild.Input(c)} is already smoothed on {owner.name}.", MessageType.Error);
+            else if (ContactSmoothingBuild.Problem(c, ContactSmoothingBuild.Resolve(c)) is string problem)
                 EditorGUILayout.HelpBox(problem, MessageType.Warning);
             else
-                foreach (var (name, by) in ContactSmoothing.Repeats(c))
-                    EditorGUILayout.HelpBox(ContactSmoothing.RepeatMessage(name, by), MessageType.Error);
+                foreach (var (name, by) in ContactSmoothingBuild.Repeats(c))
+                    EditorGUILayout.HelpBox(ContactSmoothingBuild.RepeatMessage(name, by), MessageType.Error);
         }
 
         void DrawTransform(VAPSmoothing c)
         {
-            string input = ContactSmoothing.Input(c);
-            string axis = ContactSmoothing.Axis(c, input);
-            Pick(TransformByLabel, serializedObject.FindProperty(nameof(VAPSmoothing.transformParameter)), ContactSmoothing.Parameters(c), axis);
+            string input = ContactSmoothingBuild.Input(c);
+            string axis = ContactSmoothingBuild.Axis(c, input);
+            Pick(TransformByLabel, serializedObject.FindProperty(nameof(VAPSmoothing.transformParameter)), ContactSmoothingBuild.Parameters(c), axis);
             var before = serializedObject.FindProperty(nameof(VAPSmoothing.transformBeforeSmoothing));
             EditorGUILayout.PropertyField(before, BeforeLabel);
             string xName = VAPEditorGUI.MenuName(input ?? "Input") + (before.boolValue ? "" : " (smoothed)");
@@ -184,7 +184,7 @@ namespace VAP.Editor
         void DrawInput(VAPSmoothing c)
         {
             var prop = serializedObject.FindProperty(PhysBone ? nameof(VAPPhysBoneSmoothing.physBoneParameter) : nameof(VAPContactSmoothing.contactParameter));
-            Pick(PhysBone ? PhysBoneLabel : ContactLabel, prop, ContactSmoothing.Parameters(c), ContactSmoothing.Input(c));
+            Pick(PhysBone ? PhysBoneLabel : ContactLabel, prop, ContactSmoothingBuild.Parameters(c), ContactSmoothingBuild.Input(c));
         }
 
         void Pick(GUIContent label, SerializedProperty prop, List<string> found, string current)

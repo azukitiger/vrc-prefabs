@@ -16,7 +16,7 @@ using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
-    internal static class PlayAudioClips
+    internal static class PlayAudioClipsBuild
     {
         const string Log = "[VAP VRC Animator Play Audio Clips] ";
         const string TypeName = "VRCAnimatorPlayAudio";
@@ -246,7 +246,7 @@ namespace VAP.Editor
                 .BeforePlugin("nadena.dev.modular-avatar")
                 .BeforePlugin("tech.azuki.vrc-prefabs.expressions")
                 .Run("Apply Play Audio clips", ctx =>
-                    PlayAudioClips.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
+                    PlayAudioClipsBuild.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
         }
     }
 #endif

@@ -72,34 +72,56 @@ namespace VAP
             var roots = RootMenus();
             var seen = new HashSet<VRCExpressionsMenu>(roots);
             foreach (var root in roots)
-                Collect(root, seen, result, true);
+                Collect(root, seen, result, IsRemoved);
             return result;
         }
 
-        void Collect(VRCExpressionsMenu menu, HashSet<VRCExpressionsMenu> seen, List<VRCExpressionsMenu> result, bool skipRemoved)
+        public List<VRCExpressionsMenu> AllMenus()
+        {
+            var roots = RootMenus();
+            var result = new List<VRCExpressionsMenu>(roots);
+            var seen = new HashSet<VRCExpressionsMenu>(roots);
+            foreach (var root in roots)
+                Collect(root, seen, result, null);
+            return result;
+        }
+
+        public static IEnumerable<string> ControlParameters(VRCExpressionsMenu.Control c)
+        {
+            if (c == null)
+                yield break;
+            if (!string.IsNullOrEmpty(c.parameter?.name))
+                yield return c.parameter.name;
+            if (c.subParameters != null)
+                foreach (var p in c.subParameters)
+                    if (!string.IsNullOrEmpty(p?.name))
+                        yield return p.name;
+        }
+
+        void Collect(VRCExpressionsMenu menu, HashSet<VRCExpressionsMenu> seen, List<VRCExpressionsMenu> result, Func<VRCExpressionsMenu, int, bool> skip)
         {
             if (menu.controls == null)
                 return;
             for (int i = 0; i < menu.controls.Count; i++)
             {
                 var sub = menu.controls[i]?.subMenu;
-                if (sub == null || (skipRemoved && IsRemoved(menu, i)) || !seen.Add(sub))
+                if (sub == null || (skip != null && skip(menu, i)) || !seen.Add(sub))
                     continue;
                 result.Add(sub);
-                Collect(sub, seen, result, skipRemoved);
+                Collect(sub, seen, result, skip);
             }
         }
 
         public bool IsRemoved(VRCExpressionsMenu menu, int control) => FindControl(menu, control, -1)?.removed ?? false;
 
-        HashSet<string> UsedParameters(bool skipRemoved)
+        HashSet<string> UsedParameters(Func<VRCExpressionsMenu, int, bool> skip)
         {
             var result = new HashSet<string>();
             var roots = RootMenus();
             var menus = new List<VRCExpressionsMenu>(roots);
             var seen = new HashSet<VRCExpressionsMenu>(roots);
             foreach (var root in roots)
-                Collect(root, seen, menus, skipRemoved);
+                Collect(root, seen, menus, skip);
             foreach (var menu in menus)
             {
                 if (menu.controls == null)
@@ -107,7 +129,7 @@ namespace VAP
                 for (int i = 0; i < menu.controls.Count; i++)
                 {
                     var c = menu.controls[i];
-                    if (c == null || (skipRemoved && IsRemoved(menu, i)))
+                    if (c == null || (skip != null && skip(menu, i)))
                         continue;
                     if (!string.IsNullOrEmpty(c.parameter?.name))
                         result.Add(c.parameter.name);
@@ -120,12 +142,13 @@ namespace VAP
             return result;
         }
 
-        public HashSet<string> DroppedParameters()
+        public HashSet<string> UnsyncedParameters()
         {
-            var before = UsedParameters(false);
-            before.ExceptWith(UsedParameters(true));
+            var before = UsedParameters(null);
+            before.ExceptWith(UsedParameters(IsRemoved));
             return before;
         }
+
 
         public DefaultOverride FindDefault(string name) =>
             defaultOverrides.FirstOrDefault(o => o != null && o.name == name);
@@ -137,11 +160,11 @@ namespace VAP
         {
             var source = asset != null && asset.parameters != null
                 ? asset.parameters : new VRCExpressionParameters.Parameter[0];
-            var dropped = DroppedParameters();
+            var unsynced = UnsyncedParameters();
             return source.Where(p => p != null).Select(p =>
             {
                 var copy = Copy(p);
-                if (dropped.Contains(p.name))
+                if (unsynced.Contains(p.name))
                 {
                     copy.networkSynced = false;
                     copy.saved = false;
