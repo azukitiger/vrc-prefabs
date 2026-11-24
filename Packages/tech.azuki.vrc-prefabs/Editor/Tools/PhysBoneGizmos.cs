@@ -527,7 +527,7 @@ namespace VAP.Editor
                     list.Add(row);
                 }
                 var clear = new Button(ClearPins) { text = "Clear Pins", tooltip = "Unpin everything", style = { marginTop = 4, height = 20 } };
-                clear.SetEnabled(pins.Count > 0);
+                clear.SetEnabled(pinnedCache.Any(c => c != null));
                 list.Add(clear);
             }
 

@@ -11,7 +11,7 @@ namespace VAP.Editor
     {
         const string LogoPath = "Packages/tech.azuki.vrc-prefabs/Editor/Icons/VAP Header.png";
         const string LogoPath2x = "Packages/tech.azuki.vrc-prefabs/Editor/Icons/VAP Header@2x.png";
-        const float LogoHeight = 10f;
+        const float LogoHeight = 14f;
         static readonly Color BadgeBack = new Color32(34, 34, 34, 255);
         static readonly Color BadgeText = new Color32(205, 65, 48, 255);
 

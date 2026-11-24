@@ -1,3 +1,6 @@
+## Version 3.1.3
+- Rebranding.
+
 ## Version 3.1.2
 - Update UI colors.
 
