@@ -32,8 +32,12 @@ namespace VAP.Editor
             {
                 bool open = IsOpen();
                 var header = EditorGUILayout.GetControlRect(false, HeaderHeight);
-                drawHeader(new Rect(header.x + 20f, header.y, header.width - 24f, header.height));
                 bool allowed = canOpen == null || canOpen();
+                var content = GUI.contentColor;
+                if (!allowed)
+                    GUI.contentColor = DisabledText;
+                drawHeader(new Rect(header.x + 20f, header.y, header.width - 24f, header.height));
+                GUI.contentColor = content;
                 var background = Background(allowed);
                 if (Root.style.backgroundColor.value != background)
                     Root.style.backgroundColor = background;
@@ -112,8 +116,10 @@ namespace VAP.Editor
             body.style.paddingBottom = 4f;
         }
 
+        static Color DisabledText => EditorGUIUtility.isProSkin ? new Color(0.6f, 0.6f, 0.6f) : new Color(0.75f, 0.75f, 0.75f);
+
         static Color Background(bool enabled) =>
-            !enabled ? new Color(0f, 0f, 0f, 0.12f)
+            !enabled ? (EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.11f) : new Color(1f, 1f, 1f, 0.6f))
             : EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.05f) : new Color(1f, 1f, 1f, 0.35f);
 
         bool IsOpen() => persistent ? EditorPrefs.GetBool(key, openByDefault) : SessionState.GetBool(key, openByDefault);

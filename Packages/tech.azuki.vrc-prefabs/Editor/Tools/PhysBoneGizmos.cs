@@ -341,6 +341,53 @@ namespace VAP.Editor
 
         static bool IsPinned(Component c) => pinnedCache.Contains(c);
 
+        static readonly Dictionary<Type, Texture2D> typeIcons = new Dictionary<Type, Texture2D>();
+
+        static Texture2D TypeIcon(Component c)
+        {
+            var type = c.GetType();
+            if (typeIcons.TryGetValue(type, out var icon) && icon != null)
+                return icon;
+            icon = c is VRCPhysBone ? MakeIcon(InBone)
+                : c is VRCPhysBoneCollider ? MakeIcon(InCollider)
+                : c is VRCContactReceiver ? MakeIcon(InReceiver)
+                : MakeIcon(InSender);
+            typeIcons[type] = icon;
+            return icon;
+        }
+
+        static bool InBone(float px, float py)
+        {
+            var p = new Vector2(px, py);
+            var a = new Vector2(10f, 10f);
+            var b = new Vector2(22f, 22f);
+            var d = (b - a).normalized;
+            var n = new Vector2(-d.y, d.x) * 3.2f;
+            const float knob = 3.8f;
+            return Segment(p, a, b) <= 2.6f
+                || Vector2.Distance(p, a - d + n) <= knob || Vector2.Distance(p, a - d - n) <= knob
+                || Vector2.Distance(p, b + d + n) <= knob || Vector2.Distance(p, b + d - n) <= knob;
+        }
+
+        static bool InContact(float px, float py, float ringX, float gapAngle, float fromX, float toX)
+        {
+            const float w = 1.6f;
+            var p = new Vector2(px, py);
+            float r = Vector2.Distance(p, new Vector2(ringX, 16f));
+            float angle = Mathf.Abs(Mathf.DeltaAngle(Mathf.Atan2(py - 16f, px - ringX) * Mathf.Rad2Deg, gapAngle));
+            if (Mathf.Abs(r - 11f) <= w && angle > 42f)
+                return true;
+            var tip = new Vector2(toX, 16f);
+            float back = toX > fromX ? -5.5f : 5.5f;
+            return Segment(p, new Vector2(fromX, 16f), tip) <= w
+                || Segment(p, tip, new Vector2(toX + back, 10.5f)) <= w
+                || Segment(p, tip, new Vector2(toX + back, 21.5f)) <= w;
+        }
+
+        static bool InSender(float px, float py) => InContact(px, py, 14f, 0f, 13f, 29f);
+
+        static bool InReceiver(float px, float py) => InContact(px, py, 18f, 180f, 3f, 19f);
+
         static void InstallHeaderItem()
         {
             try
@@ -484,14 +531,16 @@ namespace VAP.Editor
 
         static bool InCollider(float px, float py)
         {
+            const float w = 1.3f, a2 = 144f, b2 = 20f;
             float dx = px - 16f, dy = py - 16f;
             float r = Mathf.Sqrt(dx * dx + dy * dy);
-            if (Mathf.Abs(r - 12f) <= 1.6f)
+            if (Mathf.Abs(r - 12f) <= w)
                 return true;
-            if (r > 12f)
-                return false;
-            float e = Mathf.Sqrt(dx * dx / 144f + dy * dy / 20f);
-            return Mathf.Abs(e - 1f) * 4.5f <= 0.9f || Mathf.Abs(dx) <= 1f;
+            if (r > 12f || Mathf.Abs(dx) <= w)
+                return r <= 12f;
+            float e = Mathf.Sqrt(dx * dx / a2 + dy * dy / b2);
+            float g = Mathf.Sqrt(dx * dx / (a2 * a2) + dy * dy / (b2 * b2)) / Mathf.Max(e, 0.0001f);
+            return Mathf.Abs(e - 1f) / g <= w;
         }
 
         static Func<float, float, bool> WithCollider(Func<float, float, bool> main, float shiftX, float shiftY)
@@ -577,9 +626,14 @@ namespace VAP.Editor
                     if (isPinned)
                         pin.style.backgroundColor = PinnedColor;
                     row.Add(pin);
-                    row.Add(new Label($"{TypeLabel(c)}: {c.name}")
+                    row.Add(new Image
                     {
-                        tooltip = Path(c.transform),
+                        image = TypeIcon(c), scaleMode = ScaleMode.ScaleToFit, tintColor = Color.white, tooltip = TypeLabel(c),
+                        style = { width = 16, height = 16, marginLeft = 4, flexShrink = 0 },
+                    });
+                    row.Add(new Label(c.name)
+                    {
+                        tooltip = $"{TypeLabel(c)}: {Path(c.transform)}",
                         style =
                         {
                             flexGrow = 1, height = 18, marginLeft = 4, marginTop = 0, marginBottom = 0,
@@ -615,7 +669,7 @@ namespace VAP.Editor
             public override Vector2 GetWindowSize()
             {
                 var items = Listed();
-                float label = items.Count == 0 ? 180f : items.Max(c => EditorStyles.label.CalcSize(new GUIContent($"{TypeLabel(c)}: {c.name}")).x);
+                float label = items.Count == 0 ? 180f : items.Max(c => EditorStyles.label.CalcSize(new GUIContent(c.name)).x + 20f);
                 return new Vector2(Mathf.Clamp(label + 90f, 240f, 700f), Mathf.Clamp(items.Count, 1, 20) * 20f + 38f);
             }
 
@@ -737,7 +791,9 @@ namespace VAP.Editor
                     if (e.button != 0 || e.localPosition.x < layout.width - ArrowWidth)
                         return;
                     e.StopImmediatePropagation();
+#if !UNITY_2023_2_OR_NEWER
                     e.PreventDefault();
+#endif
                     UnityEditor.PopupWindow.Show(worldBound, new ListPopup());
                 }, TrickleDown.TrickleDown);
                 RegisterCallback<MouseDownEvent>(e =>

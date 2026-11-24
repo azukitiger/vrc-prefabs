@@ -51,6 +51,7 @@ namespace VAP.Editor
                   (Owner.overrideDefault && (Owner.defaultOn != source.defaultOn || !Mathf.Approximately(Owner.defaultValue, source.defaultValue)));
 
             EditorGUILayout.Space(6f);
+            VAPEditorGUI.BeginMenuBox();
             var header = EditorGUILayout.GetControlRect();
             var steps = MenuSection.CleanName(Info().path).Split('/').Select(n => n.Trim()).Where(n => n.Length > 0).ToList();
             if (steps.Count > 0)
@@ -69,6 +70,7 @@ namespace VAP.Editor
             };
             item.drawElementCallback = (r, i, a, f) => DrawItem(new Rect(r.x, r.y + 2f, r.width, RowHeight), slider, on, value, ownOn, ownValue, changed, source);
             item.DoLayoutList();
+            VAPEditorGUI.EndMenuBox();
         }
 
         ReorderableList item;

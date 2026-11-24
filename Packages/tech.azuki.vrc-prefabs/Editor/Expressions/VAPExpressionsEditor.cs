@@ -32,10 +32,12 @@ namespace VAP.Editor
             if (component.RootMenus().Count > 0)
             {
                 EditorGUILayout.Space(6f);
+                VAPEditorGUI.BeginMenuBox();
                 var header = EditorGUILayout.GetControlRect();
                 SubMenusSection.DrawHeader(header, subMenusSection.SingleSteps(), MenuHeader, bits);
                 subMenusSection.Draw();
                 EditorGUILayout.LabelField(MenuHint, VAPEditorGUI.RightMini);
+                VAPEditorGUI.EndMenuBox();
             }
             else if (bits != null)
                 EditorGUILayout.LabelField(bits, EditorStyles.miniLabel);

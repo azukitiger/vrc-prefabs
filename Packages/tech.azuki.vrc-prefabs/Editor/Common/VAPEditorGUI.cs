@@ -22,6 +22,21 @@ namespace VAP.Editor
         static GUIStyle rightMini;
         internal static GUIStyle RightMini => rightMini ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
 
+        static Color BoxFill => EditorGUIUtility.isProSkin ? new Color(0.17f, 0.17f, 0.17f) : new Color(0.72f, 0.72f, 0.72f);
+        static Color BoxBorder => EditorGUIUtility.isProSkin ? new Color(0.1f, 0.1f, 0.1f) : new Color(0.55f, 0.55f, 0.55f);
+        static GUIStyle menuBox;
+
+        internal static void BeginMenuBox()
+        {
+            var box = EditorGUILayout.BeginVertical(menuBox ??= new GUIStyle { padding = new RectOffset(8, 8, 6, 4) });
+            if (Event.current.type != EventType.Repaint)
+                return;
+            EditorGUI.DrawRect(box, BoxBorder);
+            EditorGUI.DrawRect(new Rect(box.x + 1f, box.y + 1f, box.width - 2f, box.height - 2f), BoxFill);
+        }
+
+        internal static void EndMenuBox() => EditorGUILayout.EndVertical();
+
         static GUIStyle searchText, searchCancel;
         static GUIContent searchIcon;
 
