@@ -1,9 +1,6 @@
 <img src="./Website/banner.png"/>
 
-# Avatar Prefabs
-Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
-
-## Table of Contents
+# Table of Contents
 
 - [Avatar Prefabs](#avatar-prefabs)
   - [Better Blink Prefab](#better-blink-prefab)
@@ -33,6 +30,9 @@ Prefabs and assets that add **advanced animations and interactive systems** to *
 - [Tools](#tools)
   - [VRC Gizmos](#vrc-gizmos)
   - [UV Bake Tool](#uv-bake-tool)
+
+# Avatar Prefabs
+Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
 
 ## Better Blink Prefab
 
