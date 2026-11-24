@@ -38,7 +38,7 @@ namespace VAP.Editor
         const float MaxListHeight = 300f;
         static readonly Color StripeColor = new Color(1f, 1f, 1f, 0.04f);
         static readonly Color SelectedColor = new Color(0.17f, 0.36f, 0.53f, 0.9f);
-        UnityEditor.IMGUI.Controls.SearchField shapeSearch;
+        const string ShapeSearchControl = "VAP.SkinnedMeshRenderer.ShapeSearch", NormalsSearchControl = "VAP.SkinnedMeshRenderer.NormalsSearch";
         string selectedShape;
         bool reveal;
         const string HeightPref = "VAP.SkinnedMeshRenderer.BlendShapesHeight";
@@ -49,7 +49,6 @@ namespace VAP.Editor
         static GUIContent editBoundsLabel;
         static readonly UnityEditor.IMGUI.Controls.BoxBoundsHandle boundsHandle = new UnityEditor.IMGUI.Controls.BoxBoundsHandle();
         static readonly GUIContent NormalsLabel = new GUIContent("Calculate Blendshape Normals", "Recalculates the normals and tangents of the listed blendshapes at build time the way Blender shades them.");
-        const string NormalsSearchControl = "VAP.SkinnedMeshRenderer.NormalsSearch";
         const int MaxSuggestions = 8;
         static readonly GUIContent CopyLabel = new GUIContent("Copy", "Copy the list as text, one blendshape per line.");
         static readonly GUIContent PasteLabel = new GUIContent("Paste", "Add blendshapes from copied text, one per line. Names already in the list are skipped.");
@@ -355,9 +354,8 @@ namespace VAP.Editor
             {
                 if (active == null)
                 {
-                    shapeSearch ??= new UnityEditor.IMGUI.Controls.SearchField();
                     string before = search;
-                    search = shapeSearch.OnToolbarGUI(EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight, EditorStyles.toolbarSearchField), search) ?? "";
+                    search = VAPEditorGUI.SearchBar(ShapeSearchControl, search);
                     if (!string.IsNullOrEmpty(before) && search.Length == 0)
                         reveal = true;
                     if (GUILayout.Button(ShowActiveLabel, GUILayout.Width(ButtonWidth)))
@@ -390,12 +388,10 @@ namespace VAP.Editor
                 for (int i = 0; i < count; i++)
                     if (string.IsNullOrEmpty(search) || mesh.GetBlendShapeName(i).IndexOf(search, System.StringComparison.OrdinalIgnoreCase) >= 0)
                         rows.Add(i);
-            if (rows.Count == 0)
-                return;
 
             float step = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
             listStyle ??= new GUIStyle(EditorStyles.helpBox) { padding = new RectOffset(6, 6, 6, 6) };
-            float content = rows.Count * step + listStyle.padding.vertical + 2f;
+            float content = count * step + listStyle.padding.vertical + 2f;
             float listHeight = Mathf.Clamp(EditorPrefs.GetFloat(HeightPref, MaxListHeight), MaxListHeight, MaxListHeight * 2f);
             float height = Mathf.Min(content, listHeight);
             if (reveal && Event.current.type == EventType.Layout)
@@ -409,6 +405,8 @@ namespace VAP.Editor
             var weights = rendererSO.FindProperty("m_BlendShapeWeights");
             float outerLabelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = Mathf.Max(80f, (EditorGUIUtility.currentViewWidth - 70f) * 0.5f);
+            if (rows.Count == 0)
+                EditorGUILayout.LabelField(active != null ? "No active blendshapes" : "No matching blendshapes", EditorStyles.miniLabel);
             for (int r = 0; r < rows.Count; r++)
             {
                 int i = rows[r];
@@ -485,11 +483,10 @@ namespace VAP.Editor
             bool enter = e.type == EventType.KeyDown && (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter) && GUI.GetNameOfFocusedControl() == NormalsSearchControl;
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUI.SetNextControlName(NormalsSearchControl);
-                normalSearch = EditorGUILayout.TextField(normalSearch, EditorStyles.toolbarSearchField);
-                string typed = (normalSearch ?? "").Trim();
+                normalSearch = VAPEditorGUI.SearchBar(NormalsSearchControl, normalSearch);
+                string typed = normalSearch.Trim();
                 using (new EditorGUI.DisabledScope(typed.Length == 0 || added.Contains(typed)))
-                    if (GUILayout.Button(AddLabel, GUILayout.Width(50f)))
+                    if (GUILayout.Button(AddLabel, GUILayout.Width(ButtonWidth)))
                     {
                         Add(prop, typed);
                         normalSearch = "";

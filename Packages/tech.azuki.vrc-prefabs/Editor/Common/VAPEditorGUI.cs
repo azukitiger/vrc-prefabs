@@ -22,6 +22,40 @@ namespace VAP.Editor
         static GUIStyle rightMini;
         internal static GUIStyle RightMini => rightMini ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
 
+        static GUIStyle searchText, searchCancel;
+        static GUIContent searchIcon;
+
+        internal static string SearchBar(string controlName, string text)
+        {
+            var rect = EditorGUILayout.GetControlRect(false, Line + 2f);
+            searchText ??= new GUIStyle(EditorStyles.textField) { alignment = TextAnchor.MiddleLeft, padding = new RectOffset(20, 20, 0, 0), fixedHeight = 0f };
+            searchCancel ??= GUI.skin.FindStyle("SearchCancelButton") ?? GUI.skin.FindStyle("ToolbarSearchCancelButton") ?? GUIStyle.none;
+            searchIcon ??= EditorGUIUtility.IconContent("Search Icon");
+            bool hasText = !string.IsNullOrEmpty(text);
+            float size = searchCancel.fixedWidth > 0f ? searchCancel.fixedWidth : 14f;
+            var clear = new Rect(rect.xMax - size - 4f, rect.y + (rect.height - size) * 0.5f, size, size);
+            var e = Event.current;
+            if (hasText && e.type == EventType.MouseDown && e.button == 0 && clear.Contains(e.mousePosition))
+            {
+                GUI.FocusControl(null);
+                GUI.changed = true;
+                e.Use();
+                return "";
+            }
+            if (hasText)
+                EditorGUIUtility.AddCursorRect(clear, MouseCursor.Arrow);
+            GUI.SetNextControlName(controlName);
+            text = EditorGUI.TextField(rect, text, searchText);
+            if (e.type == EventType.Repaint)
+            {
+                if (searchIcon?.image != null)
+                    GUI.DrawTexture(new Rect(rect.x + 4f, rect.y + (rect.height - 14f) * 0.5f, 14f, 14f), searchIcon.image, ScaleMode.ScaleToFit);
+                if (hasText)
+                    searchCancel.Draw(clear, false, false, false, false);
+            }
+            return text ?? "";
+        }
+
         internal static void EnabledBar(Rect bar, string title, SerializedProperty enabled, bool locked, bool changed)
         {
             var box = new Rect(bar.xMax - 16f, bar.y + (bar.height - Line) * 0.5f, 16f, Line);
