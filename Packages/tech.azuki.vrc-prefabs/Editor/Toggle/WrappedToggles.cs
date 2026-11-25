@@ -97,11 +97,54 @@ namespace VAP.Editor
         {
             if (root == null)
                 return;
+            if (hidden)
+                MergeDuplicates(root);
             bool changed = false;
             foreach (var w in root.GetComponentsInChildren<MonoBehaviour>(true).OfType<IVRCFuryWrapper>())
                 changed |= Set(w.Wrapped, hidden);
             if (changed)
                 ActiveEditorTracker.sharedTracker.ForceRebuild();
+        }
+
+        static void MergeDuplicates(GameObject root)
+        {
+            var extras = new List<(MonoBehaviour from, MonoBehaviour to)>();
+            var groups = root.GetComponentsInChildren<MonoBehaviour>(true)
+                .Where(m => m is IVRCFuryWrapper w && w.Wrapped != null)
+                .GroupBy(m => ((IVRCFuryWrapper)m).Wrapped);
+            foreach (var g in groups)
+            {
+                var list = g.ToList();
+                if (list.Count < 2)
+                    continue;
+                var kept = list.FirstOrDefault(m => !PrefabUtility.IsAddedComponentOverride(m));
+                if (kept == null)
+                    continue;
+                foreach (var m in list)
+                    if (m != kept && m.GetType() == kept.GetType() && PrefabUtility.IsAddedComponentOverride(m))
+                        extras.Add((m, kept));
+            }
+            if (extras.Count == 0)
+                return;
+            EditorApplication.delayCall += () =>
+            {
+                foreach (var (from, to) in extras)
+                    if (from != null && to != null)
+                        Merge(from, to);
+            };
+        }
+
+        static void Merge(MonoBehaviour from, MonoBehaviour to)
+        {
+            var source = new SerializedObject(from);
+            var target = new SerializedObject(to);
+            var p = source.GetIterator();
+            for (bool enter = true; p.Next(enter); enter = false)
+                if (!p.name.StartsWith("m_") || p.name == "m_Enabled")
+                    target.CopyFromSerializedProperty(p);
+            target.ApplyModifiedProperties();
+            Undo.DestroyObjectImmediate(from);
+            Debug.Log($"[VAP VRCFury Wrapper] Moved the overrides of the wrapper added on {to.name} into the one from its prefab.", to);
         }
 
         static bool IsWrapped(Component c) => c.GetComponents<MonoBehaviour>().OfType<IVRCFuryWrapper>().Any(w => w.Wrapped == c);

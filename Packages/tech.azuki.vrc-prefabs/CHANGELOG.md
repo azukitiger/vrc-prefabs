@@ -1,3 +1,6 @@
+## Version 3.1.11
+- Handle edge case to avoid double wrap.
+
 ## Version 3.1.10
 - Added more context menu options for Menu.
 
