@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using ControlType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionsMenu.Control.ControlType;
@@ -14,7 +13,9 @@ namespace VAP.Editor
         static readonly string[] RadialParams = { "Rotation" };
         static readonly Color RowTint = new Color(1f, 1f, 1f, 0.035f);
         static readonly Color Divider = new Color(0f, 0f, 0f, 0.45f);
-        const float RowHeight = 26f, IconSize = 24f, IconPad = 4f, DefaultWidth = 200f, CheckWidth = 16f, Indent = 20f;
+        static readonly Color LightRowFill = new Color(0.6f, 0.6f, 0.6f);
+        static readonly Color LightRowTint = new Color(0f, 0f, 0f, 0.05f);
+        const float RowHeight = 26f, IconSize = 24f, IconPad = 4f, DefaultWidth = 200f, CheckWidth = 16f, Indent = 20f, Pad = 6f;
 
         static float Line => EditorGUIUtility.singleLineHeight;
         static float Step => Line + EditorGUIUtility.standardVerticalSpacing;
@@ -22,17 +23,17 @@ namespace VAP.Editor
         readonly VAPExpressions owner;
         readonly VRCExpressionsMenu subMenu;
         SerializedObject assetSO;
-        ReorderableList list;
-        readonly System.Func<VRCExpressionsMenu, string> pathOf;
+        int count;
         internal GenericMenu.MenuFunction RestoreSection;
         bool SectionRemoved => RestoreSection != null;
-        static GUIStyle nameStyle, pathStyle;
+        static GUIStyle nameStyle;
+        HashSet<string> unsynced = new HashSet<string>();
+        static GUIStyle listBox;
 
-        internal MenuSection(VAPExpressions owner, VRCExpressionsMenu subMenu = null, System.Func<VRCExpressionsMenu, string> pathOf = null)
+        internal MenuSection(VAPExpressions owner, VRCExpressionsMenu subMenu = null)
         {
             this.owner = owner;
             this.subMenu = subMenu;
-            this.pathOf = pathOf;
         }
 
         VRCExpressionsMenu Asset => !ReferenceEquals(subMenu, null) ? subMenu : owner.menuAsset;
@@ -45,46 +46,56 @@ namespace VAP.Editor
             if (assetSO == null || assetSO.targetObject != asset)
                 assetSO = new SerializedObject(asset);
             assetSO.Update();
+            unsynced = owner.UnsyncedParameters();
             var prop = assetSO.FindProperty(nameof(VRCExpressionsMenu.controls));
-            GetList(prop).DoLayoutList();
+            count = prop.arraySize;
+            DrawList(count, i => Height(prop.GetArrayElementAtIndex(i), i) + 4f,
+                (row, content, i) =>
+                {
+                    DrawRow(row, i, i < count - 1);
+                    DrawControl(content, row, prop.GetArrayElementAtIndex(i), i);
+                });
             if (Kept() > VRCExpressionsMenu.MAX_CONTROLS)
                 EditorGUILayout.HelpBox($"VRChat menus show at most {VRCExpressionsMenu.MAX_CONTROLS} controls.", MessageType.Warning);
         }
 
-        ReorderableList GetList(SerializedProperty prop)
+        internal static void DrawList(int count, System.Func<int, float> height, System.Action<Rect, Rect, int> draw)
         {
-            if (list == null || list.serializedProperty == null || list.serializedProperty.serializedObject != prop.serializedObject)
+            var heights = new float[count];
+            float total = 0f;
+            for (int i = 0; i < count; i++)
+                total += heights[i] = height(i);
+            var box = GUILayoutUtility.GetRect(10f, total + 2f, GUILayout.ExpandWidth(true));
+            listBox ??= new GUIStyle("RL Background");
+            if (Event.current.type == EventType.Repaint)
+                listBox.Draw(box, false, false, false, false);
+            float y = box.y + 1f;
+            for (int i = 0; i < count; i++)
             {
-                list = new ReorderableList(prop.serializedObject, prop, false, false, false, false)
-                {
-                    headerHeight = 0f,
-                    elementHeightCallback = i => Height(list.serializedProperty.GetArrayElementAtIndex(i), i) + 4f,
-                    drawElementCallback = (rect, i, active, focused) => DrawControl(rect, list.serializedProperty.GetArrayElementAtIndex(i), i),
-                    drawElementBackgroundCallback = (rect, i, active, focused) => DrawBackground(rect, i),
-                    footerHeight = 0f,
-                    drawFooterCallback = rect => { },
-                };
+                var row = new Rect(box.x + 1f, y, box.width - 2f, heights[i]);
+                draw(row, new Rect(box.x + Pad, y, box.width - Pad * 2f, heights[i]), i);
+                y += heights[i];
             }
-            list.serializedProperty = prop;
-            return list;
         }
 
         int Kept()
         {
             int n = 0;
-            for (int i = 0; i < list.count; i++)
+            for (int i = 0; i < count; i++)
                 if (!owner.IsRemoved(Asset, i))
                     n++;
             return n;
         }
 
-        void DrawBackground(Rect rect, int index)
+        internal static void DrawRow(Rect rect, int index, bool divider)
         {
-            if (Event.current.type != EventType.Repaint || index < 0)
+            if (Event.current.type != EventType.Repaint)
                 return;
+            if (!EditorGUIUtility.isProSkin)
+                EditorGUI.DrawRect(rect, LightRowFill);
             if (index % 2 == 1)
-                EditorGUI.DrawRect(rect, RowTint);
-            if (index < list.count - 1)
+                EditorGUI.DrawRect(rect, EditorGUIUtility.isProSkin ? RowTint : LightRowTint);
+            if (divider)
                 EditorGUI.DrawRect(new Rect(rect.x, rect.yMax - 1f, rect.width, 1f), Divider);
         }
 
@@ -121,7 +132,7 @@ namespace VAP.Editor
             return RowHeight + (axes > 1 ? axes * Step : 0f);
         }
 
-        void DrawControl(Rect rect, SerializedProperty control, int index)
+        void DrawControl(Rect rect, Rect edges, SerializedProperty control, int index)
         {
             var menu = Asset;
             var type = TypeOf(control);
@@ -135,9 +146,9 @@ namespace VAP.Editor
             bool removedChanged = ExpressionsOverrides.RemovedChanged(owner, menu, index);
             bool defaultChanged = related.Exists(n => ExpressionsOverrides.DefaultChanged(owner, n));
             if (removedChanged)
-                ExpressionsOverrides.DrawBar(rect, removed);
+                ExpressionsOverrides.DrawEdgeBar(edges, removed);
             if (defaultChanged)
-                ExpressionsOverrides.DrawRightBar(rect);
+                ExpressionsOverrides.DrawRightEdgeBar(edges);
             if (ExpressionsOverrides.ContextClick(rect))
                 ShowContext(menu, index, type == ControlType.SubMenu, removed, defaultChanged, related);
 
@@ -150,21 +161,8 @@ namespace VAP.Editor
             if (inline)
                 name.width = value.x - row.x - 8f;
 
-            string path = type == ControlType.SubMenu && pathOf != null
-                ? pathOf(control.FindPropertyRelative("subMenu").objectReferenceValue as VRCExpressionsMenu)
-                : null;
-            if (path != null)
-                name.width = Mathf.Min(name.width, row.width * 0.45f);
-
             using (new EditorGUI.DisabledScope(removed || SectionRemoved))
-                DrawName(new Rect(name.x, full.y, name.width, RowHeight), control);
-
-            if (path != null)
-            {
-                pathStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, clipping = TextClipping.Clip };
-                var target = new Rect(name.xMax + 8f, row.y, row.xMax - name.xMax - 8f, Line);
-                EditorGUI.LabelField(target, new GUIContent(path, path), pathStyle);
-            }
+                DrawName(new Rect(name.x, full.y, name.width, RowHeight), control, string.Join("\n", related.ConvertAll(n => ParamInfo(Param(n)))));
 
             if (IsToggleLike(type) && Param(ParamName(control)) is VRCExpressionParameters.Parameter p0)
                 DrawToggleDefault(check, control, p0);
@@ -176,7 +174,7 @@ namespace VAP.Editor
                 {
                     row.y += Step;
                     var axisValue = new Rect(value.x, row.y, row.xMax - value.x, Line);
-                    EditorGUI.LabelField(new Rect(row.x + Indent, row.y, axisValue.x - row.x - Indent - 8f, Line), axis, EditorStyles.miniLabel);
+                    EditorGUI.LabelField(new Rect(row.x + Indent, row.y, axisValue.x - row.x - Indent - 8f, Line), new GUIContent(axis, ParamInfo(p)), EditorStyles.miniLabel);
                     DrawSliderDefault(axisValue, p, type == ControlType.RadialPuppet);
                 }
         }
@@ -187,7 +185,7 @@ namespace VAP.Editor
             if (!removed && SectionRemoved)
                 context.AddItem(new GUIContent("Restore Sub Menu"), false, RestoreSection);
             else
-                ExpressionsOverrides.AddRemoveItems(context, owner, menu, index, subMenu ? "Sub Menu" : "Menu Item");
+                ExpressionsOverrides.AddRemoveItems(context, owner, menu, index, subMenu);
             if (defaultChanged)
             {
                 context.AddSeparator("");
@@ -204,11 +202,27 @@ namespace VAP.Editor
         internal static string CleanName(string name) =>
             Regex.Replace(Regex.Replace(name ?? "", "<[^>]*>", ""), @"\s+", " ").Trim();
 
-        static void DrawName(Rect rect, SerializedProperty control)
+        static void DrawName(Rect rect, SerializedProperty control, string tooltip)
         {
             DrawName(rect, control.FindPropertyRelative("icon").objectReferenceValue as Texture2D,
-                new GUIContent(CleanName(control.FindPropertyRelative("name").stringValue)));
+                new GUIContent(CleanName(control.FindPropertyRelative("name").stringValue), tooltip));
         }
+
+        string ParamInfo(VRCExpressionParameters.Parameter p)
+        {
+            bool synced = p.networkSynced && !unsynced.Contains(p.name);
+            bool saved = p.saved && !unsynced.Contains(p.name);
+            float value = owner.FindDefault(p.name)?.value ?? p.defaultValue;
+            return ParamInfo(p.name, p.valueType.ToString(), synced ? VAPExpressions.SyncedBits(p) : 0, synced, saved, DefaultText(p.valueType, value));
+        }
+
+        internal static string ParamInfo(string name, string type, int bits, bool synced, bool saved, string value) =>
+            $"{name} | {type} | {bits} {(bits == 1 ? "bit" : "bits")} | {(synced ? "Synced" : "Unsynced")} | {(saved ? "Saved" : "Not Saved")} | Default {value}";
+
+        static string DefaultText(VRCExpressionParameters.ValueType type, float value) =>
+            type == VRCExpressionParameters.ValueType.Bool ? (value != 0f ? "On" : "Off")
+            : type == VRCExpressionParameters.ValueType.Int ? Mathf.RoundToInt(value).ToString()
+            : value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
 
         internal static void DrawName(Rect rect, Texture2D icon, GUIContent text)
         {

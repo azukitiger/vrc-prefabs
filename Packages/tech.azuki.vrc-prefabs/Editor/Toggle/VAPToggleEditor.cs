@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 using System.Linq;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -64,20 +63,15 @@ namespace VAP.Editor
             serializedObject.ApplyModifiedProperties();
             EditorGUILayout.Space(2f);
 
-            item ??= new ReorderableList(new[] { 0 }, typeof(int), false, false, false, false)
+            MenuSection.DrawList(1, i => RowHeight + 4f, (row, content, i) =>
             {
-                headerHeight = 0f,
-                footerHeight = 0f,
-                elementHeight = RowHeight + 4f,
-                drawFooterCallback = r => { },
-                drawElementBackgroundCallback = (r, i, a, f) => { },
-            };
-            item.drawElementCallback = (r, i, a, f) => DrawItem(new Rect(r.x, r.y + 2f, r.width, RowHeight), slider, on, value, ownOn, ownValue, changed, source);
-            item.DoLayoutList();
+                MenuSection.DrawRow(row, 0, false);
+                if (changed)
+                    ExpressionsOverrides.DrawRightEdgeBar(row);
+                DrawItem(new Rect(content.x, content.y + 2f, content.width, RowHeight), slider, on, value, ownOn, ownValue, changed, source);
+            });
             VAPEditorGUI.EndMenuBox();
         }
-
-        ReorderableList item;
 
         int SyncedBits(bool slider)
         {
@@ -88,10 +82,14 @@ namespace VAP.Editor
             return bits == 0 ? 7 : Mathf.Clamp(bits, 1, 8);
         }
 
+        bool Saved()
+        {
+            using var so = new SerializedObject(Wrapped);
+            return so.FindProperty("content")?.FindPropertyRelative("saved")?.boolValue ?? false;
+        }
+
         void DrawItem(Rect rect, bool slider, bool on, float value, bool ownOn, float ownValue, bool changed, VAPToggle source)
         {
-            if (changed)
-                ExpressionsOverrides.DrawRightBar(rect);
             if (changed && ExpressionsOverrides.ContextClick(rect))
             {
                 if (source == null)
@@ -103,10 +101,12 @@ namespace VAP.Editor
             float line = EditorGUIUtility.singleLineHeight;
             float y = rect.y + (rect.height - line) * 0.5f;
             var control = slider ? new Rect(rect.xMax - SliderWidth, y, SliderWidth, line) : new Rect(rect.xMax - CheckWidth, y, CheckWidth, line);
-            var (path, icon, _) = Info();
+            var (path, icon, param) = Info();
             string full = MenuSection.CleanName(path);
             string name = full.Substring(full.LastIndexOf('/') + 1).Trim();
-            MenuSection.DrawName(new Rect(rect.x, rect.y, control.x - rect.x - 8f, rect.height), icon, new GUIContent(name.Length == 0 ? "No menu path" : name, full));
+            string info = MenuSection.ParamInfo(string.IsNullOrEmpty(param) ? "VRCFury parameter" : param, slider ? "Float" : "Bool", SyncedBits(slider), true, Saved(),
+                slider ? Mathf.Round(value * 100f) + "%" : on ? "On" : "Off");
+            MenuSection.DrawName(new Rect(rect.x, rect.y, control.x - rect.x - 8f, rect.height), icon, new GUIContent(name.Length == 0 ? "No menu path" : name, full.Length == 0 ? info : full + "\n" + info));
 
             EditorGUI.BeginChangeCheck();
             if (slider)

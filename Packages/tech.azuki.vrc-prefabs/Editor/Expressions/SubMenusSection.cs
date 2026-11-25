@@ -15,7 +15,6 @@ namespace VAP.Editor
         class Entry
         {
             public VRCExpressionsMenu menu;
-            public string path;
             public List<string> steps;
             public VRCExpressionsMenu parent;
             public int control = -1;
@@ -25,7 +24,6 @@ namespace VAP.Editor
 
         readonly VAPExpressions owner;
         readonly Dictionary<VRCExpressionsMenu, MenuSection> sections = new Dictionary<VRCExpressionsMenu, MenuSection>();
-        readonly Dictionary<VRCExpressionsMenu, string> paths = new Dictionary<VRCExpressionsMenu, string>();
         static GUIStyle stepStyle, stepBoldStyle, slashStyle;
 
         internal SubMenusSection(VAPExpressions owner)
@@ -45,7 +43,6 @@ namespace VAP.Editor
                 var entry = new Entry
                 {
                     menu = root,
-                    path = label,
                     steps = at != null ? at.Split('/').ToList() : new List<string> { label },
                 };
                 result.Add(entry);
@@ -72,7 +69,6 @@ namespace VAP.Editor
                     menu = sub,
                     parent = menu,
                     control = i,
-                    path = parent == null ? name : parent.path + "/" + name,
                     steps = parent == null ? new List<string>() : new List<string>(parent.steps),
                 };
                 entry.steps.Add(name);
@@ -98,7 +94,7 @@ namespace VAP.Editor
         MenuSection Section(VRCExpressionsMenu menu)
         {
             if (!sections.TryGetValue(menu, out var section))
-                sections[menu] = section = new MenuSection(owner, menu, PathOf);
+                sections[menu] = section = new MenuSection(owner, menu);
             return section;
         }
 
@@ -108,15 +104,9 @@ namespace VAP.Editor
             return entries.Count == 1 ? entries[0].steps : null;
         }
 
-        string PathOf(VRCExpressionsMenu menu) =>
-            menu != null && paths.TryGetValue(menu, out var path) ? path : null;
-
         internal void Draw()
         {
             var entries = Entries();
-            paths.Clear();
-            foreach (var e in entries)
-                paths[e.menu] = e.path;
             if (entries.Count == 1)
             {
                 Section(entries[0].menu).Draw();
@@ -140,7 +130,7 @@ namespace VAP.Editor
                     if (e.Removed && !owner.IsRemoved(parent, control))
                         context.AddItem(new GUIContent("Restore Sub Menu"), false, Restore(e));
                     else
-                        ExpressionsOverrides.AddRemoveItems(context, owner, parent, control, "Sub Menu");
+                        ExpressionsOverrides.AddRemoveItems(context, owner, parent, control, true);
                     context.ShowAsContext();
                     Event.current.Use();
                 }

@@ -1,3 +1,6 @@
+## Version 3.1.15
+- Fixed light mode colors for UI.
+
 ## Version 3.1.14
 - Improve performance of Wall Collider animator.
 

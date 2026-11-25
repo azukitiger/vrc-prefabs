@@ -116,7 +116,7 @@ namespace VAP.Editor
             body.style.paddingBottom = 4f;
         }
 
-        static Color DisabledText => EditorGUIUtility.isProSkin ? new Color(0.6f, 0.6f, 0.6f) : new Color(0.75f, 0.75f, 0.75f);
+        static Color DisabledText => EditorGUIUtility.isProSkin ? new Color(0.6f, 0.6f, 0.6f) : new Color(1f, 1f, 1f, 0.45f);
 
         static Color Background(bool enabled) =>
             !enabled ? (EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.11f) : new Color(1f, 1f, 1f, 0.6f))

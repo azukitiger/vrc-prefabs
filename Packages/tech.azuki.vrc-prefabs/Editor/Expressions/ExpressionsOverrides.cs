@@ -20,10 +20,16 @@ namespace VAP.Editor
                 EditorGUI.DrawRect(new Rect(row.x - 4f, row.y, 2f, row.height), removed ? RemovedBar : Bar);
         }
 
-        internal static void DrawRightBar(Rect row)
+        internal static void DrawEdgeBar(Rect row, bool removed = false)
         {
             if (Event.current.type == EventType.Repaint)
-                EditorGUI.DrawRect(new Rect(row.xMax + 2f, row.y, 2f, row.height), Bar);
+                EditorGUI.DrawRect(new Rect(row.x, row.y, 2f, row.height), removed ? RemovedBar : Bar);
+        }
+
+        internal static void DrawRightEdgeBar(Rect row)
+        {
+            if (Event.current.type == EventType.Repaint)
+                EditorGUI.DrawRect(new Rect(row.xMax - 2f, row.y, 2f, row.height), Bar);
         }
 
         static void Changed(VAPExpressions c)
@@ -195,16 +201,19 @@ namespace VAP.Editor
             Changed(c);
         }
 
-        internal static void AddRemoveItems(GenericMenu context, VAPExpressions c, VRCExpressionsMenu menu, int control, string item)
+        internal static void AddRemoveItems(GenericMenu context, VAPExpressions c, VRCExpressionsMenu menu, int control, bool subMenu)
         {
+            string item = subMenu ? "Sub Menu" : "Menu Item";
             if (c.IsRemoved(menu, control))
             {
                 context.AddItem(new GUIContent($"Restore {item}"), false, () => SetRemoved(c, menu, control, false));
-                context.AddItem(new GUIContent("Restore Related Menu Items"), false, () => SetRelatedRemoved(c, menu, control, false));
+                if (!subMenu)
+                    context.AddItem(new GUIContent("Restore Related Menu Items"), false, () => SetRelatedRemoved(c, menu, control, false));
                 return;
             }
             context.AddItem(new GUIContent($"Remove {item}"), false, () => SetRemoved(c, menu, control, true));
-            context.AddItem(new GUIContent("Remove Related Menu Items"), false, () => SetRelatedRemoved(c, menu, control, true));
+            if (!subMenu)
+                context.AddItem(new GUIContent("Remove Related Menu Items"), false, () => SetRelatedRemoved(c, menu, control, true));
         }
 
         internal static bool ContextClick(Rect rect)
