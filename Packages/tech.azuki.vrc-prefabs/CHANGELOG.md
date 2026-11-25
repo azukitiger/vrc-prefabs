@@ -1,3 +1,6 @@
+## Version 3.1.13
+- Fixed bug where menu path field is locked for toggles with no menu path.
+
 ## Version 3.1.12
 - Allow overriding menu paths for VRCFury full controllers & toggles.
 
