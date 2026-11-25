@@ -48,14 +48,23 @@ Adds a **smooth blink animation** driven by VRChat's eyelid data.
    - **Eye Look** enabled, with **Eyelid Type** set to `None`
    - **Face Tracking** enabled, with **Use All Tracking Keys** on
 3. Use the **Output Animator Parameters** to drive animations.
-4. Optionally, add an expression parameter and toggle for `BlinkActive` to disable blinking.
-5. Optionally, use the **Input Animator Parameters** for interactions like eye pokes.
+
+### Optional Instructions
+1. Add an expression parameter and toggle for `BlinkActive` to disable blinking.
+2. Use the **Input Animated Animator Parameters** for interactions like eye pokes.
 
 ### Optional Expression Parameters
 
 | Property | Animator Type | Expression Type | Synced | Description |
 |-|-|-|-|-|
 | BlinkActive | Bool | Bool | ✔ | Blinking toggle; on by default |
+
+### Input Animated Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/BlinkLeftOverride | Float | Applied to `VAP/BlinkLeft` when not blinking |
+| VAP/BlinkRightOverride | Float | Applied to `VAP/BlinkRight` when not blinking |
 
 ### Output Animator Parameters
 
@@ -65,14 +74,6 @@ Adds a **smooth blink animation** driven by VRChat's eyelid data.
 | VAP/BlinkRight | Float | Right blink; `1` is closed |
 | EyeLidLeft | Float | `(1 - EyeClosedLeft) * 0.75 + EyeWideLeft * 0.25`; `0` is closed, `0.75` is open and `1` is wide |
 | EyeLidRight | Float | `(1 - EyeClosedRight) * 0.75 + EyeWideRight * 0.25`; `0` is closed, `0.75` is open and `1` is wide |
-
-### Input Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/BlinkLeftOverride | Float | Applied to `VAP/BlinkLeft` when not blinking |
-| VAP/BlinkRightOverride | Float | Applied to `VAP/BlinkRight` when not blinking |
-| UserEyeTracking | Bool | Built-in VRChat parameter |
 
 ---
 
@@ -101,19 +102,28 @@ Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blend
    - **Face Tracking** enabled, with **Use All Tracking Keys** on
 3. Adjust `Eye Down-Up` and `Eye In-Out` under the rig's **Muscles & Settings**.
 
-### Input Animator Parameters
+### Behavior Parameters
+
+| Property | Animator Type | Expression |
+|-|-|-|
+| EyeLeftX | Float | `EyeLookInLeft - EyeLookOutLeft` |
+| EyeRightX | Float | `EyeLookOutRight - EyeLookInRight` |
+| EyeY | Float | `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
+
+### Input Animated Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
-| EyeLeftX | Float | Set by the prefab: `EyeLookInLeft - EyeLookOutLeft` |
-| EyeRightX | Float | Set by the prefab: `EyeLookOutRight - EyeLookInRight` |
-| EyeY | Float | Set by the prefab: `(EyeLookUpLeft + EyeLookUpRight - EyeLookDownLeft - EyeLookDownRight) / 2` |
-| UserEyeTracking | Float | `1` while the user's own eye tracking is active; required for **Eye Sensitivity** |
-| UserEyeTrackingSensitivity | Float | **Eye Sensitivity** from the **Face Tracking Prefab**; `0` is 1× and `1` is 2× |
 | VAP/EyeLook/EaseOut | Float | Optional; `1` turns off all `EyeLook*` blendshapes |
 | VAP/EyeLook/LeftVerticalEaseOut | Float | Optional; `1` turns off the left eye's up/down `EyeLook*` blendshapes |
 | VAP/EyeLook/RightVerticalEaseOut | Float | Optional; `1` turns off the right eye's up/down `EyeLook*` blendshapes |
-| Derp | Float | Optional; `1` makes the eyes silly, turning both outward with the left looking up and the right looking down; ignores **Eye Sensitivity** |
+
+### Input Expression Parameters
+
+| Property | Animator Type | Expression Type | Synced | Description |
+|-|-|-|-|-|
+| UserEyeTrackingSensitivity | Float | Float | ✔ | **Eye Sensitivity** from the **Face Tracking Prefab**; `0` is 1× and `1` is 2× |
+| Derp | Float | Float | Optional | Optional; `1` makes the eyes silly, turning both outward with the left looking up and the right looking down; ignores **Eye Sensitivity** |
 
 ### Output Animator Parameters
 
@@ -124,7 +134,8 @@ Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blend
 | VAP/EyeLeftY | Float | Left eye vertical look, with sensitivity |
 | VAP/EyeRightY | Float | Right eye vertical look, with sensitivity |
 
-> **Warning:** With **Eye Sensitivity**, these outputs range from `-2` to `2`. Use **1D or 2D blend trees**, which stop at their outermost motions, not **Direct blend trees**, which would overdrive the motion up to 2×.
+> [!WARNING]
+> With **Eye Sensitivity**, these outputs range from `-2` to `2`. Use **1D or 2D blend trees**, which stop at their outermost motions, not **Direct blend trees**, which would overdrive the motion up to 2×.
 
 ---
 
@@ -135,7 +146,9 @@ Adds **smoothed gesture values** for blend trees.
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Use the **Output Animator Parameters** to drive animations.
-3. Optionally, add gesture overrides to the expression menu with `VAP Logarithmic Gestures Override Parameters`, `VAP Logarithmic Gestures Override Left Menu` and `VAP Logarithmic Gestures Override Right Menu`.
+
+### Optional Instructions
+1. Add gesture overrides to the expression menu with `VAP Logarithmic Gestures Override Parameters`, `VAP Logarithmic Gestures Override Left Menu` and `VAP Logarithmic Gestures Override Right Menu`.
 
 ### Included Expression Parameters
 
@@ -196,8 +209,10 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 5. The prefab doesn't enable or disable these Blendshapes Sets, so do it yourself from the toggles:
    - Turn the `EyeTracking` Blendshapes Set on and off with the **Eye Tracking** toggle (the `EyeTrackingActive` parameter).
    - Turn the `FaceTracking` Blendshapes Set on and off with the **Lip Tracking** toggle (the `LipTrackingActive` parameter).
-6. Optionally, add corrective blendshapes named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). The **Blendshape** tab of the prefab's **VRC Face Tracking Parameter Behaviors** lists them under **Generate Correctives Based on Tracking Keys** and lets you uncheck any.
-7. Optionally, use the **Output Animator Parameters** to drive other animations (ex. ears) from a separate FX controller.
+
+### Optional Instructions
+1. Add corrective blendshapes named `[Blendshape][Blendshape]Corrective` (ex. `MouthClosed` + `LipPucker` → `MouthClosedLipPuckerCorrective`). The **Blendshape** tab of the prefab's **VRC Face Tracking Parameter Behaviors** lists them under **Generate Correctives Based on Tracking Keys** and lets you uncheck any.
+2. Use the **Output Animator Parameters** to drive other animations (ex. ears) from a separate FX controller.
 
 ### Included Expression Parameters
 
@@ -213,8 +228,7 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 | VisemesSensitivity | Int | Int | ✔ | **Visemes Sensitivity**; `0` is full, `1` is 2/3 (default), `2` is 1/3 and `3` is 0 |
 | FT/State/TrackingActive | Float | Boolean | ✖ | Whether tracking was on, so gestures only switch when tracking is toggled |
 
-<a name="vrcft-input"></a>
-### Input Animator Parameters
+### Behavior Parameters
 
 | Property | Animator Type | Expression |
 |-|-|-|
@@ -223,6 +237,11 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 | VAP/FT/BrowExpressionLeftForward | Float | `BrowInnerUpLeft - BrowLowererLeft` |
 | VAP/FT/BrowExpressionRightForward | Float | `BrowInnerUpRight - BrowLowererRight` |
 | VAP/FT/PupilDilationForward | Float | `(EyeDilationLeft + EyeDilationRight - EyeConstrictLeft - EyeConstrictRight) / 4 + 0.5` |
+
+### Input Animated Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
 | EyeLidLeft | Float | From the **Better Blink Prefab** |
 | EyeLidRight | Float | From the **Better Blink Prefab** |
 | VAP/BlinkLeft | Float | From the **Better Blink Prefab** |
@@ -276,20 +295,20 @@ Combines **pupil dilation** from three sources into one value per eye:
 | LeftDilationSet | Float | Float | Optional | Left eye user dilation; `0` is small, `0.25` is default and `1` is high |
 | RightDilationSet | Float | Float | Optional | Right eye user dilation; `0` is small, `0.25` is default and `1` is high |
 
-### Output Animator Parameters
-
-| Property | Animator Type | Description |
-|-|-|-|
-| VAP/Pupil/LeftDilation | Float | Combined left pupil dilation |
-| VAP/Pupil/RightDilation | Float | Combined right pupil dilation |
-
-### Input Animator Parameters
+### Input Animated Animator Parameters
 
 | Property | Animator Type | Description |
 |-|-|-|
 | VAP/Pupil/DilationSmoothedInput | Float | Input dilation |
 | VAP/Pupil/LeftEyeClosedInput | Float | Left eye closed amount; above `0.9` adds closed eye dilation |
 | VAP/Pupil/RightEyeClosedInput | Float | Right eye closed amount; above `0.9` adds closed eye dilation |
+
+### Output Animator Parameters
+
+| Property | Animator Type | Description |
+|-|-|-|
+| VAP/Pupil/LeftDilation | Float | Combined left pupil dilation |
+| VAP/Pupil/RightDilation | Float | Combined right pupil dilation |
 
 ---
 
@@ -371,7 +390,9 @@ Adds **ear twitches** at random intervals.
 ### Instructions
 1. Drag and drop the prefab into the avatar's hierarchy.
 2. Use the **Output Animator Parameters** to drive animations.
-3. Optionally, add an expression parameter and toggle for `EarTwitchActive` to disable twitches.
+
+### Optional Instructions
+1. Add an expression parameter and toggle for `EarTwitchActive` to disable twitches.
 
 ### Included Expression Parameters
 
@@ -393,9 +414,11 @@ Adds **ear twitches** at random intervals.
 | VAP/Ear/Left_Twitch | Float | Left ear twitch |
 | VAP/Ear/Right_Twitch | Float | Right ear twitch |
 
-Both are `10` during a twitch, to override other animations in a direct blend tree.
+> [!NOTE]
+> Both output animator parameters are seto to `10` during a twitch, to override other animations in a direct blend tree.
 
-###
+---
+
 # Asset Prefabs
 
 ## Bell Sound System Prefab
