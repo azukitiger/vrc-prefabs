@@ -30,6 +30,33 @@ namespace VAP.Editor
                 so.ApplyModifiedPropertiesWithoutUndo();
         }
 
+        internal static string MenuName(Component c)
+        {
+            using var so = new SerializedObject(c);
+            return so.FindProperty("content")?.FindPropertyRelative("name")?.stringValue ?? "";
+        }
+
+        internal static string MenuName(VAPToggle t)
+        {
+            string name = t.toggle != null ? MenuName(t.toggle) : "";
+            return MenuPaths.Apply(name, MenuPaths.Folder(name), t.menuPath);
+        }
+
+        internal static void WriteMenuPath(VAPToggle t, bool record)
+        {
+            if (t.toggle == null || MenuPaths.Clean(t.menuPath).Length == 0)
+                return;
+            using var so = new SerializedObject(t.toggle);
+            var name = so.FindProperty("content")?.FindPropertyRelative("name");
+            if (name == null)
+                return;
+            name.stringValue = MenuPaths.Apply(name.stringValue, MenuPaths.Folder(name.stringValue), t.menuPath);
+            if (record)
+                so.ApplyModifiedProperties();
+            else
+                so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
         internal static (bool slider, bool on, float value) GetDefault(Component c)
         {
             using var so = new SerializedObject(c);
@@ -47,6 +74,7 @@ namespace VAP.Editor
             {
                 if (t.overrideDefault && t.toggle != null)
                     SetDefault(t.toggle, t.defaultOn, t.defaultValue);
+                WriteMenuPath(t, false);
                 Object.DestroyImmediate(t);
             }
         }

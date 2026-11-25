@@ -30,6 +30,14 @@ namespace VAP.Editor
                 DrawContents(Owner);
         }
 
+        protected override void DrawMenuPath(VAPExpressions component)
+        {
+            serializedObject.Update();
+            VAPEditorGUI.MenuPathField(serializedObject.FindProperty("menuPath"), Owner.DefaultMenuPath);
+            serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.Space(2f);
+        }
+
         IEnumerable<Object> Controllers()
         {
             if (Wrapped == null)

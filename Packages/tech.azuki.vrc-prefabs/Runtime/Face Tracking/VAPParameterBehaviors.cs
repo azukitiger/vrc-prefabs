@@ -6,7 +6,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [HelpURL(VAPAvatar.Docs + "#vrc-face-tracking-parameter-behaviors")]
+    [HelpURL(VAPAvatar.Docs + "#-vrc-face-tracking-parameter-behaviors")]
     [AddComponentMenu("VAP/VRC Face Tracking Parameter Behaviors")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPParameterBehaviors : MonoBehaviour, IEditorOnly

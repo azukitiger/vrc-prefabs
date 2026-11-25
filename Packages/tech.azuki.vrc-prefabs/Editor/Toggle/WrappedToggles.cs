@@ -214,6 +214,7 @@ namespace VAP.Editor
                 Undo.RecordObject(t.toggle, "Unwrap VRCFury Toggle");
                 VRCFuryToggleDefaults.SetDefault(t.toggle, t.defaultOn, t.defaultValue, true);
             }
+            VRCFuryToggleDefaults.WriteMenuPath(t, true);
             Release(t, t.toggle);
             Undo.CollapseUndoOperations(group);
         }
@@ -232,6 +233,9 @@ namespace VAP.Editor
                 return;
             Undo.SetCurrentGroupName("Unwrap VRCFury Full Controller");
             int group = Undo.GetCurrentGroup();
+            if (f.wrapped != null)
+                Undo.RecordObject(f.wrapped, "Unwrap VRCFury Full Controller");
+            FullControllerSource.WriteMenuPath(f, true);
             Release(f, f.wrapped);
             Undo.CollapseUndoOperations(group);
         }

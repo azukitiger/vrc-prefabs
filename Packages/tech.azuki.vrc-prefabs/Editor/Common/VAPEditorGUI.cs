@@ -37,6 +37,36 @@ namespace VAP.Editor
 
         internal static void EndMenuBox() => EditorGUILayout.EndVertical();
 
+        static GUIStyle placeholder;
+
+        internal static void MenuPathField(SerializedProperty prop, string defaultPath)
+        {
+            bool locked = string.IsNullOrEmpty(defaultPath);
+            var content = new GUIContent("Menu Path", locked
+                ? "The menus have no folder in common, so their path can't be changed."
+                : $"Replaces \"{defaultPath}\" in the menu path when the avatar is built. Leave empty to keep it. Can be changed on prefab instances too.");
+            var rect = EditorGUILayout.GetControlRect();
+            EditorGUI.BeginProperty(rect, content, prop);
+            using (new EditorGUI.DisabledScope(locked))
+            {
+                var field = EditorGUI.PrefixLabel(rect, content);
+                EditorGUI.BeginChangeCheck();
+                string value = EditorGUI.TextField(field, locked ? "" : prop.stringValue);
+                if (EditorGUI.EndChangeCheck())
+                    prop.stringValue = MenuPaths.ValidChars(value);
+                if ((locked || string.IsNullOrEmpty(prop.stringValue)) && Event.current.type == EventType.Repaint)
+                {
+                    placeholder ??= new GUIStyle(EditorStyles.label)
+                    {
+                        padding = EditorStyles.textField.padding,
+                        normal = { textColor = new Color(0.5f, 0.5f, 0.5f) },
+                    };
+                    placeholder.Draw(field, locked ? "No common folder" : defaultPath, false, false, false, false);
+                }
+            }
+            EditorGUI.EndProperty();
+        }
+
         static GUIStyle searchText, searchCancel;
         static GUIContent searchIcon;
 

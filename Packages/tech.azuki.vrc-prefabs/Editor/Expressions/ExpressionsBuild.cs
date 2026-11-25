@@ -28,7 +28,10 @@ namespace VAP.Editor
             foreach (var c in components)
             {
                 if (c is VAPFullController f)
+                {
+                    FullControllerSource.WriteMenuPath(f, false);
                     FullControllerSource.Resolve(f);
+                }
                 if (c is VAPDescriptorExpressions d && d.Other() is VAPDescriptorExpressions other)
                 {
                     Debug.LogError(Log + $"{c.name}: does nothing because \"{other.name}\" already has a VRC Avatar Descriptor Enhancements; skipped.", c);

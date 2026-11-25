@@ -3,38 +3,38 @@
 # Table of Contents
 
 - [Avatar Prefabs](#avatar-prefabs)
-  - [Better Blink Prefab](#better-blink-prefab)
-  - [Eye Rotation Prefab](#eye-rotation-prefab)
-  - [Logarithmic Gestures Prefab](#logarithmic-gestures-prefab)
-  - [Face Tracking Prefab](#face-tracking-prefab)
-  - [Pupil Dilation Prefab](#pupil-dilation-prefab)
-  - [Pupil Focus System Prefab](#pupil-focus-system-prefab)
-  - [Raycast Floor Physbone Collider Prefab](#raycast-floor-physbone-collider-prefab)
-  - [Raycast Wall Physbone Collider Prefab](#raycast-wall-physbone-collider-prefab)
-  - [GoGo Loco Simplified Prefab](#gogo-loco-simplified-prefab)
-  - [Ear Twitch Prefab](#ear-twitch-prefab)
+  - [📦 Better Blink Prefab](#-better-blink-prefab)
+  - [📦 Eye Rotation Prefab](#-eye-rotation-prefab)
+  - [📦 Logarithmic Gestures Prefab](#-logarithmic-gestures-prefab)
+  - [📦 Face Tracking Prefab](#-face-tracking-prefab)
+  - [📦 Pupil Dilation Prefab](#-pupil-dilation-prefab)
+  - [📦 Pupil Focus System Prefab](#-pupil-focus-system-prefab)
+  - [📦 Raycast Floor Physbone Collider Prefab](#-raycast-floor-physbone-collider-prefab)
+  - [📦 Raycast Wall Physbone Collider Prefab](#-raycast-wall-physbone-collider-prefab)
+  - [📦 GoGo Loco Simplified Prefab](#-gogo-loco-simplified-prefab)
+  - [📦 Ear Twitch Prefab](#-ear-twitch-prefab)
 - [Asset Prefabs](#asset-prefabs)
-  - [Bell Sound System Prefab](#bell-sound-system-prefab)
-  - [Heartbeat System Prefab](#heartbeat-system-prefab)
+  - [📦 Bell Sound System Prefab](#-bell-sound-system-prefab)
+  - [📦 Heartbeat System Prefab](#-heartbeat-system-prefab)
 - [Components](#components)
-  - [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements)
-  - [VRCFury Full Controller](#vrcfury-full-controller)
-  - [VRCFury Toggle](#vrcfury-toggle)
-  - [Skinned Mesh Renderer](#skinned-mesh-renderer)
-  - [VRC Remove Empty SubMenus](#vrc-remove-empty-submenus)
-  - [VRC Contact Smoothing & VRC PhysBone Smoothing](#vrc-contact-smoothing--vrc-physbone-smoothing)
-  - [VRC Face Tracking BlendShape Set](#vrc-face-tracking-blendshape-set)
-  - [VRC Face Tracking BlendShape Set Hook](#vrc-face-tracking-blendshape-set-hook)
-  - [VRC Face Tracking Parameter Behaviors](#vrc-face-tracking-parameter-behaviors)
-  - [Rig Floor Adjuster](#rig-floor-adjuster)
+  - [🧩 VRC Avatar Descriptor Enhancements](#-vrc-avatar-descriptor-enhancements)
+  - [🧩 VRCFury Full Controller](#-vrcfury-full-controller)
+  - [🧩 VRCFury Toggle](#-vrcfury-toggle)
+  - [🧩 Skinned Mesh Renderer](#-skinned-mesh-renderer)
+  - [🧩 VRC Remove Empty SubMenus](#-vrc-remove-empty-submenus)
+  - [🧩 VRC Contact Smoothing & VRC PhysBone Smoothing](#-vrc-contact-smoothing--vrc-physbone-smoothing)
+  - [🧩 VRC Face Tracking BlendShape Set](#-vrc-face-tracking-blendshape-set)
+  - [🧩 VRC Face Tracking BlendShape Set Hook](#-vrc-face-tracking-blendshape-set-hook)
+  - [🧩 VRC Face Tracking Parameter Behaviors](#-vrc-face-tracking-parameter-behaviors)
+  - [🧩 Rig Floor Adjuster](#-rig-floor-adjuster)
 - [Tools](#tools)
-  - [VRC Gizmos](#vrc-gizmos)
-  - [UV Bake Tool](#uv-bake-tool)
+  - [🔧 VRC Gizmos](#-vrc-gizmos)
+  - [🔧 UV Bake Tool](#-uv-bake-tool)
 
 # Avatar Prefabs
 Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
 
-## Better Blink Prefab
+## 📦 Better Blink Prefab
 
 Adds a **smooth blink animation** driven by VRChat's eyelid data.
 
@@ -77,7 +77,7 @@ Adds a **smooth blink animation** driven by VRChat's eyelid data.
 
 ---
 
-## Eye Rotation Prefab
+## 📦 Eye Rotation Prefab
 
 > Works with the **Face Tracking Prefab** for the eye tracking toggle and **Eye Sensitivity**.
 
@@ -139,7 +139,7 @@ Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blend
 
 ---
 
-## Logarithmic Gestures Prefab
+## 📦 Logarithmic Gestures Prefab
 
 Adds **smoothed gesture values** for blend trees.
 
@@ -176,7 +176,7 @@ Adds **smoothed gesture values** for blend trees.
 
 ---
 
-## Face Tracking Prefab
+## 📦 Face Tracking Prefab
 
 > Works with the **Better Blink Prefab**, **Eye Rotation Prefab** & **Pupil Focus System Prefab**.
 
@@ -276,7 +276,7 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 
 ---
 
-## Pupil Dilation Prefab
+## 📦 Pupil Dilation Prefab
 
 Combines **pupil dilation** from three sources into one value per eye:
 - **User dilation** set per eye (ex. from the **Expression Menu**).
@@ -312,7 +312,7 @@ Combines **pupil dilation** from three sources into one value per eye:
 
 ---
 
-## Pupil Focus System Prefab
+## 📦 Pupil Focus System Prefab
 
 Adds a **Face Proximity contact receiver** that constricts the pupils when something nears the face.
 
@@ -330,7 +330,7 @@ Adds a **Face Proximity contact receiver** that constricts the pupils when somet
 
 ---
 
-## Raycast Floor Physbone Collider Prefab
+## 📦 Raycast Floor Physbone Collider Prefab
 
 Sets the floor PhysBone collider with a raycast.
 
@@ -349,7 +349,7 @@ Sets the floor PhysBone collider with a raycast.
 
 ---
 
-## Raycast Wall Physbone Collider Prefab
+## 📦 Raycast Wall Physbone Collider Prefab
 
 Sets the wall PhysBone collider with 2 raycasts aiming left and right.
 
@@ -368,7 +368,7 @@ Sets the wall PhysBone collider with 2 raycasts aiming left and right.
 
 ---
 
-## GoGo Loco Simplified Prefab
+## 📦 GoGo Loco Simplified Prefab
 
 **GoGo Loco controllers and menus**, simplified and improved.
 
@@ -383,7 +383,7 @@ Sets the wall PhysBone collider with 2 raycasts aiming left and right.
 
 ---
 
-## Ear Twitch Prefab
+## 📦 Ear Twitch Prefab
 
 Adds **ear twitches** at random intervals.
 
@@ -421,7 +421,7 @@ Adds **ear twitches** at random intervals.
 
 # Asset Prefabs
 
-## Bell Sound System Prefab
+## 📦 Bell Sound System Prefab
 
 Adds **movement-based bell sounds** to an asset.
 
@@ -433,7 +433,7 @@ Adds **movement-based bell sounds** to an asset.
 
 ---
 
-## Heartbeat System Prefab
+## 📦 Heartbeat System Prefab
 
 Adds a **heartbeat sound and visual display**.
 
@@ -460,7 +460,7 @@ Components that only work once per avatar can still be added more than once. The
 
 On a prefab instance, locked components show an **Edit in Prefab** button. Components outside an avatar show a warning at the bottom of the inspector.
 
-## VRC Avatar Descriptor Enhancements
+## 🧩 VRC Avatar Descriptor Enhancements
 
 Adds extra settings for the avatar's own **VRC Avatar Descriptor**. Add it to the avatar root, one per avatar.
 
@@ -469,16 +469,19 @@ Adds extra settings for the avatar's own **VRC Avatar Descriptor**. Add it to th
 - **Frame Time**: adds the frame time parameters to the avatar (see [Frame Time](#frame-time)).
 - **Play Audio Clips**: sets the clips of every **VRC Animator Play Audio** behaviour in the descriptor's playable layers, without changing the controllers.
 
-## VRCFury Full Controller
+## 🧩 VRCFury Full Controller
 
-A **VRCFury Full Controller** with the same **Menu**, **Frame Time** and **Play Audio Clips** sections as the [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements), applied to the controllers, menus and parameters of that Full Controller.
+A **VRCFury Full Controller** with the same **Menu**, **Frame Time** and **Play Audio Clips** sections as the [VRC Avatar Descriptor Enhancements](#-vrc-avatar-descriptor-enhancements), applied to the controllers, menus and parameters of that Full Controller.
 
 ### Instructions
 1. Add **VAP** > **VRCFury Full Controller**, or right-click an existing **VRCFury** Full Controller and pick **Wrap with VAP**.
 2. Set it up in the **VRCFury** section like a normal Full Controller.
 3. Use **Unwrap** from the component menu to go back to a plain VRCFury component. Menu overrides are lost.
 
-## VRCFury Toggle
+### Optional Instructions
+1. Set **Menu Path** to move its menus to another folder. Only the folder shared by every menu can be changed (ex. `Clothes/Underwear` and `Clothes/Top` share `Clothes`), and the field is locked when they share none.
+
+## 🧩 VRCFury Toggle
 
 A **VRCFury Toggle** with the ability to override the **Default** value it starts at.
 
@@ -487,7 +490,10 @@ A **VRCFury Toggle** with the ability to override the **Default** value it start
 2. Set it up in the **Toggle** section like a normal VRCFury Toggle.
 3. The **Menu** below shows the toggle's menu item and its synced bits. Its checkbox (or slider) sets the start value and can be changed on prefab instances. Right-click the item to revert it.
 
-## Skinned Mesh Renderer
+### Optional Instructions
+1. Set **Menu Path** to move the toggle to another folder. Toggles at the root of the menu have no folder to change.
+
+## 🧩 Skinned Mesh Renderer
 
 Replaces the inspector of a **Skinned Mesh Renderer** with only the settings worth changing for VRChat, and keeps the rest at the recommended values.
 
@@ -508,11 +514,11 @@ Replaces the inspector of a **Skinned Mesh Renderer** with only the settings wor
 
 These are set to the recommended values when wrapping and again at build time, and are not shown: **Update When Offscreen** off, **Receive Shadows** on, **Light Probes** and **Reflection Probes** `Blend Probes`, **Quality** `Auto`, **Skinned Motion Vectors** off and **Dynamic Occlusion** on.
 
-## VRC Remove Empty SubMenus
+## 🧩 VRC Remove Empty SubMenus
 
 Removes every sub menu control of the avatar's menu that ends up with nothing inside at build time.
 
-## VRC Contact Smoothing & VRC PhysBone Smoothing
+## 🧩 VRC Contact Smoothing & VRC PhysBone Smoothing
 
 Smooths one parameter of a **VRC Contact Receiver** or a **VRC PhysBone** on the same game object, and writes it to an output parameter. All smoothings are built into one generated **VAP Smoothing** layer that also holds the [Frame Time](#frame-time).
 
@@ -536,7 +542,7 @@ Each input can only be smoothed once, and an output or timer name used by two sm
 
 ### Frame Time
 
-Added when any smoothing exists, or when **Frame Time** is turned on in a [VRC Avatar Descriptor Enhancements](#vrc-avatar-descriptor-enhancements) or [VRCFury Full Controller](#vrcfury-full-controller). Animators can use these parameters, and each Full Controller gets the ones its animators use as globals.
+Added when any smoothing exists, or when **Frame Time** is turned on in a [VRC Avatar Descriptor Enhancements](#-vrc-avatar-descriptor-enhancements) or [VRCFury Full Controller](#-vrcfury-full-controller). Animators can use these parameters, and each Full Controller gets the ones its animators use as globals.
 
 | Property | Animator Type | Description |
 |-|-|-|
@@ -546,17 +552,17 @@ Added when any smoothing exists, or when **Frame Time** is turned on in a [VRC A
 
 Custom factors can be added in the **Frame Time** section, named after the parameter your animators use. They don't need to be global. At build time, matching parameters in that component's animators are renamed to `VAP/Smooth/Speed<value>` for **Smoothing** or `VAP/Smooth/Linear<value>` for **Linear**, and made global.
 
-## VRC Face Tracking BlendShape Set
+## 🧩 VRC Face Tracking BlendShape Set
 
 Adds a **Blendshapes Set** to the avatar descriptor's **Face Tracking** at build time, so prefabs can bring their own. It has the same settings as the descriptor's Blendshapes Sets. Its name can't be used by another set on the avatar.
 
 **Auto-Fill Format** fills the set from blendshapes named after the tracking keys. `*` is the key name (`*Debug` maps `JawOpen` to `JawOpenDebug`); leave it empty to turn auto-fill off.
 
-## VRC Face Tracking BlendShape Set Hook
+## 🧩 VRC Face Tracking BlendShape Set Hook
 
 Renames blendshapes named after tracking keys in a format (ex. `JawOpenHook`) on the listed **Face Tracking Meshes** to the blendshape the **Target Blendshapes Set** uses for that key, so they move with it. Keys the target set leaves empty only lose the format (ex. `MouthClosedHook` becomes `MouthClosed`).
 
-## VRC Face Tracking Parameter Behaviors
+## 🧩 VRC Face Tracking Parameter Behaviors
 
 Adds **Parameter Behaviors** to the avatar descriptor's **Face Tracking** at build time. A shared **Blendshapes Set** is used by every behavior unless **Per Behavior** is on.
 
@@ -566,7 +572,7 @@ Adds **Parameter Behaviors** to the avatar descriptor's **Face Tracking** at bui
 - **Generate Correctives Based on Tracking Keys** (on by default, under the **Blendshape** tab) adds behaviors for blendshapes on the face tracking meshes named after two of the set's blendshapes followed by `Corrective` or `Morph` (ex. `MouthClosedLipPuckerCorrective`), driven by both. Uncheck any to leave it out.
 - **Copy All** and **Paste** copy behaviors between components.
 
-## Rig Floor Adjuster
+## 🧩 Rig Floor Adjuster
 
 Moves the armature and the view position up or down by **Armature Height Offset** (in meters) at build time, and rebuilds the humanoid avatar to match. One per avatar.
 
@@ -576,7 +582,7 @@ Moves the armature and the view position up or down by **Armature Height Offset*
 
 Editor tools that only help while working in Unity. They don't change the avatar.
 
-## VRC Gizmos
+## 🔧 VRC Gizmos
 
 Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC PhysBone Collider**, **VRC Contact Sender** and **VRC Contact Receiver** components in the Scene view without selecting them, and can draw the avatar descriptor's colliders. Disabled components are skipped.
 
@@ -595,7 +601,7 @@ Shows the VRChat SDK's gizmos of **VRC PhysBone**, **VRC PhysBone Collider**, **
 
 PhysBones, colliders and contacts also get a pin icon in their component header, left of the **?** icon, to pin or unpin them from the Inspector. Pins are saved per project on this computer.
 
-## UV Bake Tool
+## 🔧 UV Bake Tool
 
 Rebakes a texture from one UV map of a model to another, using [Blender](https://www.blender.org) in the background. Works on Windows, macOS and Linux.
 

@@ -28,7 +28,7 @@ namespace VAP.Editor
         {
             using var so = new SerializedObject(Wrapped);
             var content = so.FindProperty("content");
-            string path = content?.FindPropertyRelative("name")?.stringValue ?? "";
+            string path = Owner != null ? VRCFuryToggleDefaults.MenuName(Owner) : content?.FindPropertyRelative("name")?.stringValue ?? "";
             var icon = (content?.FindPropertyRelative("enableIcon")?.boolValue ?? false)
                 ? content.FindPropertyRelative("icon.objRef")?.objectReferenceValue as Texture2D : null;
             string param = (content?.FindPropertyRelative("useGlobalParam")?.boolValue ?? false)
@@ -59,6 +59,10 @@ namespace VAP.Editor
             if (steps.Count == 0)
                 steps.Add("Main Menu");
             SubMenusSection.DrawHeader(header, steps, null, SyncedBits(slider) + " synced bits");
+            serializedObject.Update();
+            VAPEditorGUI.MenuPathField(serializedObject.FindProperty("menuPath"), MenuPaths.Folder(VRCFuryToggleDefaults.MenuName(Wrapped)));
+            serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.Space(2f);
 
             item ??= new ReorderableList(new[] { 0 }, typeof(int), false, false, false, false)
             {

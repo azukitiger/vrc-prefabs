@@ -8,6 +8,30 @@ namespace VAP.Editor
     {
         internal const string FeatureType = "VF.Model.Feature.FullController";
 
+        internal static void WriteMenuPath(VAPFullController f, bool record)
+        {
+            if (f.wrapped == null || MenuPaths.Clean(f.menuPath).Length == 0)
+                return;
+            Resolve(f);
+            string common = f.DefaultMenuPath;
+            if (common.Length == 0)
+                return;
+            using var so = new SerializedObject(f.wrapped);
+            var menus = so.FindProperty("content")?.FindPropertyRelative("menus");
+            for (int i = 0; menus != null && i < menus.arraySize; i++)
+            {
+                var prefix = menus.GetArrayElementAtIndex(i).FindPropertyRelative("prefix");
+                if (prefix != null)
+                    prefix.stringValue = MenuPaths.Apply(MenuPaths.Clean(prefix.stringValue), common, f.menuPath);
+            }
+            if (record)
+                so.ApplyModifiedProperties();
+            else
+                so.ApplyModifiedPropertiesWithoutUndo();
+            f.menuPath = "";
+            Resolve(f);
+        }
+
         internal static void Resolve(VAPFullController f)
         {
             f.menus.Clear();

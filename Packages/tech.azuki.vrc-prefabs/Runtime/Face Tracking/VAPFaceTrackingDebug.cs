@@ -3,7 +3,7 @@ using VRC.SDK3.Avatars.Components;
 
 namespace VAP
 {
-    [HelpURL(VAPAvatar.Docs + "#vrc-face-tracking-blendshape-set")]
+    [HelpURL(VAPAvatar.Docs + "#-vrc-face-tracking-blendshape-set")]
     [AddComponentMenu("VAP/VRC Face Tracking BlendShape Set")]
     [Icon(IconPath)]
     public class VAPFaceTrackingDebug : VAPBlendshapeSetBase

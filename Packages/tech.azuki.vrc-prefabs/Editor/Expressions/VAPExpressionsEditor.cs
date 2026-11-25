@@ -25,6 +25,10 @@ namespace VAP.Editor
             return $"{cost} synced bits";
         }
 
+        protected virtual void DrawMenuPath(VAPExpressions component)
+        {
+        }
+
         protected void DrawContents(VAPExpressions component)
         {
             subMenusSection ??= new SubMenusSection(component);
@@ -35,6 +39,7 @@ namespace VAP.Editor
                 VAPEditorGUI.BeginMenuBox();
                 var header = EditorGUILayout.GetControlRect();
                 SubMenusSection.DrawHeader(header, subMenusSection.SingleSteps(), MenuHeader, bits);
+                DrawMenuPath(component);
                 subMenusSection.Draw();
                 EditorGUILayout.LabelField(MenuHint, VAPEditorGUI.RightMini);
                 VAPEditorGUI.EndMenuBox();

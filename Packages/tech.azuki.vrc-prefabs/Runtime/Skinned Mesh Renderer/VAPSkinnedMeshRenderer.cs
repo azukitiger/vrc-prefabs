@@ -4,7 +4,7 @@ using VRC.SDKBase;
 
 namespace VAP
 {
-    [HelpURL(VAPAvatar.Docs + "#skinned-mesh-renderer")]
+    [HelpURL(VAPAvatar.Docs + "#-skinned-mesh-renderer")]
     [AddComponentMenu("VAP/Skinned Mesh Renderer")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     [DisallowMultipleComponent]

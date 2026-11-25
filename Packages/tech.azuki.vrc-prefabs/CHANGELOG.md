@@ -1,3 +1,6 @@
+## Version 3.1.12
+- Allow overriding menu paths for VRCFury full controllers & toggles.
+
 ## Version 3.1.11
 - Handle edge case to avoid double wrap.
 
