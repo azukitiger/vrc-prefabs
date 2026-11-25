@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1493.0
+  vrcfuryVersion: 1.1514.0
   somethingIsBroken: 0
   config:
     features: []
@@ -380,6 +380,7 @@ MonoBehaviour:
   frameTimeFactors: []
   audioClips: []
   wrapped: {fileID: 5267550226181345152}
+  menuPath: 
 --- !u!114 &5267550226181345152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,7 +395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1493.0
+  vrcfuryVersion: 1.1514.0
   somethingIsBroken: 0
   config:
     features: []
@@ -434,7 +435,8 @@ MonoBehaviour:
               Physbone Colliders/Menu/VAP Raycast Wall Physbone Collider Parameters.asset
             objRef: {fileID: 11400000, guid: e4a462a9effc9584f8693a6de15a9709, type: 2}
         smoothedPrms: []
-        globalParams: []
+        globalParams:
+        - VelocityMagnitude
         ignoreSaved: 0
         toggleParam: 
         rootObjOverride: {fileID: 0}
@@ -583,7 +585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1493.0
+  vrcfuryVersion: 1.1514.0
   somethingIsBroken: 0
   config:
     features: []
@@ -1014,7 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 3
   unityVersion: 6000.0.67f1
-  vrcfuryVersion: 1.1493.0
+  vrcfuryVersion: 1.1514.0
   somethingIsBroken: 0
   config:
     features: []

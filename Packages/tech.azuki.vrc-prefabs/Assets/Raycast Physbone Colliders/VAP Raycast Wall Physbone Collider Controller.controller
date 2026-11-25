@@ -166,7 +166,7 @@ AnimatorStateMachine:
   m_AnyStatePosition: {x: 390, y: -190, z: 0}
   m_EntryPosition: {x: 390, y: -110, z: 0}
   m_ExitPosition: {x: 390, y: -150, z: 0}
-  m_ParentStateMachinePosition: {x: 390, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 370, y: 120, z: 0}
   m_DefaultState: {fileID: -2189890931203374613}
 --- !u!206 &-8858299352931865601
 BlendTree:
@@ -683,7 +683,7 @@ AnimatorStateTransition:
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
   - m_ConditionMode: 3
-    m_ConditionEvent: WallCollider/Low/_Hit
+    m_ConditionEvent: WallCollider/High/_Hit
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5534701442067777362}
@@ -1616,7 +1616,7 @@ AnimatorStateMachine:
   m_AnyStatePosition: {x: 440, y: -80, z: 0}
   m_EntryPosition: {x: 440, y: -40, z: 0}
   m_ExitPosition: {x: 440, y: -120, z: 0}
-  m_ParentStateMachinePosition: {x: 440, y: 190, z: 0}
+  m_ParentStateMachinePosition: {x: 420, y: 190, z: 0}
   m_DefaultState: {fileID: -276288321509913970}
 --- !u!1102 &-4301685246413231911
 AnimatorState:
@@ -1626,7 +1626,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Low Update
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5684189199462410024}
@@ -1660,7 +1660,7 @@ AnimatorStateTransition:
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
   - m_ConditionMode: 3
-    m_ConditionEvent: WallCollider/Low/_Hit
+    m_ConditionEvent: WallCollider/High/_Hit
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2589147860202300937}
@@ -1984,7 +1984,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: 1723753236812827292}
+  - {fileID: 1939789551544361800}
+  - {fileID: 2135151200853004716}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -2089,7 +2090,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left High
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4745480747785122403}
@@ -2141,7 +2142,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Enable
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1839431686213805150}
@@ -2497,7 +2498,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Select
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 585706151187781744}
@@ -2992,6 +2993,12 @@ AnimatorController:
   m_Name: VAP Raycast Wall Physbone Collider Controller
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: VelocityMagnitude
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: WallCollider
     m_Type: 1
     m_DefaultFloat: 1
@@ -3435,7 +3442,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Low
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6728753829858786638}
@@ -3636,7 +3643,7 @@ AnimatorStateTransition:
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
   - m_ConditionMode: 3
-    m_ConditionEvent: WallCollider/Low/_Hit
+    m_ConditionEvent: WallCollider/High/_Hit
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4297239307079357479}
@@ -3891,31 +3898,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 4
---- !u!1101 &1723753236812827292
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 3
-    m_ConditionEvent: WallCollider
-    m_EventTreshold: 0
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: -4064249087052967101}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0
-  m_TransitionOffset: 0
-  m_ExitTime: 0
-  m_HasExitTime: 0
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!1102 &1727117713461313306
 AnimatorState:
   serializedVersion: 6
@@ -3943,6 +3925,59 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &1939789551544361800
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: WallCollider
+    m_EventTreshold: 0
+  - m_ConditionMode: 3
+    m_ConditionEvent: VelocityMagnitude
+    m_EventTreshold: 0.1
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -4064249087052967101}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &2135151200853004716
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: WallCollider
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -4064249087052967101}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!206 &2154680900086864428
 BlendTree:
   m_ObjectHideFlags: 1
@@ -4042,7 +4077,7 @@ AnimatorStateTransition:
     m_ConditionEvent: WallCollider/Low/_Hit
     m_EventTreshold: 0
   - m_ConditionMode: 3
-    m_ConditionEvent: WallCollider/Low/_Hit
+    m_ConditionEvent: WallCollider/High/_Hit
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2433812988502837368}
@@ -4431,7 +4466,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left High Update
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -9117658699958199583}
@@ -4811,7 +4846,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall Raycast Left Skip
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -5071581991411154125}
@@ -4964,7 +4999,7 @@ AnimatorStateMachine:
   m_AnyStatePosition: {x: 410, y: -100, z: 0}
   m_EntryPosition: {x: 410, y: -20, z: 0}
   m_ExitPosition: {x: 410, y: -60, z: 0}
-  m_ParentStateMachinePosition: {x: 410, y: 210, z: 0}
+  m_ParentStateMachinePosition: {x: 390, y: 210, z: 0}
   m_DefaultState: {fileID: -3085489715027401009}
 --- !u!206 &7056789308254416120
 BlendTree:
@@ -5364,7 +5399,7 @@ AnimatorStateMachine:
   m_AnyStatePosition: {x: 410, y: -100, z: 0}
   m_EntryPosition: {x: 410, y: -50, z: 0}
   m_ExitPosition: {x: 410, y: -140, z: 0}
-  m_ParentStateMachinePosition: {x: 410, y: 180, z: 0}
+  m_ParentStateMachinePosition: {x: 390, y: 180, z: 0}
   m_DefaultState: {fileID: -4118333244710187131}
 --- !u!1101 &8955877653246333476
 AnimatorStateTransition:
@@ -5468,23 +5503,23 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 6964195398441705587}
-    m_Position: {x: -120, y: 140, z: 0}
+    m_Position: {x: -140, y: 140, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 8810627745013195832}
-    m_Position: {x: 20, y: 200, z: 0}
+    m_Position: {x: 0, y: 200, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -4502178469057492903}
-    m_Position: {x: -120, y: 260, z: 0}
+    m_Position: {x: -140, y: 260, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -8877188499098792644}
-    m_Position: {x: -270, y: 200, z: 0}
+    m_Position: {x: -290, y: 200, z: 0}
   m_AnyStateTransitions:
   - {fileID: -8732648343101279897}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -120, y: -20, z: 0}
+  m_AnyStatePosition: {x: -330, y: 80, z: 0}
   m_EntryPosition: {x: -120, y: 30, z: 0}
-  m_ExitPosition: {x: 80, y: 90, z: 0}
+  m_ExitPosition: {x: 90, y: 80, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -3941908609781142000}

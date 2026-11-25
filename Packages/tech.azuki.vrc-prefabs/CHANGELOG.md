@@ -1,3 +1,6 @@
+## Version 3.1.14
+- Improve performance of Wall Collider animator.
+
 ## Version 3.1.13
 - Fixed bug where menu path field is locked for toggles with no menu path.
 
