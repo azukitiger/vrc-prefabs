@@ -60,7 +60,7 @@ namespace VAP.Editor
                 steps.Add("Main Menu");
             SubMenusSection.DrawHeader(header, steps, null, SyncedBits(slider) + " synced bits");
             serializedObject.Update();
-            VAPEditorGUI.MenuPathField(serializedObject.FindProperty("menuPath"), MenuPaths.Folder(VRCFuryToggleDefaults.MenuName(Wrapped)));
+            VAPEditorGUI.MenuPathField(serializedObject.FindProperty("menuPath"), MenuPaths.Folder(VRCFuryToggleDefaults.MenuName(Wrapped)), true);
             serializedObject.ApplyModifiedProperties();
             EditorGUILayout.Space(2f);
 

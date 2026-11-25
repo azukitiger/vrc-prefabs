@@ -47,6 +47,15 @@ namespace VAP
             return common == null ? "" : string.Join("/", common);
         }
 
+        public static string ApplyFolder(string path, string replacement)
+        {
+            replacement = Clean(replacement);
+            var parts = Split(path);
+            if (replacement.Length == 0 || parts.Length == 0)
+                return path;
+            return replacement + "/" + parts[parts.Length - 1];
+        }
+
         public static string Apply(string path, string common, string replacement)
         {
             replacement = Clean(replacement);

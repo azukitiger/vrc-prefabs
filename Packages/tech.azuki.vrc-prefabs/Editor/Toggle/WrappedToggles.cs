@@ -93,6 +93,8 @@ namespace VAP.Editor
                 SetAll(root, hidden);
         }
 
+        internal static void Hide(GameObject root) => SetAll(root, true);
+
         static void SetAll(GameObject root, bool hidden)
         {
             if (root == null)

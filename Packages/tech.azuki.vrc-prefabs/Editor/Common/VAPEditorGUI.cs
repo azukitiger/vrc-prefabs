@@ -39,9 +39,11 @@ namespace VAP.Editor
 
         static GUIStyle placeholder;
 
-        internal static void MenuPathField(SerializedProperty prop, string defaultPath)
+        internal static void MenuPathField(SerializedProperty prop, string defaultPath, bool allowRoot = false)
         {
-            bool locked = string.IsNullOrEmpty(defaultPath);
+            bool locked = !allowRoot && string.IsNullOrEmpty(defaultPath);
+            if (string.IsNullOrEmpty(defaultPath))
+                defaultPath = allowRoot ? "Main Menu" : "";
             var content = new GUIContent("Menu Path", locked
                 ? "The menus have no folder in common, so their path can't be changed."
                 : $"Replaces \"{defaultPath}\" in the menu path when the avatar is built. Leave empty to keep it. Can be changed on prefab instances too.");

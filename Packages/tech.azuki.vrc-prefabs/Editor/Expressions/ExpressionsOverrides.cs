@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.ScriptableObjects;
+using Object = UnityEngine.Object;
 
 namespace VAP.Editor
 {
@@ -31,6 +32,41 @@ namespace VAP.Editor
             c.controlOverrides.RemoveAll(o => o == null || o.IsEmpty);
             EditorUtility.SetDirty(c);
             PrefabUtility.RecordPrefabInstancePropertyModifications(c);
+            ClearUnchanged(c, "defaultOverrides", "controlOverrides");
+        }
+
+        internal static void ClearUnchanged(Object c, params string[] names)
+        {
+            var source = PrefabUtility.GetCorrespondingObjectFromSource(c);
+            if (source == null)
+                return;
+            using var mine = new SerializedObject(c);
+            using var theirs = new SerializedObject(source);
+            bool cleared = false;
+            foreach (var name in names)
+            {
+                var a = mine.FindProperty(name);
+                var b = theirs.FindProperty(name);
+                if (a == null || b == null || !a.prefabOverride || !SerializedProperty.DataEquals(a, b))
+                    continue;
+                PrefabUtility.RevertPropertyOverride(a, InteractionMode.AutomatedAction);
+                cleared = true;
+            }
+#if UNITY_2022_2_OR_NEWER
+            if (cleared && c is Component component)
+            {
+                var root = PrefabUtility.GetOutermostPrefabInstanceRoot(component);
+                if (root != null)
+                    PrefabUtility.RemoveUnusedOverrides(new[] { root }, InteractionMode.AutomatedAction);
+            }
+#endif
+            if (cleared && c is Component owner)
+            {
+                var top = PrefabUtility.GetOutermostPrefabInstanceRoot(owner);
+                var target = top != null ? top : owner.gameObject;
+                WrappedToggles.Hide(target);
+                EditorApplication.delayCall += () => WrappedToggles.Hide(target);
+            }
         }
 
         internal static void SetDefault(VAPExpressions c, string name, float value, float assetValue)

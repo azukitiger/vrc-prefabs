@@ -39,7 +39,7 @@ namespace VAP.Editor
         internal static string MenuName(VAPToggle t)
         {
             string name = t.toggle != null ? MenuName(t.toggle) : "";
-            return MenuPaths.Apply(name, MenuPaths.Folder(name), t.menuPath);
+            return MenuPaths.ApplyFolder(name, t.menuPath);
         }
 
         internal static void WriteMenuPath(VAPToggle t, bool record)
@@ -50,7 +50,7 @@ namespace VAP.Editor
             var name = so.FindProperty("content")?.FindPropertyRelative("name");
             if (name == null)
                 return;
-            name.stringValue = MenuPaths.Apply(name.stringValue, MenuPaths.Folder(name.stringValue), t.menuPath);
+            name.stringValue = MenuPaths.ApplyFolder(name.stringValue, t.menuPath);
             if (record)
                 so.ApplyModifiedProperties();
             else

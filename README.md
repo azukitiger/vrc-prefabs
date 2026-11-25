@@ -491,7 +491,7 @@ A **VRCFury Toggle** with the ability to override the **Default** value it start
 3. The **Menu** below shows the toggle's menu item and its synced bits. Its checkbox (or slider) sets the start value and can be changed on prefab instances. Right-click the item to revert it.
 
 ### Optional Instructions
-1. Set **Menu Path** to move the toggle to another folder. Toggles at the root of the menu have no folder to change.
+1. Set **Menu Path** to move the toggle to another folder. Only the folder can be changed, the toggle keeps its name.
 
 ## 🧩 Skinned Mesh Renderer
 
