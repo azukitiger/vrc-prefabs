@@ -51,6 +51,7 @@ namespace VAP.Editor
             avatarColliders = EditorPrefs.GetBool(AvatarCollidersKey, false);
             SceneView.duringSceneGui += DrawAvatarColliders;
             EditorApplication.update += InstallHeaderItem;
+            EditorApplication.update += WatchSkin;
             LoadPins();
             RefreshCache();
             EditorApplication.hierarchyChanged += RefreshCache;
@@ -445,24 +446,30 @@ namespace VAP.Editor
             AfterPinChange();
         }
 
-        static Texture2D Icon(params string[] names)
+        static Texture2D Icon(string name)
         {
-            foreach (var name in names)
-            {
-                var icon = EditorGUIUtility.FindTexture(name);
-                if (icon != null)
-                    return icon;
-            }
-            return null;
+            var icon = EditorGUIUtility.isProSkin ? EditorGUIUtility.FindTexture("d_" + name) : null;
+            return icon != null ? icon : EditorGUIUtility.FindTexture(name);
         }
 
-        static readonly Color IconOff = new Color(0.77f, 0.77f, 0.77f);
+        static readonly Color LightIcon = new Color(0.333f, 0.333f, 0.333f);
+        static Color IconOn => EditorGUIUtility.isProSkin ? Color.white : LightIcon;
+        static Color IconOff => EditorGUIUtility.isProSkin ? new Color(0.77f, 0.77f, 0.77f) : LightIcon;
+        
+        static bool darkSkin = EditorGUIUtility.isProSkin;
+
+        static void WatchSkin()
+        {
+            if (darkSkin == EditorGUIUtility.isProSkin) return;
+            darkSkin = EditorGUIUtility.isProSkin;
+            modeChanged?.Invoke();
+        }
 
         static void StyleIcon(VisualElement e, bool on)
         {
             e.Query<Image>().ForEach(i =>
             {
-                i.tintColor = on ? Color.white : IconOff;
+                i.tintColor = on ? IconOn : IconOff;
             });
         }
 
@@ -606,11 +613,11 @@ namespace VAP.Editor
         static VisualElement ListView()
         {
             var list = new VisualElement { style = { marginTop = 4 } };
-            var properties = Icon("d_UnityEditor.InspectorWindow", "UnityEditor.InspectorWindow");
 
             void Rebuild()
             {
                 list.Clear();
+                var properties = Icon("UnityEditor.InspectorWindow");
                 var items = Listed();
                 if (items.Count == 0)
                     list.Add(new Label("Nothing selected or pinned") { style = { marginLeft = 4, marginTop = 2 } });
@@ -626,7 +633,7 @@ namespace VAP.Editor
                     row.Add(pin);
                     row.Add(new Image
                     {
-                        image = TypeIcon(c), scaleMode = ScaleMode.ScaleToFit, tintColor = Color.white, tooltip = TypeLabel(c),
+                        image = TypeIcon(c), scaleMode = ScaleMode.ScaleToFit, tintColor = IconOn, tooltip = TypeLabel(c),
                         style = { width = 16, height = 16, marginLeft = 4, flexShrink = 0 },
                     });
                     row.Add(new Label(c.name)
