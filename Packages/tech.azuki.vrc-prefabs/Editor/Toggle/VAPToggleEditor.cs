@@ -20,9 +20,6 @@ namespace VAP.Editor
 
         void OnDisable() => wrap.Disable();
 
-        static readonly GUIContent DefaultTip = new GUIContent("",
-            "Start value. Replaces the VRCFury Toggle's default when the avatar is built. Can be changed on prefab instances too.");
-
         (string path, Texture2D icon, string param) Info()
         {
             using var so = new SerializedObject(Wrapped);
@@ -105,7 +102,7 @@ namespace VAP.Editor
             if (slider)
                 value = EditorGUI.Slider(control, Mathf.Round(value * 100f), 0f, 100f) / 100f;
             else
-                on = EditorGUI.Toggle(control, DefaultTip, on);
+                on = EditorGUI.Toggle(control, on);
             if (!EditorGUI.EndChangeCheck())
                 return;
             bool same = slider ? Mathf.Approximately(value, ownValue) : on == ownOn;

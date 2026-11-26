@@ -1,3 +1,6 @@
+## Version 3.1.18
+- Update Menu tooltips.
+
 ## Version 3.1.17
 - Changes to Menu feature.
 

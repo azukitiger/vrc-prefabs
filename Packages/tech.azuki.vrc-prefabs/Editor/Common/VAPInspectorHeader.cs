@@ -85,6 +85,23 @@ namespace VAP.Editor
             return root;
         }
 
+        static void RepaintOnHover(VisualElement root)
+        {
+            root.RegisterCallback<MouseMoveEvent>(e => RepaintContainer(e.target), TrickleDown.TrickleDown);
+            root.RegisterCallback<MouseOutEvent>(e => RepaintContainer(e.target), TrickleDown.TrickleDown);
+            root.RegisterCallback<MouseLeaveEvent>(e => root.Query<IMGUIContainer>().ForEach(c => c.MarkDirtyRepaint()));
+        }
+
+        static void RepaintContainer(IEventHandler target)
+        {
+            for (var v = target as VisualElement; v != null; v = v.parent)
+                if (v is IMGUIContainer container)
+                {
+                    container.MarkDirtyRepaint();
+                    return;
+                }
+        }
+
         public static void Attach(VisualElement inspectorRoot, string title, UnityEditor.Editor editor = null, Toggle toggle = null)
         {
 #if !VAP_NDMF
@@ -95,6 +112,7 @@ namespace VAP.Editor
 #endif
             if (editor != null)
                 inspectorRoot.Add(NotInAvatarWarning(editor));
+            RepaintOnHover(inspectorRoot);
             IVisualElementScheduledItem watch = null;
             inspectorRoot.RegisterCallback<AttachToPanelEvent>(_ =>
             {

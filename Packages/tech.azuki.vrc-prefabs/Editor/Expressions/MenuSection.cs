@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
@@ -138,7 +139,8 @@ namespace VAP.Editor
             var type = TypeOf(control);
             var axes = Axes(control, type);
             var related = new List<string>();
-            if (IsToggleLike(type) && Param(ParamName(control)) != null)
+            bool hasValue = IsToggleLike(type) && Param(ParamName(control)) != null;
+            if (hasValue)
                 related.Add(ParamName(control));
             foreach (var (_, p) in axes)
                 related.Add(p.name);
@@ -163,7 +165,7 @@ namespace VAP.Editor
 
             using (new EditorGUI.DisabledScope(removed || SectionRemoved))
             {
-                DrawName(new Rect(name.x, full.y, name.width, RowHeight), control, string.Join("\n", related.ConvertAll(n => ParamInfo(Param(n)))));
+                DrawName(new Rect(name.x, full.y, name.width, RowHeight), control, string.Join("\n", related.ConvertAll(n => ParamInfo(Param(n), hasValue && n == ParamName(control) ? control : null))));
                 if (type == ControlType.SubMenu)
                     DrawSubMenuIcon(check);
             }
@@ -231,10 +233,16 @@ namespace VAP.Editor
             }
         }
 
-        string ParamInfo(VRCExpressionParameters.Parameter p)
+        string ParamInfo(VRCExpressionParameters.Parameter p, SerializedProperty control = null)
         {
             bool synced = p.networkSynced && !unsynced.Contains(p.name);
-            return ParamInfo(p.name, p.valueType.ToString(), synced ? VAPExpressions.SyncedBits(p) : 0, synced);
+            string name = p.name;
+            if (control != null && p.valueType != VRCExpressionParameters.ValueType.Bool)
+            {
+                float v = control.FindPropertyRelative("value").floatValue;
+                name += " = " + (p.valueType == VRCExpressionParameters.ValueType.Int ? Mathf.RoundToInt(v).ToString() : v.ToString("0.###", CultureInfo.InvariantCulture));
+            }
+            return ParamInfo(name,p.valueType.ToString(), synced ? VAPExpressions.SyncedBits(p) : 0, synced);
         }
 
         internal static string ParamInfo(string name, string type, int bits, bool synced) =>
@@ -263,9 +271,6 @@ namespace VAP.Editor
             EditorGUI.LabelField(new Rect(x, rect.y, rect.xMax - x, rect.height), text, nameStyle);
         }
 
-        static readonly GUIContent DefaultOnLabel = new GUIContent("", "Starts on.");
-        static readonly GUIContent DefaultChoiceLabel = new GUIContent("", "This is the item that's on at the start. Only one item using the same parameter can be.");
-
         void DrawToggleDefault(Rect rect, SerializedProperty control, VRCExpressionParameters.Parameter p)
         {
             float value = control.FindPropertyRelative("value").floatValue;
@@ -273,7 +278,7 @@ namespace VAP.Editor
             bool isBool = p.valueType == VRCExpressionParameters.ValueType.Bool;
             bool on = isBool ? current != 0f : Mathf.Approximately(current, value);
             EditorGUI.BeginChangeCheck();
-            on = GUI.Toggle(rect, on, isBool ? DefaultOnLabel : DefaultChoiceLabel, EditorStyles.toggle);
+            on = GUI.Toggle(rect, on, GUIContent.none, EditorStyles.toggle);
             if (!EditorGUI.EndChangeCheck())
                 return;
             float v = isBool ? (on ? 1f : 0f) : (on ? value : 0f);
