@@ -58,20 +58,35 @@ namespace VAP.Editor
                 PrefabUtility.RevertPropertyOverride(a, InteractionMode.AutomatedAction);
                 cleared = true;
             }
-#if UNITY_2022_2_OR_NEWER
             if (cleared && c is Component component)
             {
                 var root = PrefabUtility.GetOutermostPrefabInstanceRoot(component);
                 if (root != null)
-                    PrefabUtility.RemoveUnusedOverrides(new[] { root }, InteractionMode.AutomatedAction);
+                    RemoveUnusedOverrides(root);
             }
-#endif
             if (cleared && c is Component owner)
             {
                 var top = PrefabUtility.GetOutermostPrefabInstanceRoot(owner);
                 var target = top != null ? top : owner.gameObject;
                 WrappedToggles.Hide(target);
                 EditorApplication.delayCall += () => WrappedToggles.Hide(target);
+            }
+        }
+
+        static readonly System.Reflection.MethodInfo RemoveUnusedOverridesMethod = typeof(PrefabUtility).GetMethod("RemoveUnusedOverrides",
+            System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
+            null, new[] { typeof(GameObject[]), typeof(InteractionMode) }, null);
+
+        static void RemoveUnusedOverrides(GameObject root)
+        {
+            if (RemoveUnusedOverridesMethod == null)
+                return;
+            try
+            {
+                RemoveUnusedOverridesMethod.Invoke(null, new object[] { new[] { root }, InteractionMode.AutomatedAction });
+            }
+            catch (System.Exception)
+            {
             }
         }
 

@@ -1,3 +1,6 @@
+## Version 3.1.16
+- Unity 2022 fix.
+
 ## Version 3.1.15
 - Fixed light mode colors for UI.
 
