@@ -82,12 +82,6 @@ namespace VAP.Editor
             return bits == 0 ? 7 : Mathf.Clamp(bits, 1, 8);
         }
 
-        bool Saved()
-        {
-            using var so = new SerializedObject(Wrapped);
-            return so.FindProperty("content")?.FindPropertyRelative("saved")?.boolValue ?? false;
-        }
-
         void DrawItem(Rect rect, bool slider, bool on, float value, bool ownOn, float ownValue, bool changed, VAPToggle source)
         {
             if (changed && ExpressionsOverrides.ContextClick(rect))
@@ -104,8 +98,7 @@ namespace VAP.Editor
             var (path, icon, param) = Info();
             string full = MenuSection.CleanName(path);
             string name = full.Substring(full.LastIndexOf('/') + 1).Trim();
-            string info = MenuSection.ParamInfo(string.IsNullOrEmpty(param) ? "VRCFury parameter" : param, slider ? "Float" : "Bool", SyncedBits(slider), true, Saved(),
-                slider ? Mathf.Round(value * 100f) + "%" : on ? "On" : "Off");
+            string info = MenuSection.ParamInfo(string.IsNullOrEmpty(param) ? "VRCFury parameter" : param, slider ? "Float" : "Bool", SyncedBits(slider), true);
             MenuSection.DrawName(new Rect(rect.x, rect.y, control.x - rect.x - 8f, rect.height), icon, new GUIContent(name.Length == 0 ? "No menu path" : name, full.Length == 0 ? info : full + "\n" + info));
 
             EditorGUI.BeginChangeCheck();

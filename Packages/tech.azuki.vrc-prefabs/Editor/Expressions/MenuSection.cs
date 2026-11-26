@@ -162,7 +162,11 @@ namespace VAP.Editor
                 name.width = value.x - row.x - 8f;
 
             using (new EditorGUI.DisabledScope(removed || SectionRemoved))
+            {
                 DrawName(new Rect(name.x, full.y, name.width, RowHeight), control, string.Join("\n", related.ConvertAll(n => ParamInfo(Param(n)))));
+                if (type == ControlType.SubMenu)
+                    DrawSubMenuIcon(check);
+            }
 
             if (IsToggleLike(type) && Param(ParamName(control)) is VRCExpressionParameters.Parameter p0)
                 DrawToggleDefault(check, control, p0);
@@ -208,21 +212,33 @@ namespace VAP.Editor
                 new GUIContent(CleanName(control.FindPropertyRelative("name").stringValue), tooltip));
         }
 
+        static void DrawSubMenuIcon(Rect rect)
+        {
+            if (Event.current.type != EventType.Repaint)
+                return;
+            float px = 1f / EditorGUIUtility.pixelsPerPoint;
+            float Snap(float v) => Mathf.Round(v / px) * px;
+            const float width = 12f, height = 10f, dot = 2f, gap = 2f, step = 4f;
+            float x = Snap(rect.x + (rect.width - width) * 0.5f);
+            float y = Snap(rect.y + (rect.height - height) * 0.5f);
+            var text = EditorStyles.label.normal.textColor;
+            var color = new Color(text.r, text.g, text.b, GUI.enabled ? 0.6f : 0.3f);
+            for (int i = 0; i < 3; i++)
+            {
+                float row = y + i * step;
+                EditorGUI.DrawRect(new Rect(x, row, dot, dot), color);
+                EditorGUI.DrawRect(new Rect(x + dot + gap, row, width - dot - gap, dot), color);
+            }
+        }
+
         string ParamInfo(VRCExpressionParameters.Parameter p)
         {
             bool synced = p.networkSynced && !unsynced.Contains(p.name);
-            bool saved = p.saved && !unsynced.Contains(p.name);
-            float value = owner.FindDefault(p.name)?.value ?? p.defaultValue;
-            return ParamInfo(p.name, p.valueType.ToString(), synced ? VAPExpressions.SyncedBits(p) : 0, synced, saved, DefaultText(p.valueType, value));
+            return ParamInfo(p.name, p.valueType.ToString(), synced ? VAPExpressions.SyncedBits(p) : 0, synced);
         }
 
-        internal static string ParamInfo(string name, string type, int bits, bool synced, bool saved, string value) =>
-            $"{name} | {type} | {bits} {(bits == 1 ? "bit" : "bits")} | {(synced ? "Synced" : "Unsynced")} | {(saved ? "Saved" : "Not Saved")} | Default {value}";
-
-        static string DefaultText(VRCExpressionParameters.ValueType type, float value) =>
-            type == VRCExpressionParameters.ValueType.Bool ? (value != 0f ? "On" : "Off")
-            : type == VRCExpressionParameters.ValueType.Int ? Mathf.RoundToInt(value).ToString()
-            : value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
+        internal static string ParamInfo(string name, string type, int bits, bool synced) =>
+            $"{name} | {type} | {bits} {(bits == 1 ? "bit" : "bits")} | {(synced ? "Synced" : "Unsynced")}";
 
         internal static void DrawName(Rect rect, Texture2D icon, GUIContent text)
         {
