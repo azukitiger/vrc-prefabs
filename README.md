@@ -34,6 +34,14 @@
 # Avatar Prefabs
 Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
 
+A **prefab** is a ready-made object. To add one, drag it from the Project window onto your avatar in the **hierarchy**.
+
+Words used in the tables below:
+- **Animator parameters** are used by the avatar's animations (its animator). **Expression parameters** are the ones VRChat saves and uses in your **Expression Menu**, the round menu you open in game.
+- **Synced** means other players get the value too. ✔ means synced and ✖ means only you have it. Synced values use **bits** from the avatar's limited sync space.
+- **Input** parameters are ones you set so the prefab can use them. **Output** parameters are ones the prefab sets, so you can use them in your own animations.
+- A **blendshape** (also called a shape key) is a saved shape of a mesh, like a smile or a closed eye.
+
 ## 📦 Better Blink Prefab
 
 Adds a **smooth blink animation** driven by VRChat's eyelid data.
@@ -103,6 +111,8 @@ Rotates the eyes from VRChat's eye look data, with **eye bones** and **eye blend
 3. Adjust `Eye Down-Up` and `Eye In-Out` under the rig's **Muscles & Settings**.
 
 ### Behavior Parameters
+
+These are worked out from the tracking values with the formula shown.
 
 | Property | Animator Type | Expression |
 |-|-|-|
@@ -230,6 +240,8 @@ VRChat drives and smooths the **Unified Expressions** blendshapes through the de
 
 ### Behavior Parameters
 
+These are worked out from the tracking values with the formula shown.
+
 | Property | Animator Type | Expression |
 |-|-|-|
 | VAP/FT/EyeSquintLeftForward | Float | `EyeSquintLeft` |
@@ -332,7 +344,7 @@ Adds a **Face Proximity contact receiver** that constricts the pupils when somet
 
 ## 📦 Raycast Floor Physbone Collider Prefab
 
-Sets the floor PhysBone collider with a raycast.
+Sets the floor PhysBone collider with a raycast. PhysBones are the bones that move on their own, like hair, ears and tails.
 
 ### Features
 - Synced, saved `bool` toggle for the floor collider. On by default.
@@ -415,7 +427,7 @@ Adds **ear twitches** at random intervals.
 | VAP/Ear/Right_Twitch | Float | Right ear twitch |
 
 > [!NOTE]
-> Both output animator parameters are seto to `10` during a twitch, to override other animations in a direct blend tree.
+> Both output animator parameters are set to `10` during a twitch, to override other animations in a direct blend tree.
 
 ---
 
@@ -452,20 +464,20 @@ Adds a **heartbeat sound and visual display**.
 
 # Components
 
-Components added from **Add Component** > **VAP**. They are applied when the avatar is built and are removed from the uploaded avatar.
+A **component** is a part you add to an object to give it a job. These are added from **Add Component** > **VAP** in the **Inspector**. They are applied when the avatar is built and are removed from the uploaded avatar.
 
 > Requires [NDMF](https://ndmf.nadena.dev) and [VRCFury](https://vrcfury.com).
 
 Components that only work once per avatar can still be added more than once. The one closest to the avatar root is used, and the others say so in their inspector.
 
-On a prefab instance, locked components show an **Edit in Prefab** button. Components outside an avatar show a warning at the bottom of the inspector.
+A **prefab instance** is a copy of a prefab placed in your scene. On a prefab instance, locked components show an **Edit in Prefab** button. Components outside an avatar show a warning at the bottom of the inspector.
 
 ## 🧩 VRC Avatar Descriptor Enhancements
 
 Adds extra settings for the avatar's own **VRC Avatar Descriptor**. Add it to the avatar root, one per avatar.
 
 ### Features
-- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed; a copy is edited at build time. A removed item keeps its default value, which can still be changed; parameters used only by removed items stay on the avatar but are no longer synced or saved, so everyone loads the default.
+- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed. A copy is edited at build time. A removed item keeps its default value, which can still be changed. Parameters used only by removed items stay on the avatar but are no longer synced or saved, so everyone loads the default.
 - **Frame Time**: adds the frame time parameters to the avatar (see [Frame Time](#frame-time)).
 - **Play Audio Clips**: sets the clips of every **VRC Animator Play Audio** behaviour in the descriptor's playable layers, without changing the controllers.
 
@@ -495,7 +507,7 @@ A **VRCFury Toggle** with the ability to override the **Default** value it start
 
 ## 🧩 Skinned Mesh Renderer
 
-Replaces the inspector of a **Skinned Mesh Renderer** with only the settings worth changing for VRChat, and keeps the rest at the recommended values.
+A **Skinned Mesh Renderer** is the component that shows a mesh that bends with bones and blendshapes. This replaces its inspector with only the settings worth changing for VRChat, and keeps the rest at the recommended values.
 
 ### Instructions
 1. Right-click a **Skinned Mesh Renderer** and pick **Wrap with VAP**, or add **VAP** > **Skinned Mesh Renderer**.
