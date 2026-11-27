@@ -1,3 +1,6 @@
+## Version 3.3.1
+- Improved blendshape list viewer.
+
 ## Version 3.3.0
 - Added `VAP/GestureRight/Idle` to logarithmic gestures.
 - Fixed logarithmic gestures parameters not set as synced.

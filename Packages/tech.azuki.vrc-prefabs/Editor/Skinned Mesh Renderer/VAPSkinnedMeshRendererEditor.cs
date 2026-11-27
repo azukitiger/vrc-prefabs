@@ -59,11 +59,25 @@ namespace VAP.Editor
 
         VAPSkinnedMeshRenderer Owner => target as VAPSkinnedMeshRenderer;
 
+        static readonly Dictionary<int, (string search, List<int> active, Vector2 scroll, string selected, string normalSearch)> kept =
+            new Dictionary<int, (string, List<int>, Vector2, string, string)>();
+
         void OnEnable()
         {
             active = null;
             search = "";
             normalSearch = "";
+            if (target != null && kept.TryGetValue(target.GetInstanceID(), out var state))
+            {
+                kept.Remove(target.GetInstanceID());
+                (search, active, scroll, selectedShape, normalSearch) = state;
+            }
+        }
+
+        void OnDisable()
+        {
+            if (Owner != null && Selection.gameObjects.Contains(Owner.gameObject))
+                kept[target.GetInstanceID()] = (search, active, scroll, selectedShape, normalSearch);
         }
 
         public override VisualElement CreateInspectorGUI()
@@ -315,11 +329,17 @@ namespace VAP.Editor
             var smr = Prepare() ? Owner.wrapped : null;
             var mesh = smr != null ? smr.sharedMesh : null;
             int count = mesh != null ? mesh.blendShapeCount : 0;
-            int on = 0;
+            var headers = count > 0 ? EmptyShapes(mesh) : new bool[0];
+            int on = 0, shapes = 0;
             for (int i = 0; i < count; i++)
+            {
+                if (headers[i])
+                    continue;
+                shapes++;
                 if (smr.GetBlendShapeWeight(i) > 0f)
                     on++;
-            VRCFuryWrap.BarLabels(bar, bar.x, BlendShapesLabel.text, $"{on} of {count} Active", 0.6f, Changed("m_BlendShapeWeights"));
+            }
+            VRCFuryWrap.BarLabels(bar, bar.x, BlendShapesLabel.text, $"{on} of {shapes} Active", 0.6f, Changed("m_BlendShapeWeights"));
         }
 
         ReorderableList Materials(SerializedProperty prop)
@@ -354,6 +374,7 @@ namespace VAP.Editor
             int count = mesh != null ? mesh.blendShapeCount : 0;
             if (count == 0)
                 return;
+            var headers = EmptyShapes(mesh);
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (active == null)
@@ -366,7 +387,7 @@ namespace VAP.Editor
                     {
                         active = new List<int>();
                         for (int i = 0; i < count; i++)
-                            if (smr.GetBlendShapeWeight(i) > 0f)
+                            if (!headers[i] && smr.GetBlendShapeWeight(i) > 0f)
                                 active.Add(i);
                         scroll = Vector2.zero;
                         GUIUtility.ExitGUI();
@@ -386,12 +407,45 @@ namespace VAP.Editor
             }
 
             var rows = new List<int>();
-            if (active != null)
-                rows.AddRange(active.Where(i => i < count));
-            else
-                for (int i = 0; i < count; i++)
-                    if (string.IsNullOrEmpty(search) || mesh.GetBlendShapeName(i).IndexOf(search, System.StringComparison.OrdinalIgnoreCase) >= 0)
-                        rows.Add(i);
+            bool filtered = active != null || !string.IsNullOrEmpty(search);
+            bool Matches(int i) => active != null
+                ? active.Contains(i)
+                : string.IsNullOrEmpty(search) || mesh.GetBlendShapeName(i).IndexOf(search, System.StringComparison.OrdinalIgnoreCase) >= 0;
+            int group = -1;
+            var members = new List<int>();
+            void Flush()
+            {
+                if (group < 0)
+                    rows.AddRange(members.Where(Matches));
+                else if (!filtered)
+                {
+                    rows.Add(group);
+                    if (GroupOpen(mesh, group))
+                        rows.AddRange(members);
+                }
+                else
+                {
+                    bool groupMatch = active == null && Matches(group);
+                    var shown = groupMatch ? members : members.Where(Matches).ToList();
+                    if (shown.Count > 0 || groupMatch)
+                    {
+                        rows.Add(group);
+                        rows.AddRange(shown);
+                    }
+                }
+                members.Clear();
+            }
+            for (int i = 0; i < count; i++)
+            {
+                if (headers[i])
+                {
+                    Flush();
+                    group = i;
+                }
+                else
+                    members.Add(i);
+            }
+            Flush();
 
             float step = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
             listStyle ??= new GUIStyle(EditorStyles.helpBox) { padding = new RectOffset(6, 6, 6, 6) };
@@ -423,6 +477,19 @@ namespace VAP.Editor
                 var e = Event.current;
                 if (e.type == EventType.Repaint && (selected || r % 2 == 1))
                     EditorGUI.DrawRect(back, selected ? SelectedColor : StripeColor);
+                if (headers[i])
+                {
+                    if (e.type == EventType.ContextClick && rowRect.Contains(e.mousePosition))
+                    {
+                        GroupMenu(mesh, headers, i);
+                        e.Use();
+                    }
+                    bool open = filtered || GroupOpen(mesh, i);
+                    bool now = EditorGUI.Foldout(rowRect, open, new GUIContent(GroupTitle(name), name), true);
+                    if (!filtered && now != open)
+                        SessionState.SetBool(GroupKey(mesh, i), now);
+                    continue;
+                }
                 var labelRect = new Rect(rowRect.x, rowRect.y, EditorGUIUtility.labelWidth, rowRect.height);
                 if (e.type == EventType.MouseDown && e.button == 0 && labelRect.Contains(e.mousePosition))
                 {
@@ -454,6 +521,91 @@ namespace VAP.Editor
             EditorGUILayout.EndScrollView();
             if (content > MaxListHeight)
                 ResizeHandle(listHeight, content);
+        }
+
+        static readonly Dictionary<Mesh, (int dirty, bool[] empty)> emptyShapes = new Dictionary<Mesh, (int, bool[])>();
+
+        internal static void ClearEmptyShapes() => emptyShapes.Clear();
+
+        internal static bool[] EmptyShapes(Mesh mesh)
+        {
+            int dirty = EditorUtility.GetDirtyCount(mesh);
+            if (emptyShapes.TryGetValue(mesh, out var cached) && cached.dirty == dirty && cached.empty.Length == mesh.blendShapeCount)
+                return cached.empty;
+            var empty = new bool[mesh.blendShapeCount];
+            var vertices = new Vector3[mesh.vertexCount];
+            var normals = new Vector3[mesh.vertexCount];
+            var tangents = new Vector3[mesh.vertexCount];
+            for (int i = 0; i < empty.Length; i++)
+            {
+                string name = mesh.GetBlendShapeName(i);
+                if (IsSilence(name) || !StartsWithSymbol(name))
+                    continue;
+                int frames = mesh.GetBlendShapeFrameCount(i);
+                bool moves = false;
+                for (int f = 0; f < frames && !moves; f++)
+                {
+                    mesh.GetBlendShapeFrameVertices(i, f, vertices, normals, tangents);
+                    moves = vertices.Any(v => v != Vector3.zero) || normals.Any(v => v != Vector3.zero) || tangents.Any(v => v != Vector3.zero);
+                }
+                empty[i] = !moves;
+            }
+            emptyShapes[mesh] = (dirty, empty);
+            return empty;
+        }
+
+        static bool StartsWithSymbol(string name)
+        {
+            string trimmed = name.TrimStart();
+            return trimmed.Length > 0 && trimmed[0] < 128 && (char.IsPunctuation(trimmed[0]) || char.IsSymbol(trimmed[0]));
+        }
+
+        static bool IsSilence(string name)
+        {
+            string lower = name.ToLowerInvariant();
+            return lower == "sil" || lower.EndsWith("v_sil");
+        }
+
+        static string GroupTitle(string name)
+        {
+            string title = name.Trim(' ', '-');
+            return title.Length == 0 ? name : title;
+        }
+
+        static string GroupKey(Mesh mesh, int index) => $"VAP.SkinnedMeshRenderer.Group.{mesh.GetInstanceID()}.{mesh.GetBlendShapeName(index)}";
+
+        static bool GroupOpen(Mesh mesh, int index) => SessionState.GetBool(GroupKey(mesh, index), true);
+
+        void GroupMenu(Mesh mesh, bool[] headers, int index)
+        {
+            var groups = Enumerable.Range(0, headers.Length).Where(k => headers[k]).ToList();
+            bool open = GroupOpen(mesh, index);
+            var menu = new GenericMenu();
+            void Item(string label, bool enabled, System.Func<int, bool?> state)
+            {
+                if (!enabled)
+                    return;
+                menu.AddItem(new GUIContent(label), false, () =>
+                {
+                    foreach (int g in groups)
+                    {
+                        var value = state(g);
+                        if (value.HasValue)
+                            SessionState.SetBool(GroupKey(mesh, g), value.Value);
+                    }
+                    Repaint();
+                });
+            }
+            bool anyOpen = groups.Any(g => GroupOpen(mesh, g));
+            bool anyClosed = groups.Any(g => !GroupOpen(mesh, g));
+            bool others = groups.Any(g => GroupOpen(mesh, g) != (g == index));
+            Item(open ? "Collapse" : "Expand", true, g => g == index ? !open : (bool?)null);
+            if (anyOpen || anyClosed || others)
+                menu.AddSeparator("");
+            Item("Collapse All", anyOpen, g => false);
+            Item("Expand All", anyClosed, g => true);
+            Item("Collapse All But This One", others, g => g == index);
+            menu.ShowAsContext();
         }
 
         bool ShowNormals()
@@ -671,6 +823,15 @@ namespace VAP.Editor
                 prop.intValue = v;
             EditorGUI.EndProperty();
         }
+    }
+}
+
+namespace VAP.Editor
+{
+    internal class EmptyBlendShapesReset : AssetPostprocessor
+    {
+        static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom) =>
+            VAPSkinnedMeshRendererEditor.ClearEmptyShapes();
     }
 }
 #endif
