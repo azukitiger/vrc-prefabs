@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 #if VAP_NDMF
 using nadena.dev.ndmf;
 #endif
@@ -27,6 +26,8 @@ namespace VAP.Editor
             if (combiners.Length == 0)
                 return;
             var pairs = new Dictionary<AnimationClip, List<(AnimationClip clip, VAPAnimationCombiner.Mode mode)>>();
+            var paths = new PathFixer(avatarRoot.transform);
+            var rebased = new Dictionary<(AnimationClip, Transform), AnimationClip>();
             foreach (var c in combiners)
                 foreach (var e in c.entries)
                 {
@@ -45,7 +46,14 @@ namespace VAP.Editor
                     }
                     if (!pairs.TryGetValue(e.animation, out var list))
                         pairs[e.animation] = list = new List<(AnimationClip, VAPAnimationCombiner.Mode)>();
-                    list.Add((e.combine, e.mode));
+                    var start = c.startingPoint != null && c.startingPoint.IsChildOf(avatarRoot.transform) ? c.startingPoint : avatarRoot.transform;
+                    if (!rebased.TryGetValue((e.combine, start), out var with))
+                    {
+                        rebased[(e.combine, start)] = with = Rebase(e.combine, paths, start, out var missing);
+                        foreach (string path in missing)
+                            Debug.LogWarning(Log + $"{c.name}: \"{path}\" in {e.combine.name} wasn't found on the avatar; left as it is.", c);
+                    }
+                    list.Add((with, e.mode));
                 }
             foreach (var c in combiners)
                 Object.DestroyImmediate(c);
@@ -73,15 +81,52 @@ namespace VAP.Editor
                 return copy;
             }
 
-            ControllerCopy.SwapDescriptor(avatarRoot.GetComponent<VRCAvatarDescriptor>(), Swap);
-            foreach (var f in avatarRoot.GetComponentsInChildren<VAPFullController>(true))
-                ControllerCopy.SwapFullController(f.wrapped, Swap);
+            foreach (var component in avatarRoot.GetComponentsInChildren<Component>(true))
+                if (component != null && !(component is Transform) && !IsToggle(component))
+                    SwapControllers(component, Swap);
 
             foreach (var pair in pairs)
             {
                 string with = string.Join(", ", pair.Value.Select(a => $"{(a.mode == VAPAnimationCombiner.Mode.Replace ? "replaced by" : "combined with")} \"{a.clip.name}\""));
                 if (made.ContainsKey(pair.Key))
                     Debug.Log(Log + $"\"{pair.Key.name}\" {with}.", avatarRoot);
+            }
+        }
+
+        static bool IsToggle(Component component)
+        {
+            if (component.GetType().FullName != VRCFuryWrap.VRCFuryType)
+                return false;
+            using var so = new SerializedObject(component);
+            return so.FindProperty("content")?.managedReferenceFullTypename?.EndsWith(".Toggle") == true;
+        }
+
+        static void SwapControllers(Component component, Func<AnimatorController, AnimatorController> swap)
+        {
+            using var so = new SerializedObject(component);
+            var it = so.GetIterator();
+            bool enter = true;
+            var ids = new List<string>();
+            while (it.Next(enter))
+            {
+                enter = !(it.isArray && it.propertyType == SerializedPropertyType.Generic && ExpressionsBuild.PlainTypes.Contains(it.arrayElementType))
+                        && it.propertyType != SerializedPropertyType.String;
+                if (it.propertyType != SerializedPropertyType.ObjectReference || !(it.objectReferenceValue is AnimatorController controller)
+                    || !(swap(controller) is AnimatorController copy))
+                    continue;
+                it.objectReferenceValue = copy;
+                if (it.name == "objRef")
+                    ids.Add(it.propertyPath.Substring(0, it.propertyPath.Length - "objRef".Length) + "id");
+            }
+            if (so.hasModifiedProperties || ids.Count > 0)
+            {
+                foreach (string path in ids)
+                {
+                    var id = so.FindProperty(path);
+                    if (id != null && id.propertyType == SerializedPropertyType.String)
+                        id.stringValue = "";
+                }
+                so.ApplyModifiedPropertiesWithoutUndo();
             }
         }
 
@@ -113,6 +158,100 @@ namespace VAP.Editor
             if (length > 0f && clip.length < length)
                 Hold(clip, length);
             return clip;
+        }
+
+        internal static AnimationClip Rebase(AnimationClip clip, PathFixer paths, Transform start, out List<string> missing)
+        {
+            missing = new List<string>();
+            var floats = AnimationUtility.GetCurveBindings(clip);
+            var objects = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+            var fixedFloats = floats.Select(b => paths.Fix(b, start)).ToArray();
+            var fixedObjects = objects.Select(b => paths.Fix(b, start)).ToArray();
+            bool changed = false;
+            for (int i = 0; i < floats.Length; i++)
+                changed |= Check(floats[i], fixedFloats[i], missing);
+            for (int i = 0; i < objects.Length; i++)
+                changed |= Check(objects[i], fixedObjects[i], missing);
+            if (!changed)
+                return clip;
+            var copy = Object.Instantiate(clip);
+            copy.name = clip.name;
+            copy.ClearCurves();
+            AnimationUtility.SetEditorCurves(copy, floats.Select((b, i) => Moved(b, fixedFloats[i])).ToArray(),
+                floats.Select(b => AnimationUtility.GetEditorCurve(clip, b)).ToArray());
+            for (int i = 0; i < objects.Length; i++)
+                AnimationUtility.SetObjectReferenceCurve(copy, Moved(objects[i], fixedObjects[i]), AnimationUtility.GetObjectReferenceCurve(clip, objects[i]));
+            return copy;
+        }
+
+        internal static List<string> MissingPaths(AnimationClip clip, Transform root, Transform start)
+        {
+            var fixer = new PathFixer(root);
+            return AnimationUtility.GetCurveBindings(clip).Concat(AnimationUtility.GetObjectReferenceCurveBindings(clip))
+                .Where(b => fixer.Fix(b, start) == null)
+                .Select(b => b.propertyName.StartsWith("blendShape.") ? $"{b.path} ({b.propertyName.Substring("blendShape.".Length)})" : b.path)
+                .Distinct().ToList();
+        }
+
+        static bool Check(EditorCurveBinding b, string path, List<string> missing)
+        {
+            if (path == null)
+            {
+                if (!missing.Contains(b.path))
+                    missing.Add(b.path);
+                return false;
+            }
+            return path != b.path;
+        }
+
+        static EditorCurveBinding Moved(EditorCurveBinding b, string path)
+        {
+            if (path != null)
+                b.path = path;
+            return b;
+        }
+
+        internal class PathFixer
+        {
+            readonly Transform root;
+
+            internal PathFixer(Transform root) => this.root = root;
+
+            internal string Fix(EditorCurveBinding b, Transform start)
+            {
+                string prefix = AnimationUtility.CalculateTransformPath(start, root);
+                if (b.path.Length == 0)
+                    return Has(start, b) ? prefix : null;
+                var parts = b.path.Split('/');
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    string rest = string.Join("/", parts, i, parts.Length - i);
+                    if (Has(Find(start, rest), b))
+                        return Join(prefix, rest);
+                }
+                return Has(Find(root, b.path), b) ? b.path : null;
+            }
+
+            static Transform Find(Transform from, string path) => path.Length == 0 ? from : from.Find(path);
+
+            static string Join(string prefix, string path) =>
+                prefix.Length == 0 ? path : path.Length == 0 ? prefix : prefix + "/" + path;
+
+            static bool Has(Transform t, EditorCurveBinding b)
+            {
+                if (t == null)
+                    return false;
+                if (b.type == typeof(GameObject) || b.type == typeof(Transform))
+                    return true;
+                if (b.type == null || !typeof(Component).IsAssignableFrom(b.type))
+                    return false;
+                var component = t.GetComponent(b.type);
+                if (component == null)
+                    return false;
+                if (component is SkinnedMeshRenderer smr && b.propertyName.StartsWith("blendShape."))
+                    return smr.sharedMesh != null && smr.sharedMesh.GetBlendShapeIndex(b.propertyName.Substring("blendShape.".Length)) >= 0;
+                return true;
+            }
         }
 
         static void Hold(AnimationClip clip, float length)

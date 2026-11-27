@@ -24,6 +24,8 @@ namespace VAP
             public AnimationClip combine;
         }
 
+        public Transform startingPoint;
+
         public List<Entry> entries = new List<Entry>();
     }
 }

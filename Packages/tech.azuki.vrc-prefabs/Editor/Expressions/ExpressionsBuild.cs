@@ -96,7 +96,7 @@ namespace VAP.Editor
                 Object.DestroyImmediate(c);
         }
 
-        static readonly HashSet<string> PlainTypes = new HashSet<string>
+        internal static readonly HashSet<string> PlainTypes = new HashSet<string>
         {
             "float", "double", "int", "uint", "long", "ulong", "short", "ushort", "byte", "sbyte", "bool", "char", "string",
             "Vector2", "Vector3", "Vector4", "Quaternion", "Color", "Matrix4x4", "BoneWeight",

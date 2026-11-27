@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
@@ -10,18 +11,40 @@ namespace VAP.Editor
     [CustomEditor(typeof(VAPAnimationCombiner))]
     public class VAPAnimationCombinerEditor : UnityEditor.Editor
     {
-        static readonly GUIContent AnimationLabel = new GUIContent("Animation",
-            "At build time, every use of this animation in the avatar descriptor's controllers and in VAP VRCFury Full Controllers uses the new animation instead.");
+        static readonly GUIContent AnimationLabel = new GUIContent("Target Animation",
+            "At build time, every animator controller on the avatar that uses this animation uses the new animation instead.");
         static readonly GUIContent ModeLabel = new GUIContent("Mode",
-            "Combine adds the curves of With to the animation; where both animate the same property, With is used. Replace uses only the curves of With. Either way the result keeps the animation's settings and length.");
-        static readonly GUIContent CombineLabel = new GUIContent("With",
-            "The animation whose curves are used. If it is longer than the animation, it is compressed to fit.");
+            "Combine adds the curves of the animation being combined; where both animate the same property, the animation being combined is used. Replace uses only the curves of the animation being combined. Either way the result keeps the animation's settings and length.");
+        static readonly GUIContent CombineLabel = new GUIContent("With Source Animation",
+            "The animation being combined. If it is longer than the animation, it is compressed to fit.");
+        static readonly GUIContent StartLabel = new GUIContent("Source Animations Root",
+            "The object the animations being combined were recorded from. At build time their paths are fixed to work from the avatar root. Leave empty if they were recorded from the avatar root.");
         const float ModeWidth = 70f;
 
         SerializedProperty entries;
+        SerializedProperty startingPoint;
         ReorderableList list;
+        readonly Dictionary<(AnimationClip, Transform, Transform), List<string>> missing = new Dictionary<(AnimationClip, Transform, Transform), List<string>>();
 
-        void OnEnable() => entries = serializedObject.FindProperty(nameof(VAPAnimationCombiner.entries));
+        void OnEnable()
+        {
+            entries = serializedObject.FindProperty(nameof(VAPAnimationCombiner.entries));
+            startingPoint = serializedObject.FindProperty(nameof(VAPAnimationCombiner.startingPoint));
+            EditorApplication.hierarchyChanged += ClearMissing;
+            Undo.undoRedoPerformed += ClearMissing;
+            AnimationUtility.onCurveWasModified += CurveModified;
+        }
+
+        void OnDisable()
+        {
+            EditorApplication.hierarchyChanged -= ClearMissing;
+            Undo.undoRedoPerformed -= ClearMissing;
+            AnimationUtility.onCurveWasModified -= CurveModified;
+        }
+
+        void ClearMissing() => missing.Clear();
+
+        void CurveModified(AnimationClip clip, EditorCurveBinding binding, AnimationUtility.CurveModifiedType type) => ClearMissing();
 
         public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("Animation Combiner", DrawFields, this), this);
 
@@ -33,6 +56,7 @@ namespace VAP.Editor
             serializedObject.Update();
             using (new EditorGUI.DisabledScope(locked))
             {
+                EditorGUILayout.PropertyField(startingPoint, StartLabel);
                 list ??= MakeList();
                 list.draggable = list.displayAdd = list.displayRemove = !locked;
                 list.DoLayoutList();
@@ -76,9 +100,19 @@ namespace VAP.Editor
                     return;
                 }
                 if (combineProblem != null)
+                {
                     VAPEditorGUI.ErrorIcon(rightIcon, combineProblem);
-                else if (AnimationCombinerBuild.Compressed(from, add))
-                    VAPEditorGUI.WarningIcon(rightIcon, $"{add.name} is longer than {from.name} and will be compressed to {(from.length <= 0f ? "1 frame" : "fit")}.");
+                    return;
+                }
+                var warnings = new List<string>();
+                if (AnimationCombinerBuild.Compressed(from, add))
+                    warnings.Add($"{add.name} is longer than {from.name} and will be compressed to {(from.length <= 0f ? "1 frame" : "fit")}.");
+                var paths = Missing(add);
+                if (paths.Count > 0)
+                    warnings.Add($"{add.name} has paths that don't match anything:\n" + string.Join("\n", paths.Take(5)) +
+                                 (paths.Count > 5 ? $"\nand {paths.Count - 5} more" : ""));
+                if (warnings.Count > 0)
+                    VAPEditorGUI.WarningIcon(rightIcon, string.Join("\n", warnings));
             };
             l.onAddCallback = x =>
             {
@@ -90,6 +124,20 @@ namespace VAP.Editor
                 x.index = entries.arraySize - 1;
             };
             return l;
+        }
+
+        List<string> Missing(AnimationClip clip)
+        {
+            var combiner = (VAPAnimationCombiner)target;
+            var descriptor = VAPAvatar.Descriptor(combiner);
+            if (clip == null || descriptor == null)
+                return new List<string>();
+            var root = descriptor.transform;
+            var start = combiner.startingPoint != null && combiner.startingPoint.IsChildOf(root) ? combiner.startingPoint : root;
+            var key = (clip, start, root);
+            if (!missing.TryGetValue(key, out var paths))
+                missing[key] = paths = AnimationCombinerBuild.MissingPaths(clip, root, start);
+            return paths;
         }
 
         static string ClipField(Rect rect, SerializedProperty prop, System.Func<AnimationClip, string> problem)

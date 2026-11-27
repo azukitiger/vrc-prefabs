@@ -18,7 +18,7 @@ MonoBehaviour:
     valueType: 0
     saved: 1
     defaultValue: 0
-    networkSynced: 0
+    networkSynced: 1
     bitWidth: 3
     useCustomLerpDuration: 0
     customLerpDuration: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
     valueType: 0
     saved: 1
     defaultValue: 0
-    networkSynced: 0
+    networkSynced: 1
     bitWidth: 3
     useCustomLerpDuration: 0
     customLerpDuration: 0

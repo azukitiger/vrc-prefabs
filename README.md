@@ -593,10 +593,11 @@ Combines animations at build time. The animation files are never changed.
 
 ### Instructions
 1. Add **VAP** > **Animation Combiner** anywhere in the avatar.
-2. In each row, pick the **Animation** to change, the **Mode** and the animation to use **With** it.
-3. At build time, a new animation is made. **Combine** adds the curves of **With**, and where both change the same property, **With** is used. **Replace** uses only the curves of **With**. The new animation keeps the settings and length of **Animation**, and a longer **With** is compressed to fit.
-4. **With** can't change AAPs. **Animation** can't be an animation that only changes AAPs, or a placeholder animation whose only property starts with `_`.
-5. The new animation replaces **Animation** in the avatar descriptor's controllers and in VAP **VRCFury Full Controllers**. Plain VRCFury components are left alone.
+2. Set **Source Animations Root** to the object the source animations were recorded from, or leave it empty if they were recorded from the avatar root. At build time their paths are matched to what is under **Source Animations Root** and fixed to work from the avatar root, so moving or renaming the object doesn't break them.
+3. In each row, pick the **Target Animation**, the **Mode**, and the **With Source Animation** being combined.
+4. At build time, a new animation is made. **Combine** adds the curves of the source animation to the target animation, and where both change the same property, the source is used. **Replace** uses only the curves of the source. The new animation keeps the settings and length of the target, and a longer source is compressed to fit.
+5. The source can't change AAPs. The target can't be an animation that only changes AAPs, or a placeholder animation whose only property starts with `_`.
+6. The new animation replaces the target in every animator controller used on the avatar, like the avatar descriptor's controllers and **VRCFury Full Controllers**. VRCFury Toggles and Animator Override Controllers are not affected.
 
 ---
 

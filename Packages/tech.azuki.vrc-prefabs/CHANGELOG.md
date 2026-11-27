@@ -1,3 +1,8 @@
+## Version 3.3.0
+- Added `VAP/GestureRight/Idle` to logarithmic gestures.
+- Fixed logarithmic gestures parameters not set as synced.
+- Added  Animation Combiner component.
+
 ## Version 3.2.1
 - Disable face tracking debug on upload.
 
