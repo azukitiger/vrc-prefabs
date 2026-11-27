@@ -15,7 +15,7 @@ namespace VAP.Editor
         internal const string NotInAvatar = "This VAP component is not inside an avatar, so it won't do anything.";
 
         static readonly GUIContent PickContent = new GUIContent("", "Pick a Blendshapes Set from this avatar.");
-        static GUIContent warnIcon, foundIcon;
+        static GUIContent warnIcon, errorIcon, foundIcon;
 
         internal static float Line => EditorGUIUtility.singleLineHeight;
 
@@ -176,6 +176,13 @@ namespace VAP.Editor
             warnIcon ??= new GUIContent(EditorGUIUtility.IconContent("console.warnicon.sml").image);
             warnIcon.tooltip = tooltip;
             FieldIcon(field, warnIcon);
+        }
+
+        internal static void ErrorIcon(Rect field, string tooltip)
+        {
+            errorIcon ??= new GUIContent(EditorGUIUtility.IconContent("console.erroricon.sml").image);
+            errorIcon.tooltip = tooltip;
+            FieldIcon(field, errorIcon);
         }
 
         internal static void FoundIcon(Rect field, string tooltip)

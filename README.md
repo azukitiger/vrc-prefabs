@@ -27,6 +27,7 @@
   - [🧩 VRC Face Tracking BlendShape Set Hook](#-vrc-face-tracking-blendshape-set-hook)
   - [🧩 VRC Face Tracking Parameter Behaviors](#-vrc-face-tracking-parameter-behaviors)
   - [🧩 Rig Floor Adjuster](#-rig-floor-adjuster)
+  - [🧩 Animation Combiner](#-animation-combiner)
 - [Tools](#tools)
   - [🔧 VRC Gizmos](#-vrc-gizmos)
   - [🔧 UV Bake Tool](#-uv-bake-tool)
@@ -585,6 +586,17 @@ Adds **Parameter Behaviors** to the avatar descriptor's **Face Tracking** at bui
 ## 🧩 Rig Floor Adjuster
 
 Moves the armature and the view position up or down by **Armature Height Offset** (in meters) at build time, and rebuilds the humanoid avatar to match. One per avatar.
+
+## 🧩 Animation Combiner
+
+Combines animations at build time. The animation files are never changed.
+
+### Instructions
+1. Add **VAP** > **Animation Combiner** anywhere in the avatar.
+2. In each row, pick the **Animation** to change, the **Mode** and the animation to use **With** it.
+3. At build time, a new animation is made. **Combine** adds the curves of **With**, and where both change the same property, **With** is used. **Replace** uses only the curves of **With**. The new animation keeps the settings and length of **Animation**, and a longer **With** is compressed to fit.
+4. **With** can't change AAPs. **Animation** can't be an animation that only changes AAPs, or a placeholder animation whose only property starts with `_`.
+5. The new animation replaces **Animation** in the avatar descriptor's controllers and in VAP **VRCFury Full Controllers**. Plain VRCFury components are left alone.
 
 ---
 
