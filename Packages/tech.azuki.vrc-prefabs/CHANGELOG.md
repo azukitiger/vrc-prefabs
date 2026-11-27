@@ -1,3 +1,8 @@
+## Version 3.2.0
+- Avatar eyes are only controlled by one eye direction for non-face tracking.
+- Deprecated mesh matcap.
+- Updated derp blendtree.
+
 ## Version 3.1.18
 - Update Menu tooltips.
 
