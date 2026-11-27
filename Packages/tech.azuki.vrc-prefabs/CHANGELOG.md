@@ -1,3 +1,6 @@
+## Version 3.2.1
+- Disable face tracking debug on upload.
+
 ## Version 3.2.0
 - Avatar eyes are only controlled by one eye direction for non-face tracking.
 - Deprecated mesh matcap.

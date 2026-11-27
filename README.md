@@ -464,20 +464,18 @@ Adds a **heartbeat sound and visual display**.
 
 # Components
 
-A **component** is a part you add to an object to give it a job. These are added from **Add Component** > **VAP** in the **Inspector**. They are applied when the avatar is built and are removed from the uploaded avatar.
+These are added from **Add Component** > **VAP** in the **Inspector**. They are applied when the avatar is built and are removed from the uploaded avatar.
 
 > Requires [NDMF](https://ndmf.nadena.dev) and [VRCFury](https://vrcfury.com).
 
 Components that only work once per avatar can still be added more than once. The one closest to the avatar root is used, and the others say so in their inspector.
-
-A **prefab instance** is a copy of a prefab placed in your scene. On a prefab instance, locked components show an **Edit in Prefab** button. Components outside an avatar show a warning at the bottom of the inspector.
 
 ## 🧩 VRC Avatar Descriptor Enhancements
 
 Adds extra settings for the avatar's own **VRC Avatar Descriptor**. Add it to the avatar root, one per avatar.
 
 ### Features
-- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed. A copy is edited at build time. A removed item keeps its default value, which can still be changed. Parameters used only by removed items stay on the avatar but are no longer synced or saved, so everyone loads the default.
+- **Menu**: change parameter defaults and remove menu items of the descriptor's **Expressions Menu** and **Expression Parameters**. The assets are never changed. A copy is edited at build time. A removed item keeps its default value, which can still be changed. Parameters used only by removed items are kept on the avatar but are no longer synced or saved, so everyone loads the default.
 - **Frame Time**: adds the frame time parameters to the avatar (see [Frame Time](#frame-time)).
 - **Play Audio Clips**: sets the clips of every **VRC Animator Play Audio** behaviour in the descriptor's playable layers, without changing the controllers.
 
