@@ -31,6 +31,7 @@
 - [Tools](#tools)
   - [🔧 VRC Gizmos](#-vrc-gizmos)
   - [🔧 UV Bake Tool](#-uv-bake-tool)
+  - [🔧 Find Property Animations](#-find-property-animations)
 
 # Avatar Prefabs
 Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
@@ -642,3 +643,14 @@ The result is saved next to the texture as `<texture>_<model>_<To UV>`, with the
 |-|-|
 | Margin (px) | How far the baked color extends past each UV island. Raise it if islands get dark edges |
 | Bake Device | `Auto` uses the GPU when Blender finds one. Use `CPU` if the result comes out patchy or purple |
+
+## 🔧 Find Property Animations
+
+Finds every animation in the project that changes a property.
+
+### Instructions
+1. Right-click a property in the Inspector, like a PhysBone setting or a blendshape, and pick **Find Animations Using This Property**.
+2. For fields that can't be right-clicked, like a PhysBone's Rotation, open the component's **⋮** menu and pick **Find Animations Using This Component**. It lists every animation that changes that component, or turns its game object on or off.
+3. A window lists each animation that changes it, with the path and property it uses. Click one to find it in the Project, or double-click it to open it.
+
+Animations are matched by the object's name and the property, not the full path, so animations recorded from any root are found.

@@ -1,3 +1,6 @@
+## Version 3.3.2
+- Animation property finder tool.
+
 ## Version 3.3.1
 - Improved blendshape list viewer.
 
