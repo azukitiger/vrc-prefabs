@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 
-namespace VAP.Editor
-{
+namespace VAP.Editor {
     [InitializeOnLoad]
-    internal static class AssetMenus
-    {
-        class Item
-        {
+    internal static class AssetMenus {
+        class Item {
             public string path;
             public int priority;
             public Action run;
@@ -30,48 +27,39 @@ namespace VAP.Editor
 
         static readonly HashSet<string> removed = new HashSet<string>();
 
-        static AssetMenus()
-        {
-            if (AddMethod == null || RemoveMethod == null)
+        static AssetMenus() {
+            if (AddMethod == null || RemoveMethod == null) {
                 return;
+            }
+
             Selection.selectionChanged += Refresh;
             EditorApplication.delayCall += Refresh;
         }
 
-        static void Refresh()
-        {
+        static void Refresh() {
             bool changed = false;
-            foreach (var item in Items)
-            {
+            foreach (var item in Items) {
                 bool valid;
-                try
-                {
+                try {
                     valid = item.valid();
-                }
-                catch
-                {
+                } catch {
                     valid = false;
                 }
-                try
-                {
-                    if (!valid && removed.Add(item.path))
-                    {
+                try {
+                    if (!valid && removed.Add(item.path)) {
                         RemoveMethod.Invoke(null, new object[] { item.path });
                         changed = true;
-                    }
-                    else if (valid && removed.Remove(item.path))
-                    {
+                    } else if (valid && removed.Remove(item.path)) {
                         AddMethod.Invoke(null, new object[] { item.path, "", false, item.priority, item.run, item.valid });
                         changed = true;
                     }
-                }
-                catch
-                {
+                } catch {
                     return;
                 }
             }
-            if (changed)
+            if (changed) {
                 UpdateMethod?.Invoke(null, null);
+            }
         }
     }
 }

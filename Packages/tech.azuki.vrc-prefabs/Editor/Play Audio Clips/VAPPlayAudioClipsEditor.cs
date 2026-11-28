@@ -4,11 +4,9 @@ using AnimatorController = UnityEditor.Animations.AnimatorController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace VAP.Editor
-{
+namespace VAP.Editor {
     [CustomEditor(typeof(VAPPlayAudioClips))]
-    public class VAPPlayAudioClipsEditor : UnityEditor.Editor
-    {
+    public class VAPPlayAudioClipsEditor : UnityEditor.Editor {
         static readonly GUIContent ControllerLabel = new GUIContent("Controller",
             "Animator controller whose VRC Animator Play Audio behaviours get the clips below at build time. The controller asset itself is never changed.");
 
@@ -16,8 +14,7 @@ namespace VAP.Editor
         SerializedProperty entries;
         PlayAudioClipsGUI clips;
 
-        void OnEnable()
-        {
+        void OnEnable() {
             controller = serializedObject.FindProperty(nameof(VAPPlayAudioClips.controller));
             entries = serializedObject.FindProperty(nameof(VAPPlayAudioClips.entries));
             clips = new PlayAudioClipsGUI(serializedObject, nameof(VAPPlayAudioClips.entries));
@@ -25,31 +22,33 @@ namespace VAP.Editor
 
         public override VisualElement CreateInspectorGUI() => VAPInspectorHeader.Create("VRC Animator Play Audio Clips", DrawFields, this);
 
-        void DrawFields()
-        {
-            if (target == null)
+        void DrawFields() {
+            if (target == null) {
                 return;
+            }
+
             serializedObject.Update();
 
             EditorGUILayout.HelpBox("Play Audio Clips is now a section of the VRC Avatar Descriptor Enhancements and VRCFury Full Controller components. Move these clips there.", MessageType.Warning);
 
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(controller, ControllerLabel);
-            if (EditorGUI.EndChangeCheck())
-            {
+            if (EditorGUI.EndChangeCheck()) {
                 entries.ClearArray();
                 clips.Clear();
             }
 
             var value = controller.objectReferenceValue;
-            if (value == null)
+            if (value == null) {
                 EditorGUILayout.HelpBox("Select an animator controller.", MessageType.Error);
-            else if (!(value is AnimatorController ac))
+            } else if (!(value is AnimatorController ac)) {
                 EditorGUILayout.HelpBox("Select an Animator Controller, not an override controller.", MessageType.Error);
-            else if (clips.Found(ac).Count == 0)
+            } else if (clips.Found(ac).Count == 0) {
                 EditorGUILayout.HelpBox("This controller has no VRC Animator Play Audio.", MessageType.Warning);
-            else
+            } else {
                 clips.Draw(ac, "");
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
     }

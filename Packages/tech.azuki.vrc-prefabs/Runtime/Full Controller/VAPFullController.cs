@@ -5,13 +5,11 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.SDK3.Avatars.ScriptableObjects;
 
-namespace VAP
-{
+namespace VAP {
     [HelpURL(VAPAvatar.Docs + "#-vrcfury-full-controller")]
     [AddComponentMenu("VAP/VRCFury Full Controller")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
-    public class VAPFullController : VAPExpressions, IVRCFuryWrapper
-    {
+    public class VAPFullController : VAPExpressions, IVRCFuryWrapper {
         [NotKeyable]
         [HideInInspector] public Component wrapped;
         [NotKeyable]
@@ -21,8 +19,7 @@ namespace VAP
         [NonSerialized] public List<string> menuPrefixes = new List<string>();
         [NonSerialized] public List<VRCExpressionParameters> parameterFiles = new List<VRCExpressionParameters>();
 
-        public Component Wrapped
-        {
+        public Component Wrapped {
             get => wrapped;
             set => wrapped = value;
         }
@@ -31,12 +28,13 @@ namespace VAP
 
         public override List<VRCExpressionParameters> ParameterAssets() => parameterFiles.Where(p => p != null).Distinct().ToList();
 
-        public override string RootPath(VRCExpressionsMenu root)
-        {
+        public override string RootPath(VRCExpressionsMenu root) {
             int i = menus.IndexOf(root);
             string prefix = i >= 0 && i < menuPrefixes.Count ? menuPrefixes[i] : null;
-            if (string.IsNullOrWhiteSpace(prefix))
+            if (string.IsNullOrWhiteSpace(prefix)) {
                 return null;
+            }
+
             return MenuPaths.Apply(MenuPaths.Clean(prefix), DefaultMenuPath, menuPath);
         }
 

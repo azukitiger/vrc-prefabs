@@ -7,30 +7,28 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3A.Editor;
 
-namespace VAP.Editor
-{
+namespace VAP.Editor {
     [CustomEditor(typeof(VAPFaceTrackingDebug))]
     [CanEditMultipleObjects]
-    public class VAPFaceTrackingDebugEditor : VAPBlendshapeSetEditorBase
-    {
+    public class VAPFaceTrackingDebugEditor : VAPBlendshapeSetEditorBase {
         Cached<string> conflict;
 
-        protected override void DrawNotices()
-        {
-            if (targets.Length != 1)
+        protected override void DrawNotices() {
+            if (targets.Length != 1) {
                 return;
-            conflict ??= new Cached<string>(1.0, () =>
-            {
+            }
+
+            conflict ??= new Cached<string>(1.0, () => {
                 var c = (VAPFaceTrackingDebug)target;
                 return BlendshapeSetNameCheck.Conflict(c, VAPAvatar.Descriptor(c));
             });
-            if (conflict.Value is string text)
+            if (conflict.Value is string text) {
                 EditorGUILayout.HelpBox(text + " Use a different name. The avatar won't build until this is fixed.", MessageType.Error);
+            }
         }
     }
 
-    public abstract class VAPBlendshapeSetEditorBase : UnityEditor.Editor
-    {
+    public abstract class VAPBlendshapeSetEditorBase : UnityEditor.Editor {
         protected virtual string Title => "VRC Face Tracking BlendShape Set";
         protected virtual string LogName => "VAP Face Tracking BlendShape Set";
         protected virtual GUIContent SetNameLabel => NameLabel;
@@ -66,37 +64,34 @@ namespace VAP.Editor
 
         string lastError;
 
-        void SafeDrawFields()
-        {
-            try
-            {
+        void SafeDrawFields() {
+            try {
                 DrawFields();
                 lastError = null;
-            }
-            catch (ExitGUIException)
-            {
+            } catch (ExitGUIException) {
                 throw;
-            }
-            catch (System.Exception e)
-            {
-                if (lastError != e.Message)
+            } catch (System.Exception e) {
+                if (lastError != e.Message) {
                     Debug.LogException(e, target);
+                }
+
                 lastError = e.Message;
             }
-            if (lastError != null)
+            if (lastError != null) {
                 EditorGUILayout.HelpBox("Couldn't draw this component:\n" + lastError, MessageType.Error);
+            }
         }
 
-        void DrawFields()
-        {
-            if (target == null)
+        void DrawFields() {
+            if (target == null) {
                 return;
+            }
+
             serializedObject.Update();
             bool locked = targets.Any(VAPPrefabLock.IsFromPrefab);
             DrawNotices();
 
-            if (targets.Length > 1)
-            {
+            if (targets.Length > 1) {
                 EditorGUILayout.HelpBox("Select one component to edit its Blendshapes Set.", MessageType.None);
                 return;
             }
@@ -108,8 +103,10 @@ namespace VAP.Editor
             FaceTrackingDebugSetFiller.EnsureArrays(set);
             UpdateCatalog(component, set);
 
-            using (new EditorGUI.DisabledScope(locked))
+            using (new EditorGUI.DisabledScope(locked)) {
                 EditorGUILayout.PropertyField(meshes, MeshesFieldLabel, true);
+            }
+
             EditorGUILayout.Space(4f);
 
             float sdkHeight = drawer.GetPropertyHeight(set, GUIContent.none);
@@ -123,29 +120,31 @@ namespace VAP.Editor
 
             var header = TakeLine(ref position);
             EditorGUI.LabelField(header, "Blendshapes Set", EditorStyles.boldLabel);
-            if (GUI.Button(new Rect(header.xMax - 134f, header.y, 64f, Line), CopyContent))
+            if (GUI.Button(new Rect(header.xMax - 134f, header.y, 64f, Line), CopyContent)) {
                 EditorGUIUtility.systemCopyBuffer = FaceTrackingClipboard.SerializeBlendshapesSets(new[] { component.blendshapesSet });
-            using (new EditorGUI.DisabledScope(locked))
-            {
-                if (GUI.Button(new Rect(header.xMax - 64f, header.y, 64f, Line), PasteContent))
-                {
+            }
+
+            using (new EditorGUI.DisabledScope(locked)) {
+                if (GUI.Button(new Rect(header.xMax - 64f, header.y, 64f, Line), PasteContent)) {
                     PasteSet(set);
                     GUIUtility.ExitGUI();
                 }
             }
 
-            using (new EditorGUI.DisabledScope(locked))
-            {
+            using (new EditorGUI.DisabledScope(locked)) {
                 var nameProp = set.FindPropertyRelative("setName");
                 DrawSetName(TakeLine(ref position), nameProp);
-                if (nameProp.stringValue.Length > 100)
+                if (nameProp.stringValue.Length > 100) {
                     nameProp.stringValue = nameProp.stringValue.Substring(0, 100);
-                if (ShowWeight)
+                }
+
+                if (ShowWeight) {
                     EditorGUI.Slider(TakeLine(ref position), set.FindPropertyRelative("setWeight"), 0f, 1f, WeightLabel);
+                }
+
                 position.y += 5f;
                 EditorGUI.PropertyField(TakeLine(ref position), format, FormatLabel);
-                if (formatHint)
-                {
+                if (formatHint) {
                     string read = FaceTrackingDebugSetFiller.Normalize(format.stringValue);
                     EditorGUI.HelpBox(new Rect(position.x, position.y, position.width, hintHeight - 4f),
                         $"Use * for the tracking key name, like *Debug, Debug* or Debug*Debug. Without *, this is read as {read}.",
@@ -155,14 +154,13 @@ namespace VAP.Editor
                 position.y += 5f;
 
                 var buttons = TakeLine(ref position);
-                using (new EditorGUI.DisabledScope(catalogMeshes.Count == 0 || !FaceTrackingDebugSetFiller.HasFormat(format.stringValue)))
-                {
-                    if (GUI.Button(new Rect(buttons.x, buttons.y, buttons.width / 2 - 2f, Line), "Auto-Fill Blendshapes"))
+                using (new EditorGUI.DisabledScope(catalogMeshes.Count == 0 || !FaceTrackingDebugSetFiller.HasFormat(format.stringValue))) {
+                    if (GUI.Button(new Rect(buttons.x, buttons.y, buttons.width / 2 - 2f, Line), "Auto-Fill Blendshapes")) {
                         AutoFill(set, format.stringValue);
+                    }
                 }
                 if (GUI.Button(new Rect(buttons.x + buttons.width / 2 + 2f, buttons.y, buttons.width / 2 - 2f, Line), "Clear Blendshapes")
-                    && EditorUtility.DisplayDialog("Clear Blendshapes", "Clear every blendshape mapping in this set?", "Clear", "Cancel"))
-                {
+                    && EditorUtility.DisplayDialog("Clear Blendshapes", "Clear every blendshape mapping in this set?", "Clear", "Cancel")) {
                     Undo.SetCurrentGroupName("Clear Blendshapes");
                     FaceTrackingDebugSetFiller.Clear(set);
                     RefreshDrawer();
@@ -174,39 +172,46 @@ namespace VAP.Editor
                 drawer.OnGUI(new Rect(0f, -HiddenTop, clip.width, sdkHeight), set, GUIContent.none);
                 GUI.EndClip();
             }
-            if (locked)
+            if (locked) {
                 DrawViewControls(new Rect(position.x, position.y, position.width, sdkHeight - HiddenTop));
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        object ViewState()
-        {
-            if (StatesField == null || !(StatesField.GetValue(drawer) is System.Collections.IDictionary states))
+        object ViewState() {
+            if (StatesField == null || !(StatesField.GetValue(drawer) is System.Collections.IDictionary states)) {
                 return null;
+            }
+
             return states[(target.GetInstanceID(), "$inspector")];
         }
 
         static readonly string[] Tabs = { "All", "Eyes", "Brows", "Nose", "Cheek", "Jaw", "Lip", "Mouth", "Tongue", "Throat", "Visemes" };
 
-        void DrawViewControls(Rect area)
-        {
+        void DrawViewControls(Rect area) {
             object state = ViewState();
-            if (state == null)
+            if (state == null) {
                 return;
+            }
+
             var type = state.GetType();
             var tabField = type.GetField("tab");
             var searchField = type.GetField("search");
-            if (tabField == null || searchField == null)
+            if (tabField == null || searchField == null) {
                 return;
+            }
+
             var tabs = new Rect(area.x, area.y, area.width, Line);
             var search = new Rect(area.x, area.y + Step, area.width, Line);
             tabField.SetValue(state, GUI.Toolbar(tabs, (int)tabField.GetValue(state), Tabs, EditorStyles.toolbarButton));
             searchField.SetValue(state, EditorGUI.TextField(search, (string)searchField.GetValue(state) ?? "",
                 GUI.skin.FindStyle("ToolbarSearchTextField") ?? EditorStyles.toolbarTextField));
 
-            if (!Scrollable(state, out var scrollField, out float content, out float view))
+            if (!Scrollable(state, out var scrollField, out float content, out float view)) {
                 return;
+            }
+
             float barWidth = GUI.skin.verticalScrollbar.fixedWidth;
             var bar = new Rect(area.xMax - barWidth, area.y + Step * 4f, barWidth, view);
             var scroll = (Vector2)scrollField.GetValue(state);
@@ -214,25 +219,29 @@ namespace VAP.Editor
             scrollField.SetValue(state, scroll);
         }
 
-        void HandleScrollWheel(Rect clip)
-        {
+        void HandleScrollWheel(Rect clip) {
             var e = Event.current;
-            if (e.type != EventType.ScrollWheel)
+            if (e.type != EventType.ScrollWheel) {
                 return;
+            }
+
             object state = ViewState();
-            if (!Scrollable(state, out var scrollField, out float content, out float view))
+            if (!Scrollable(state, out var scrollField, out float content, out float view)) {
                 return;
+            }
+
             var viewport = new Rect(clip.x, clip.y + Step * 4f, clip.width, view);
-            if (!viewport.Contains(e.mousePosition))
+            if (!viewport.Contains(e.mousePosition)) {
                 return;
+            }
+
             var scroll = (Vector2)scrollField.GetValue(state);
             scroll.y = Mathf.Clamp(scroll.y + e.delta.y * 20f, 0f, content - view);
             scrollField.SetValue(state, scroll);
             e.Use();
         }
 
-        static bool Scrollable(object state, out System.Reflection.FieldInfo scrollField, out float content, out float view)
-        {
+        static bool Scrollable(object state, out System.Reflection.FieldInfo scrollField, out float content, out float view) {
             scrollField = state?.GetType().GetField("scroll");
             var heightField = state?.GetType().GetField("contentHeight");
             content = heightField != null ? (float)heightField.GetValue(state) : 0f;
@@ -240,38 +249,42 @@ namespace VAP.Editor
             return scrollField != null && heightField != null && content > view;
         }
 
-        protected static Rect TakeLine(ref Rect position)
-        {
+        protected static Rect TakeLine(ref Rect position) {
             var line = new Rect(position.x, position.y, position.width, Line);
             position.y += Step;
             return line;
         }
 
-        void UpdateCatalog(VAPBlendshapeSetBase component, SerializedProperty set)
-        {
+        void UpdateCatalog(VAPBlendshapeSetBase component, SerializedProperty set) {
             var list = new List<SkinnedMeshRenderer>();
             var descriptor = VAPAvatar.Descriptor(component);
-            if (IncludeAvatarMeshes && descriptor != null && descriptor.faceTrackingMeshes != null)
+            if (IncludeAvatarMeshes && descriptor != null && descriptor.faceTrackingMeshes != null) {
                 list.AddRange(descriptor.faceTrackingMeshes.Where(m => m != null));
+            }
+
             string format = FaceTrackingDebugSetFiller.Normalize(component.nameFormat);
-            foreach (var smr in FaceTrackingDebugBuild.MeshesFor(component, format))
-                if (smr != null && !list.Contains(smr))
+            foreach (var smr in FaceTrackingDebugBuild.MeshesFor(component, format)) {
+                if (smr != null && !list.Contains(smr)) {
                     list.Add(smr);
-            if (list.Count > 16)
+                }
+            }
+
+            if (list.Count > 16) {
                 list.RemoveRange(16, list.Count - 16);
+            }
 
             var context = FaceTrackingEditorContext.ForProperty(set);
-            if (context.SourceAvatar != null)
+            if (context.SourceAvatar != null) {
                 context.SourceAvatar = null;
-            if (!list.SequenceEqual(catalogMeshes))
-            {
+            }
+
+            if (!list.SequenceEqual(catalogMeshes)) {
                 catalogMeshes = list;
                 context.SetMeshes(list);
             }
         }
 
-        void AutoFill(SerializedProperty set, string format)
-        {
+        void AutoFill(SerializedProperty set, string format) {
             Undo.SetCurrentGroupName("Auto-Fill Blendshapes");
             var missing = new List<string>();
             int filled = FaceTrackingDebugSetFiller.AutoFill(set, format, FaceTrackingDebugSetFiller.BlendshapeNames(catalogMeshes), missing);
@@ -287,10 +300,8 @@ namespace VAP.Editor
 
         static void RefreshDrawer() => InvalidateBindings?.Invoke(null, null);
 
-        static void PasteSet(SerializedProperty set)
-        {
-            if (!FaceTrackingClipboard.TryParseBlendshapesSets(EditorGUIUtility.systemCopyBuffer, out var parsed, out string error) || parsed.Count == 0)
-            {
+        static void PasteSet(SerializedProperty set) {
+            if (!FaceTrackingClipboard.TryParseBlendshapesSets(EditorGUIUtility.systemCopyBuffer, out var parsed, out string error) || parsed.Count == 0) {
                 EditorUtility.DisplayDialog("Paste Blendshapes Set", "The clipboard doesn't hold a Blendshapes Set.\n\n" + error, "OK");
                 return;
             }

@@ -1,0 +1,5 @@
+# Force all text files to be normalized to LF in the repo
+* text=auto eol=lf
+
+# Specific rule for markdown (or any file type you want)
+*.md text eol=lf

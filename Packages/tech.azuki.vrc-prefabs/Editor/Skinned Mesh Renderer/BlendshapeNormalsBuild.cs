@@ -12,37 +12,36 @@ using Object = UnityEngine.Object;
 [assembly: ExportsPlugin(typeof(VAP.Editor.BlendshapeNormalsPlugin))]
 #endif
 
-namespace VAP.Editor
-{
-    internal static class BlendshapeNormalsBuild
-    {
-        internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
-        {
+namespace VAP.Editor {
+    internal static class BlendshapeNormalsBuild {
+        internal static void Process(GameObject avatarRoot, Action<Object> saveAsset) {
             var wrappers = avatarRoot.GetComponentsInChildren<VAPSkinnedMeshRenderer>(true)
                 .Where(w => w.blendShapeNormals && w.wrapped != null && w.wrapped.sharedMesh != null)
                 .ToList();
-            if (wrappers.Count == 0)
+            if (wrappers.Count == 0) {
                 return;
+            }
 
             var wanted = new Dictionary<SkinnedMeshRenderer, HashSet<string>>();
-            foreach (var w in wrappers)
-            {
+            foreach (var w in wrappers) {
                 var has = new HashSet<string>(Blendshapes.Names(w.wrapped.sharedMesh));
                 var found = w.normalBlendShapes.Where(n => !string.IsNullOrEmpty(n) && has.Contains(n)).ToList();
-                if (found.Count == 0)
+                if (found.Count == 0) {
                     continue;
-                if (!wanted.TryGetValue(w.wrapped, out var set))
+                }
+
+                if (!wanted.TryGetValue(w.wrapped, out var set)) {
                     wanted[w.wrapped] = set = new HashSet<string>();
+                }
+
                 set.UnionWith(found);
             }
 
             var done = new Dictionary<(Mesh, string), Mesh>();
-            foreach (var pair in wanted)
-            {
+            foreach (var pair in wanted) {
                 var smr = pair.Key;
                 var key = (smr.sharedMesh, string.Join("\n", pair.Value.OrderBy(n => n)));
-                if (!done.TryGetValue(key, out var mesh))
-                {
+                if (!done.TryGetValue(key, out var mesh)) {
                     mesh = Recalculate(smr.sharedMesh, pair.Value);
                     saveAsset?.Invoke(mesh);
                     done[key] = mesh;
@@ -51,8 +50,7 @@ namespace VAP.Editor
             }
         }
 
-        internal static Mesh Recalculate(Mesh source, HashSet<string> names)
-        {
+        internal static Mesh Recalculate(Mesh source, HashSet<string> names) {
             int count = source.vertexCount;
             var positions = source.vertices;
             var normals = source.normals;
@@ -74,20 +72,18 @@ namespace VAP.Editor
             var dn = new Vector3[count];
             var dt = new Vector3[count];
             var shaped = new Vector3[count];
-            for (int s = 0; s < source.blendShapeCount; s++)
-            {
+            for (int s = 0; s < source.blendShapeCount; s++) {
                 string name = source.GetBlendShapeName(s);
                 bool redo = names.Contains(name);
-                for (int f = 0; f < source.GetBlendShapeFrameCount(s); f++)
-                {
+                for (int f = 0; f < source.GetBlendShapeFrameCount(s); f++) {
                     source.GetBlendShapeFrameVertices(s, f, dv, dn, dt);
-                    if (redo)
-                    {
-                        for (int i = 0; i < count; i++)
+                    if (redo) {
+                        for (int i = 0; i < count; i++) {
                             shaped[i] = positions[i] + dv[i];
+                        }
+
                         var n = Shade(shaped, triangles, group, groupCount);
-                        for (int i = 0; i < count; i++)
-                        {
+                        for (int i = 0; i < count; i++) {
                             dn[i] = n[i] - baseNormals[i];
                             finalNormals[i] = (normals[i] + dn[i]).normalized;
                         }
@@ -95,8 +91,9 @@ namespace VAP.Editor
                         temp.normals = finalNormals;
                         temp.RecalculateTangents();
                         var t = temp.tangents;
-                        for (int i = 0; i < count; i++)
+                        for (int i = 0; i < count; i++) {
                             dt[i] = (Vector3)(t[i] - baseTangents[i]);
+                        }
                     }
                     mesh.AddBlendShapeFrame(name, source.GetBlendShapeFrameWeight(s, f), dv, dn, dt);
                 }
@@ -105,27 +102,27 @@ namespace VAP.Editor
             return mesh;
         }
 
-        static int[] Groups(Vector3[] positions, Vector3[] normals, out int groupCount)
-        {
+        static int[] Groups(Vector3[] positions, Vector3[] normals, out int groupCount) {
             const float sameNormal = 0.985f;
             var group = new int[positions.Length];
             var byPosition = new Dictionary<Vector3, List<(Vector3, int)>>();
             bool hasNormals = normals != null && normals.Length == positions.Length;
             groupCount = 0;
-            for (int i = 0; i < positions.Length; i++)
-            {
+            for (int i = 0; i < positions.Length; i++) {
                 var n = hasNormals ? normals[i] : Vector3.zero;
-                if (!byPosition.TryGetValue(positions[i], out var found))
+                if (!byPosition.TryGetValue(positions[i], out var found)) {
                     byPosition[positions[i]] = found = new List<(Vector3, int)>();
+                }
+
                 int id = -1;
-                foreach (var (other, otherId) in found)
-                    if (!hasNormals || Vector3.Dot(n, other) >= sameNormal)
-                    {
+                foreach (var (other, otherId) in found) {
+                    if (!hasNormals || Vector3.Dot(n, other) >= sameNormal) {
                         id = otherId;
                         break;
                     }
-                if (id < 0)
-                {
+                }
+
+                if (id < 0) {
                     id = groupCount++;
                     found.Add((n, id));
                 }
@@ -134,25 +131,27 @@ namespace VAP.Editor
             return group;
         }
 
-        static Vector3[] Shade(Vector3[] positions, int[] triangles, int[] group, int groupCount)
-        {
+        static Vector3[] Shade(Vector3[] positions, int[] triangles, int[] group, int groupCount) {
             var sum = new Vector3[groupCount];
-            for (int t = 0; t < triangles.Length; t += 3)
-            {
+            for (int t = 0; t < triangles.Length; t += 3) {
                 int a = triangles[t], b = triangles[t + 1], c = triangles[t + 2];
                 Vector3 pa = positions[a], pb = positions[b], pc = positions[c];
                 var face = Vector3.Cross(pb - pa, pc - pa);
                 float area = face.magnitude;
-                if (area < 1e-12f)
+                if (area < 1e-12f) {
                     continue;
+                }
+
                 face /= area;
                 sum[group[a]] += face * Corner(pb - pa, pc - pa);
                 sum[group[b]] += face * Corner(pc - pb, pa - pb);
                 sum[group[c]] += face * Corner(pa - pc, pb - pc);
             }
             var result = new Vector3[positions.Length];
-            for (int i = 0; i < result.Length; i++)
+            for (int i = 0; i < result.Length; i++) {
                 result[i] = sum[group[i]].normalized;
+            }
+
             return result;
         }
 
@@ -160,13 +159,11 @@ namespace VAP.Editor
     }
 
 #if VAP_NDMF
-    public class BlendshapeNormalsPlugin : Plugin<BlendshapeNormalsPlugin>
-    {
+    public class BlendshapeNormalsPlugin : Plugin<BlendshapeNormalsPlugin> {
         public override string QualifiedName => "tech.azuki.vrc-prefabs.blendshape-normals";
         public override string DisplayName => "VAP Blendshape Normals";
 
-        protected override void Configure()
-        {
+        protected override void Configure() {
             InPhase(BuildPhase.Transforming)
                 .Run("Recalculate blendshape normals", ctx => BlendshapeNormalsBuild.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
         }

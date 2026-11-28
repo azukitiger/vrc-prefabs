@@ -1,0 +1,70 @@
+#!/bin/sh
+package="Packages/tech.azuki.vrc-prefabs"
+
+files=$(git diff --cached --name-only --diff-filter=ACMR -- "$package/*.cs")
+[ -z "$files" ] && exit 0
+
+dotnet=dotnet
+if ! command -v dotnet >/dev/null 2>&1; then
+    if command -v dotnet.exe >/dev/null 2>&1; then
+        dotnet=dotnet.exe
+    else
+        echo "pre-commit: dotnet not found, skipping C# formatting."
+        exit 0
+    fi
+fi
+
+partial=$(echo "$files" | while IFS= read -r f; do
+    git diff --quiet -- "$f" || echo "  $f"
+done)
+if [ -n "$partial" ]; then
+    echo "pre-commit: these files have unstaged changes, so they can't be formatted automatically:"
+    echo "$partial"
+    echo "Stage or stash those changes, then commit again."
+    exit 1
+fi
+
+format() {
+    project=$1
+    folder=$2
+    set --
+    while IFS= read -r f; do
+        case "$f" in
+            "$package/$folder/"*) set -- "$@" "$f" ;;
+        esac
+    done <<EOF
+$files
+EOF
+    [ $# -eq 0 ] && return 0
+    if [ -f "$project" ]; then
+        "$dotnet" format style "$project" --diagnostics IDE0011 --severity warn --include "$@" &&
+            "$dotnet" format whitespace "$project" --include "$@"
+    else
+        (
+            cd "$package" || exit 1
+            for f; do
+                set -- "$@" "${f#"$package/"}"
+                shift
+            done
+            "$dotnet" format whitespace --folder . --include "$@"
+        )
+    fi || {
+        echo "pre-commit: dotnet format failed."
+        exit 1
+    }
+}
+
+lf=$(echo "$files" | while IFS= read -r f; do
+    [ "$(tr -dc '\r' < "$f" | head -c 1 | wc -c)" -gt 0 ] || echo "$f"
+done)
+
+format VAP.Runtime.csproj Runtime
+format VAP.Tools.Editor.csproj Editor
+
+[ -n "$lf" ] && echo "$lf" | while IFS= read -r f; do
+    tr -d '\r' < "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+done
+
+echo "$files" | while IFS= read -r f; do
+    git add -- "$f"
+done

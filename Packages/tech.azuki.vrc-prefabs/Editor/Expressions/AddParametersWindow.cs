@@ -5,10 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.ScriptableObjects;
 
-namespace VAP.Editor
-{
-    internal class AddParametersWindow : EditorWindow
-    {
+namespace VAP.Editor {
+    internal class AddParametersWindow : EditorWindow {
         internal const string AssetsMenu = "Assets/VAP/Add Parameters From...";
         const string InspectorMenu = "CONTEXT/VRCExpressionParameters/Add Parameters From...";
 
@@ -28,8 +26,7 @@ namespace VAP.Editor
         [MenuItem(InspectorMenu)]
         static void FromContext(MenuCommand command) => Open((VRCExpressionParameters)command.context);
 
-        static void Open(VRCExpressionParameters asset)
-        {
+        static void Open(VRCExpressionParameters asset) {
             var window = CreateInstance<AddParametersWindow>();
             window.titleContent = new GUIContent("Add Parameters");
             window.target = asset;
@@ -44,10 +41,8 @@ namespace VAP.Editor
 
         static int Cost(VRCExpressionParameters.Parameter p) => VAPExpressions.SyncedBits(p);
 
-        void OnGUI()
-        {
-            if (target == null)
-            {
+        void OnGUI() {
+            if (target == null) {
                 Close();
                 return;
             }
@@ -55,46 +50,50 @@ namespace VAP.Editor
             EditorGUI.BeginChangeCheck();
             source = (VRCExpressionParameters)EditorGUILayout.ObjectField(
                 new GUIContent("From", "The parameters file to copy from. It isn't changed."), source, typeof(VRCExpressionParameters), false);
-            if (EditorGUI.EndChangeCheck())
-            {
+            if (EditorGUI.EndChangeCheck()) {
                 picked.Clear();
-                if (source == target)
+                if (source == target) {
                     source = null;
+                }
             }
-            if (source == null)
+            if (source == null) {
                 return;
+            }
 
             var existing = new HashSet<string>(Valid(target).Select(p => p.name));
             var candidates = Valid(source).ToList();
 
             EditorGUILayout.Space(4f);
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                if (GUILayout.Button("All", EditorStyles.miniButtonLeft, GUILayout.Width(50f)))
-                    foreach (var p in candidates.Where(p => !existing.Contains(p.name)))
+            using (new EditorGUILayout.HorizontalScope()) {
+                if (GUILayout.Button("All", EditorStyles.miniButtonLeft, GUILayout.Width(50f))) {
+                    foreach (var p in candidates.Where(p => !existing.Contains(p.name))) {
                         picked.Add(p.name);
-                if (GUILayout.Button("None", EditorStyles.miniButtonRight, GUILayout.Width(50f)))
+                    }
+                }
+
+                if (GUILayout.Button("None", EditorStyles.miniButtonRight, GUILayout.Width(50f))) {
                     picked.Clear();
+                }
             }
 
             scroll = EditorGUILayout.BeginScrollView(scroll);
-            for (int i = 0; i < candidates.Count; i++)
-            {
+            for (int i = 0; i < candidates.Count; i++) {
                 var p = candidates[i];
                 bool there = existing.Contains(p.name);
                 var rect = EditorGUILayout.GetControlRect();
-                if (i % 2 == 1 && Event.current.type == EventType.Repaint)
+                if (i % 2 == 1 && Event.current.type == EventType.Repaint) {
                     EditorGUI.DrawRect(rect, RowTint);
-                using (new EditorGUI.DisabledScope(there))
-                {
+                }
+
+                using (new EditorGUI.DisabledScope(there)) {
                     var label = new GUIContent(p.name, there ? "Already in this file." : null);
                     bool on = EditorGUI.ToggleLeft(rect, label, !there && picked.Contains(p.name));
-                    if (!there)
-                    {
-                        if (on)
+                    if (!there) {
+                        if (on) {
                             picked.Add(p.name);
-                        else
+                        } else {
                             picked.Remove(p.name);
+                        }
                     }
                 }
             }
@@ -104,24 +103,27 @@ namespace VAP.Editor
             int total = Valid(target).Sum(Cost) + adding.Sum(Cost);
             bool over = total > VRCExpressionParameters.MAX_PARAMETER_COST;
             var bitsStyle = new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight };
-            if (over)
+            if (over) {
                 bitsStyle.normal.textColor = new Color(1f, 0.45f, 0.4f);
+            }
+
             EditorGUILayout.LabelField($"{total} / {VRCExpressionParameters.MAX_PARAMETER_COST} synced bits", bitsStyle);
 
-            using (new EditorGUI.DisabledScope(adding.Count == 0))
-                if (GUILayout.Button(adding.Count > 0 ? $"Add {adding.Count}" : "Add"))
-                {
+            using (new EditorGUI.DisabledScope(adding.Count == 0)) {
+                if (GUILayout.Button(adding.Count > 0 ? $"Add {adding.Count}" : "Add")) {
                     Add(adding);
                     picked.Clear();
                 }
+            }
         }
 
-        void Add(List<VRCExpressionParameters.Parameter> adding)
-        {
+        void Add(List<VRCExpressionParameters.Parameter> adding) {
             Undo.RecordObject(target, "Add Parameters");
             var list = (target.parameters ?? new VRCExpressionParameters.Parameter[0]).ToList();
-            foreach (var p in adding)
+            foreach (var p in adding) {
                 list.Add(VAPExpressions.Copy(p));
+            }
+
             target.parameters = list.ToArray();
             EditorUtility.SetDirty(target);
             AssetDatabase.SaveAssetIfDirty(target);

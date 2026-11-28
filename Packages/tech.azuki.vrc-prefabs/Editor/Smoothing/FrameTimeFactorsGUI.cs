@@ -5,10 +5,8 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace VAP.Editor
-{
-    internal class FrameTimeFactorsGUI
-    {
+namespace VAP.Editor {
+    internal class FrameTimeFactorsGUI {
         static readonly GUIContent DefaultsLabel = new GUIContent("Defaults", "Values every avatar with frame time gets.");
         static readonly GUIContent FactorsLabel = new GUIContent("Custom Factors",
             "Smoothing gives a smoothing factor for the given speed. Linear gives the value multiplied by the frame time, like StepSizeOne. " +
@@ -21,46 +19,45 @@ namespace VAP.Editor
         readonly string property;
         ReorderableList list;
 
-        internal FrameTimeFactorsGUI(SerializedObject serializedObject, string property)
-        {
+        internal FrameTimeFactorsGUI(SerializedObject serializedObject, string property) {
             this.serializedObject = serializedObject;
             this.property = property;
         }
 
-        internal void Draw(List<VAPFrameTime.Factor> factors, bool locked)
-        {
+        internal void Draw(List<VAPFrameTime.Factor> factors, bool locked) {
             EditorGUILayout.LabelField(DefaultsLabel, EditorStyles.boldLabel);
-            using (new EditorGUI.DisabledScope(true))
-                foreach (var d in ContactSmoothingBuild.Defaults())
+            using (new EditorGUI.DisabledScope(true)) {
+                foreach (var d in ContactSmoothingBuild.Defaults()) {
                     Row(EditorGUILayout.GetControlRect(), d.parameter, d.kind, d.value);
+                }
+            }
 
             EditorGUILayout.Space();
-            using (new EditorGUI.DisabledScope(locked))
-            {
+            using (new EditorGUI.DisabledScope(locked)) {
                 list ??= MakeList();
                 list.draggable = list.displayAdd = list.displayRemove = !locked;
                 list.DoLayoutList();
             }
 
             var seen = new HashSet<string>();
-            foreach (var factor in factors)
-            {
+            foreach (var factor in factors) {
                 string problem = ContactSmoothingBuild.FactorProblem(factor);
-                if (problem == null && !seen.Add(factor.parameter))
+                if (problem == null && !seen.Add(factor.parameter)) {
                     problem = $"\"{factor.parameter}\" is already in the list; only the first one is used.";
-                if (problem != null)
+                }
+
+                if (problem != null) {
                     EditorGUILayout.HelpBox(problem, MessageType.Warning);
+                }
             }
         }
 
-        ReorderableList MakeList()
-        {
+        ReorderableList MakeList() {
             var prop = serializedObject.FindProperty(property);
             var l = new ReorderableList(serializedObject, prop, true, true, true, true);
             l.drawHeaderCallback = rect => EditorGUI.LabelField(rect, FactorsLabel);
             l.elementHeight = EditorGUIUtility.singleLineHeight + 4f;
-            l.drawElementCallback = (rect, index, active, focused) =>
-            {
+            l.drawElementCallback = (rect, index, active, focused) => {
                 var e = prop.GetArrayElementAtIndex(index);
                 rect.y += 2f;
                 rect.height = EditorGUIUtility.singleLineHeight;
@@ -70,8 +67,7 @@ namespace VAP.Editor
                 EditorGUI.PropertyField(kind, e.FindPropertyRelative(nameof(VAPFrameTime.Factor.kind)), GUIContent.none);
                 EditorGUI.PropertyField(value, e.FindPropertyRelative(nameof(VAPFrameTime.Factor.value)), GUIContent.none);
             };
-            l.onAddCallback = x =>
-            {
+            l.onAddCallback = x => {
                 prop.arraySize++;
                 var e = prop.GetArrayElementAtIndex(prop.arraySize - 1);
                 e.FindPropertyRelative(nameof(VAPFrameTime.Factor.parameter)).stringValue = "";
@@ -82,8 +78,7 @@ namespace VAP.Editor
             return l;
         }
 
-        static void Row(Rect rect, string parameter, VAPFrameTime.Kind kind, float value)
-        {
+        static void Row(Rect rect, string parameter, VAPFrameTime.Kind kind, float value) {
             rect.xMin += 20f;
             rect.xMax -= 6f;
             var (name, kindRect, valueRect) = Split(rect);
@@ -92,8 +87,7 @@ namespace VAP.Editor
             EditorGUI.TextField(valueRect, value.ToString(CultureInfo.InvariantCulture));
         }
 
-        static (Rect, Rect, Rect) Split(Rect rect)
-        {
+        static (Rect, Rect, Rect) Split(Rect rect) {
             var value = new Rect(rect.xMax - ValueWidth, rect.y, ValueWidth, rect.height);
             var kind = new Rect(value.x - KindWidth - 4f, rect.y, KindWidth, rect.height);
             var name = new Rect(rect.x, rect.y, kind.x - rect.x - 4f, rect.height);

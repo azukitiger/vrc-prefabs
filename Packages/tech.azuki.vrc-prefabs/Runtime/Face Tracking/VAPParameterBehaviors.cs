@@ -5,13 +5,11 @@ using UnityEngine.Animations;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
-namespace VAP
-{
+namespace VAP {
     [HelpURL(VAPAvatar.Docs + "#-vrc-face-tracking-parameter-behaviors")]
     [AddComponentMenu("VAP/VRC Face Tracking Parameter Behaviors")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
-    public class VAPParameterBehaviors : MonoBehaviour, IEditorOnly
-    {
+    public class VAPParameterBehaviors : MonoBehaviour, IEditorOnly {
         [Tooltip("The Blendshapes Set every Tracking Key and Blendshape behavior here uses. " +
                  "Ignored when Per Behavior is on. If empty, each behavior's own set is used.")]
         [NotKeyable]
@@ -48,8 +46,7 @@ namespace VAP
         public string CorrectivesSet => SetFor(correctivesSet);
 
         [Serializable]
-        public class TrackingKeyBehavior
-        {
+        public class TrackingKeyBehavior {
             [Tooltip("A tracking key (LipFunnelUpperLeft) or a group of keys (LipFunnel, LipFunnelUpper).")]
             [NotKeyable]
             public string trackingKey = "";

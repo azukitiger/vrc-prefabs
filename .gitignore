@@ -3,6 +3,7 @@
 
 # Allow root metadata
 !.gitignore
+!.gitattributes
 !README.md
 !LICENSE
 !/source.json
@@ -10,6 +11,8 @@
 # Allow GitHub/Website folders
 !.github/
 !.github/**
+!.githooks/
+!.githooks/**
 !Website/
 !Website/**
 

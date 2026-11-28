@@ -1,9 +1,7 @@
 using UnityEngine;
 
-namespace VAP
-{
-    public interface IVRCFuryWrapper
-    {
+namespace VAP {
+    public interface IVRCFuryWrapper {
         Component Wrapped { get; set; }
     }
 }

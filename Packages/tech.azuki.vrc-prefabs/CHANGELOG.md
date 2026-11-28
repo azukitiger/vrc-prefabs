@@ -1,3 +1,6 @@
+## Version 3.3.3
+- Fixed VRC Contact & Physbone smoothing parameter names.
+
 ## Version 3.3.2
 - Animation property finder tool.
 

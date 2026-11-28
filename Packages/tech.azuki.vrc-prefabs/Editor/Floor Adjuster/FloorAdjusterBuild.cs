@@ -11,76 +11,76 @@ using Object = UnityEngine.Object;
 [assembly: ExportsPlugin(typeof(VAP.Editor.FloorAdjusterPlugin))]
 #endif
 
-namespace VAP.Editor
-{
-    internal static class FloorAdjusterBuild
-    {
+namespace VAP.Editor {
+    internal static class FloorAdjusterBuild {
         const string Log = "[VAP Rig Floor Adjuster] ";
 
-        internal static void Process(GameObject avatarRoot, Action<Object> saveAsset)
-        {
+        internal static void Process(GameObject avatarRoot, Action<Object> saveAsset) {
             var all = avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(true);
-            if (all.Length == 0)
+            if (all.Length == 0) {
                 return;
-            var used = VAPAvatar.First<VAPFloorAdjuster>(all[0], false);
-            foreach (var c in avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(false))
-                if (c != used)
-                    Debug.LogWarning(Log + $"{c.name}: does nothing because \"{used.name}\" game object already has a Rig Floor Adjuster.", c);
-            if (used != null)
-                Apply(avatarRoot, used, saveAsset);
+            }
 
-            foreach (var c in all)
+            var used = VAPAvatar.First<VAPFloorAdjuster>(all[0], false);
+            foreach (var c in avatarRoot.GetComponentsInChildren<VAPFloorAdjuster>(false)) {
+                if (c != used) {
+                    Debug.LogWarning(Log + $"{c.name}: does nothing because \"{used.name}\" game object already has a Rig Floor Adjuster.", c);
+                }
+            }
+
+            if (used != null) {
+                Apply(avatarRoot, used, saveAsset);
+            }
+
+            foreach (var c in all) {
                 Object.DestroyImmediate(c);
+            }
         }
 
-        static void Apply(GameObject avatarRoot, VAPFloorAdjuster adjuster, Action<Object> saveAsset)
-        {
+        static void Apply(GameObject avatarRoot, VAPFloorAdjuster adjuster, Action<Object> saveAsset) {
             var root = avatarRoot.transform;
             var animator = avatarRoot.GetComponent<Animator>();
-            if (animator == null || animator.avatar == null || !animator.avatar.isHuman)
-            {
+            if (animator == null || animator.avatar == null || !animator.avatar.isHuman) {
                 Debug.LogWarning(Log + "The avatar needs a humanoid Animator; skipped.", avatarRoot);
                 return;
             }
 
             Transform hips = null;
-            try { hips = animator.GetBoneTransform(HumanBodyBones.Hips); }
-            catch (Exception) { }
+            try { hips = animator.GetBoneTransform(HumanBodyBones.Hips); } catch (Exception) { }
             var armature = hips != null ? hips.parent : null;
-            if (armature == null || armature == root)
-            {
+            if (armature == null || armature == root) {
                 Debug.LogWarning(Log + "The hips need a parent object (the armature) under the avatar root; skipped.", avatarRoot);
                 return;
             }
 
             float height = adjuster.height;
-            if (Mathf.Abs(height) < 0.00001f)
+            if (Mathf.Abs(height) < 0.00001f) {
                 return;
+            }
 
             armature.position += root.TransformVector(new Vector3(0f, height, 0f));
 
             var descriptor = avatarRoot.GetComponent<VRCAvatarDescriptor>();
-            if (descriptor != null)
+            if (descriptor != null) {
                 descriptor.ViewPosition.y += height;
+            }
 
             var oldAvatar = animator.avatar;
             var human = oldAvatar.humanDescription;
             var skeleton = human.skeleton;
-            if (skeleton != null && skeleton.Length > 0)
-            {
+            if (skeleton != null && skeleton.Length > 0) {
                 skeleton[0].name = avatarRoot.name;
-                for (int i = 0; i < skeleton.Length; i++)
-                {
-                    if (skeleton[i].name == armature.name)
+                for (int i = 0; i < skeleton.Length; i++) {
+                    if (skeleton[i].name == armature.name) {
                         skeleton[i].position = armature.localPosition;
+                    }
                 }
                 human.skeleton = skeleton;
             }
 
             var armaturePosition = armature.localPosition;
             var rebuilt = BuildOnCleanCopy(root, armature, human, out string problem);
-            if (rebuilt == null || !rebuilt.isValid || !rebuilt.isHuman)
-            {
+            if (rebuilt == null || !rebuilt.isValid || !rebuilt.isHuman) {
                 Debug.LogError(Log + "Couldn't rebuild the humanoid Avatar, so the rig still uses the original one" +
                                (problem != null ? $" ({problem})" : "") + ". Only the armature and view position were moved.", avatarRoot);
                 return;
@@ -93,22 +93,21 @@ namespace VAP.Editor
             Debug.Log(Log + $"Moved the armature {(height > 0 ? "up" : "down")} {Mathf.Abs(height) * 100f:0.0} cm and rebuilt the rig as \"{rebuilt.name}\".", avatarRoot);
         }
 
-        static Avatar BuildOnCleanCopy(Transform root, Transform armature, HumanDescription human, out string problem)
-        {
+        static Avatar BuildOnCleanCopy(Transform root, Transform armature, HumanDescription human, out string problem) {
             problem = null;
             var temp = new GameObject(root.name) { hideFlags = HideFlags.HideAndDontSave };
             temp.SetActive(false);
-            try
-            {
+            try {
                 Transform parent = temp.transform;
                 string path = UnityEditor.AnimationUtility.CalculateTransformPath(armature.parent, root);
-                if (!string.IsNullOrEmpty(path))
-                    foreach (string part in path.Split('/'))
-                    {
+                if (!string.IsNullOrEmpty(path)) {
+                    foreach (string part in path.Split('/')) {
                         var go = new GameObject(part);
                         go.transform.SetParent(parent, false);
                         parent = go.transform;
                     }
+                }
+
                 var copy = Object.Instantiate(armature.gameObject, parent, false);
                 copy.name = armature.name;
                 copy.transform.localPosition = armature.localPosition;
@@ -116,45 +115,46 @@ namespace VAP.Editor
                 copy.transform.localScale = armature.localScale;
 
                 var names = new System.Collections.Generic.HashSet<string> { temp.name };
-                foreach (var t in temp.GetComponentsInChildren<Transform>(true))
+                foreach (var t in temp.GetComponentsInChildren<Transform>(true)) {
                     names.Add(t.name);
+                }
+
                 var skeleton = new System.Collections.Generic.List<SkeletonBone>();
-                for (int i = 0; i < human.skeleton.Length; i++)
-                {
+                for (int i = 0; i < human.skeleton.Length; i++) {
                     var bone = human.skeleton[i];
-                    if (i == 0)
+                    if (i == 0) {
                         bone.name = temp.name;
-                    if (names.Contains(bone.name))
+                    }
+
+                    if (names.Contains(bone.name)) {
                         skeleton.Add(bone);
+                    }
                 }
                 human.skeleton = skeleton.ToArray();
 
                 var missing = System.Linq.Enumerable.FirstOrDefault(human.human, h => !names.Contains(h.boneName));
-                if (!string.IsNullOrEmpty(missing.boneName))
-                {
+                if (!string.IsNullOrEmpty(missing.boneName)) {
                     problem = $"bone \"{missing.boneName}\" ({missing.humanName}) isn't under the armature";
                     return null;
                 }
                 var avatar = AvatarBuilder.BuildHumanAvatar(temp, human);
-                if (avatar == null || !avatar.isValid || !avatar.isHuman)
+                if (avatar == null || !avatar.isValid || !avatar.isHuman) {
                     problem = "Unity's AvatarBuilder rejected it; see the Console for its message";
+                }
+
                 return avatar;
-            }
-            finally
-            {
+            } finally {
                 Object.DestroyImmediate(temp);
             }
         }
     }
 
 #if VAP_NDMF
-    public class FloorAdjusterPlugin : Plugin<FloorAdjusterPlugin>
-    {
+    public class FloorAdjusterPlugin : Plugin<FloorAdjusterPlugin> {
         public override string QualifiedName => "tech.azuki.vrc-prefabs.floor-adjuster";
         public override string DisplayName => "VAP Rig Floor Adjuster";
 
-        protected override void Configure()
-        {
+        protected override void Configure() {
             InPhase(BuildPhase.Transforming)
                 .Run("Adjust floor height", ctx => FloorAdjusterBuild.Process(ctx.AvatarRootObject, o => ctx.AssetSaver.SaveAsset(o)));
         }

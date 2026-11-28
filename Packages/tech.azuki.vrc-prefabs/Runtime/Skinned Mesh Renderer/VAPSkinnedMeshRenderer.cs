@@ -3,16 +3,14 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.SDKBase;
 
-namespace VAP
-{
+namespace VAP {
     [HelpURL(VAPAvatar.Docs + "#-skinned-mesh-renderer")]
     [AddComponentMenu("VAP/Skinned Mesh Renderer")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SkinnedMeshRenderer))]
     [ExecuteAlways]
-    public class VAPSkinnedMeshRenderer : MonoBehaviour, IEditorOnly, IVRCFuryWrapper
-    {
+    public class VAPSkinnedMeshRenderer : MonoBehaviour, IEditorOnly, IVRCFuryWrapper {
         [NotKeyable]
         [HideInInspector] public SkinnedMeshRenderer wrapped;
         [NotKeyable]
@@ -20,8 +18,7 @@ namespace VAP
         [NotKeyable]
         public List<string> normalBlendShapes = new List<string>();
 
-        public Component Wrapped
-        {
+        public Component Wrapped {
             get => wrapped;
             set => wrapped = value as SkinnedMeshRenderer;
         }
@@ -29,10 +26,10 @@ namespace VAP
 #if UNITY_EDITOR
         void Reset() => wrapped = GetComponent<SkinnedMeshRenderer>();
 
-        void OnDestroy()
-        {
-            if (wrapped != null)
+        void OnDestroy() {
+            if (wrapped != null) {
                 wrapped.hideFlags &= ~HideFlags.HideInInspector;
+            }
         }
 #endif
     }

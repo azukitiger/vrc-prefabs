@@ -32,6 +32,7 @@
   - [🔧 VRC Gizmos](#-vrc-gizmos)
   - [🔧 UV Bake Tool](#-uv-bake-tool)
   - [🔧 Find Property Animations](#-find-property-animations)
+- [Development](#development)
 
 # Avatar Prefabs
 Prefabs and assets that add **advanced animations and interactive systems** to **VRChat avatars**.
@@ -654,3 +655,11 @@ Finds every animation in the project that changes a property.
 3. A window lists each animation that changes it, with the path and property it uses. Click one to find it in the Project, or double-click it to open it.
 
 Animations are matched by the object's name and the property, not the full path, so animations recorded from any root are found.
+
+---
+
+# Development
+
+Run `git config core.hooksPath .githooks` once after cloning, so C# files in the package are formatted when you commit.
+
+To format every file, braces included, run `dotnet format style VAP.Runtime.csproj --diagnostics IDE0011 --severity warn`, `dotnet format whitespace VAP.Runtime.csproj`, and the same two with `VAP.Tools.Editor.csproj`. These need the project files Unity makes.

@@ -3,10 +3,8 @@ using UnityEngine.Animations;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
-namespace VAP
-{
-    public abstract class VAPBlendshapeSetBase : MonoBehaviour, IEditorOnly
-    {
+namespace VAP {
+    public abstract class VAPBlendshapeSetBase : MonoBehaviour, IEditorOnly {
         public const string IconPath = "Packages/tech.azuki.vrc-prefabs/Editor/Icons/VAP Icon.png";
 
         public VRCAvatarDescriptor.FaceTrackingBlendshapesSet blendshapesSet =

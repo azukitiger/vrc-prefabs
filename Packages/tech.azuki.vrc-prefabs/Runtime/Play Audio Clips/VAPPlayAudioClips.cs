@@ -4,16 +4,13 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.SDKBase;
 
-namespace VAP
-{
+namespace VAP {
     [HelpURL(VAPAvatar.Docs + "#-vrc-avatar-descriptor-enhancements")]
     [AddComponentMenu("")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
-    public class VAPPlayAudioClips : MonoBehaviour, IEditorOnly
-    {
+    public class VAPPlayAudioClips : MonoBehaviour, IEditorOnly {
         [Serializable]
-        public class Entry
-        {
+        public class Entry {
             [NotKeyable]
             public string key;
             [NotKeyable]

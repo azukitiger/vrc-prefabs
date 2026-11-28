@@ -6,11 +6,9 @@ using UnityEngine.Animations;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using VRC.SDKBase;
 
-namespace VAP
-{
+namespace VAP {
     [Icon(VAPFaceTrackingDebug.IconPath)]
-    public abstract class VAPExpressions : MonoBehaviour, IEditorOnly
-    {
+    public abstract class VAPExpressions : MonoBehaviour, IEditorOnly {
         [Tooltip("The Expressions Menu asset. It is never changed; values set here are applied to a copy at build time.")]
         [NotKeyable]
         public VRCExpressionsMenu menuAsset;
@@ -37,8 +35,7 @@ namespace VAP
         public List<VAPPlayAudioClips.Entry> audioClips = new List<VAPPlayAudioClips.Entry>();
 
         [Serializable]
-        public class DefaultOverride
-        {
+        public class DefaultOverride {
             [NotKeyable]
             public string name = "";
             [NotKeyable]
@@ -46,8 +43,7 @@ namespace VAP
         }
 
         [Serializable]
-        public class ControlOverride
-        {
+        public class ControlOverride {
             [NotKeyable]
             public VRCExpressionsMenu menu;
             [NotKeyable]
@@ -68,59 +64,75 @@ namespace VAP
 
         public virtual string RootPath(VRCExpressionsMenu root) => null;
 
-        public VRCExpressionParameters.Parameter FindParameter(string name)
-        {
-            if (string.IsNullOrEmpty(name))
+        public VRCExpressionParameters.Parameter FindParameter(string name) {
+            if (string.IsNullOrEmpty(name)) {
                 return null;
-            foreach (var asset in ParameterAssets())
-                if (asset.parameters != null)
-                    foreach (var p in asset.parameters)
-                        if (p != null && p.name == name)
+            }
+
+            foreach (var asset in ParameterAssets()) {
+                if (asset.parameters != null) {
+                    foreach (var p in asset.parameters) {
+                        if (p != null && p.name == name) {
                             return p;
+                        }
+                    }
+                }
+            }
+
             return null;
         }
 
-        public List<VRCExpressionsMenu> SubMenus()
-        {
+        public List<VRCExpressionsMenu> SubMenus() {
             var result = new List<VRCExpressionsMenu>();
             var roots = RootMenus();
             var seen = new HashSet<VRCExpressionsMenu>(roots);
-            foreach (var root in roots)
+            foreach (var root in roots) {
                 Collect(root, seen, result, IsRemoved);
+            }
+
             return result;
         }
 
-        public List<VRCExpressionsMenu> AllMenus()
-        {
+        public List<VRCExpressionsMenu> AllMenus() {
             var roots = RootMenus();
             var result = new List<VRCExpressionsMenu>(roots);
             var seen = new HashSet<VRCExpressionsMenu>(roots);
-            foreach (var root in roots)
+            foreach (var root in roots) {
                 Collect(root, seen, result, null);
+            }
+
             return result;
         }
 
-        public static IEnumerable<string> ControlParameters(VRCExpressionsMenu.Control c)
-        {
-            if (c == null)
+        public static IEnumerable<string> ControlParameters(VRCExpressionsMenu.Control c) {
+            if (c == null) {
                 yield break;
-            if (!string.IsNullOrEmpty(c.parameter?.name))
+            }
+
+            if (!string.IsNullOrEmpty(c.parameter?.name)) {
                 yield return c.parameter.name;
-            if (c.subParameters != null)
-                foreach (var p in c.subParameters)
-                    if (!string.IsNullOrEmpty(p?.name))
+            }
+
+            if (c.subParameters != null) {
+                foreach (var p in c.subParameters) {
+                    if (!string.IsNullOrEmpty(p?.name)) {
                         yield return p.name;
+                    }
+                }
+            }
         }
 
-        void Collect(VRCExpressionsMenu menu, HashSet<VRCExpressionsMenu> seen, List<VRCExpressionsMenu> result, Func<VRCExpressionsMenu, int, bool> skip)
-        {
-            if (menu.controls == null)
+        void Collect(VRCExpressionsMenu menu, HashSet<VRCExpressionsMenu> seen, List<VRCExpressionsMenu> result, Func<VRCExpressionsMenu, int, bool> skip) {
+            if (menu.controls == null) {
                 return;
-            for (int i = 0; i < menu.controls.Count; i++)
-            {
+            }
+
+            for (int i = 0; i < menu.controls.Count; i++) {
                 var sub = menu.controls[i]?.subMenu;
-                if (sub == null || (skip != null && skip(menu, i)) || !seen.Add(sub))
+                if (sub == null || (skip != null && skip(menu, i)) || !seen.Add(sub)) {
                     continue;
+                }
+
                 result.Add(sub);
                 Collect(sub, seen, result, skip);
             }
@@ -128,36 +140,43 @@ namespace VAP
 
         public bool IsRemoved(VRCExpressionsMenu menu, int control) => FindControl(menu, control, -1)?.removed ?? false;
 
-        HashSet<string> UsedParameters(Func<VRCExpressionsMenu, int, bool> skip)
-        {
+        HashSet<string> UsedParameters(Func<VRCExpressionsMenu, int, bool> skip) {
             var result = new HashSet<string>();
             var roots = RootMenus();
             var menus = new List<VRCExpressionsMenu>(roots);
             var seen = new HashSet<VRCExpressionsMenu>(roots);
-            foreach (var root in roots)
+            foreach (var root in roots) {
                 Collect(root, seen, menus, skip);
-            foreach (var menu in menus)
-            {
-                if (menu.controls == null)
+            }
+
+            foreach (var menu in menus) {
+                if (menu.controls == null) {
                     continue;
-                for (int i = 0; i < menu.controls.Count; i++)
-                {
+                }
+
+                for (int i = 0; i < menu.controls.Count; i++) {
                     var c = menu.controls[i];
-                    if (c == null || (skip != null && skip(menu, i)))
+                    if (c == null || (skip != null && skip(menu, i))) {
                         continue;
-                    if (!string.IsNullOrEmpty(c.parameter?.name))
+                    }
+
+                    if (!string.IsNullOrEmpty(c.parameter?.name)) {
                         result.Add(c.parameter.name);
-                    if (c.subParameters != null)
-                        foreach (var p in c.subParameters)
-                            if (!string.IsNullOrEmpty(p?.name))
+                    }
+
+                    if (c.subParameters != null) {
+                        foreach (var p in c.subParameters) {
+                            if (!string.IsNullOrEmpty(p?.name)) {
                                 result.Add(p.name);
+                            }
+                        }
+                    }
                 }
             }
             return result;
         }
 
-        public HashSet<string> UnsyncedParameters()
-        {
+        public HashSet<string> UnsyncedParameters() {
             var before = UsedParameters(null);
             before.ExceptWith(UsedParameters(IsRemoved));
             return before;
@@ -170,22 +189,18 @@ namespace VAP
         public ControlOverride FindControl(VRCExpressionsMenu menu, int control, int label) =>
             controlOverrides.FirstOrDefault(o => o != null && o.menu == menu && o.control == control && o.label == label);
 
-        public VRCExpressionParameters.Parameter[] BuildParameters(VRCExpressionParameters asset)
-        {
+        public VRCExpressionParameters.Parameter[] BuildParameters(VRCExpressionParameters asset) {
             var source = asset != null && asset.parameters != null
                 ? asset.parameters : new VRCExpressionParameters.Parameter[0];
             var unsynced = UnsyncedParameters();
-            return source.Where(p => p != null).Select(p =>
-            {
+            return source.Where(p => p != null).Select(p => {
                 var copy = Copy(p);
-                if (unsynced.Contains(p.name))
-                {
+                if (unsynced.Contains(p.name)) {
                     copy.networkSynced = false;
                     copy.saved = false;
                 }
                 var o = FindDefault(p.name);
-                if (o != null)
-                {
+                if (o != null) {
                     Range(p, out float min, out float max);
                     copy.defaultValue = Mathf.Clamp(o.value, min, max);
                 }
@@ -202,11 +217,9 @@ namespace VAP
         public static bool IsSigned(VRCExpressionParameters.Parameter p) =>
             p.GetRepresentationByType() == VRCExpressionParameters.Parameter.ValueRepresentation.Signed;
 
-        public static void Range(VRCExpressionParameters.Parameter p, out float min, out float max)
-        {
+        public static void Range(VRCExpressionParameters.Parameter p, out float min, out float max) {
             bool signed = IsSigned(p);
-            switch (p.valueType)
-            {
+            switch (p.valueType) {
                 case VRCExpressionParameters.ValueType.Bool:
                     min = 0f;
                     max = 1f;
@@ -223,31 +236,32 @@ namespace VAP
             }
         }
 
-        public List<VRCExpressionsMenu.Control> BuildControls(VRCExpressionsMenu menu)
-        {
+        public List<VRCExpressionsMenu.Control> BuildControls(VRCExpressionsMenu menu) {
             var result = new List<VRCExpressionsMenu.Control>();
-            if (menu == null || menu.controls == null)
+            if (menu == null || menu.controls == null) {
                 return result;
-            for (int i = 0; i < menu.controls.Count; i++)
-            {
-                if (IsRemoved(menu, i))
+            }
+
+            for (int i = 0; i < menu.controls.Count; i++) {
+                if (IsRemoved(menu, i)) {
                     continue;
+                }
+
                 result.Add(Copy(menu.controls[i]));
             }
             return result;
         }
 
-        public static VRCExpressionsMenu.Control Copy(VRCExpressionsMenu.Control c)
-        {
-            if (c == null)
-                return new VRCExpressionsMenu.Control
-                {
+        public static VRCExpressionsMenu.Control Copy(VRCExpressionsMenu.Control c) {
+            if (c == null) {
+                return new VRCExpressionsMenu.Control {
                     parameter = new VRCExpressionsMenu.Control.Parameter { name = "" },
                     subParameters = new VRCExpressionsMenu.Control.Parameter[0],
                     labels = new VRCExpressionsMenu.Control.Label[0],
                 };
-            return new VRCExpressionsMenu.Control
-            {
+            }
+
+            return new VRCExpressionsMenu.Control {
                 name = c.name,
                 icon = c.icon,
                 type = c.type,

@@ -2,19 +2,18 @@
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace VAP.Editor
-{
+namespace VAP.Editor {
     [CustomEditor(typeof(VAPFrameTime))]
-    public class VAPFrameTimeEditor : UnityEditor.Editor
-    {
+    public class VAPFrameTimeEditor : UnityEditor.Editor {
         FrameTimeFactorsGUI factors;
 
         public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("Frame Time", DrawFields, this), this);
 
-        void DrawFields()
-        {
-            if (target == null)
+        void DrawFields() {
+            if (target == null) {
                 return;
+            }
+
             serializedObject.Update();
             var f = (VAPFrameTime)target;
             EditorGUILayout.HelpBox("Frame Time is now a section of the VRC Avatar Descriptor Enhancements component. Move these factors there.", MessageType.Warning);

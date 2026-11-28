@@ -5,11 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace VAP.Editor
-{
+namespace VAP.Editor {
     [CustomEditor(typeof(VAPFullController))]
-    public class VAPFullControllerEditor : VAPExpressionsEditor
-    {
+    public class VAPFullControllerEditor : VAPExpressionsEditor {
         readonly WrappedEditor wrap = new WrappedEditor(FullControllerSource.FeatureType, "VRCFury Full Controller", "VAP.FullController.Open.");
 
         VAPFullController Owner => (VAPFullController)wrap.Owner;
@@ -19,37 +17,39 @@ namespace VAP.Editor
 
         void OnDisable() => wrap.Disable();
 
-        void DrawFullController()
-        {
-            if (Owner == null || Wrapped == null)
+        void DrawFullController() {
+            if (Owner == null || Wrapped == null) {
                 return;
+            }
+
             FullControllerSource.Resolve(Owner);
-            if (Owner.RootMenus().Count == 0 && Owner.ParameterAssets().Count == 0)
+            if (Owner.RootMenus().Count == 0 && Owner.ParameterAssets().Count == 0) {
                 EditorGUILayout.HelpBox("The Full Controller below has no menu or parameters yet.", MessageType.Info);
-            else
+            } else {
                 DrawContents(Owner);
+            }
         }
 
-        protected override void DrawMenuPath(VAPExpressions component)
-        {
+        protected override void DrawMenuPath(VAPExpressions component) {
             serializedObject.Update();
             VAPEditorGUI.MenuPathField(serializedObject.FindProperty("menuPath"), Owner.DefaultMenuPath);
             serializedObject.ApplyModifiedProperties();
             EditorGUILayout.Space(2f);
         }
 
-        IEnumerable<Object> Controllers()
-        {
-            if (Wrapped == null)
+        IEnumerable<Object> Controllers() {
+            if (Wrapped == null) {
                 yield break;
+            }
+
             using var so = new SerializedObject(Wrapped);
             var controllers = so.FindProperty("content.controllers");
-            for (int i = 0; i < (controllers?.arraySize ?? 0); i++)
+            for (int i = 0; i < (controllers?.arraySize ?? 0); i++) {
                 yield return controllers.GetArrayElementAtIndex(i).FindPropertyRelative("controller.objRef")?.objectReferenceValue;
+            }
         }
 
-        void DrawInfo(Rect rect)
-        {
+        void DrawInfo(Rect rect) {
             var names = Controllers().Where(o => o != null).Select(o => o.name).ToList();
             VRCFuryWrap.BarLabels(rect, rect.x, "Full Controller", string.Join(", ", names), 0.6f, VRCFuryWrap.ContentChanged(Wrapped));
         }

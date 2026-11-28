@@ -7,47 +7,45 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace VAP.Editor
-{
-    internal static class VRCFuryWrap
-    {
+namespace VAP.Editor {
+    internal static class VRCFuryWrap {
         internal const string VRCFuryType = "VF.Model.VRCFury";
 
         internal static Type FindType(string fullName) =>
             AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType(fullName, false)).FirstOrDefault(t => t != null);
 
-        internal static bool HasFeature(Component c, string featureType)
-        {
-            if (c == null || c.GetType().FullName != VRCFuryType)
+        internal static bool HasFeature(Component c, string featureType) {
+            if (c == null || c.GetType().FullName != VRCFuryType) {
                 return false;
+            }
+
             using var so = new SerializedObject(c);
             var content = so.FindProperty("content");
             return content != null && content.propertyType == SerializedPropertyType.ManagedReference &&
                    content.managedReferenceFullTypename.EndsWith(featureType);
         }
 
-        internal static Component Ensure(MonoBehaviour owner, string featureType)
-        {
+        internal static Component Ensure(MonoBehaviour owner, string featureType) {
             var wrapper = (IVRCFuryWrapper)owner;
             var current = wrapper.Wrapped;
-            if (current != null && current.gameObject == owner.gameObject && HasFeature(current, featureType))
-            {
+            if (current != null && current.gameObject == owner.gameObject && HasFeature(current, featureType)) {
                 Hide(current);
                 return current;
             }
-            if (PrefabUtility.IsPartOfPrefabInstance(owner) || EditorUtility.IsPersistent(owner))
+            if (PrefabUtility.IsPartOfPrefabInstance(owner) || EditorUtility.IsPersistent(owner)) {
                 return null;
+            }
 
             var vfType = FindType(VRCFuryType);
             var feature = FindType(featureType);
-            if (vfType == null || feature == null)
+            if (vfType == null || feature == null) {
                 return null;
+            }
 
             var created = Undo.AddComponent(owner.gameObject, vfType);
-            if (current != null && HasFeature(current, featureType))
+            if (current != null && HasFeature(current, featureType)) {
                 EditorUtility.CopySerialized(current, created);
-            else
-            {
+            } else {
                 using var so = new SerializedObject(created);
                 so.FindProperty("content").managedReferenceValue = Activator.CreateInstance(feature, true);
                 so.ApplyModifiedPropertiesWithoutUndo();
@@ -59,24 +57,25 @@ namespace VAP.Editor
             return created;
         }
 
-        static void Hide(Component c)
-        {
-            if (WrappedToggles.Set(c, true))
+        static void Hide(Component c) {
+            if (WrappedToggles.Set(c, true)) {
                 EditorApplication.delayCall += () => ActiveEditorTracker.sharedTracker.ForceRebuild();
+            }
         }
 
-        internal static void ScheduleRemoval(Object owner, Component wrapped)
-        {
-            if (wrapped == null)
+        internal static void ScheduleRemoval(Object owner, Component wrapped) {
+            if (wrapped == null) {
                 return;
+            }
+
             int group = Undo.GetCurrentGroup();
-            EditorApplication.delayCall += () =>
-            {
-                if (owner != null || wrapped == null || EditorApplication.isPlayingOrWillChangePlaymode)
+            EditorApplication.delayCall += () => {
+                if (owner != null || wrapped == null || EditorApplication.isPlayingOrWillChangePlaymode) {
                     return;
+                }
+
                 if (WrappedToggles.Released.Remove(wrapped) ||
-                    (PrefabUtility.IsPartOfPrefabInstance(wrapped) && !PrefabUtility.IsAddedComponentOverride(wrapped)))
-                {
+                    (PrefabUtility.IsPartOfPrefabInstance(wrapped) && !PrefabUtility.IsAddedComponentOverride(wrapped))) {
                     WrappedToggles.Set(wrapped, false);
                     ActiveEditorTracker.sharedTracker.ForceRebuild();
                     return;
@@ -96,83 +95,83 @@ namespace VAP.Editor
 
         internal static bool Changed(SerializedProperty prop) => prop != null && prop.prefabOverride;
 
-        internal static bool ContentChanged(Component wrapped)
-        {
-            if (wrapped == null || !PrefabUtility.IsPartOfPrefabInstance(wrapped))
+        internal static bool ContentChanged(Component wrapped) {
+            if (wrapped == null || !PrefabUtility.IsPartOfPrefabInstance(wrapped)) {
                 return false;
+            }
+
             using var so = new SerializedObject(wrapped);
             return Changed(so.FindProperty("content"));
         }
 
-        internal static void BarLabels(Rect rect, float x, string left, string right, float rightMaxFraction, bool bold = false)
-        {
+        internal static void BarLabels(Rect rect, float x, string left, string right, float rightMaxFraction, bool bold = false) {
             barLeftStyle ??= new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft, clipping = TextClipping.Clip, padding = new RectOffset(0, 0, 0, 0) };
             barBoldStyle ??= new GUIStyle(barLeftStyle) { fontStyle = FontStyle.Bold };
             barRightStyle ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, clipping = TextClipping.Clip };
-            if (bold && Event.current.type == EventType.Repaint)
+            if (bold && Event.current.type == EventType.Repaint) {
                 EditorGUI.DrawRect(new Rect(0f, rect.y, 2f, rect.height), OverrideColor);
+            }
+
             float rightWidth = string.IsNullOrEmpty(right) ? 0f : Mathf.Min(barRightStyle.CalcSize(new GUIContent(right)).x, rect.width * rightMaxFraction);
             GUI.Label(new Rect(x, rect.y, rect.xMax - x - rightWidth - 8f, rect.height), left, bold ? barBoldStyle : barLeftStyle);
-            if (rightWidth > 0f)
+            if (rightWidth > 0f) {
                 GUI.Label(new Rect(rect.xMax - rightWidth, rect.y, rightWidth, rect.height), right, barRightStyle);
+            }
         }
     }
 
-    internal class WrappedEditor
-    {
+    internal class WrappedEditor {
         readonly string featureType, title, key;
         WrappedSection section;
 
         internal MonoBehaviour Owner { get; private set; }
         internal Component Wrapped { get; private set; }
 
-        internal WrappedEditor(string featureType, string title, string key)
-        {
+        internal WrappedEditor(string featureType, string title, string key) {
             this.featureType = featureType;
             this.title = title;
             this.key = key;
         }
 
-        internal void Enable(UnityEditor.Editor editor)
-        {
+        internal void Enable(UnityEditor.Editor editor) {
             Owner = editor.target as MonoBehaviour;
-            if (Owner == null || editor.targets.Length > 1)
+            if (Owner == null || editor.targets.Length > 1) {
                 return;
+            }
+
             Wrapped = VRCFuryWrap.Ensure(Owner, featureType);
             WrappedToggles.HideShownEditors();
         }
 
-        internal void Disable()
-        {
+        internal void Disable() {
             section?.Dispose();
             VRCFuryWrap.ScheduleRemoval(Owner, Wrapped);
         }
 
-        internal VisualElement Build(UnityEditor.Editor editor, Action drawTop, Action<Rect> drawInfo, VisualElement extra = null, bool sectionFirst = false)
-        {
+        internal VisualElement Build(UnityEditor.Editor editor, Action drawTop, Action<Rect> drawInfo, VisualElement extra = null, bool sectionFirst = false) {
             var root = new VisualElement();
-            if (editor.targets.Length > 1)
+            if (editor.targets.Length > 1) {
                 root.Add(new IMGUIContainer(() => EditorGUILayout.HelpBox("Editing several of these at once isn't supported.", MessageType.Info)));
-            else if (Wrapped == null)
+            } else if (Wrapped == null) {
                 root.Add(VRCFuryWrap.MissingMessage(title));
-            else
-            {
+            } else {
                 var top = new IMGUIContainer(drawTop);
                 section?.Dispose();
                 section = new WrappedSection(Wrapped, key, drawInfo);
-                if (sectionFirst)
-                {
+                if (sectionFirst) {
                     root.Add(section.Root);
-                    if (extra != null)
+                    if (extra != null) {
                         root.Add(extra);
+                    }
+
                     top.style.marginTop = 6f;
                     root.Add(top);
-                }
-                else
-                {
+                } else {
                     root.Add(top);
-                    if (extra != null)
+                    if (extra != null) {
                         root.Add(extra);
+                    }
+
                     root.Add(section.Root);
                 }
             }
@@ -181,8 +180,7 @@ namespace VAP.Editor
         }
     }
 
-    internal class WrappedSection : IDisposable
-    {
+    internal class WrappedSection : IDisposable {
         const float HeaderHeight = 26f, MaxBodyHeight = 440f;
 
         readonly Component wrapped;
@@ -192,28 +190,29 @@ namespace VAP.Editor
 
         internal VisualElement Root { get; } = new VisualElement();
 
-        internal WrappedSection(Component wrapped, string key, Action<Rect> drawInfo)
-        {
+        internal WrappedSection(Component wrapped, string key, Action<Rect> drawInfo) {
             this.wrapped = wrapped;
             this.drawInfo = drawInfo;
             VAPFoldout.StyleBox(Root, body, true);
 
             key += wrapped.GetInstanceID();
-            Root.Add(new IMGUIContainer(() =>
-            {
-                if (this.wrapped == null)
+            Root.Add(new IMGUIContainer(() => {
+                if (this.wrapped == null) {
                     return;
+                }
+
                 bool open = SessionState.GetBool(key, false);
                 var header = EditorGUILayout.GetControlRect(false, HeaderHeight);
-                if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && header.Contains(Event.current.mousePosition))
-                {
+                if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && header.Contains(Event.current.mousePosition)) {
                     open = !open;
                     SessionState.SetBool(key, open);
                     Show(open);
                     Event.current.Use();
                 }
-                if (Event.current.type != EventType.Repaint)
+                if (Event.current.type != EventType.Repaint) {
                     return;
+                }
+
                 float line = EditorGUIUtility.singleLineHeight;
                 EditorStyles.foldout.Draw(new Rect(header.x + 4f, header.y + (header.height - line) * 0.5f, 14f, line), false, false, open, false);
                 this.drawInfo(new Rect(header.x + 20f, header.y, header.width - 24f, header.height));
@@ -222,11 +221,9 @@ namespace VAP.Editor
             Show(SessionState.GetBool(key, false));
         }
 
-        void Show(bool open)
-        {
+        void Show(bool open) {
             body.style.display = open ? DisplayStyle.Flex : DisplayStyle.None;
-            if (open && inner == null && wrapped != null)
-            {
+            if (open && inner == null && wrapped != null) {
                 inner = UnityEditor.Editor.CreateEditor(wrapped);
                 var scroll = new ScrollView(ScrollViewMode.Vertical) { horizontalScrollerVisibility = ScrollerVisibility.Hidden, style = { maxHeight = MaxBodyHeight } };
                 scroll.Add(new InspectorElement(inner));
@@ -234,10 +231,11 @@ namespace VAP.Editor
             }
         }
 
-        public void Dispose()
-        {
-            if (inner != null)
+        public void Dispose() {
+            if (inner != null) {
                 Object.DestroyImmediate(inner);
+            }
+
             inner = null;
         }
     }

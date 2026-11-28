@@ -2,62 +2,68 @@
 using UnityEditor;
 using VRC.SDK3.Avatars.ScriptableObjects;
 
-namespace VAP.Editor
-{
-    internal static class FullControllerSource
-    {
+namespace VAP.Editor {
+    internal static class FullControllerSource {
         internal const string FeatureType = "VF.Model.Feature.FullController";
 
-        internal static void WriteMenuPath(VAPFullController f, bool record)
-        {
-            if (f.wrapped == null || MenuPaths.Clean(f.menuPath).Length == 0)
+        internal static void WriteMenuPath(VAPFullController f, bool record) {
+            if (f.wrapped == null || MenuPaths.Clean(f.menuPath).Length == 0) {
                 return;
+            }
+
             Resolve(f);
             string common = f.DefaultMenuPath;
-            if (common.Length == 0)
+            if (common.Length == 0) {
                 return;
+            }
+
             using var so = new SerializedObject(f.wrapped);
             var menus = so.FindProperty("content")?.FindPropertyRelative("menus");
-            for (int i = 0; menus != null && i < menus.arraySize; i++)
-            {
+            for (int i = 0; menus != null && i < menus.arraySize; i++) {
                 var prefix = menus.GetArrayElementAtIndex(i).FindPropertyRelative("prefix");
-                if (prefix != null)
+                if (prefix != null) {
                     prefix.stringValue = MenuPaths.Apply(MenuPaths.Clean(prefix.stringValue), common, f.menuPath);
+                }
             }
-            if (record)
+            if (record) {
                 so.ApplyModifiedProperties();
-            else
+            } else {
                 so.ApplyModifiedPropertiesWithoutUndo();
+            }
+
             f.menuPath = "";
             Resolve(f);
         }
 
-        internal static void Resolve(VAPFullController f)
-        {
+        internal static void Resolve(VAPFullController f) {
             f.menus.Clear();
             f.menuPrefixes.Clear();
             f.parameterFiles.Clear();
-            if (f.wrapped == null)
+            if (f.wrapped == null) {
                 return;
+            }
+
             using var so = new SerializedObject(f.wrapped);
             var content = so.FindProperty("content");
             if (content == null || content.propertyType != SerializedPropertyType.ManagedReference ||
-                !content.managedReferenceFullTypename.EndsWith(FeatureType))
+                !content.managedReferenceFullTypename.EndsWith(FeatureType)) {
                 return;
+            }
+
             var menus = content.FindPropertyRelative("menus");
-            for (int i = 0; menus != null && i < menus.arraySize; i++)
-            {
+            for (int i = 0; menus != null && i < menus.arraySize; i++) {
                 var entry = menus.GetArrayElementAtIndex(i);
-                if (entry.FindPropertyRelative("menu.objRef")?.objectReferenceValue is VRCExpressionsMenu menu)
-                {
+                if (entry.FindPropertyRelative("menu.objRef")?.objectReferenceValue is VRCExpressionsMenu menu) {
                     f.menus.Add(menu);
                     f.menuPrefixes.Add(entry.FindPropertyRelative("prefix")?.stringValue ?? "");
                 }
             }
             var prms = content.FindPropertyRelative("prms");
-            for (int i = 0; prms != null && i < prms.arraySize; i++)
-                if (prms.GetArrayElementAtIndex(i).FindPropertyRelative("parameters.objRef")?.objectReferenceValue is VRCExpressionParameters p)
+            for (int i = 0; prms != null && i < prms.arraySize; i++) {
+                if (prms.GetArrayElementAtIndex(i).FindPropertyRelative("parameters.objRef")?.objectReferenceValue is VRCExpressionParameters p) {
                     f.parameterFiles.Add(p);
+                }
+            }
         }
     }
 }

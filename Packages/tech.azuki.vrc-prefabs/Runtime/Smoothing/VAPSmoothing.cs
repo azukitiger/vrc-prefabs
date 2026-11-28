@@ -3,14 +3,11 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.SDKBase;
 
-namespace VAP
-{
-    public abstract class VAPSmoothing : MonoBehaviour, IEditorOnly
-    {
+namespace VAP {
+    public abstract class VAPSmoothing : MonoBehaviour, IEditorOnly {
         public const string None = "None";
 
-        public enum PassMode
-        {
+        public enum PassMode {
             Double,
             Single,
         }
@@ -64,8 +61,7 @@ namespace VAP
         public float timerReset = 0f;
 
         [System.Serializable]
-        public struct TransformPoint
-        {
+        public struct TransformPoint {
             [NotKeyable]
             public Vector2 position;
             [NotKeyable]

@@ -4,22 +4,18 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.SDKBase;
 
-namespace VAP
-{
+namespace VAP {
     [HelpURL(VAPAvatar.Docs + "#frame-time")]
     [AddComponentMenu("")]
     [Icon(VAPFaceTrackingDebug.IconPath)]
-    public class VAPFrameTime : MonoBehaviour, IEditorOnly
-    {
-        public enum Kind
-        {
+    public class VAPFrameTime : MonoBehaviour, IEditorOnly {
+        public enum Kind {
             Smoothing,
             Linear,
         }
 
         [Serializable]
-        public class Factor
-        {
+        public class Factor {
             [Tooltip("Animator parameter that receives the value every frame.")]
             [NotKeyable]
             public string parameter = "";

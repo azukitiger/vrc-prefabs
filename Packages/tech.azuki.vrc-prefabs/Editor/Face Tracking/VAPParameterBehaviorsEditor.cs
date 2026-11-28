@@ -8,12 +8,10 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3A.Editor;
 
-namespace VAP.Editor
-{
+namespace VAP.Editor {
     [CustomEditor(typeof(VAPParameterBehaviors))]
     [CanEditMultipleObjects]
-    public class VAPParameterBehaviorsEditor : UnityEditor.Editor
-    {
+    public class VAPParameterBehaviorsEditor : UnityEditor.Editor {
         static readonly GUIContent ListLabel = new GUIContent("Parameter Behaviors",
             "Added to the avatar descriptor's face tracking Parameter Behaviors at build time, after the ones already there.");
         static readonly GUIContent TrackingListLabel = new GUIContent("Tracking Key Limits",
@@ -34,8 +32,7 @@ namespace VAP.Editor
             "Apply Blend Set Weight: drives a Blendshapes Set's weight.",
         };
         const string TabKey = "VAP.ParameterBehaviors.Tab";
-        static int Tab
-        {
+        static int Tab {
             get => Mathf.Clamp(SessionState.GetInt(TabKey, 0), 0, TabNames.Length - 1);
             set => SessionState.SetInt(TabKey, value);
         }
@@ -56,122 +53,134 @@ namespace VAP.Editor
 
         public override VisualElement CreateInspectorGUI() => VAPPrefabLock.AddEditButton(VAPInspectorHeader.Create("VRC Face Tracking Parameter Behaviors", DrawFields, this), this);
 
-        void DrawFields()
-        {
-            if (target == null)
+        void DrawFields() {
+            if (target == null) {
                 return;
+            }
+
             serializedObject.Update();
 
             var list = serializedObject.FindProperty("parameterBehaviors");
             var keyList = serializedObject.FindProperty("trackingKeyBehaviors");
             bool locked = targets.Any(VAPPrefabLock.IsFromPrefab);
             using (new EditorGUI.DisabledScope(targets.Length > 1))
-            using (new EditorGUILayout.HorizontalScope())
-            {
+            using (new EditorGUILayout.HorizontalScope()) {
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button(CopyAll, EditorStyles.miniButtonLeft, GUILayout.Width(70)))
+                if (GUILayout.Button(CopyAll, EditorStyles.miniButtonLeft, GUILayout.Width(70))) {
                     EditorGUIUtility.systemCopyBuffer = FaceTrackingClipboard.SerializeParameterBehaviors(
                         Enumerable.Range(0, ((VAPParameterBehaviors)target).parameterBehaviors.Count).Select(BuildCopy).ToList());
-                using (new EditorGUI.DisabledScope(locked))
-                    if (GUILayout.Button(Paste, EditorStyles.miniButtonRight, GUILayout.Width(70)))
+                }
+
+                using (new EditorGUI.DisabledScope(locked)) {
+                    if (GUILayout.Button(Paste, EditorStyles.miniButtonRight, GUILayout.Width(70))) {
                         PasteBehaviors(list);
+                    }
+                }
             }
 
-            if (targets.Length > 1)
-            {
+            if (targets.Length > 1) {
                 EditorGUILayout.HelpBox("Select one component to edit its Parameter Behaviors.", MessageType.None);
-            }
-            else
-            {
-                using (new EditorGUI.DisabledScope(locked))
+            } else {
+                using (new EditorGUI.DisabledScope(locked)) {
                     DrawSharedSet();
-                DrawTabs(list, keyList);
-                if (Tab == TabTrackingKey)
-                {
-                    using (new EditorGUI.DisabledScope(locked))
-                        GetTrackingList(keyList).DoLayoutList();
                 }
-                else
-                {
-                    using (new EditorGUI.DisabledScope(locked))
-                    {
+
+                DrawTabs(list, keyList);
+                if (Tab == TabTrackingKey) {
+                    using (new EditorGUI.DisabledScope(locked)) {
+                        GetTrackingList(keyList).DoLayoutList();
+                    }
+                } else {
+                    using (new EditorGUI.DisabledScope(locked)) {
                         shown.Clear();
-                        for (int i = 0; i < list.arraySize; i++)
-                            if (TabOfMode(ModeOf(list.GetArrayElementAtIndex(i))) == Tab)
+                        for (int i = 0; i < list.arraySize; i++) {
+                            if (TabOfMode(ModeOf(list.GetArrayElementAtIndex(i))) == Tab) {
                                 shown.Add(i);
+                            }
+                        }
+
                         shownSnapshot = shown.ToArray();
                         DrawTabNote(list);
                         GetList(list).DoLayoutList();
                     }
-                    if (Tab == TabBlendshape)
-                    {
+                    if (Tab == TabBlendshape) {
                         var generate = serializedObject.FindProperty(nameof(VAPParameterBehaviors.generateCorrectives));
                         EditorGUI.BeginChangeCheck();
                         bool on = EditorGUILayout.ToggleLeft(GenerateLabel, generate.boolValue);
-                        if (EditorGUI.EndChangeCheck())
+                        if (EditorGUI.EndChangeCheck()) {
                             generate.boolValue = on;
-                        if (generate.boolValue)
+                        }
+
+                        if (generate.boolValue) {
                             correctives.Draw(locked);
+                        }
                     }
                 }
             }
             serializedObject.ApplyModifiedProperties();
         }
 
-        void DrawTabs(SerializedProperty list, SerializedProperty keyList)
-        {
+        void DrawTabs(SerializedProperty list, SerializedProperty keyList) {
             var counts = new int[TabNames.Length];
-            for (int i = 0; i < list.arraySize; i++)
+            for (int i = 0; i < list.arraySize; i++) {
                 counts[TabOfMode(ModeOf(list.GetArrayElementAtIndex(i)))]++;
+            }
+
             counts[TabTrackingKey] = keyList?.arraySize ?? 0;
-            if (serializedObject.FindProperty(nameof(VAPParameterBehaviors.generateCorrectives)).boolValue)
+            if (serializedObject.FindProperty(nameof(VAPParameterBehaviors.generateCorrectives)).boolValue) {
                 counts[TabBlendshape] += correctives.Count;
+            }
+
             var labels = new GUIContent[TabNames.Length];
-            for (int i = 0; i < labels.Length; i++)
+            for (int i = 0; i < labels.Length; i++) {
                 labels[i] = new GUIContent($"{TabNames[i]} ({counts[i]})", TabTips[i]);
+            }
+
             int picked = GUILayout.Toolbar(Tab, labels, EditorStyles.miniButton);
-            if (picked != Tab)
-            {
+            if (picked != Tab) {
                 Tab = picked;
-                if (reorderable != null)
+                if (reorderable != null) {
                     reorderable.index = -1;
-                if (trackingList != null)
+                }
+
+                if (trackingList != null) {
                     trackingList.index = -1;
+                }
             }
         }
 
-        ReorderableList GetList(SerializedProperty list)
-        {
-            if (reorderable != null && reorderable.serializedProperty == null && listOwner == serializedObject)
-            {
+        ReorderableList GetList(SerializedProperty list) {
+            if (reorderable != null && reorderable.serializedProperty == null && listOwner == serializedObject) {
                 listArray = list;
                 return reorderable;
             }
             listOwner = serializedObject;
             listArray = list;
-            reorderable = new ReorderableList(shown, typeof(int), true, true, true, true)
-            {
+            reorderable = new ReorderableList(shown, typeof(int), true, true, true, true) {
                 drawHeaderCallback = rect => EditorGUI.LabelField(rect, ListLabels[Tab] ?? ListLabel),
-                elementHeightCallback = i =>
-                {
-                    if (i >= shownSnapshot.Length)
+                elementHeightCallback = i => {
+                    if (i >= shownSnapshot.Length) {
                         return EditorGUIUtility.singleLineHeight;
+                    }
+
                     var element = listArray.GetArrayElementAtIndex(shownSnapshot[i]);
                     element.isExpanded = true;
                     return ElementHeight(element, 0f) + 4f;
                 },
-                drawElementCallback = (rect, i, active, focused) =>
-                {
-                    if (i >= shownSnapshot.Length)
+                drawElementCallback = (rect, i, active, focused) => {
+                    if (i >= shownSnapshot.Length) {
                         return;
+                    }
+
                     rect.y += 2f;
                     rect.height -= 4f;
-                    if (ContextMenu(rect, reorderable, i, listArray, shownSnapshot[i], true))
+                    if (ContextMenu(rect, reorderable, i, listArray, shownSnapshot[i], true)) {
                         return;
+                    }
+
                     DrawBehavior(rect, listArray.GetArrayElementAtIndex(shownSnapshot[i]), listArray);
                 },
-                onAddCallback = l =>
-                {
+                onAddCallback = l => {
                     listArray.arraySize++;
                     var element = listArray.GetArrayElementAtIndex(listArray.arraySize - 1);
                     element.boxedValue = new VRCAvatarDescriptor.FaceTrackingParameterBehavior();
@@ -181,19 +190,21 @@ namespace VAP.Editor
                     listArray.serializedObject.ApplyModifiedProperties();
                     GUIUtility.ExitGUI();
                 },
-                onRemoveCallback = l =>
-                {
-                    if (l.index < 0 || l.index >= shownSnapshot.Length)
+                onRemoveCallback = l => {
+                    if (l.index < 0 || l.index >= shownSnapshot.Length) {
                         return;
+                    }
+
                     listArray.DeleteArrayElementAtIndex(shownSnapshot[l.index]);
                     l.index = -1;
                     listArray.serializedObject.ApplyModifiedProperties();
                     GUIUtility.ExitGUI();
                 },
-                onReorderCallbackWithDetails = (l, from, to) =>
-                {
-                    if (from < 0 || to < 0 || from >= shownSnapshot.Length || to >= shownSnapshot.Length)
+                onReorderCallbackWithDetails = (l, from, to) => {
+                    if (from < 0 || to < 0 || from >= shownSnapshot.Length || to >= shownSnapshot.Length) {
                         return;
+                    }
+
                     listArray.MoveArrayElement(shownSnapshot[from], shownSnapshot[to]);
                     listArray.serializedObject.ApplyModifiedProperties();
                 },
@@ -204,28 +215,28 @@ namespace VAP.Editor
         SerializedObject listOwner;
         SerializedProperty listArray;
 
-        void DrawBehavior(Rect rect, SerializedProperty element, SerializedProperty array)
-        {
+        void DrawBehavior(Rect rect, SerializedProperty element, SerializedProperty array) {
             float headerWidth = rect.width + 25f;
             var g = HeaderGeometry(rect, headerWidth, 25f);
             int tab = TabOfMode(ModeOf(element));
             float stripEnd = g.targetXMax;
-            if (!element.isExpanded)
+            if (!element.isExpanded) {
                 element.isExpanded = true;
+            }
 
             DrawSdk(rect, element, rect.width, headerWidth, g.row.x, stripEnd, 0f, null, array, () => DrawBehaviorStrip(g, element, tab, stripEnd));
         }
 
-        VRCAvatarDescriptor.FaceTrackingParameterBehavior BuildCopy(int index)
-        {
+        VRCAvatarDescriptor.FaceTrackingParameterBehavior BuildCopy(int index) {
             var c = (VAPParameterBehaviors)target;
             return ParameterBehaviorsBuild.WithSharedSet(ParameterBehaviorsBuild.Copy(c.parameterBehaviors[index]), c);
         }
 
-        void SearchButton(Rect search, SerializedProperty nameProp)
-        {
-            if (!GUI.Button(search, SearchContent, SearchStyle))
+        void SearchButton(Rect search, SerializedProperty nameProp) {
+            if (!GUI.Button(search, SearchContent, SearchStyle)) {
                 return;
+            }
+
             new BlendshapeSearch(AvatarBlendshapes(), VAPEditorGUI.Setter(nameProp)).Show(search);
         }
 
@@ -234,8 +245,7 @@ namespace VAP.Editor
         static readonly GUIContent PerBehaviorLabel = new GUIContent("Per Behavior",
             "Give each behavior its own Blendshapes Set instead of this one.");
 
-        void DrawSharedSet()
-        {
+        void DrawSharedSet() {
             var setProp = serializedObject.FindProperty("blendshapesSet");
             var perProp = serializedObject.FindProperty("perBehaviorSet");
             var row = EditorGUILayout.GetControlRect();
@@ -244,82 +254,89 @@ namespace VAP.Editor
             var toggleRect = new Rect(row.xMax - toggleWidth, row.y, toggleWidth, row.height);
             var field = new Rect(labelRect.xMax, row.y, toggleRect.x - labelRect.xMax - 6f, row.height);
             EditorGUI.LabelField(labelRect, SharedSetLabel);
-            using (new EditorGUI.DisabledScope(perProp.boolValue))
-            {
+            using (new EditorGUI.DisabledScope(perProp.boolValue)) {
                 VAPEditorGUI.StringField(field, setProp);
-                if (!perProp.boolValue && !string.IsNullOrEmpty(setProp.stringValue))
+                if (!perProp.boolValue && !string.IsNullOrEmpty(setProp.stringValue)) {
                     SetIcon(field, setProp.stringValue);
+                }
             }
             EditorGUI.BeginChangeCheck();
             bool per = EditorGUI.ToggleLeft(toggleRect, PerBehaviorLabel, perProp.boolValue);
-            if (EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck()) {
                 perProp.boolValue = per;
+            }
+
             EditorGUILayout.Space(2f);
         }
 
         bool PerBehavior => serializedObject.FindProperty("perBehaviorSet").boolValue;
 
-        string SharedSet
-        {
-            get
-            {
-                if (serializedObject.FindProperty("perBehaviorSet").boolValue)
+        string SharedSet {
+            get {
+                if (serializedObject.FindProperty("perBehaviorSet").boolValue) {
                     return null;
+                }
+
                 string name = serializedObject.FindProperty("blendshapesSet").stringValue;
                 return string.IsNullOrEmpty(name) ? null : name;
             }
         }
 
-        void SetIcon(Rect field, string name)
-        {
-            if (SetProblem(name) is string problem)
+        void SetIcon(Rect field, string name) {
+            if (SetProblem(name) is string problem) {
                 VAPEditorGUI.WarningIcon(field, problem);
-            else if (Descriptor != null)
+            } else if (Descriptor != null) {
                 VAPEditorGUI.FoundIcon(field, $"Found \"{name}\" on this avatar.");
+            }
         }
 
         VRCAvatarDescriptor Descriptor => VAPAvatar.Descriptor(target as Component);
 
-        string BlendshapeProblem(string name)
-        {
-            if (string.IsNullOrEmpty(name))
+        string BlendshapeProblem(string name) {
+            if (string.IsNullOrEmpty(name)) {
                 return "No blendshape selected: this behavior has no effect without one.";
+            }
+
             var shapes = ftShapes.Value;
-            if (shapes != null && !shapes.Contains(name))
+            if (shapes != null && !shapes.Contains(name)) {
                 return "Not found on any Face Tracking Mesh. It still applies at runtime if the blendshape is added (e.g. by a build-time tool).";
+            }
+
             return null;
         }
 
-        string SetProblem(string name)
-        {
-            if (string.IsNullOrEmpty(name))
+        string SetProblem(string name) {
+            if (string.IsNullOrEmpty(name)) {
                 return "No Blendshapes Set selected.";
-            if (Descriptor == null)
+            }
+
+            if (Descriptor == null) {
                 return null;
+            }
+
             return sets.Value.ContainsKey(name) ? null : "No Blendshapes Set with this name on this avatar.";
         }
 
-        void DrawTabNote(SerializedProperty list)
-        {
+        void DrawTabNote(SerializedProperty list) {
             bool any = false;
-            foreach (int i in shown)
-            {
+            foreach (int i in shown) {
                 var e = list.GetArrayElementAtIndex(i);
                 any |= Tab == TabBlendshape ? BlendshapeProblem(e.FindPropertyRelative("targetBlendshapeName").stringValue) != null
                      : Tab == TabBlendSet && SetProblem(e.FindPropertyRelative("targetBlendSetName").stringValue) != null;
-                if (any)
+                if (any) {
                     break;
+                }
             }
-            if (any)
+            if (any) {
                 EditorGUILayout.HelpBox("Some entries have a problem. Hover the warning icon in the field for details.", MessageType.Warning);
+            }
         }
 
         Cached<HashSet<string>> ftShapes;
         Cached<Dictionary<string, string[]>> sets;
         CorrectivesSection correctives;
 
-        void OnEnable()
-        {
+        void OnEnable() {
             ftShapes = new Cached<HashSet<string>>(1.0, () =>
                 Descriptor is VRCAvatarDescriptor d ? ParameterBehaviorsBuild.FaceTrackingBlendshapes(d) : null);
             sets = new Cached<Dictionary<string, string[]>>(1.0, () => VAPEditorGUI.AvatarSets(Descriptor));
@@ -329,27 +346,28 @@ namespace VAP.Editor
         static readonly GUIContent DeleteContent = new GUIContent("Delete");
         static readonly GUIContent CopyContent = new GUIContent("Copy Behavior");
 
-        bool ContextMenu(Rect rect, ReorderableList list, int listIndex, SerializedProperty array, int arrayIndex, bool canCopy)
-        {
-            if (!ExpressionsOverrides.ContextClick(rect))
+        bool ContextMenu(Rect rect, ReorderableList list, int listIndex, SerializedProperty array, int arrayIndex, bool canCopy) {
+            if (!ExpressionsOverrides.ContextClick(rect)) {
                 return false;
+            }
+
             list.index = listIndex;
             var so = array.serializedObject;
             string path = array.propertyPath;
             var menu = new GenericMenu();
-            if (canCopy)
-            {
+            if (canCopy) {
                 serializedObject.ApplyModifiedProperties();
                 var copies = new List<VRCAvatarDescriptor.FaceTrackingParameterBehavior> { BuildCopy(arrayIndex) };
                 menu.AddItem(CopyContent, false, () => EditorGUIUtility.systemCopyBuffer =
                     FaceTrackingClipboard.SerializeParameterBehaviors(copies));
             }
-            menu.AddItem(DeleteContent, false, () =>
-            {
+            menu.AddItem(DeleteContent, false, () => {
                 so.Update();
                 var a = so.FindProperty(path);
-                if (arrayIndex < a.arraySize)
+                if (arrayIndex < a.arraySize) {
                     a.DeleteArrayElementAtIndex(arrayIndex);
+                }
+
                 so.ApplyModifiedProperties();
                 list.index = -1;
             });
@@ -369,48 +387,47 @@ namespace VAP.Editor
             new GUIContent("Blend Set Behaviors", "Apply Blend Set Weight behaviors, added to the avatar descriptor at build time."),
         };
 
-        void DrawBehaviorStrip(Header g, SerializedProperty element, int tab, float stripEnd)
-        {
+        void DrawBehaviorStrip(Header g, SerializedProperty element, int tab, float stripEnd) {
             float itemX = g.row.x - EditorStyles.helpBox.padding.left;
             float fieldX = itemX + ItemLabelWidth;
-            if (tab == TabAnimator || tab == TabBlendSet)
+            if (tab == TabAnimator || tab == TabBlendSet) {
                 EditorGUI.LabelField(new Rect(itemX + 15f, g.mode.y, fieldX - itemX - 15f, Line),
                     tab == TabAnimator ? ParameterLabel : BlendSetLabel);
-            if (tab == TabAnimator)
-            {
+            }
+
+            if (tab == TabAnimator) {
                 var name = element.FindPropertyRelative("outputParameterName");
                 var r = new Rect(fieldX, g.mode.y, stripEnd - fieldX, Line);
                 EditorGUI.BeginChangeCheck();
                 string value = EditorGUI.TextField(r, name.stringValue);
-                if (EditorGUI.EndChangeCheck())
-                {
+                if (EditorGUI.EndChangeCheck()) {
                     value = value.Replace(" ", "_");
                     name.stringValue = value.Length > 64 ? value.Substring(0, 64) : value;
                 }
-            }
-            else if (tab == TabBlendSet)
-            {
+            } else if (tab == TabBlendSet) {
                 var r = new Rect(fieldX, g.mode.y, stripEnd - fieldX, Line);
                 var setName = element.FindPropertyRelative("targetBlendSetName");
                 VAPEditorGUI.StringField(r, setName);
-                if (SetProblem(setName.stringValue) is string problem)
+                if (SetProblem(setName.stringValue) is string problem) {
                     VAPEditorGUI.WarningIcon(r, problem);
-            }
-            else
-            {
+                }
+            } else {
                 var mode = element.FindPropertyRelative("targetMode");
                 int at = System.Array.IndexOf(BlendshapeModes, mode.intValue);
                 var r = new Rect(g.row.x, g.mode.y, g.mode.xMax - g.row.x, Line);
                 int next = EditorGUI.Popup(r, Mathf.Max(0, at), BlendshapeModeNames);
-                if (next != at)
+                if (next != at) {
                     mode.intValue = BlendshapeModes[next];
+                }
 
                 const float searchWidth = 22f;
                 var nameProp = element.FindPropertyRelative("targetBlendshapeName");
                 var field = new Rect(g.mode.xMax + 4f, g.mode.y, stripEnd - g.mode.xMax - 6f - searchWidth, Line);
                 VAPEditorGUI.StringField(field, nameProp);
-                if (BlendshapeProblem(nameProp.stringValue) is string problem)
+                if (BlendshapeProblem(nameProp.stringValue) is string problem) {
                     VAPEditorGUI.WarningIcon(field, problem);
+                }
+
                 SearchButton(new Rect(field.xMax + 2f, g.mode.y, searchWidth, Line), nameProp);
             }
         }
@@ -420,54 +437,53 @@ namespace VAP.Editor
             EditorGUIUtility.IconContent(EditorGUIUtility.isProSkin ? "d_Search Icon" : "Search Icon").image,
             "Search the blendshapes on this avatar's meshes.");
         static GUIStyle searchStyle;
-        static GUIStyle SearchStyle => searchStyle ??= new GUIStyle(EditorStyles.miniButton)
-        {
+        static GUIStyle SearchStyle => searchStyle ??= new GUIStyle(EditorStyles.miniButton) {
             padding = new RectOffset(3, 3, 1, 1),
             imagePosition = ImagePosition.ImageOnly,
         };
 
-        List<(string mesh, string[] names)> AvatarBlendshapes()
-        {
+        List<(string mesh, string[] names)> AvatarBlendshapes() {
             var result = new List<(string, string[])>();
             var descriptor = Descriptor;
-            if (descriptor == null)
+            if (descriptor == null) {
                 return result;
-            foreach (var smr in descriptor.GetComponentsInChildren<SkinnedMeshRenderer>(true))
-            {
+            }
+
+            foreach (var smr in descriptor.GetComponentsInChildren<SkinnedMeshRenderer>(true)) {
                 var names = Blendshapes.Names(smr.sharedMesh);
-                if (names.Length > 0)
+                if (names.Length > 0) {
                     result.Add((smr.name, names));
+                }
             }
             return result;
         }
 
-        class BlendshapeSearch : UnityEditor.IMGUI.Controls.AdvancedDropdown
-        {
+        class BlendshapeSearch : UnityEditor.IMGUI.Controls.AdvancedDropdown {
             readonly List<(string mesh, string[] names)> meshes;
             readonly System.Action<string> onPick;
             readonly Dictionary<int, string> ids = new Dictionary<int, string>();
 
             public BlendshapeSearch(List<(string mesh, string[] names)> meshes, System.Action<string> onPick)
-                : base(new UnityEditor.IMGUI.Controls.AdvancedDropdownState())
-            {
+                : base(new UnityEditor.IMGUI.Controls.AdvancedDropdownState()) {
                 this.meshes = meshes;
                 this.onPick = onPick;
                 minimumSize = new Vector2(320f, 400f);
             }
 
-            protected override UnityEditor.IMGUI.Controls.AdvancedDropdownItem BuildRoot()
-            {
+            protected override UnityEditor.IMGUI.Controls.AdvancedDropdownItem BuildRoot() {
                 var root = new UnityEditor.IMGUI.Controls.AdvancedDropdownItem("Blendshape");
                 int id = 1;
-                if (meshes.Count == 0)
+                if (meshes.Count == 0) {
                     root.AddChild(new UnityEditor.IMGUI.Controls.AdvancedDropdownItem("No blendshapes on this avatar") { id = id++, enabled = false });
-                foreach (var (mesh, names) in meshes)
-                {
+                }
+
+                foreach (var (mesh, names) in meshes) {
                     var parent = meshes.Count == 1 ? root : new UnityEditor.IMGUI.Controls.AdvancedDropdownItem(mesh) { id = id++ };
-                    if (parent != root)
+                    if (parent != root) {
                         root.AddChild(parent);
-                    foreach (var name in names)
-                    {
+                    }
+
+                    foreach (var name in names) {
                         var item = new UnityEditor.IMGUI.Controls.AdvancedDropdownItem(name) { id = id++ };
                         ids[item.id] = name;
                         parent.AddChild(item);
@@ -476,55 +492,52 @@ namespace VAP.Editor
                 return root;
             }
 
-            protected override void ItemSelected(UnityEditor.IMGUI.Controls.AdvancedDropdownItem item)
-            {
-                if (ids.TryGetValue(item.id, out var name))
+            protected override void ItemSelected(UnityEditor.IMGUI.Controls.AdvancedDropdownItem item) {
+                if (ids.TryGetValue(item.id, out var name)) {
                     onPick(name);
+                }
             }
         }
 
-        ReorderableList GetTrackingList(SerializedProperty list)
-        {
-            if (trackingList != null && trackingList.serializedProperty.serializedObject == serializedObject)
-            {
+        ReorderableList GetTrackingList(SerializedProperty list) {
+            if (trackingList != null && trackingList.serializedProperty.serializedObject == serializedObject) {
                 trackingList.serializedProperty = list;
                 return trackingList;
             }
-            trackingList = new ReorderableList(serializedObject, list, true, true, true, true)
-            {
+            trackingList = new ReorderableList(serializedObject, list, true, true, true, true) {
                 drawHeaderCallback = rect => EditorGUI.LabelField(rect, TrackingListLabel),
-                elementHeightCallback = i =>
-                {
+                elementHeightCallback = i => {
                     var behavior = trackingList.serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("behavior");
                     behavior.isExpanded = true;
                     var entry = trackingList.serializedProperty.GetArrayElementAtIndex(i);
                     return ElementHeight(behavior, InsertHeightFor(entry)) + 4f;
                 },
-                drawElementCallback = (rect, i, active, focused) =>
-                {
+                drawElementCallback = (rect, i, active, focused) => {
                     rect.y += 2f;
                     rect.height -= 4f;
-                    if (ContextMenu(rect, trackingList, i, trackingList.serializedProperty, i, false))
+                    if (ContextMenu(rect, trackingList, i, trackingList.serializedProperty, i, false)) {
                         return;
+                    }
+
                     DrawTrackingEntry(rect, trackingList.serializedProperty, i);
                 },
-                onAddCallback = l =>
-                {
+                onAddCallback = l => {
                     var p = l.serializedProperty;
                     p.arraySize++;
                     var element = p.GetArrayElementAtIndex(p.arraySize - 1);
                     element.boxedValue = new VAPParameterBehaviors.TrackingKeyBehavior();
                     var found = sets.Value;
-                    if (SharedSet == null && found.Count == 1)
+                    if (SharedSet == null && found.Count == 1) {
                         element.FindPropertyRelative("blendshapesSet").stringValue = found.Keys.First();
+                    }
+
                     element.FindPropertyRelative("behavior").isExpanded = true;
                 },
             };
             return trackingList;
         }
 
-        float InsertHeightFor(SerializedProperty entry)
-        {
+        float InsertHeightFor(SerializedProperty entry) {
             string key = entry.FindPropertyRelative("trackingKey").stringValue;
             string set = ItemSet(entry.FindPropertyRelative("blendshapesSet"));
             return (PerBehavior ? Step : 0f) + (ItemNote(key, TrackingKeyGroups.Resolve(key), set) != null ? Step : 0f);
@@ -537,8 +550,7 @@ namespace VAP.Editor
             "It also scales how strongly the limit applies (its weight).");
         static readonly GUIContent KeyPrompt = new GUIContent("Select Tracking Key", "A tracking key, or a group of keys such as LipFunnel or LipFunnelUpper.");
 
-        void DrawTrackingEntry(Rect rect, SerializedProperty array, int index)
-        {
+        void DrawTrackingEntry(Rect rect, SerializedProperty array, int index) {
             var entry = array.GetArrayElementAtIndex(index);
             var behavior = entry.FindPropertyRelative("behavior");
             var keyProp = entry.FindPropertyRelative("trackingKey");
@@ -549,8 +561,10 @@ namespace VAP.Editor
             var g = HeaderGeometry(rect, sdkWidth, 0f);
             var full = g;
 
-            if (!behavior.isExpanded)
+            if (!behavior.isExpanded) {
                 behavior.isExpanded = true;
+            }
+
             float insertH = InsertHeightFor(entry);
             var insert = new Rect(rect.x, rect.y + HeaderHeight, sdkWidth, insertH);
             DrawSdk(rect, behavior, sdkWidth, sdkWidth, g.row.x, g.targetXMax, insertH, insert, null, () =>
@@ -558,13 +572,13 @@ namespace VAP.Editor
         }
 
         void DrawTrackingControls(Rect rect, SerializedProperty array, int index, Header g, Header full, Rect insert,
-            SerializedProperty keyProp, SerializedProperty modeProp, SerializedProperty setProp)
-        {
+            SerializedProperty keyProp, SerializedProperty modeProp, SerializedProperty setProp) {
             var modeRect = new Rect(g.row.x, g.mode.y, g.mode.xMax - g.row.x, Line);
             int limit = modeProp.intValue == ModeLimitMin ? 1 : 0;
             int pickedLimit = EditorGUI.Popup(modeRect, limit, LimitModeNames);
-            if (pickedLimit != limit)
+            if (pickedLimit != limit) {
                 modeProp.intValue = pickedLimit == 1 ? ModeLimitMin : ModeLimitMax;
+            }
 
             var keyRect = new Rect(modeRect.xMax + 4f, modeRect.y, g.targetXMax - modeRect.xMax - 4f, Line);
             var keys = TrackingKeyGroups.Resolve(keyProp.stringValue);
@@ -572,23 +586,19 @@ namespace VAP.Editor
             var keyLabel = string.IsNullOrEmpty(keyProp.stringValue) ? KeyPrompt
                 : new GUIContent(keys != null && keys.Length > 1 ? $"{keyProp.stringValue}  ({keys.Length} keys)" : keyProp.stringValue,
                     keys == null ? "Unknown tracking key." : string.Join("\n", keys.Select(k => TrackingKeyGroups.Keys[k])));
-            if (EditorGUI.DropdownButton(keyRect, keyLabel, FocusType.Keyboard))
-            {
+            if (EditorGUI.DropdownButton(keyRect, keyLabel, FocusType.Keyboard)) {
                 TrackingKeyGroups.ShowMenu(keyRect, keyProp.stringValue, VAPEditorGUI.Setter(keyProp));
             }
 
-            if (insert.height > 0f)
-            {
+            if (insert.height > 0f) {
                 bool per = PerBehavior;
                 float previewY = insert.y + 2f;
-                if (per)
-                {
+                if (per) {
                     var field = DrawSetRow(insert.x, previewY, insert.width, SetLabel, setProp);
                     SetIcon(field, setProp.stringValue);
                     previewY += Step;
                 }
-                if (ItemNote(keyProp.stringValue, keys, itemSet) is string note)
-                {
+                if (ItemNote(keyProp.stringValue, keys, itemSet) is string note) {
                     float previewX = insert.x + ItemLabelWidth;
                     var previewRect = new Rect(previewX, previewY, insert.xMax - previewX, Line);
                     EditorGUI.LabelField(previewRect, note, EditorStyles.miniLabel);
@@ -596,25 +606,31 @@ namespace VAP.Editor
             }
         }
 
-        string ItemNote(string key, int[] keys, string setName)
-        {
-            if (string.IsNullOrEmpty(key))
+        string ItemNote(string key, int[] keys, string setName) {
+            if (string.IsNullOrEmpty(key)) {
                 return "Select a tracking key.";
-            if (keys == null)
+            }
+
+            if (keys == null) {
                 return $"Unknown tracking key \"{key}\".";
-            if (string.IsNullOrEmpty(setName) || !sets.Value.TryGetValue(setName, out var names))
+            }
+
+            if (string.IsNullOrEmpty(setName) || !sets.Value.TryGetValue(setName, out var names)) {
                 return null;
+            }
+
             var shapes = ParameterBehaviorsBuild.BlendshapesFor(names, keys);
-            if (shapes.Count == 0)
+            if (shapes.Count == 0) {
                 return $"\"{setName}\" has no blendshapes for these keys.";
+            }
+
             return $"Creates {shapes.Count} behavior{(shapes.Count == 1 ? "" : "s")}: {string.Join(", ", shapes)}";
         }
 
         static readonly GUIContent WeightSetLabel = new GUIContent("Blendshapes Set",
             "This Blendshapes Set's weight controls how strongly to apply. Leave empty to always fully apply.");
 
-        static Rect DrawSetRow(float x, float y, float width, GUIContent label, SerializedProperty prop)
-        {
+        static Rect DrawSetRow(float x, float y, float width, GUIContent label, SerializedProperty prop) {
             float labelWidth = ItemLabelWidth;
             EditorGUI.LabelField(new Rect(x + 15f, y, labelWidth - 15f, Line), label);
             var field = new Rect(x + labelWidth, y, (width - labelWidth) * 0.5f, Line);
@@ -624,10 +640,8 @@ namespace VAP.Editor
 
         static float Line => VAPEditorGUI.Line;
 
-        static float ItemLabelWidth
-        {
-            get
-            {
+        static float ItemLabelWidth {
+            get {
                 float longest = EditorStyles.label.CalcSize(WeightSetLabel).x;
                 float unity = EditorGUIUtility.labelWidth;
                 return Mathf.Max(15f + longest + 4f, 15f + longest + (unity - 15f - longest) * 0.5f);
@@ -636,15 +650,13 @@ namespace VAP.Editor
         static float Step => Line + EditorGUIUtility.standardVerticalSpacing;
         static float HeaderHeight => VAPEditorGUI.BoxHeaderHeight;
 
-        struct Header
-        {
+        struct Header {
             public Rect row;
             public Rect mode;
             public float targetXMax;
         }
 
-        static Header HeaderGeometry(Rect rect, float width, float controls)
-        {
+        static Header HeaderGeometry(Rect rect, float width, float controls) {
             var header = new Rect(rect.x, rect.y, width, HeaderHeight);
             var row = EditorStyles.helpBox.padding.Remove(header);
             row.height = Line;
@@ -654,8 +666,7 @@ namespace VAP.Editor
         }
 
         void DrawSdk(Rect rect, SerializedProperty sdk, float sdkWidth, float headerWidth, float strip0, float strip1, float insertH,
-            Rect? insertRect, SerializedProperty array, System.Action drawOwn)
-        {
+            Rect? insertRect, SerializedProperty array, System.Action drawOwn) {
             float sdkH = EditorGUI.GetPropertyHeight(sdk, GUIContent.none, true);
             float headerH = HeaderHeight;
             bool custom = HasCustomExpression(sdk);
@@ -665,8 +676,7 @@ namespace VAP.Editor
             var stripBox = new Rect(strip0, rect.y, strip1 - strip0, headerH);
             var rightBox = new Rect(rightEnd, rect.y, rect.xMax - rightEnd, headerH);
             var e = Event.current;
-            if (e.type == EventType.Repaint)
-            {
+            if (e.type == EventType.Repaint) {
                 BoxPiece(stripBox, rect, headerH);
                 BoxPiece(rightBox, rect, headerH);
             }
@@ -694,107 +704,124 @@ namespace VAP.Editor
 
             Rect weightRow = default;
             float weightTop = -1f;
-            if (sdk.isExpanded && blendshapeMode)
-            {
+            if (sdk.isExpanded && blendshapeMode) {
                 weightTop = inputsTop - Step;
-                if (!hideWeight)
-                {
+                if (!hideWeight) {
                     weightRow = new Rect(rect.x, rect.y + insertH + Shift(weightTop), sdkWidth, Step);
                     DrawSetRow(rect.x, weightRow.y, sdkWidth, WeightSetLabel, sdk.FindPropertyRelative("weightBlendSetName"));
                 }
             }
 
             Rect expressionRow = default;
-            if (custom)
-            {
+            if (custom) {
                 expressionRow = new Rect(rect.x + 15f, rect.y + insertH + Shift(bodyEnd), sdkWidth - 15f, ExpressionHeight(sdk));
                 DrawExpression(expressionRow, sdk);
             }
 
             var owned = new List<Rect> { stripBox, rightBox };
-            if (insertRect.HasValue && insertRect.Value.height > 0f)
+            if (insertRect.HasValue && insertRect.Value.height > 0f) {
                 owned.Add(insertRect.Value);
-            if (custom)
+            }
+
+            if (custom) {
                 owned.Add(expressionRow);
-            if (weightTop > 0f && !hideWeight)
+            }
+
+            if (weightTop > 0f && !hideWeight) {
                 owned.Add(weightRow);
-            if (warnH > 0f)
+            }
+
+            if (warnH > 0f) {
                 owned.Add(warnRow);
+            }
+
             if ((e.type == EventType.MouseDown || e.type == EventType.MouseUp || e.type == EventType.ContextClick)
-                && owned.Any(r => r.Contains(e.mousePosition)))
+                && owned.Any(r => r.Contains(e.mousePosition))) {
                 e.Use();
+            }
 
             int size = array?.arraySize ?? -1;
-            bool Changed()
-            {
-                if (array == null || array.arraySize == size)
+            bool Changed() {
+                if (array == null || array.arraySize == size) {
                     return false;
+                }
+
                 array.serializedObject.ApplyModifiedProperties();
                 GUIUtility.ExitGUI();
                 return true;
             }
 
             Piece(new Rect(rect.x, rect.y, strip0 - rect.x, headerH), rect.position, sdk, headerWidth, sdkH);
-            if (Changed())
+            if (Changed()) {
                 return;
-            Piece(new Rect(strip1, rect.y, rightEnd - strip1, headerH), rect.position, sdk, headerWidth, sdkH);
-            if (Changed())
-                return;
+            }
 
-            if (sdk.isExpanded && bodyEnd > headerH)
-            {
+            Piece(new Rect(strip1, rect.y, rightEnd - strip1, headerH), rect.position, sdk, headerWidth, sdkH);
+            if (Changed()) {
+                return;
+            }
+
+            if (sdk.isExpanded && bodyEnd > headerH) {
                 float top = rect.y + insertH;
                 var cuts = new List<(float a, float b)>();
-                if (weightTop > headerH)
+                if (weightTop > headerH) {
                     cuts.Add((weightTop, weightTop + Step));
-                if (warnH > 0f)
+                }
+
+                if (warnH > 0f) {
                     cuts.Add((warnTop, warnTop + warnH));
-                if (targetH > 0f)
+                }
+
+                if (targetH > 0f) {
                     cuts.Add((headerH, warnTop));
+                }
+
                 cuts.Sort((x, y) => x.a.CompareTo(y.a));
                 float from = headerH;
                 cuts.Add((bodyEnd, bodyEnd));
-                foreach (var cut in cuts)
-                {
+                foreach (var cut in cuts) {
                     float to = Mathf.Min(cut.a, bodyEnd);
-                    if (to > from)
-                    {
+                    if (to > from) {
                         float shift = Shift(from) - from;
                         Piece(new Rect(rect.x, top + from + shift, sdkWidth, to - from),
                             new Vector2(rect.x, top + shift), sdk, sdkWidth, sdkH);
-                        if (Changed())
+                        if (Changed()) {
                             return;
+                        }
                     }
                     from = Mathf.Max(from, cut.b);
                 }
-                if (warnH > 0f && e.type == EventType.Repaint)
+                if (warnH > 0f && e.type == EventType.Repaint) {
                     EditorGUI.HelpBox(warnRow, warnText, MessageType.Warning);
+                }
             }
         }
 
-        static void Piece(Rect clip, Vector2 origin, SerializedProperty sdk, float width, float height)
-        {
-            if (clip.width <= 0f || clip.height <= 0f)
+        static void Piece(Rect clip, Vector2 origin, SerializedProperty sdk, float width, float height) {
+            if (clip.width <= 0f || clip.height <= 0f) {
                 return;
+            }
+
             var e = Event.current;
             bool mouse = e.isMouse || e.type == EventType.ContextClick;
             var saved = e.mousePosition;
-            if (mouse && !clip.Contains(saved))
+            if (mouse && !clip.Contains(saved)) {
                 e.mousePosition = new Vector2(-100000f, -100000f);
+            }
+
             GUI.BeginClip(clip);
             EditorGUI.PropertyField(new Rect(origin.x - clip.x, origin.y - clip.y, width, height), sdk, GUIContent.none, true);
             GUI.EndClip();
-            if (mouse)
+            if (mouse) {
                 e.mousePosition = saved;
+            }
         }
 
         static System.Reflection.MethodInfo inputWarningMethod;
         static bool inputWarningLooked;
 
-        static string InputWarning(SerializedProperty sdk, bool custom, int count)
-        {
-            if (!inputWarningLooked)
-            {
+        static string InputWarning(SerializedProperty sdk, bool custom, int count) {
+            if (!inputWarningLooked) {
                 inputWarningLooked = true;
                 var type = typeof(FaceTrackingClipboard).Assembly.GetTypes()
                     .FirstOrDefault(t => t.Name == "FaceTrackingMappingValidator");
@@ -802,16 +829,15 @@ namespace VAP.Editor
                     System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
                     null, new[] { typeof(bool), typeof(string), typeof(int) }, null);
             }
-            if (inputWarningMethod == null)
+            if (inputWarningMethod == null) {
                 return null;
-            try
-            {
+            }
+
+            try {
                 return inputWarningMethod.Invoke(null, new object[]
                     { custom || sdk.FindPropertyRelative("combineMode").intValue == CustomCombineMode,
                       sdk.FindPropertyRelative("customExpression").stringValue, count }) as string;
-            }
-            catch
-            {
+            } catch {
                 return null;
             }
         }
@@ -820,10 +846,11 @@ namespace VAP.Editor
             : Mathf.Max(38f, EditorStyles.helpBox.CalcHeight(new GUIContent(text), Mathf.Max(100f, width - 35f)))
               + EditorGUIUtility.standardVerticalSpacing;
 
-        static void BoxPiece(Rect clip, Rect rect, float headerH)
-        {
-            if (clip.width <= 0f || clip.height <= 0f)
+        static void BoxPiece(Rect clip, Rect rect, float headerH) {
+            if (clip.width <= 0f || clip.height <= 0f) {
                 return;
+            }
+
             GUI.BeginClip(clip);
             EditorStyles.helpBox.Draw(new Rect(rect.x - clip.x, rect.y - clip.y, rect.width, headerH), false, false, false, false);
             GUI.EndClip();
@@ -844,8 +871,7 @@ namespace VAP.Editor
         static bool HasCustomExpression(SerializedProperty sdk) =>
             sdk.isExpanded && sdk.FindPropertyRelative("combineMode").intValue == CustomCombineMode;
 
-        float ExpressionHeight(SerializedProperty sdk)
-        {
+        float ExpressionHeight(SerializedProperty sdk) {
             float width = fieldWidth > 50f ? fieldWidth : EditorGUIUtility.currentViewWidth - ItemLabelWidth - 90f;
             string text = sdk.FindPropertyRelative("customExpression").stringValue;
             return Mathf.Max(Line, WrapStyle.CalcHeight(new GUIContent(text), width));
@@ -853,65 +879,65 @@ namespace VAP.Editor
 
         float lastWidth;
 
-        float ElementHeight(SerializedProperty sdk, float insertH)
-        {
+        float ElementHeight(SerializedProperty sdk, float insertH) {
             float sdkH = EditorGUI.GetPropertyHeight(sdk, GUIContent.none, true);
             float height = sdkH + insertH;
             bool custom = HasCustomExpression(sdk);
-            if (custom)
+            if (custom) {
                 height += ExpressionHeight(sdk) - Line;
-            if (sdk.isExpanded)
-            {
+            }
+
+            if (sdk.isExpanded) {
                 bool blendshapeMode = IsBlendshapeMode(sdk);
                 int count = sdk.FindPropertyRelative("inputTrackingKeys").arraySize;
                 float inputsH = InputsHeight(custom, count);
                 float width = lastWidth > 50f ? lastWidth : EditorGUIUtility.currentViewWidth - 60f;
                 float warnH = WarningHeight(InputWarning(sdk, custom, count), width);
                 height -= Mathf.Max(0f, sdkH - 5f - inputsH - (blendshapeMode ? Step : 0f) - warnH - HeaderHeight);
-                if (blendshapeMode && !PerBehavior)
+                if (blendshapeMode && !PerBehavior) {
                     height -= Step;
+                }
             }
             return height;
         }
 
-        void DrawExpression(Rect row, SerializedProperty sdk)
-        {
+        void DrawExpression(Rect row, SerializedProperty sdk) {
             var labelRect = new Rect(row.x, row.y, ItemLabelWidth - 15f, Line);
             var fieldRect = new Rect(labelRect.xMax, row.y, row.xMax - labelRect.xMax, row.height);
-            if (Event.current.type == EventType.Repaint && fieldRect.width > 50f)
+            if (Event.current.type == EventType.Repaint && fieldRect.width > 50f) {
                 fieldWidth = fieldRect.width;
+            }
+
             var expression = sdk.FindPropertyRelative("customExpression");
             EditorGUI.LabelField(labelRect, ExpressionLabel);
 
             string controlName = "VAP.Expression." + expression.propertyPath;
             var e = Event.current;
             if (e.type == EventType.KeyDown && GUI.GetNameOfFocusedControl() == controlName
-                && (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter || e.character == '\n' || e.character == '\r'))
-            {
+                && (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter || e.character == '\n' || e.character == '\r')) {
                 e.Use();
-                if (e.keyCode != KeyCode.None)
+                if (e.keyCode != KeyCode.None) {
                     GUI.FocusControl(null);
+                }
             }
 
             EditorGUI.BeginChangeCheck();
             GUI.SetNextControlName(controlName);
             string value = EditorGUI.TextArea(fieldRect, expression.stringValue, WrapStyle);
-            if (EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck()) {
                 expression.stringValue = value.Replace("\n", " ").Replace("\r", "");
+            }
         }
 
-        void PasteBehaviors(SerializedProperty list)
-        {
-            if (!FaceTrackingClipboard.TryParseParameterBehaviors(EditorGUIUtility.systemCopyBuffer, out var parsed, out string error))
-            {
+        void PasteBehaviors(SerializedProperty list) {
+            if (!FaceTrackingClipboard.TryParseParameterBehaviors(EditorGUIUtility.systemCopyBuffer, out var parsed, out string error)) {
                 EditorUtility.DisplayDialog("Paste Parameter Behaviors",
                     "The clipboard doesn't hold Parameter Behaviors.\n\n" + error, "OK");
                 return;
             }
             int first = list.arraySize;
             list.arraySize += parsed.Count;
-            for (int i = 0; i < parsed.Count; i++)
-            {
+            for (int i = 0; i < parsed.Count; i++) {
                 var element = list.GetArrayElementAtIndex(first + i);
                 element.boxedValue = parsed[i];
                 element.isExpanded = true;
