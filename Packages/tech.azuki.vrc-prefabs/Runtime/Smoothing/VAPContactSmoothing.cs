@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace VAP
 {
@@ -8,6 +9,7 @@ namespace VAP
     public class VAPContactSmoothing : VAPSmoothing
     {
         [Tooltip("Parameter of a VRC Contact Receiver on this object. If empty, the first one found is used.")]
+        [NotKeyable]
         public string contactParameter = "";
 
         public override string InputParameter => contactParameter;

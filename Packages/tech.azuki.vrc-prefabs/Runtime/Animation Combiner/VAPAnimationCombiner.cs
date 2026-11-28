@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.SDKBase;
 
 namespace VAP
@@ -19,13 +20,18 @@ namespace VAP
         [Serializable]
         public class Entry
         {
+            [NotKeyable]
             public AnimationClip animation;
+            [NotKeyable]
             public Mode mode;
+            [NotKeyable]
             public AnimationClip combine;
         }
 
+        [NotKeyable]
         public Transform startingPoint;
 
+        [NotKeyable]
         public List<Entry> entries = new List<Entry>();
     }
 }

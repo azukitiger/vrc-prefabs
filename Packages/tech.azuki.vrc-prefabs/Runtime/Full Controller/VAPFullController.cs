@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.SDK3.Avatars.ScriptableObjects;
 
 namespace VAP
@@ -11,7 +12,9 @@ namespace VAP
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPFullController : VAPExpressions, IVRCFuryWrapper
     {
+        [NotKeyable]
         [HideInInspector] public Component wrapped;
+        [NotKeyable]
         public string menuPath = "";
 
         [NonSerialized] public List<VRCExpressionsMenu> menus = new List<VRCExpressionsMenu>();

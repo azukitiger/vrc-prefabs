@@ -34,8 +34,32 @@ namespace VAP.Editor
                 label = smr.sharedMesh.GetBlendShapeName(index);
                 path = "blendShape." + label;
             }
+            if (!Animatable(owner, type, path))
+                return;
             menu.AddItem(MenuLabel, false, () => Run(owner, type, path, label));
         }
+
+        static GameObject bindingsOwner;
+        static double bindingsTime;
+        static EditorCurveBinding[] bindings;
+
+        static EditorCurveBinding[] Bindings(GameObject owner)
+        {
+            if (owner != bindingsOwner || EditorApplication.timeSinceStartup - bindingsTime > 1.0)
+            {
+                var animator = owner.GetComponentInParent<Animator>(true);
+                var root = animator != null ? animator.gameObject : owner.transform.root.gameObject;
+                bindings = AnimationUtility.GetAnimatableBindings(owner, root);
+                bindingsOwner = owner;
+                bindingsTime = EditorApplication.timeSinceStartup;
+            }
+            return bindings;
+        }
+
+        static bool SameProperty(string a, string b) => a == b || a.StartsWith(b + ".") || b.StartsWith(a + ".");
+
+        static bool Animatable(GameObject owner, Type type, string property) =>
+            Bindings(owner).Any(b => b.type == type && SameProperty(b.propertyName, property));
 
         [MenuItem("CONTEXT/Component/Find Animations Using This Component")]
         static void FromComponent(MenuCommand command)
@@ -46,7 +70,8 @@ namespace VAP.Editor
 
         [MenuItem("CONTEXT/Component/Find Animations Using This Component", true)]
         static bool CanFromComponent(MenuCommand command) =>
-            command.context is Component component && !EditorUtility.IsPersistent(component);
+            command.context is Component component && !EditorUtility.IsPersistent(component)
+            && Bindings(component.gameObject).Any(b => b.type == component.GetType() && b.propertyName != "m_Enabled");
 
         static void Run(GameObject owner, Type type, string path, string label)
         {
@@ -105,8 +130,7 @@ namespace VAP.Editor
             string last = b.path.Substring(b.path.LastIndexOf('/') + 1);
             if (b.path.Length == 0 ? !isRoot : last != name)
                 return false;
-            string p = b.propertyName;
-            return property == null || p == property || p.StartsWith(property + ".") || property.StartsWith(p + ".");
+            return property == null || SameProperty(b.propertyName, property);
         }
     }
 

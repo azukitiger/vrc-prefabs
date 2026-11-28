@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.SDKBase;
 
 namespace VAP
@@ -8,7 +9,9 @@ namespace VAP
     [Icon(VAPFaceTrackingDebug.IconPath)]
     public class VAPToggle : MonoBehaviour, IEditorOnly, IVRCFuryWrapper
     {
+        [NotKeyable]
         [HideInInspector] public Component toggle;
+        [NotKeyable]
         public string menuPath = "";
 
         public Component Wrapped
@@ -17,8 +20,11 @@ namespace VAP
             set => toggle = value;
         }
 
+        [NotKeyable]
         public bool overrideDefault;
+        [NotKeyable]
         public bool defaultOn;
+        [NotKeyable]
         [Range(0, 1)] public float defaultValue;
     }
 }

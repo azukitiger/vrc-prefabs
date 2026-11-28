@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using VRC.SDKBase;
 
@@ -11,36 +12,49 @@ namespace VAP
     public abstract class VAPExpressions : MonoBehaviour, IEditorOnly
     {
         [Tooltip("The Expressions Menu asset. It is never changed; values set here are applied to a copy at build time.")]
+        [NotKeyable]
         public VRCExpressionsMenu menuAsset;
 
         [Tooltip("The Expression Parameters asset. It is never changed; values set here are applied to a copy at build time.")]
+        [NotKeyable]
         public VRCExpressionParameters parametersAsset;
 
+        [NotKeyable]
         public List<DefaultOverride> defaultOverrides = new List<DefaultOverride>();
+        [NotKeyable]
         public List<ControlOverride> controlOverrides = new List<ControlOverride>();
 
         [Tooltip("Add frame time to the avatar and make its parameters available to the animators.")]
+        [NotKeyable]
         public bool frameTime = false;
 
         [Tooltip("Extra values added to the frame time for the animators.")]
+        [NotKeyable]
         public List<VAPFrameTime.Factor> frameTimeFactors = new List<VAPFrameTime.Factor>();
 
         [Tooltip("Clips for the VRC Animator Play Audio behaviours in the animators, applied at build time.")]
+        [NotKeyable]
         public List<VAPPlayAudioClips.Entry> audioClips = new List<VAPPlayAudioClips.Entry>();
 
         [Serializable]
         public class DefaultOverride
         {
+            [NotKeyable]
             public string name = "";
+            [NotKeyable]
             public float value;
         }
 
         [Serializable]
         public class ControlOverride
         {
+            [NotKeyable]
             public VRCExpressionsMenu menu;
+            [NotKeyable]
             public int control;
+            [NotKeyable]
             public int label = -1;
+            [NotKeyable]
             public bool removed;
 
             public bool IsEmpty => !removed;

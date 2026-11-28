@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.SDKBase;
 
 namespace VAP
@@ -12,8 +13,11 @@ namespace VAP
     [ExecuteAlways]
     public class VAPSkinnedMeshRenderer : MonoBehaviour, IEditorOnly, IVRCFuryWrapper
     {
+        [NotKeyable]
         [HideInInspector] public SkinnedMeshRenderer wrapped;
+        [NotKeyable]
         public bool blendShapeNormals;
+        [NotKeyable]
         public List<string> normalBlendShapes = new List<string>();
 
         public Component Wrapped
