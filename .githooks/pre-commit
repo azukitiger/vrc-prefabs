@@ -36,32 +36,29 @@ format() {
 $files
 EOF
     [ $# -eq 0 ] && return 0
-    if [ -f "$project" ]; then
-        "$dotnet" format style "$project" --diagnostics IDE0011 --severity warn --include "$@" &&
-            "$dotnet" format whitespace "$project" --include "$@"
-    else
-        (
+    output=$(
+        if [ -f "$project" ]; then
+            "$dotnet" format style "$project" --diagnostics IDE0011 --severity warn --include "$@" &&
+                "$dotnet" format whitespace "$project" --include "$@"
+        else
             cd "$package" || exit 1
             for f; do
                 set -- "$@" "${f#"$package/"}"
                 shift
             done
             "$dotnet" format whitespace --folder . --include "$@"
-        )
-    fi || {
+        fi 2>&1
+    ) || {
+        echo "$output"
         echo "pre-commit: dotnet format failed."
         exit 1
     }
 }
 
-lf=$(echo "$files" | while IFS= read -r f; do
-    [ "$(tr -dc '\r' < "$f" | head -c 1 | wc -c)" -gt 0 ] || echo "$f"
-done)
-
 format VAP.Runtime.csproj Runtime
 format VAP.Tools.Editor.csproj Editor
 
-[ -n "$lf" ] && echo "$lf" | while IFS= read -r f; do
+echo "$files" | while IFS= read -r f; do
     tr -d '\r' < "$f" > "$f.tmp" && mv "$f.tmp" "$f"
 done
 
